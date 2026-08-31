@@ -1,0 +1,12 @@
+# Task family D (protocol section 5.2): human A/B preference. Anchor status is
+# preference-dependent, so a high contested share is expected here and a
+# surviving residual on this task is weak evidence for an information limit.
+task: preference_ranking
+task_family: D
+labels: [A, B]
+prompt_version: preference.v1
+n_eval: 2000
+n_train_per_member: 500
+anchors:
+  source: file
+  path: data/anchors/preference_panel.jsonl

@@ -1,0 +1,23 @@
+# Keeps inference, fine-tuning and analysis decoupled (protocol section 14):
+# same image, different entrypoint args, shared bind mounts for data/results.
+services:
+  hg:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    image: hg:m2
+    volumes:
+      - ../configs:/workspace/configs:ro
+      - ../data:/workspace/data
+      - ../results:/workspace/results
+      - hf-cache:/workspace/.hf
+    deploy:
+      resources:
+        reservations:
+          devices: [{ driver: nvidia, count: all, capabilities: [gpu] }]
+    # Override per stage, e.g.:
+    #   docker compose run --rm hg infer --config configs/experiments/m2_llm_endpoints.yaml
+    command: ["--help"]
+
+volumes:
+  hf-cache:

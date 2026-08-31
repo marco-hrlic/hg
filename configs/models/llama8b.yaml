@@ -1,0 +1,11 @@
+# Widely used control lineage and deployment baseline.
+family: llama
+lineage: llama
+checkpoint: meta-llama/Llama-3.1-8B-Instruct
+backend: transformers
+params_b: 8.0
+dtype: bfloat16
+max_new_tokens: 8
+options:
+  scoring_mode: rank
+  max_input_tokens: 2048

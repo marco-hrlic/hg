@@ -1,0 +1,13 @@
+# Strong open baseline; the primary reference family (protocol section 3).
+family: qwen
+lineage: qwen
+checkpoint: Qwen/Qwen3-8B
+backend: transformers
+params_b: 8.2
+dtype: bfloat16
+max_new_tokens: 8
+options:
+  # Rank the allowed labels by continuation log-prob instead of generating.
+  # Removes the parser as a source of cross-family disagreement.
+  scoring_mode: rank
+  max_input_tokens: 2048

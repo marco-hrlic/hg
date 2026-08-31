@@ -1,0 +1,34 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# Experiment outputs: keep the directory layout, not the artifacts.
+data/raw/*
+data/anchors/*
+data/splits/*
+data/processed/*
+results/predictions/*
+results/matrices/*
+results/bootstrap/*
+results/figures/*
+!**/.gitkeep
+
+# Model weights and adapters are never committed.
+checkpoints/
+adapters/
+*.safetensors
+*.bin
+*.gguf
+
+# Local overrides
+configs/**/local_*.yaml
+.env

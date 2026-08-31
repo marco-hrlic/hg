@@ -1,0 +1,39 @@
+# Phase 0 — infrastructure validation (protocol sections 15 and 19).
+#
+# "Build and run the three-family infrastructure pilot first. Do not start with
+# the full five-family, multi-task experiment."
+#
+# Three families x 1 seed x 1 dataset, ~200 training items per model and ~1,000
+# evaluation items. Exit criterion: tokenization, LoRA bookkeeping,
+# deterministic output parsing, memory behaviour and the result schema all
+# validate, and the dependence metrics reproduce a known ground truth.
+#
+# Runs on the simulator backend by design: the analysis half must be verifiable
+# before GPU time is spent. Swap `backend` for `transformers` and the sim_*
+# models for the real panel to run the same pipeline on the Spark.
+name: phase0_infra
+dataset: synthetic_pilot
+backend: simulator
+seed: 0
+n_bootstrap: 1000
+output_root: results
+
+conditions:
+  # Homogeneous / shared: one lineage, one training slice, seeds vary.
+  HS:
+    models: [sim_qwen_v1, sim_qwen_v2, sim_qwen_v3]
+    train_data: shared
+    adapter_seeds: [0, 1, 2]
+  # Diverse / disjoint: three lineages, non-overlapping slices.
+  DD:
+    models: [sim_qwen, sim_mistral, sim_gemma]
+    train_data: disjoint
+    adapter_seeds: [0, 0, 0]
+
+options:
+  # Phase 0 never touches a GPU: adapters are planned and carded, not trained.
+  dry_run_finetune: true
+  n_eval: 1000
+  n_train_per_member: 200
+  race: true
+  unparsed_policy: wrong

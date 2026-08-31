@@ -1,0 +1,11 @@
+# Distinct small-model / data-quality philosophy.
+family: phi
+lineage: phi
+checkpoint: microsoft/phi-4
+backend: transformers
+params_b: 14.7
+dtype: bfloat16
+max_new_tokens: 8
+options:
+  scoring_mode: rank
+  max_input_tokens: 2048

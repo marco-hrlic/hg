@@ -1,0 +1,11 @@
+# Independent major training lineage.
+family: gemma
+lineage: gemma
+checkpoint: google/gemma-3-12b-it
+backend: transformers
+params_b: 12.2
+dtype: bfloat16
+max_new_tokens: 8
+options:
+  scoring_mode: rank
+  max_input_tokens: 2048

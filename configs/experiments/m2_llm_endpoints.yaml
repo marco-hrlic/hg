@@ -1,0 +1,29 @@
+# Phase 1 — endpoint M2-LLM (protocol sections 4 and 15).
+#
+# Run the two endpoints first: HS and DD at E = 5. Measure the total diversity
+# gap Delta_div and decide whether the experiment is worth expanding before
+# spending time on HD and DS.
+name: m2_llm_endpoints
+dataset: harmfulness_pilot
+seed: 0
+n_bootstrap: 2000
+output_root: results
+
+conditions:
+  HS:
+    # Same family, shared task-training data, independent seed/adapter variation.
+    models: [qwen8b, qwen8b, qwen8b, qwen8b, qwen8b]
+    train_data: shared
+    adapter_seeds: [0, 1, 2, 3, 4]
+  DD:
+    # Five different families, disjoint task-training slices. Strongest
+    # practical internal-diversity condition.
+    models: [qwen8b, mistral8b, gemma12b, phi14b, llama8b]
+    train_data: disjoint
+    adapter_seeds: [0, 0, 0, 0, 0]
+
+options:
+  dry_run_finetune: false
+  race: true
+  unparsed_policy: wrong
+  adapter_root: adapters/m2_llm_endpoints

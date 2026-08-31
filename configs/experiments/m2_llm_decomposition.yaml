@@ -1,0 +1,40 @@
+# Phase 2 — decomposition (protocol sections 4 and 15).
+#
+# Adds HD and DS so the change measured at the endpoints can be split into a
+# data-overlap effect and a model-family effect:
+#
+#   HS -> HD   holds family fixed, breaks data sharing   => data-overlap effect
+#   HS -> DS   holds data fixed, varies family           => family effect
+#   HS -> DD   both                                      => total gap
+#
+# Several adapter seeds per family, so seed variation can be separated from
+# lineage variation.
+name: m2_llm_decomposition
+dataset: harmfulness_pilot
+seed: 0
+n_bootstrap: 2000
+output_root: results
+
+conditions:
+  HS:
+    models: [qwen8b, qwen8b, qwen8b, qwen8b, qwen8b]
+    train_data: shared
+    adapter_seeds: [0, 1, 2, 3, 4]
+  HD:
+    models: [qwen8b, qwen8b, qwen8b, qwen8b, qwen8b]
+    train_data: disjoint
+    adapter_seeds: [0, 1, 2, 3, 4]
+  DS:
+    models: [qwen8b, mistral8b, gemma12b, phi14b, llama8b]
+    train_data: shared
+    adapter_seeds: [0, 0, 0, 0, 0]
+  DD:
+    models: [qwen8b, mistral8b, gemma12b, phi14b, llama8b]
+    train_data: disjoint
+    adapter_seeds: [0, 0, 0, 0, 0]
+
+options:
+  dry_run_finetune: false
+  race: true
+  unparsed_policy: wrong
+  adapter_root: adapters/m2_llm_decomposition

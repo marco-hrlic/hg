@@ -1,0 +1,12 @@
+# Simulator stand-in. Phase 0 only: validates the pipeline, produces no evidence.
+family: sim_qwen
+lineage: sim_qwen
+checkpoint: simulator://sim_qwen_v2
+backend: simulator
+params_b: 8.0
+options:
+  skill: -1.5
+  lineage_bias: 1.6
+  data_bias: 1.0
+  core_strength: 6.0
+  embedding_dim: 16

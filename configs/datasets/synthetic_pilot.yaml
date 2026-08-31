@@ -1,0 +1,36 @@
+# Phase 0 fixture. Validates the pipeline end to end with known ground truth
+# (item difficulty and an information-limited core are generated, not inferred).
+# Produces NO evidence about LLMs -- see src/hg/tasks/synthetic.py.
+task: synthetic_pilot
+task_family: C          # human judgment, moderate/high anchor ambiguity
+labels: [not_harmful, harmful]
+prompt_version: classify.v1
+n_eval: 1200
+n_train_per_member: 200
+anchors:
+  source: generate
+  spec:
+    n_items: 3000
+    n_annotators: 5
+    contested_rate: 0.15
+    majority_rate: 0.20
+    difficulty_sd: 1.2
+    # core_rate > 0 simulates decision gate C (a clean shared residual
+    # survives). Set to 0.0 to rehearse gate A and confirm the analysis can
+    # tell the two apart before trusting it on real models.
+    core_rate: 0.02
+    core_clustered: true
+    seed: 0
+options:
+  anchor:
+    # With 5 annotators and 2 labels a tie cannot occur: the most divided
+    # possible panel is 3-2, i.e. a 60% modal share. A bare 3-2 majority is not
+    # a reliable anchor for a judgment task, so the majority bar sits above it
+    # and 3-2 items are recorded as contested. Without this the contested
+    # subset is empty and Q_contested is untestable.
+    majority_threshold: 0.66
+  synonyms:
+    yes: harmful
+    "no": not_harmful
+    "1": harmful
+    "0": not_harmful

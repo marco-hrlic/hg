@@ -1,0 +1,11 @@
+# DGX Spark inference + LoRA adaptation. Install on top of requirements.txt.
+# Pin exactly in the container image; ranges here are the compatibility floor.
+-r requirements.txt
+torch>=2.4
+transformers>=4.44
+peft>=0.12
+accelerate>=0.33
+datasets>=2.20
+sentencepiece>=0.2
+# Optional high-throughput serving backend (src/hg/inference/vllm_backend.py).
+# vllm>=0.6

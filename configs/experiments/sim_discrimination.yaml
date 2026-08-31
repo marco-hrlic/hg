@@ -1,0 +1,73 @@
+# Analysis-validation control pair. Simulator only; no GPU, no evidence claims.
+#
+# Purpose: establish that the analysis can tell decision gate A from gate C
+# BEFORE it is trusted on real models. Run this config twice, once with
+# `core_rate: 0.02` (a real information-limited core exists) and once with
+# `core_rate: 0.0` (none does), and check that the two runs are distinguished.
+#
+#   scripts/run_discrimination_control.py
+#
+# What it establishes, and why it is not optional:
+#
+# The obvious discriminator -- "did the survival curve flatten?" -- does not
+# work at the ensemble size the protocol budgets for. Measured on this control
+# at E = 5, the curve is still falling in BOTH cases (trailing slope 28% with a
+# core, 44% without), so the plateau test alone returns gate B either way and
+# cannot separate them. Neither can the endpoint level, which differs by only a
+# factor of two.
+#
+# What does separate them is comparing the observed curve to the fitted
+# hierarchical model's own curve. That model has one shared item-difficulty
+# factor and conditional independence given it, so its C_k must fall to zero as
+# k grows -- it cannot represent a floor. With no core the observed curve tracks
+# it at every k (ratio 1.00 -> 1.06); with a real core the observed curve pulls
+# away (ratio 1.00 -> 1.42). See `hg.diversity.survival.excess_survival`.
+#
+# Consequence for the real experiment: read `excess_verdict` alongside the
+# survival shape. A nonzero C_5^clean with `excess_verdict:
+# consistent_with_shared_difficulty` is not a candidate residual, however
+# nonzero it looks.
+name: sim_discrimination
+backend: simulator
+seed: 3
+n_bootstrap: 400
+output_root: results
+
+dataset:
+  name: sim_discrimination
+  task: sim_discrimination
+  task_family: C
+  labels: [not_harmful, harmful]
+  prompt_version: classify.v1
+  n_eval: 4000
+  n_train_per_member: 400
+  anchors:
+    source: generate
+    spec:
+      n_items: 9000
+      n_annotators: 5
+      contested_rate: 0.15
+      majority_rate: 0.20
+      difficulty_sd: 1.2
+      # Overridden by scripts/run_discrimination_control.py, which runs both arms.
+      core_rate: 0.02
+      core_clustered: true
+      seed: 3
+  options:
+    anchor:
+      majority_threshold: 0.66
+
+conditions:
+  HS:
+    models: [sim_qwen_v1, sim_qwen_v2, sim_qwen_v3, sim_qwen_v4, sim_qwen_v5]
+    train_data: shared
+    adapter_seeds: [0, 1, 2, 3, 4]
+  DD:
+    models: [sim_qwen, sim_mistral, sim_gemma, sim_phi, sim_llama]
+    train_data: disjoint
+    adapter_seeds: [0, 0, 0, 0, 0]
+
+options:
+  dry_run_finetune: true
+  race: true
+  unparsed_policy: wrong

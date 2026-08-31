@@ -1,0 +1,21 @@
+# Continuity benchmark (protocol section 5.1). Reuses the existing v0.4
+# harmfulness task to connect the shallow-model result to the modern-LLM
+# regime. Its purpose is continuity, not strongest external evidence.
+#
+# Before running: place the annotator-level panel at the path below, one JSONL
+# row per item with fields {item_id, x, judgments, [reference], [annotator_ids]}.
+# Raw judgments are required, not a majority label -- the clean/contested split
+# is what every headline metric conditions on (protocol section 6).
+task: harmfulness_v04
+task_family: C
+labels: [not_harmful, harmful]
+prompt_version: classify.v1
+n_eval: 2000
+n_train_per_member: 500
+anchors:
+  source: file
+  path: data/anchors/harmfulness_v04_panel.jsonl
+options:
+  synonyms:
+    yes: harmful
+    "no": not_harmful

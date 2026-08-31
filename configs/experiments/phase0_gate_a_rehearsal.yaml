@@ -1,0 +1,51 @@
+# Phase 0 companion run: the same pipeline with core_rate = 0.
+#
+# Purpose is negative control. If the analysis reports a surviving clean
+# residual here -- where none was generated -- the residual is an artifact of
+# the pipeline, not a finding. Running this before Phase 1 is what makes a
+# later gate C claim credible.
+name: phase0_gate_a_rehearsal
+backend: simulator
+seed: 7
+n_bootstrap: 1000
+output_root: results
+
+dataset:
+  name: synthetic_no_core
+  task: synthetic_no_core
+  task_family: C
+  labels: [not_harmful, harmful]
+  prompt_version: classify.v1
+  n_eval: 1200
+  n_train_per_member: 200
+  anchors:
+    source: generate
+    spec:
+      n_items: 3000
+      n_annotators: 5
+      contested_rate: 0.15
+      majority_rate: 0.20
+      difficulty_sd: 1.2
+      core_rate: 0.0
+      seed: 7
+  options:
+    anchor:
+      # See configs/datasets/synthetic_pilot.yaml: a 3-2 split among 5
+      # annotators is the most divided a binary panel can be, and counts as
+      # contested rather than as a majority.
+      majority_threshold: 0.66
+
+conditions:
+  HS:
+    models: [sim_qwen_v1, sim_qwen_v2, sim_qwen_v3]
+    train_data: shared
+    adapter_seeds: [0, 1, 2]
+  DD:
+    models: [sim_qwen, sim_mistral, sim_gemma]
+    train_data: disjoint
+    adapter_seeds: [0, 0, 0]
+
+options:
+  dry_run_finetune: true
+  race: true
+  unparsed_policy: wrong

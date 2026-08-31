@@ -1,0 +1,12 @@
+# Simulator stand-in. Phase 0 only: validates the pipeline, produces no evidence.
+family: sim_llama
+lineage: sim_llama
+checkpoint: simulator://sim_llama
+backend: simulator
+params_b: 8.0
+options:
+  skill: -1.55
+  lineage_bias: 1.6
+  data_bias: 1.0
+  core_strength: 6.0
+  embedding_dim: 16

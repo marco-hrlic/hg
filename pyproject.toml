@@ -1,0 +1,39 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hg"
+version = "0.1.0"
+description = "M2-LLM: does clean shared error survive strong internal model diversity?"
+requires-python = ">=3.10"
+dependencies = [
+    "numpy>=1.24",
+    "pyyaml>=6.0",
+]
+
+[project.optional-dependencies]
+# Analysis extras. Nothing in src/hg requires these; report/figures degrades to CSV.
+analysis = ["matplotlib>=3.7"]
+# GPU / DGX Spark inference and adaptation stack. Deliberately separate so the
+# analysis half of the pipeline installs and tests anywhere.
+gpu = [
+    "torch>=2.4",
+    "transformers>=4.44",
+    "peft>=0.12",
+    "accelerate>=0.33",
+    "datasets>=2.20",
+]
+serve = ["vllm>=0.6"]
+dev = ["pytest>=8.0"]
+
+[project.scripts]
+hg = "hg.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+filterwarnings = ["error::DeprecationWarning:hg.*"]
