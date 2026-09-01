@@ -12,6 +12,7 @@ from hg_native.eval.predict import predict
 from hg_native.model.config import DEFAULT_DECISION_LABELS, DEFAULT_ROUTES, HeadsConfig, HGLatentConfig, HGNativeConfig, TransformerConfig
 from hg_native.model.hg_model import build_model
 from hg_native.training.batch import ByteTokenizer
+from hg_native.training.actions import ACTIONS
 
 SMALL_TRUNK = TransformerConfig(vocab_size=259, d_model=32, n_layers=2, n_heads=4, n_kv_heads=2, d_ff=64, max_seq_len=64)
 SMALL_LATENT = HGLatentConfig(hidden_dim=16, latent_dim=8, layers=1)
@@ -49,6 +50,7 @@ def test_predict_shapes_and_ranges():
     assert set(preds.route_pred.tolist()) <= set(range(len(DEFAULT_ROUTES)))
     assert preds.decision_label(0) in DEFAULT_DECISION_LABELS
     assert preds.route_label(0) in DEFAULT_ROUTES
+    assert preds.distortion_hat.shape == (len(episodes), len(ACTIONS))
 
 
 def test_predict_batches_without_changing_results():

@@ -28,6 +28,7 @@ class Predictions:
     accessibility_prob: np.ndarray
     decision_pred: np.ndarray  # index into DEFAULT_DECISION_LABELS
     route_pred: np.ndarray  # index into DEFAULT_ROUTES
+    distortion_hat: np.ndarray  # (n, len(ACTIONS)) raw predicted distortion; feeds eval.query_efficiency
 
     def decision_label(self, i: int) -> str:
         return DEFAULT_DECISION_LABELS[self.decision_pred[i]]
@@ -51,7 +52,7 @@ def predict(
 
     model.eval()
     episode_ids: list[str] = []
-    info_deficit_chunks, access_chunks, decision_chunks, route_chunks = [], [], [], []
+    info_deficit_chunks, access_chunks, decision_chunks, route_chunks, distortion_chunks = [], [], [], [], []
 
     for start in range(0, len(episodes), batch_size):
         chunk = episodes[start : start + batch_size]
@@ -65,6 +66,7 @@ def predict(
         access_chunks.append(torch.sigmoid(out["accessibility_logit"]).cpu().numpy())
         decision_chunks.append(out["decision_logits"].argmax(dim=-1).cpu().numpy())
         route_chunks.append(out["route_logits"].argmax(dim=-1).cpu().numpy())
+        distortion_chunks.append(out["distortion_hat"].cpu().numpy())
 
     return Predictions(
         episode_id=episode_ids,
@@ -72,4 +74,5 @@ def predict(
         accessibility_prob=np.concatenate(access_chunks),
         decision_pred=np.concatenate(decision_chunks),
         route_pred=np.concatenate(route_chunks),
+        distortion_hat=np.concatenate(distortion_chunks),
     )

@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-"""Evaluate a trained HG-variant checkpoint against spec section 10's metrics
-(gates N0-N3, N4, N5 -- the full query-efficiency/soundness-minimality
-metrics from section 10.4 are still not implemented, see
-[[hg-native-m0-project-state]]).
+"""Evaluate a trained HG-variant checkpoint against spec section 10's metrics:
+gates N0-N5 plus query efficiency (section 10.4, Family A only -- see
+`eval/query_efficiency.py`'s docstring for why M0's structured action space
+narrows soundness/minimality from the spec's original free-form-query
+framing).
 
 Usage:
     python experiments/hg_native/run_eval.py \
@@ -27,6 +28,7 @@ from hg_native.eval.capability import capability_floor  # noqa: E402
 from hg_native.eval.grounding import grounding_discrimination  # noqa: E402
 from hg_native.eval.latents import extract_latents  # noqa: E402
 from hg_native.eval.predict import predict  # noqa: E402
+from hg_native.eval.query_efficiency import query_efficiency  # noqa: E402
 from hg_native.eval.quotient_probes import quotient_recovery  # noqa: E402
 from hg_native.eval.reuse import future_external_bits, repeated_ask_rate  # noqa: E402
 from hg_native.eval.routing import route_accuracy, route_value_report  # noqa: E402
@@ -97,6 +99,7 @@ def main() -> None:
             "route_accuracy_lambda_1_1": route_accuracy(episodes, preds.route_pred),
             "route_value_report": route_value_report(episodes, preds.route_pred, lambda_grid=[(0.1, 1.0), (1.0, 1.0), (10.0, 1.0)]),
         },
+        "query_efficiency_static_hidden": query_efficiency(static_hidden_eps, preds.distortion_hat[static_hidden_idx]),
         "N3_accessibility_discrimination": accessibility_discrimination(accessibility_eps, preds.accessibility_prob[accessibility_idx]),
         "N3_route_rates_on_zero_deficit": route_rates_on_zero_deficit(accessibility_eps, preds.route_pred[accessibility_idx]),
         "N5_grounding_reuse": {
