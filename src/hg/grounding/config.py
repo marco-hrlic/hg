@@ -42,6 +42,99 @@ class IndexSweep:
 
 
 @dataclass(slots=True)
+class FrontierSpec:
+    """E1's sweep: task sizes, and the tolerances of the lossy relaxation.
+
+    The query budgets are not listed: for each n the frontier runs
+    r = 0..ceil(log2 n), which is the whole range over which b*(n, r) varies.
+    Letting a config pick a subset would make it possible to report a frontier
+    with its inconvenient cells omitted.
+    """
+
+    n_bits: list[int]
+    n_items: int = 400
+    n_items_lossy: int = 200
+    epsilons: list[float] = field(default_factory=list)
+    # Above this fiber size a lossy codebook is designed by a structured scheme
+    # with closed-form distortion instead of by 2**s enumeration.
+    max_enumerable_fiber: int = 10
+
+    def __post_init__(self) -> None:
+        if not self.n_bits:
+            raise ConfigError("task.n_bits must list at least one size")
+        if any(n < 2 for n in self.n_bits):
+            raise ConfigError(f"task.n_bits must all be >= 2, got {self.n_bits}")
+        if len(set(self.n_bits)) != len(self.n_bits):
+            raise ConfigError(f"task.n_bits has duplicates: {self.n_bits}")
+        if self.n_items < 1 or self.n_items_lossy < 1:
+            raise ConfigError("task.n_items and task.n_items_lossy must be >= 1")
+        if any(not 0.0 <= e < 0.5 for e in self.epsilons):
+            raise ConfigError(
+                f"task.epsilons must lie in [0, 0.5), got {self.epsilons}: at "
+                "eps >= 0.5 the source can say nothing and still meet the "
+                "tolerance, so the cell measures no protocol at all"
+            )
+        if self.max_enumerable_fiber < 1:
+            raise ConfigError("task.max_enumerable_fiber must be >= 1")
+
+
+@dataclass(slots=True)
+class E1Gate:
+    """Declared acceptance criteria for gate H0 (improved plan section 18).
+
+    Only the lossy tolerance is a number worth configuring. The zero-error half
+    is an exact identity: `b*(n, r) = ceil(n / 2**r)` at accuracy 1.0, with
+    b* - 1 bits failing. There is no tolerance to set on an identity, and
+    offering one would invite widening it.
+    """
+
+    # Slack on the realized error rate of a lossy cell, allowing for the
+    # sampling error of a finite item count. At 200 items the standard error on
+    # an error rate near 0.3 is ~0.032.
+    epsilon_tolerance: float = 0.05
+    # The truncated-protocol control fails with probability (s - b) / 2s, which
+    # is 1/128 at n = 64, r = 0. Each cell is therefore run at whatever item
+    # count buys this many expected failures, so "the bound is tight here" is
+    # backed by the same evidence at every point of the frontier.
+    min_expected_failures: int = 20
+
+    def __post_init__(self) -> None:
+        if self.epsilon_tolerance < 0:
+            raise ConfigError("gate.epsilon_tolerance must be >= 0")
+        if self.min_expected_failures < 1:
+            raise ConfigError("gate.min_expected_failures must be >= 1")
+
+
+@dataclass(slots=True)
+class E2Gate:
+    """Declared acceptance criteria for gates H1 and H2 (plan section 18).
+
+    H1: `B_learned_route+synth < B_always_ask+synth` at matched final
+    distortion. H2: at least one query intervention reduces response cost or
+    raises eta_Q without materially reducing soundness or decision quality.
+    """
+
+    # How much worse an arm's final loss may be than its comparator and still
+    # count as matched distortion. One-sided, for the same reason as Phase 2's.
+    distortion_tolerance: float = 0.02
+    # H1 is a claim about routing, which is only meaningful at a price of
+    # external information -- so, as in gate G1, it must hold at more than one.
+    min_winning_lambdas: int = 2
+    # H2's guard: a minimality intervention may not drop soundness by more than
+    # this against the unmodified synthesizer. Falsification F2 is exactly the
+    # case where cheapness is bought with soundness.
+    max_soundness_loss: float = 0.05
+
+    def __post_init__(self) -> None:
+        if self.distortion_tolerance < 0:
+            raise ConfigError("gate.distortion_tolerance must be >= 0")
+        if self.min_winning_lambdas < 1:
+            raise ConfigError("gate.min_winning_lambdas must be >= 1")
+        if not 0.0 <= self.max_soundness_loss <= 1.0:
+            raise ConfigError("gate.max_soundness_loss must be in [0, 1]")
+
+
+@dataclass(slots=True)
 class Phase0Gate:
     """Declared acceptance criteria (plan section 8)."""
 
@@ -107,6 +200,7 @@ class GroundingConfig:
     sweep: IndexSweep | None = None
     phase1_task: NoisyIndexTaskSpec | None = None
     phase2_task: RouteChoiceSpec | None = None
+    frontier_task: FrontierSpec | None = None
     seed: int = 0
     n_bootstrap: int = 1000
     alpha: float = 0.05
@@ -121,7 +215,9 @@ class GroundingConfig:
     # Share of items used to fit the router; the rest is held out for scoring.
     train_fraction: float = 0.5
     output_root: Path = Path("results")
-    gate: Phase0Gate | Phase1Gate | Phase2Gate = field(default_factory=Phase0Gate)
+    gate: Phase0Gate | Phase1Gate | Phase2Gate | E1Gate | E2Gate = field(
+        default_factory=Phase0Gate
+    )
     # Where this config was loaded from, recorded so a run's manifest and its
     # reproduce command name the real file rather than a guess from the name.
     source_path: Path | None = None
@@ -146,6 +242,17 @@ class GroundingConfig:
                 "n_observations": t.n_observations,
                 "p_self_sufficient": t.p_self_sufficient,
                 "error_rates": list(t.error_rates),
+            }
+        elif self.task_kind == "bounded_query":
+            f = self.frontier_task
+            assert f is not None
+            task = {
+                "kind": self.task_kind,
+                "n_bits": list(f.n_bits),
+                "n_items": f.n_items,
+                "n_items_lossy": f.n_items_lossy,
+                "epsilons": list(f.epsilons),
+                "max_enumerable_fiber": f.max_enumerable_fiber,
             }
         else:
             r = self.phase2_task
@@ -172,6 +279,9 @@ class GroundingConfig:
             "backend": self.raw.get("backend"),
             "backend_options": dict(self.raw.get("backend_options") or {}),
             "synthesizer": dict(self.raw.get("synthesizer") or {}),
+            "query_variants": list(self.raw.get("query_variants") or []),
+            "query_variant": self.raw.get("query_variant"),
+            "arms": list(self.raw.get("arms") or []),
             "self_consistency_samples": self.raw.get("self_consistency_samples"),
             "temperature": self.raw.get("temperature"),
             "max_new_tokens": self.raw.get("max_new_tokens"),
@@ -184,7 +294,13 @@ class GroundingConfig:
 
 
 # Which task each phase uses, and which policy vocabulary and gate go with it.
-TASK_KINDS = ("index", "noisy_index", "route_choice")
+TASK_KINDS = (
+    "index",
+    "noisy_index",
+    "route_choice",
+    "bounded_query",
+    "route_choice_integrated",
+)
 
 
 def load_grounding_config(
@@ -221,6 +337,7 @@ def load_grounding_config(
     sweep: IndexSweep | None = None
     phase1_task: NoisyIndexTaskSpec | None = None
     phase2_task: RouteChoiceSpec | None = None
+    frontier_task: FrontierSpec | None = None
     gate_cls: type[Phase0Gate] | type[Phase1Gate]
 
     if kind == "index":
@@ -254,6 +371,50 @@ def load_grounding_config(
         except ValueError as exc:
             raise ConfigError(f"{path}: {exc}") from exc
         gate_cls = Phase1Gate
+    elif kind == "bounded_query":
+        from .bounded_query import POLICIES as TASK_POLICIES
+
+        unknown_task = set(task) - {
+            "kind", "n_bits", "n_items", "n_items_lossy", "epsilons",
+            "max_enumerable_fiber",
+        }
+        if unknown_task:
+            raise ConfigError(f"{path}: unknown task keys {sorted(unknown_task)}")
+        n_bits = task.get("n_bits")
+        if not isinstance(n_bits, (list, tuple)):
+            raise ConfigError(f"{path}: task.n_bits must be a list of sizes")
+        try:
+            frontier_task = FrontierSpec(
+                n_bits=[int(n) for n in n_bits],
+                n_items=int(task.get("n_items", 400)),
+                n_items_lossy=int(task.get("n_items_lossy", 200)),
+                epsilons=[float(e) for e in task.get("epsilons") or ()],
+                max_enumerable_fiber=int(task.get("max_enumerable_fiber", 10)),
+            )
+        except ValueError as exc:
+            raise ConfigError(f"{path}: {exc}") from exc
+        gate_cls = E1Gate
+    elif kind == "route_choice_integrated":
+        from .integrated import ARMS as TASK_POLICIES
+
+        unknown_task = set(task) - {
+            "kind", "n_items", "p_a_faster", "p_accepts", "p_concession_on_a",
+            "variables", "seed",
+        }
+        if unknown_task:
+            raise ConfigError(f"{path}: unknown task keys {sorted(unknown_task)}")
+        try:
+            phase2_task = RouteChoiceSpec(
+                n_items=int(task.get("n_items", 1000)),
+                p_a_faster=float(task.get("p_a_faster", 0.5)),
+                p_accepts=float(task.get("p_accepts", 0.5)),
+                p_concession_on_a=float(task.get("p_concession_on_a", 0.5)),
+                variables=tuple(task.get("variables") or PREFERENCE_VARIABLES),
+                seed=int(raw.get("seed", 0)),
+            )
+        except ValueError as exc:
+            raise ConfigError(f"{path}: {exc}") from exc
+        gate_cls = E2Gate
     else:
         from .phase2 import BASELINES as TASK_POLICIES
 
@@ -295,11 +456,11 @@ def load_grounding_config(
         )
 
     lambda_grid = [float(v) for v in (raw.get("lambda_grid") or [])]
-    if kind == "noisy_index" and not lambda_grid:
+    if kind in ("noisy_index", "route_choice_integrated") and not lambda_grid:
         raise ConfigError(
-            f"{path}: task {kind!r} needs a `lambda_grid`; gate G1 is a claim "
-            "about a range of external-information prices, so a single price "
-            "cannot test it"
+            f"{path}: task {kind!r} needs a `lambda_grid`; the routing gates "
+            "are claims about a range of external-information prices, so a "
+            "single price cannot test them"
         )
     if len(set(lambda_grid)) != len(lambda_grid):
         raise ConfigError(f"{path}: lambda_grid has duplicates: {lambda_grid}")
@@ -316,6 +477,7 @@ def load_grounding_config(
         sweep=sweep,
         phase1_task=phase1_task,
         phase2_task=phase2_task,
+        frontier_task=frontier_task,
         policies=policies,
         seed=int(raw.get("seed", 0)),
         n_bootstrap=int(raw.get("n_bootstrap", 1000)),

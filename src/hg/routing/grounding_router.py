@@ -102,7 +102,7 @@ class LogisticRouter:
         features: Sequence[dict[str, float]],
         labels: Sequence[float],
     ) -> "LogisticRouter":
-        x = feature_matrix(features)
+        x = feature_matrix(features, self.feature_names)
         y = np.asarray(list(labels), dtype=float)
         if x.shape[0] != y.shape[0]:
             raise ValueError(f"{x.shape[0]} feature rows but {y.shape[0]} labels")
@@ -142,7 +142,7 @@ class LogisticRouter:
     def predict_proba(self, features: Sequence[dict[str, float]]) -> np.ndarray:
         if not self.weights:
             raise RuntimeError("router has not been fitted")
-        x = feature_matrix(features)
+        x = feature_matrix(features, self.feature_names)
         z = (x - np.asarray(self.mean)) / np.asarray(self.scale)
         return _sigmoid(z @ np.asarray(self.weights) + self.intercept)
 

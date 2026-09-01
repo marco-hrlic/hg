@@ -146,9 +146,70 @@ QUERY_SYNTH_V1 = PromptTemplate(
     answer_prefix="Facts needed:",
 )
 
+# E3's minimality interventions (improved plan section 9). Q1 and Q2 differ
+# from `query_synth.v1` only in the instruction: the rule, the options and the
+# list of available facts are byte-identical, so a cost difference between them
+# is attributable to the instruction rather than to a reformatting.
+#
+# The previous run's failure mode is the target. The 3B model was sound on
+# essentially every item and still overpaid, because its cost distribution was
+# bimodal -- a one-variable query most of the time and a full escalation the
+# rest. These two instructions attack that from opposite ends: v2 argues from
+# decision-relevance, v3 states a hard budget.
+QUERY_SYNTH_V2_MINIMAL = PromptTemplate(
+    version="query_synth.v2_minimal",
+    instruction=(
+        "You must choose between the options below by applying the rule, but "
+        "some information is missing. Decide what to ask the traveller.\n"
+        "Ask only for information that can change the final choice. Do not "
+        "request anything that becomes irrelevant once a narrower answer would "
+        "already determine the choice.\n"
+        "Reply with the names of the facts you need, comma-separated, taken "
+        "exactly from the list of available facts. If the rule already settles "
+        "the choice with what you know, reply with the single word NONE."
+    ),
+    body=(
+        "{instruction}\n\n"
+        "Rule:\n{rule}\n\n"
+        "Options:\n{x}\n\n"
+        "Available facts you could ask about:\n{available}\n\n"
+        "{answer_prefix}"
+    ),
+    answer_prefix="Facts needed:",
+)
+
+QUERY_SYNTH_V3_BUDGET = PromptTemplate(
+    version="query_synth.v3_budget",
+    instruction=(
+        "You must choose between the options below by applying the rule, but "
+        "some information is missing. Decide what to ask the traveller.\n"
+        "You may ask about at most one of the traveller's preferences. Choose "
+        "the single fact that decides the choice.\n"
+        "Reply with the name of that one fact, taken exactly from the list of "
+        "available facts. If the rule already settles the choice with what you "
+        "know, reply with the single word NONE."
+    ),
+    body=(
+        "{instruction}\n\n"
+        "Rule:\n{rule}\n\n"
+        "Options:\n{x}\n\n"
+        "Available facts you could ask about:\n{available}\n\n"
+        "{answer_prefix}"
+    ),
+    answer_prefix="Facts needed:",
+)
+
 PROMPT_REGISTRY: dict[str, PromptTemplate] = {
     t.version: t
-    for t in (CLASSIFY_V1, POLICY_V1, PREFERENCE_V1, ROUTE_CHOICE_V1, QUERY_SYNTH_V1)
+    for t in (
+        CLASSIFY_V1,
+        POLICY_V1,
+        PREFERENCE_V1,
+        ROUTE_CHOICE_V1,
+        QUERY_SYNTH_V1,
+        QUERY_SYNTH_V2_MINIMAL,
+        QUERY_SYNTH_V3_BUDGET,
+    )
 }
 # Short aliases so dataset configs can say `prompt_version: classify.v1` or `v1`.
 PROMPT_REGISTRY["v1"] = CLASSIFY_V1

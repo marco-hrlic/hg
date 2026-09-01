@@ -259,6 +259,28 @@ Phase 2 added `src/hg/grounding/{route_choice,phase2}.py`, `src/hg/queries/`
 `src/hg/inference/grounding_simulator.py`, two prompt versions in
 `hg.inference.prompts`, and `scripts/spark_deploy.sh`.
 
+E1 (the bounded-query frontier) added `src/hg/grounding/bounded_query.py` and
+one task kind in `hg.grounding.config`. It reuses the episode artifact, the run
+directory and the figure helper unchanged; its lossy codebook design is new and
+has no counterpart anywhere in the repository.
+
+E2/E3 (the integrated router + synthesizer) added
+`src/hg/grounding/integrated.py`, `src/hg/metrics/calibration.py`,
+`src/hg/queries/quality.py`, two prompt versions, and the E3 variant registry
+plus a cap policy in `hg.queries.lm_query_synthesizer`. Three existing pieces
+were *extended additively* rather than duplicated:
+
+- `hg.routing.decision_state.feature_matrix` now takes the feature-name list as
+  an argument (defaulting to the Phase 1 set), and `LogisticRouter` passes its
+  own `feature_names` through. A Phase 1 router's saved weight vector keeps
+  meaning what it meant; the LM router uses a second, longer set.
+- `hg.grounding.costs.aggregate_route_arm` is reused verbatim for the E2 arms,
+  which is why every E2 episode carries the same `loss_act` / `bits_ask`
+  counterfactual metadata Phase 1 writes.
+- `hg.queries.lm_query_synthesizer.LMQuerySynthesizer` gained `variant` and
+  `on_cap`; the defaults reproduce the Phase 2 behaviour exactly, so a rerun of
+  the G2 config is unchanged.
+
 One existing module needed a genuine fix rather than an extension:
 `hg.inference.hf._label_logprob` scored `" " + label`, which measures the wrong
 token after a chat template and so silently corrupted `scoring_mode: rank` --

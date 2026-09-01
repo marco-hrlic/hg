@@ -1,0 +1,44 @@
+# HG-v2 E1 -- the full bounded-query frontier (improved plan sections 4 and 5).
+#
+# Replaces Phase 0's two endpoints with the whole curve between them. No model,
+# no GPU: this is the theorem-regression experiment behind gate H0, and its job
+# is to fail loudly if the measurement infrastructure and the v0.8 zero-error
+# theorem ever disagree.
+name: hg_v2_e1_frontier
+
+task:
+  kind: bounded_query
+  # The plan's sweep. Every n runs r = 0..ceil(log2 n), so n = 64 alone
+  # produces the seven-row table in section 4.
+  n_bits: [8, 16, 32, 64]
+  # Zero-error cells are deterministic -- accuracy is exactly 1 or exactly not,
+  # and no amount of items changes that -- so this is sized for the truncated
+  # control, whose failure is probabilistic.
+  n_items: 400
+  n_items_lossy: 400
+  # E1b. 0.00 is the zero-error arm and is skipped rather than run twice.
+  epsilons: [0.05, 0.10, 0.20, 0.30, 0.40]
+  # Fibers up to this size get a codebook designed by Lloyd search over all
+  # 2**s source words; larger ones fall back to a structured scheme with
+  # closed-form distortion. Raising it costs 2**s memory per design.
+  max_enumerable_fiber: 10
+
+policies:
+  - zero_error         # the protocol at b*(n, r) bits: must be exactly right
+  - truncated_converse # the same protocol at b* - 1: must fail
+  - lossy              # E1b, at each tolerance
+
+seed: 0
+n_bootstrap: 1000
+alpha: 0.05
+lambda_bit: 1.0
+output_root: results
+
+gate:
+  # Slack on a lossy cell's realized error against its tolerance, for the
+  # sampling error of n_items_lossy items. The zero-error half has no
+  # tolerance: it is an identity.
+  epsilon_tolerance: 0.05
+  # Each cell of the truncated-protocol control is sized to buy this many
+  # expected failures, so the converse check has the same power at every n.
+  min_expected_failures: 20

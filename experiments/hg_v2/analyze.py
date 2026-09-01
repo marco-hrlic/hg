@@ -23,7 +23,7 @@ sys.path.insert(0, str(REPO_ROOT / "src"))
 
 from hg.grounding.config import load_grounding_config  # noqa: E402
 from hg.grounding.episodes import GroundingRunDir  # noqa: E402
-from hg.grounding import phase0, phase1, phase2  # noqa: E402
+from hg.grounding import bounded_query, integrated, phase0, phase1, phase2  # noqa: E402
 
 # Which analysis a run directory gets is decided by the task its config names,
 # not by a flag the caller has to remember. A run directory carries its own
@@ -32,6 +32,8 @@ ANALYZERS = {
     "index": phase0.analyze_run_dir,
     "noisy_index": phase1.analyze_run_dir,
     "route_choice": phase2.analyze_run_dir,
+    "bounded_query": bounded_query.analyze_run_dir,
+    "route_choice_integrated": integrated.analyze_run_dir,
 }
 
 
@@ -56,6 +58,27 @@ def main() -> int:
         )
         return 2
     analysis = analyzer(args.run_dir, args.config)
+
+    gates = analysis.get("gates")
+    if gates:
+        # E2 reports H1 and H2 together; a run fails if any *evaluated* gate
+        # fails, and a gate that was not evaluated cannot fail the run.
+        if args.print_json:
+            print(json.dumps(analysis, indent=2, default=str))
+        else:
+            print(Path(args.run_dir) / "report.md")
+            for gate in gates.values():
+                if not gate.get("evaluated", True):
+                    status = "not evaluated (simulated backend)"
+                else:
+                    status = "PASSED" if gate.get("passed") else "FAILED"
+                print(f"gate {gate['gate']}: {status} — {gate['title']}")
+                for f in gate.get("failures") or []:
+                    print(f"  - {f}")
+        failed = [
+            g for g in gates.values() if g.get("evaluated", True) and not g.get("passed")
+        ]
+        return 1 if failed else 0
 
     gate = analysis.get("gate") or {}
     # A gate can be reported but not *evaluated*: phase 2's G2 is a claim about

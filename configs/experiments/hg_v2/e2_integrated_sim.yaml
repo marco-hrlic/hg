@@ -1,0 +1,76 @@
+# HG-v2 E2 -- the integrated router + query synthesizer, on the simulator.
+#
+# Validates the factorial, the cost accounting, the router calibration and the
+# minimality metrics. It does NOT evaluate gates H1 or H2: those are claims
+# about a frozen off-the-shelf model, and a stand-in cannot bear them either
+# way. Use e2_integrated_qwen3b.yaml for that.
+name: hg_v2_e2_integrated_sim
+
+task:
+  kind: route_choice_integrated
+  n_items: 800
+  p_a_faster: 0.5
+  p_accepts: 0.5
+  p_concession_on_a: 0.5
+  variables:
+    - mountain_roads
+    - toll_roads
+    - ferry_crossings
+    - night_driving
+    - unpaved_roads
+
+policies:
+  - b0_no_grounding
+  - b1_self_consistency
+  - b2_generic_ask
+  - b3_oracle_route_oracle_query
+  - b4_always_ask_synth
+  - b5_learned_route_synth
+  - b6_learned_route_oracle_query
+  - b7_oracle_route_synth
+  # The Q0 comparator only. The E3 interventions are a *prompt* difference, and
+  # the simulated stand-in synthesizer does not read prompts -- running them
+  # here would produce four identical arms and invite reading their equality as
+  # a result. They are exercised by tests/test_integrated.py against a scripted
+  # backend, and for real in the Qwen config.
+  - e3_q0_baseline
+
+backend: grounding_simulator
+backend_options:
+  # A model that applies a stated rule reliably when it has the information,
+  # and guesses with a bias toward the visible numbers when it does not.
+  error_rate_when_sufficient: 0.05
+  bias_strength: 0.8
+
+self_consistency_samples: 5
+temperature: 0.7
+max_new_tokens: 8
+
+synthesizer:
+  # The controlled stand-in: right variable most of the time, sometimes a hedge,
+  # sometimes a miss. Known behaviour, so the metrics can be checked against it.
+  kind: noisy
+  p_correct: 0.6
+  p_superset: 0.25
+  n_extra: 2
+
+router:
+  learning_rate: 0.5
+  n_steps: 2000
+  l2: 0.0001
+
+# The price of an external bit. Dense, per plan section 13: a coarse sweep can
+# hide estimator error inside a threshold window, which is exactly what Phase 1
+# found and reported as a divergence-window width.
+lambda_grid: [0.01, 0.02, 0.05, 0.08, 0.10, 0.15, 0.20, 0.30, 0.40, 0.50]
+
+train_fraction: 0.5
+seed: 0
+n_bootstrap: 1000
+alpha: 0.05
+output_root: results
+
+gate:
+  distortion_tolerance: 0.02
+  min_winning_lambdas: 2
+  max_soundness_loss: 0.05

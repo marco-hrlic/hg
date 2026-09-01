@@ -111,8 +111,31 @@ def agreement_features(observations: Sequence[int]) -> dict[str, float]:
     }
 
 
-def feature_matrix(rows: Sequence[dict[str, float]]) -> np.ndarray:
-    """Stack feature dicts into an (n, len(FEATURE_NAMES)) array in fixed order."""
+# The LM route-choice task cannot use the agreement features alone: a frozen
+# model's own label distribution is available too, and it is the signal a
+# decision-state estimator on a real model would actually have. Kept as a
+# separate tuple rather than appended to FEATURE_NAMES so a Phase 1 router's
+# saved weight vector keeps meaning what it meant.
+LM_FEATURE_NAMES = (
+    "majority_margin",
+    "vote_entropy_bits",
+    "unanimous",
+    # |P(A) - P(B)| under the frozen model's own label scoring: how decided the
+    # single greedy pass was, as opposed to how consistent k sampled passes were.
+    "label_margin",
+    # The probability mass on the label the model actually chose.
+    "top_label_prob",
+)
+
+
+def feature_matrix(
+    rows: Sequence[dict[str, float]], names: Sequence[str] = FEATURE_NAMES
+) -> np.ndarray:
+    """Stack feature dicts into an (n, len(names)) array in fixed order.
+
+    The order is a contract with a fitted weight vector, so it comes from an
+    explicit name list rather than from dict iteration order.
+    """
     return np.asarray(
-        [[float(r[name]) for name in FEATURE_NAMES] for r in rows], dtype=float
+        [[float(r[name]) for name in names] for r in rows], dtype=float
     )

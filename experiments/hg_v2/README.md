@@ -18,14 +18,24 @@ is reused from that infrastructure and what is new — with reasons — is in
 
 ## Status
 
+The gates come from two documents. G0–G2 are the original implementation plan
+(`plans/HG_v2_Claude_Implementation_Plan.md`); H0–H6 are the improved plan
+(`plans/HG_v2_Improved_Experiment_Plan_FIXED.md`), written after G0–G2 and the
+v0.8 theoretical refinements, and they supersede G3–G5 rather than sitting
+alongside them.
+
 | Gate | Question | State |
 |---|---|---|
 | **G0** | Does the simulator reproduce known theory? | **passed** |
 | **G1** | Does a learned router beat fixed ACT/ASK policies? | **passed** |
 | **G2** | Does targeted query synthesis compress external cost? | **passed** on Qwen2.5-3B-Instruct |
-| G3 | Does the effect survive a frozen off-the-shelf LM? | not started |
-| G4 | Does the grounding requirement change with model capability? | not started |
-| G5 | Is custom training justified? | not started |
+| **H0** | Does the whole bounded-query frontier reproduce `b*(n,r)`? | **passed** (E1) |
+| **H1** | Does routing buy anything on top of query synthesis? | see E2 below |
+| **H2** | Does a minimality intervention make the query cheaper? | see E3 below |
+| H3 | Does a second model pass the capability floor? | not started |
+| H4 | Does the effect persist across two capable models? | not started |
+| H5 | Does it survive a second task family? | not started |
+| H6 | Is custom training justified? | not started |
 
 Phases 0, 1 and 2 are complete and their gates pass. G2 was evaluated on a real
 frozen model (Qwen2.5-3B-Instruct, on the DGX Spark): **at equal final
@@ -437,6 +447,196 @@ own passes, restoring the mode afterwards, which keeps the weights loaded once.
 ```bash
 make hg-v2-phase2
 ```
+
+---
+
+## E1 — the full bounded-query frontier (gate H0, passed)
+
+No model, no GPU, about a minute. Improved plan §§4–5 replaces Phase 0's two
+endpoints with the whole curve between them.
+
+### The claim
+
+For deterministic, fixed-length, single-shot, **zero-error** protocols where the
+AI may spend `r` bits naming what it wants and the source answers with `b` bits,
+
+    b*(n, r) = ceil(n / 2^r)
+
+The `r` query bits partition the `n` candidate indices into at most `2^r`
+fibers. Some fiber has size `s ≥ ceil(n / 2^r)`, and conditional on that query
+message the answer must determine `X_K` for *every* `K` in the fiber — so the
+response map restricted to those coordinates is injective on `{0,1}^s` and
+`b ≥ s`. Achievability is the balanced partition: send the fiber verbatim.
+
+Phase 0's two results are the endpoints of this curve: `r = 0` gives `b* = n`
+(generic escalation) and `r = log₂ n` gives `b* = 1` (a targeted query).
+
+### Why it is run rather than asserted
+
+An arithmetic identity that no code path can violate is not a regression test.
+So each `(n, r)` cell is simulated twice — once at `b*` bits, which must reach
+accuracy 1, and once at `b* − 1`, which must not. Either half alone is
+compatible with the bound being wrong in the other direction.
+
+The one-bit-short control fails with probability `(s − b) / 2s`, which is
+**1/128** at `n = 64, r = 0`. At a fixed item count the check therefore gets
+weaker as `n` grows, and a run at 400 items has a 4% chance of seeing no failure
+at all and reporting the bound as not tight. Each cell is instead sized to buy
+`gate.min_expected_failures` expected failures, so "tight here" means the same
+thing at every point of the frontier.
+
+Observed at `n = 64` — the table from plan §4, reproduced by measurement:
+
+| r | 0 | 1 | 2 | 3 | 4 | 5 | 6 |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| `b*` predicted | 64 | 32 | 16 | 8 | 4 | 2 | 1 |
+| `b` observed | 64 | 32 | 16 | 8 | 4 | 2 | 1 |
+| accuracy at `b*` | 1.0 | 1.0 | 1.0 | 1.0 | 1.0 | 1.0 | 1.0 |
+| accuracy at `b*−1` | 0.994 | 0.984 | 0.969 | 0.938 | 0.870 | 0.748 | 0.495 |
+
+### E1b — the lossy frontier
+
+Three claims, kept apart because the plan (§5) is emphatic that merging them is
+the error to avoid:
+
+| quantity | status |
+|---|---|
+| finite converse `b ≥ s(1 − h₂(ε))` | **exact at every blocklength** — the rate-distortion converse applied to one fiber |
+| asymptotic rate `b* → n·2^{−r}(1 − h₂(ε))` | a limit; **not** a prediction about any single cell at these sizes |
+| achievability | what a constructed code attained — an **upper** bound on `b*`, since the codebook is best-found, not proven optimal |
+
+Codebooks are designed by Lloyd search over all `2^s` source words where `s` is
+small enough to enumerate, and by a structured "send `b` coordinates, guess the
+rest" scheme where it is not; each cell reports which. Distortion is computed
+exactly over the whole source alphabet, not sampled, so the design criterion has
+no sampling error in it — the realized error rate is reported beside it as a
+finite-sample check.
+
+Gate H0 gates on the zero-error identity, on the truncated control failing, and
+on the converse. It does **not** gate on approaching the asymptotic rate: at
+`s ≤ 10` that would be gating on a limit the experiment cannot reach.
+
+### Run it
+
+```bash
+make hg-v2-e1
+```
+
+---
+
+## E2/E3 — routing and query synthesis in one system (gates H1, H2)
+
+The improved plan's central experiment (§§6–10), and the one the Phase 2 result
+most obviously demanded: the frozen LM asked a perfectly targeted question 58%
+of the time and **never once declined to ask**, spending bits on all 490 items
+whose prompt already determined the answer. Phase 1's router makes exactly that
+decision. This is the first run where both exist in one system.
+
+    route -> query -> external response -> decision
+
+### The factorial (plan §7)
+
+| arm | route | query |
+|---|---|---|
+| `b0_no_grounding` | never | — |
+| `b1_self_consistency` | never | — (more internal compute) |
+| `b2_generic_ask` | always | every preference the source holds |
+| `b3_oracle_route_oracle_query` | oracle | the gold one-bit query |
+| `b4_always_ask_synth` | always | synthesized — reproduces Phase 2's B4 |
+| `b5_learned_route_synth` | learned | synthesized — **the integrated arm** |
+| `b6_learned_route_oracle_query` | learned | gold — isolates routing error |
+| `b7_oracle_route_synth` | oracle | synthesized — isolates synthesis error |
+
+B6 and B7 are the two single-substitutions of B5, which is what makes the gap
+decomposable: `routing_gap = B5 − B7` and `synthesis_gap = B5 − B6`, in mean
+external bits at matched quality. Without both, one disappointing number would
+be uninterpretable.
+
+### One cache, eight arms
+
+Every arm is a different *policy* over the same three model behaviours: what the
+model answers ungrounded, given a generic dump, and given a targeted answer.
+Each is measured once per item and the arms are assembled from that cache. Two
+consequences, and the second is the important one: GPU time does not scale with
+the arm count, and the arms are **exactly item-paired by construction** rather
+than by coincidence. A λ sweep is then free — repricing a saved counterfactual
+is arithmetic — which is why the price grid is dense (plan §13: a coarse sweep
+can hide estimator error inside a threshold window).
+
+### The router on a real model
+
+Phase 1's router ran on a synthetic task where the internal evidence was
+constructed. Here it runs on the frozen LM's own signals, and only those:
+
+| feature | from |
+|---|---|
+| `majority_margin`, `vote_entropy_bits`, `unanimous` | k sampled generations of the ungrounded prompt |
+| `label_margin`, `top_label_prob` | the model's own label distribution under rank scoring |
+
+Nothing about the withheld variable, the source, or the reference action enters.
+A router that could see those would report its own leak as routing skill — and
+note that `needs_grounding` *is* AI-visible on this task (it is whether the
+concession route is faster), so a structural router would be near-oracle and
+would measure nothing. The question worth asking is whether the model's internal
+signal supports the decision, which is falsification F1's habitat.
+
+The estimator is scored directly, not only through the policy it feeds (plan
+§2.3): Brier, ECE, MCE, MAE, a calibration curve, and the rank correlation
+between the predicted and the empirical value of asking
+`V_ask = L_ACT − L_ASK − λB` at every price. Phase 1 established why: its
+learned router and the exact posterior produced *identical routes* while holding
+different numbers, so routing regret alone cannot see estimator error.
+
+### E3 — minimality interventions (plan §9)
+
+The Phase 2 gap was not a targeting failure. Resolution was 1.0000 and the cost
+distribution was bimodal — one variable most of the time, all five the rest — so
+what is left is minimality. Four variants, all asking on every item so the query
+is the only thing that differs:
+
+| variant | prompt | enforcement |
+|---|---|---|
+| `q0_baseline` | `query_synth.v1` | none — the comparator |
+| `q1_minimality` | `query_synth.v2_minimal` (ask only what can change the decision) | none |
+| `q2_budget` | `query_synth.v3_budget` (at most one preference) | none |
+| `q3_hard_cap` | `query_synth.v3_budget` | truncate to one variable |
+
+Q2 against Q3 separates *stating* a budget from *imposing* one. Q3's truncation
+can break soundness — if the dropped name was the deciding one, the query is now
+cheap and useless — which is falsification F2 made measurable rather than
+argued. Gate H2 therefore requires a cost reduction **and** soundness within
+`gate.max_soundness_loss` **and** decision quality within the distortion
+tolerance; any one of the three failing means the intervention traded rather
+than improved.
+
+Plan §10 asks for the distribution rather than a summary, so the report prints
+the full per-query variable-count distribution and the mixture weights
+`alpha_minimal` and `share_full_escalation`.
+
+### Soundness, minimality and overhead are separate (plan §§2.1–2.2)
+
+- **Soundness** is a property of the query, not of the answer the model then
+  gave: a sound query the model misapplied is a capability failure, and merging
+  the two makes both unreadable.
+- **Minimality excess** `B_Q − B*` is reported *conditional on soundness*.
+  Averaging an unsound 1-bit query into the excess would make a broken
+  synthesizer look economical.
+- **Coordination overhead** is `null` with `protocol_sufficient: false` whenever
+  the protocol left the deficit open — including an ACT on an item that needed
+  grounding, even one that happened to come out right. It is never negative.
+
+### Run it
+
+```bash
+make hg-v2-e2                                    # simulated, validates the metrics
+scripts/spark_deploy.sh run 'experiments/hg_v2/run_e2.py \
+  --config configs/experiments/hg_v2/e2_integrated_qwen3b.yaml -v'
+```
+
+The simulated run does **not** evaluate H1 or H2 — those are claims about a
+frozen off-the-shelf model. What it establishes is that the factorial, the cost
+accounting, the calibration and the minimality metrics detect what they are
+meant to detect, which is the precondition for the test rather than the test.
 
 ---
 

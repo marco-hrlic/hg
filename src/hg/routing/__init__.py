@@ -8,6 +8,7 @@ experiments/hg_v2/REUSE_AUDIT.md.
 
 from .decision_state import (
     FEATURE_NAMES,
+    LM_FEATURE_NAMES,
     DecisionState,
     agreement_features,
     feature_matrix,
@@ -31,6 +32,7 @@ from .strategies import (
 __all__ = [
     "DecisionState",
     "FEATURE_NAMES",
+    "LM_FEATURE_NAMES",
     "agreement_features",
     "feature_matrix",
     "FIXED_POLICIES",

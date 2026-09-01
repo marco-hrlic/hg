@@ -59,6 +59,56 @@ NONE_TOKEN = "NONE"
 ON_FAILURE_GENERIC = "generic"
 ON_FAILURE_NONE = "none"
 
+# What to do when the answer names more variables than `max_variables` allows.
+#
+# `reject` discards the query, which sends it down the parse-failure path and
+# therefore, by default, to generic escalation. That is the conservative
+# reading of a cap violation and it is what the Phase 2 runs used, so it stays
+# the default: changing it silently would make old and new runs incomparable.
+#
+# `truncate` keeps the first `max_variables` names in task order. This is the
+# structured hard cap of improved plan section 9 (Q3), and its interest is
+# precisely that it can break soundness: if the dropped name was the one that
+# decided, the query is now cheap and useless. That is falsification F2 made
+# measurable rather than argued about.
+ON_CAP_REJECT = "reject"
+ON_CAP_TRUNCATE = "truncate"
+
+# The E3 minimality interventions (improved plan section 9). A variant is a
+# prompt plus an enforcement policy, named once here so a config, an episode and
+# a report cannot disagree about what "q2" meant.
+QUERY_VARIANTS: dict[str, dict[str, Any]] = {
+    # Q0: the synthesizer exactly as the previous run had it. The comparator.
+    "q0_baseline": {
+        "prompt_version": "query_synth.v1",
+        "max_variables": None,
+        "on_cap": ON_CAP_REJECT,
+        "description": "unmodified synthesizer (plan section 9, Q0)",
+    },
+    # Q1: an explicit minimality instruction, no enforcement.
+    "q1_minimality": {
+        "prompt_version": "query_synth.v2_minimal",
+        "max_variables": None,
+        "on_cap": ON_CAP_REJECT,
+        "description": "explicit minimality instruction (Q1)",
+    },
+    # Q2: an explicit response-bit budget, still no enforcement -- so a
+    # difference between Q2 and Q3 separates stating a budget from imposing one.
+    "q2_budget": {
+        "prompt_version": "query_synth.v3_budget",
+        "max_variables": None,
+        "on_cap": ON_CAP_REJECT,
+        "description": "stated one-variable budget, unenforced (Q2)",
+    },
+    # Q3: the same budget, enforced structurally on the parsed query.
+    "q3_hard_cap": {
+        "prompt_version": "query_synth.v3_budget",
+        "max_variables": 1,
+        "on_cap": ON_CAP_TRUNCATE,
+        "description": "one-variable budget, enforced by truncation (Q3)",
+    },
+}
+
 
 @dataclass(slots=True)
 class SynthesisOutcome:
@@ -71,6 +121,10 @@ class SynthesisOutcome:
     named_variables: list[str] = field(default_factory=list)
     said_none: bool = False
     fell_back: bool = False
+    # Names the model produced but the cap removed. Kept because a truncated
+    # query that turns out to be unsound has to be attributable to the cap
+    # rather than to the model.
+    dropped_variables: list[str] = field(default_factory=list)
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -80,6 +134,7 @@ class SynthesisOutcome:
             "named_variables": list(self.named_variables),
             "said_none": self.said_none,
             "fell_back": self.fell_back,
+            "dropped_variables": list(self.dropped_variables),
             "response_bits": self.query.response_bits if self.query else 0.0,
         }
 
@@ -97,12 +152,33 @@ class LMQuerySynthesizer:
         temperature: float = 0.0,
         seed: int = 0,
         on_parse_failure: str = ON_FAILURE_GENERIC,
-        # Refuse a query naming more than this many variables. A model that
-        # names everything has produced generic escalation with extra steps,
-        # and letting it through as a "targeted" query would misattribute the
-        # cost. Capped at the full set by default, i.e. no refusal.
+        # Refuse or trim a query naming more than this many variables. A model
+        # that names everything has produced generic escalation with extra
+        # steps, and letting it through as a "targeted" query would misattribute
+        # the cost. Uncapped by default.
         max_variables: int | None = None,
+        on_cap: str = ON_CAP_REJECT,
+        # Which E3 variant this is. Sets the prompt and the cap policy together
+        # -- they are one intervention, and configuring them separately would
+        # allow combinations no arm of the experiment describes.
+        variant: str | None = None,
+        prompt_version: str = QUERY_SYNTH_PROMPT_VERSION,
     ):
+        if variant is not None:
+            if variant not in QUERY_VARIANTS:
+                raise ValueError(
+                    f"unknown query variant {variant!r}; expected one of "
+                    f"{sorted(QUERY_VARIANTS)}"
+                )
+            spec = QUERY_VARIANTS[variant]
+            prompt_version = spec["prompt_version"]
+            max_variables = spec["max_variables"]
+            on_cap = spec["on_cap"]
+        if on_cap not in (ON_CAP_REJECT, ON_CAP_TRUNCATE):
+            raise ValueError(
+                f"on_cap must be {ON_CAP_REJECT!r} or {ON_CAP_TRUNCATE!r}, "
+                f"got {on_cap!r}"
+            )
         if on_parse_failure not in (ON_FAILURE_GENERIC, ON_FAILURE_NONE):
             raise ValueError(
                 f"on_parse_failure must be {ON_FAILURE_GENERIC!r} or "
@@ -114,6 +190,9 @@ class LMQuerySynthesizer:
         self.seed = int(seed)
         self.on_parse_failure = on_parse_failure
         self.max_variables = max_variables
+        self.on_cap = on_cap
+        self.variant = variant
+        self.prompt_version = prompt_version
         self.outcomes: dict[str, SynthesisOutcome] = {}
 
     # ------------------------------------------------------------ prompting ---
@@ -123,7 +202,7 @@ class LMQuerySynthesizer:
             for name in item.variables
         )
         return render_prompt(
-            QUERY_SYNTH_PROMPT_VERSION,
+            self.prompt_version,
             item.route_text(),
             ACTIONS,
             extra={"rule": item.decision_rule(), "available": available},
@@ -176,12 +255,22 @@ class LMQuerySynthesizer:
         named = extract_variables(text, item.variables)
         said_none = bool(re.search(rf"\b{NONE_TOKEN}\b", text, flags=re.IGNORECASE))
 
+        dropped: list[str] = []
         if named and self.max_variables is not None and len(named) > self.max_variables:
             log.debug(
-                "%s: query named %d variables, above max_variables=%d",
-                item.item_id, len(named), self.max_variables,
+                "%s: query named %d variables, above max_variables=%d (%s)",
+                item.item_id, len(named), self.max_variables, self.on_cap,
             )
-            named = []
+            if self.on_cap == ON_CAP_TRUNCATE:
+                # Task order, not the order the model happened to mention them
+                # in: `extract_variables` already normalizes to task order, so
+                # two models naming the same set are truncated identically.
+                named, dropped = (
+                    named[: self.max_variables],
+                    named[self.max_variables :],
+                )
+            else:
+                named = []
 
         if named:
             return SynthesisOutcome(
@@ -190,6 +279,7 @@ class LMQuerySynthesizer:
                 raw_output=text,
                 parse_ok=True,
                 named_variables=named,
+                dropped_variables=dropped,
             )
 
         # "NONE" is a real answer: on an item the prompt already settles, the
@@ -228,8 +318,14 @@ class LMQuerySynthesizer:
             "mean_variables_named": sum(
                 len(o.named_variables) for o in self.outcomes.values()
             ) / n,
-            "prompt_version": QUERY_SYNTH_PROMPT_VERSION,
+            "truncated_rate": sum(
+                bool(o.dropped_variables) for o in self.outcomes.values()
+            ) / n,
+            "variant": self.variant,
+            "prompt_version": self.prompt_version,
             "on_parse_failure": self.on_parse_failure,
+            "max_variables": self.max_variables,
+            "on_cap": self.on_cap,
             "examples": [
                 o.to_dict() for o in list(self.outcomes.values())[:5]
             ],

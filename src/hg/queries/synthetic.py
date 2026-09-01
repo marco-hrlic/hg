@@ -10,6 +10,8 @@ from a targeted one would silently flatter gate G2.
 
 from __future__ import annotations
 
+import hashlib
+
 import numpy as np
 
 from ..grounding.channels import QuerySpec
@@ -70,9 +72,15 @@ class NoisyQuerySynthesizer:
     def synthesize(self, item: RouteChoiceItem) -> QuerySpec:
         # Keyed on the item, not drawn from a walking stream, so a synthesizer's
         # behaviour on one item does not depend on how many items preceded it.
-        rng = np.random.default_rng(
-            [self.seed, abs(hash(item.item_id)) % (2**31)]
-        )
+        #
+        # The key is a *stable* digest rather than `hash(item.item_id)`. Python
+        # salts string hashing per process, so the earlier version produced a
+        # different query set on every run -- the arms stayed internally
+        # consistent and the saved-artifact round-trip still reproduced, so
+        # nothing failed loudly, but two runs of the same config disagreed. Cost
+        # comparisons between runs are the whole point here, and the repository
+        # requires deterministic inference for exactly this reason.
+        rng = np.random.default_rng([self.seed, _item_key(item.item_id)])
         u = float(rng.random())
         others = [v for v in item.variables if v != item.requirement]
 
@@ -86,3 +94,10 @@ class NoisyQuerySynthesizer:
 
         wrong = str(rng.choice(others))
         return targeted_preference_query([wrong])
+
+
+def _item_key(item_id: str) -> int:
+    """A stable small integer key for an item id, unaffected by PYTHONHASHSEED."""
+    return int.from_bytes(
+        hashlib.blake2b(item_id.encode("utf-8"), digest_size=4).digest(), "little"
+    )
