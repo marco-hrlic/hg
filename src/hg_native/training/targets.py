@@ -98,14 +98,19 @@ def accessibility_target(episode: Episode) -> tuple[float, bool]:
     return float(episode.metadata.get("accessibility_deficit", False)), True
 
 
-def route_target(episode: Episode, lambda_b: float = 1.0, lambda_k: float = 1.0) -> tuple[int, bool]:
-    """r* = argmin_r C(r) = L(r) + lambda_B*B(r) + lambda_K*K(r) (spec section 3.3).
+def route_costs(episode: Episode, lambda_b: float = 1.0, lambda_k: float = 1.0) -> dict[str, float]:
+    """C(r) = L(r) + lambda_B*B(r) + lambda_K*K(r) for every route this
+    episode actually offers (spec section 3.3). `L(r)` is the best available
+    action's distortion within that route (e.g. `L(ACT) = min` over `ACT_*`
+    distortions, or `BLIND_ACT_RISK` under a genuine deficit -- see that
+    constant's docstring); `B`/`K` are the fixed unit costs above, zero for
+    routes that don't incur them. A route absent from this episode's
+    `available_actions` (e.g. `THINK` outside Family B) is simply not a key
+    in the returned dict, rather than being scored as free.
 
-    `L(r)` is the best available action's distortion within that route
-    (e.g. `L(ACT) = min` over `ACT_*` distortions); `B`/`K` are the fixed
-    unit costs above, zero for routes that don't incur them. A route absent
-    from this episode's `available_actions` (e.g. `THINK` outside Family B)
-    is simply not a candidate, rather than being scored as free.
+    Shared by `route_target` (the training label: argmin) and
+    `eval.routing` (the evaluation question: how much would each route,
+    including ones the router didn't pick, have actually cost).
     """
     candidates: dict[str, tuple[float, float, float]] = {}  # route -> (L, B, K)
     act_costs = [v for a, v in episode.distortion_profile.items() if a.startswith("ACT_")]
@@ -119,10 +124,13 @@ def route_target(episode: Episode, lambda_b: float = 1.0, lambda_k: float = 1.0)
     ask_costs = [v for a, v in episode.distortion_profile.items() if a.startswith("ASK")]
     if ask_costs:
         candidates["ASK"] = (min(ask_costs), COST_PER_ASK, 0.0)
+    return {r: (l + lambda_b * b + lambda_k * k) for r, (l, b, k) in candidates.items()}
 
-    if not candidates:
+
+def route_target(episode: Episode, lambda_b: float = 1.0, lambda_k: float = 1.0) -> tuple[int, bool]:
+    """r* = argmin_r C(r) (spec section 3.3). See `route_costs` for the cost model."""
+    costs = route_costs(episode, lambda_b, lambda_k)
+    if not costs:
         return 0, False
-
-    route_cost = {r: (l + lambda_b * b + lambda_k * k) for r, (l, b, k) in candidates.items()}
-    best_route = min(route_cost, key=route_cost.get)
+    best_route = min(costs, key=costs.get)
     return DEFAULT_ROUTES.index(best_route), True
