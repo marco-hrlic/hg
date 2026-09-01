@@ -56,6 +56,16 @@ _RENDERERS = {
 }
 
 
+def tokenizer_hash(tokenizer: Tokenizer) -> str:
+    """A stable identity string for run-manifest provenance (spec section 16).
+
+    `ByteTokenizer` has no vocab file to hash; this is enough to detect "the
+    tokenizer changed" across runs, not a full vocabulary digest -- a real
+    trained BPE tokenizer would hash its actual vocab/merges file instead.
+    """
+    return f"{type(tokenizer).__name__}:v{tokenizer.vocab_size}"
+
+
 def render(episode: Episode) -> str:
     try:
         renderer = _RENDERERS[episode.family]

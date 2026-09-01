@@ -134,6 +134,33 @@ class Transformer(nn.Module):
         self.blocks = nn.ModuleList(TransformerBlock(cfg) for _ in range(cfg.n_layers))
         self.final_norm = RMSNorm(cfg.d_model)
         self._rope_cache: tuple[torch.Tensor, torch.Tensor] | None = None
+        self._init_weights()
+
+    def _init_weights(self, std: float = 0.02) -> None:
+        """GPT-2-style init. Caught by an actual Spark smoke run: with
+        default `nn.Linear`/`nn.Embedding` init, the tied-embedding LM head
+        produced logits of magnitude ~400 at random init, which is not a
+        correctness bug on its own (the smoke run's loss still decreased)
+        but is a well-known transformer-training footgun -- unscaled
+        residual growth across layers risks instability at longer/larger
+        runs. `std=0.02` and the o_proj/down_proj residual-output scaling
+        below match GPT-2's own init.
+        """
+        for module in self.modules():
+            if isinstance(module, nn.Linear):
+                nn.init.normal_(module.weight, mean=0.0, std=std)
+                if module.bias is not None:
+                    nn.init.zeros_(module.bias)
+            elif isinstance(module, nn.Embedding):
+                nn.init.normal_(module.weight, mean=0.0, std=std)
+        # Residual-output projections get an extra 1/sqrt(2*n_layers): each
+        # of the 2*n_layers residual additions (attn + mlp per layer) would
+        # otherwise compound the output variance across the whole trunk.
+        residual_scale = 1.0 / math.sqrt(2 * self.cfg.n_layers)
+        with torch.no_grad():
+            for block in self.blocks:
+                block.attn.o_proj.weight.mul_(residual_scale)
+                block.mlp.down_proj.weight.mul_(residual_scale)
 
     def _cos_sin(self, seq_len: int, device: torch.device) -> tuple[torch.Tensor, torch.Tensor]:
         if self._rope_cache is None or self._rope_cache[0].shape[0] < seq_len or self._rope_cache[0].device != device:

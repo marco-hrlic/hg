@@ -14,6 +14,7 @@ from hg_native.training.batch import ByteTokenizer, collate, serialize_episode
 from hg_native.training.losses import (
     compute_losses,
     hg_multiplier_for_progress,
+    next_token_labels,
     targets_to_tensors,
     total_loss,
     transition_loss,
@@ -54,7 +55,7 @@ def test_compute_losses_baseline_variant_only_has_lm():
     batch, tok = _batch(_mixed_episodes())
     ids = torch.tensor(batch["input_ids"])
     out = model(ids)
-    labels = ids.clone()
+    labels = next_token_labels(ids, torch.tensor(batch["attention_mask"]))
     losses = compute_losses(out, {}, labels)
     assert set(losses) == {"lm"}
     assert torch.isfinite(losses["lm"])
@@ -67,7 +68,7 @@ def test_compute_losses_hg_variant_has_every_non_transition_head():
     ids = torch.tensor(batch["input_ids"])
     positions = torch.tensor(batch["decision_position"])
     out = model(ids, decision_positions=positions)
-    labels = ids.clone()
+    labels = next_token_labels(ids, torch.tensor(batch["attention_mask"]))
     target_tensors = targets_to_tensors(batch["targets"])
     losses = compute_losses(out, target_tensors, labels)
     assert set(losses) == {"lm", "decision", "quotient", "info_deficit", "accessibility", "route"}
@@ -83,7 +84,7 @@ def test_compute_losses_with_transition_target():
     positions = torch.tensor(batch["decision_position"])
     action_id = torch.tensor(batch["action_id"])
     out = model(ids, decision_positions=positions, action_id=action_id)
-    labels = ids.clone()
+    labels = next_token_labels(ids, torch.tensor(batch["attention_mask"]))
     target_tensors = targets_to_tensors(batch["targets"])
     fake_next_state = torch.zeros_like(out["s_t"]).detach()
     losses = compute_losses(out, target_tensors, labels, s_next_target=fake_next_state)
@@ -105,7 +106,8 @@ def test_masked_losses_do_not_crash_on_all_masked_batch():
     positions = torch.tensor(batch["decision_position"])
     out = model(ids, decision_positions=positions)
     target_tensors = targets_to_tensors(batch["targets"])
-    losses = compute_losses(out, target_tensors, ids.clone())
+    labels = next_token_labels(ids, torch.tensor(batch["attention_mask"]))
+    losses = compute_losses(out, target_tensors, labels)
     for name, value in losses.items():
         assert torch.isfinite(value), name
 
@@ -134,6 +136,44 @@ def test_hg_multiplier_for_progress_matches_schedule():
 def test_hg_multiplier_for_progress_rejects_zero_total_steps():
     with pytest.raises(ValueError, match="total_steps"):
         hg_multiplier_for_progress(HGLossSchedule(), step=0, total_steps=0)
+
+
+def test_next_token_labels_shifts_by_one_and_masks_padding():
+    ids = torch.tensor([[10, 11, 12, 13, 0], [20, 21, 0, 0, 0]])
+    attention_mask = torch.tensor([[1, 1, 1, 1, 0], [1, 1, 0, 0, 0]])
+    labels = next_token_labels(ids, attention_mask)
+    assert labels.tolist() == [
+        [11, 12, 13, -100, -100],  # last real token's target is padding -> ignored; final position always ignored
+        [21, -100, -100, -100, -100],
+    ]
+
+
+def test_next_token_labels_is_not_a_same_position_copy():
+    # The actual bug this catches: a real 12M-parameter model with tied
+    # embeddings drove lm_loss to exactly 0.0 with exactly 0.0 gradient from
+    # step 0 of an actual Spark training run, because `labels = ids.clone()`
+    # asked every position to reproduce its own input token -- trivially
+    # solvable via the residual stream at random init. This just pins that
+    # `next_token_labels` output is never equal to its own input.
+    ids = torch.randint(0, 259, (3, 10))
+    attention_mask = torch.ones_like(ids)
+    labels = next_token_labels(ids, attention_mask)
+    assert not torch.equal(labels[:, :-1], ids[:, :-1])
+
+
+def test_lm_loss_with_next_token_labels_is_nonzero_at_random_init():
+    from hg_native.model.hg_model import build_model
+
+    cfg = _baseline_config()
+    model = build_model(cfg)
+    ids = torch.randint(0, SMALL_TRUNK.vocab_size, (4, 20))
+    attention_mask = torch.ones_like(ids)
+    out = model(ids)
+    labels = next_token_labels(ids, attention_mask)
+    loss = compute_losses(out, {}, labels)["lm"]
+    # A random 259-way classifier's cross-entropy is ln(259) ~= 5.56; assert
+    # it's in a sane range, not exactly (or suspiciously near) zero.
+    assert loss.item() > 1.0
 
 
 def test_transition_loss_does_not_detach_for_you():

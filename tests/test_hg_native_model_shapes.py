@@ -152,6 +152,21 @@ def test_same_seed_gives_identical_model_init_and_output():
     assert torch.equal(out1["route_logits"], out2["route_logits"])
 
 
+def test_init_produces_bounded_logit_magnitude():
+    # Regression for a real bug caught on the Spark: default nn.Linear/
+    # nn.Embedding init let tied-embedding logits reach magnitude ~400 at
+    # random init (see transformer.py's `_init_weights` docstring). A
+    # healthy GPT-2-style init should keep initial logits within a modest
+    # multiple of a random classifier's natural scale.
+    cfg = _baseline_config()
+    model = build_model(cfg)
+    model.eval()
+    ids = _random_ids(4, 10, cfg.transformer.vocab_size)
+    with torch.no_grad():
+        logits = model(ids)["logits"]
+    assert logits.abs().max().item() < 20.0
+
+
 def test_rejects_sequence_longer_than_max_seq_len():
     cfg = _baseline_config()
     model = build_model(cfg)

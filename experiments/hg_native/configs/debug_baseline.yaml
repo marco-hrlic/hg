@@ -1,0 +1,14 @@
+# spec section 19 run-order step 3: "Train a 5-10M parameter micro-model for
+# debugging only." vocab_size=259 matches training.batch.ByteTokenizer (the
+# placeholder tokenizer -- see hg_native.training.batch's docstring), not the
+# spec section 3.1 recommended 16000, since no real BPE has been trained yet.
+variant: baseline
+seed: 0
+transformer:
+  vocab_size: 259
+  d_model: 384
+  n_layers: 6
+  n_heads: 8
+  n_kv_heads: 4
+  d_ff: 1024
+  max_seq_len: 128

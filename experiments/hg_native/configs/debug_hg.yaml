@@ -1,0 +1,19 @@
+# Same trunk as debug_baseline.yaml (spec section 2.1's matched-comparison
+# requirement) plus the default HG latent/heads. See debug_baseline.yaml for
+# why vocab_size=259.
+variant: hg
+seed: 0
+transformer:
+  vocab_size: 259
+  d_model: 384
+  n_layers: 6
+  n_heads: 8
+  n_kv_heads: 4
+  d_ff: 1024
+  max_seq_len: 128
+hg_latent:
+  hidden_dim: 256
+  latent_dim: 64
+  layers: 2
+heads:
+  n_actions: 7

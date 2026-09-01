@@ -54,8 +54,33 @@ def _masked_mean(per_example: torch.Tensor, mask: torch.Tensor) -> torch.Tensor:
     return (per_example * mask).sum() / denom
 
 
+def next_token_labels(input_ids: torch.Tensor, attention_mask: torch.Tensor, ignore_index: int = -100) -> torch.Tensor:
+    """Build `labels` such that `labels[:, t]` is the token *after* position `t`.
+
+    Without this shift, `lm_loss(logits, input_ids)` asks position `t`'s
+    output to reproduce position `t`'s own input token -- with tied
+    embeddings, the residual stream already carries `embed(x_t)` straight
+    through to the final norm, so the LM head can "predict" it almost
+    perfectly at random init by simple self-similarity, collapsing the loss
+    to ~0 with ~0 gradient before any real training happens. Caught by a
+    smoke run on the Spark returning exactly `0.0` loss and `0.0` grad norm
+    from step 0 -- the spec section 8.1 smoke stage's whole job.
+
+    The last position and any position whose *target* token is padding are
+    set to `ignore_index` so padding never contributes to the loss.
+    """
+    labels = torch.full_like(input_ids, ignore_index)
+    labels[:, :-1] = input_ids[:, 1:]
+    pad_target = attention_mask[:, 1:] == 0
+    labels[:, :-1] = labels[:, :-1].masked_fill(pad_target, ignore_index)
+    return labels
+
+
 def lm_loss(logits: torch.Tensor, labels: torch.Tensor, ignore_index: int = -100) -> torch.Tensor:
-    """Standard next-token cross-entropy. logits: (batch, seq, vocab); labels: (batch, seq)."""
+    """Cross-entropy against already-next-token-aligned `labels` (see `next_token_labels`).
+
+    logits: (batch, seq, vocab); labels: (batch, seq).
+    """
     return F.cross_entropy(logits.reshape(-1, logits.shape[-1]), labels.reshape(-1), ignore_index=ignore_index)
 
 
