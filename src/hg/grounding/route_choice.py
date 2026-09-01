@@ -57,9 +57,10 @@ from ..inference.prompts import render_prompt
 from .channels import QuerySpec, Response, log2_alphabet
 
 # v2 changed two display phrases (see VARIABLE_PHRASES) and so changed the
-# rendered prompt. The items themselves are unchanged, but a run is only
-# comparable to another at the same version.
-ROUTE_CHOICE_TASK_VERSION = "route-choice-v2"
+# rendered prompt. v3 randomizes which label carries the concession, which
+# changes the item distribution as well. A run is only comparable to another at
+# the same version.
+ROUTE_CHOICE_TASK_VERSION = "route-choice-v3"
 TASK_NAME = "route_choice"
 PROMPT_VERSION = "route_choice.v1"
 
@@ -103,11 +104,16 @@ VARIABLE_ALIASES = {
     "unpaved_roads": ("unpaved road", "unpaved roads", "unpaved", "gravel"),
 }
 
+# Stated over "the route with the requirement" rather than over route A, because
+# which label carries the requirement is randomized -- see
+# `RouteChoiceSpec.p_concession_on_a` for why that matters.
 DECISION_RULE = (
-    "- If route A's travel time is longer than route B's, choose B.\n"
-    "- Otherwise, if route A's requirement is acceptable to the traveller, "
-    "choose A.\n"
-    "- Otherwise choose B."
+    "- One route requires something of the traveller; the other requires "
+    "nothing.\n"
+    "- If the route with the requirement is the slower one, choose the other "
+    "route.\n"
+    "- Otherwise, choose the route with the requirement if that requirement is "
+    "acceptable to the traveller, and the other route if it is not."
 )
 
 NO_CONSTRAINTS = "(nothing known about the traveller's preferences)"
@@ -122,18 +128,34 @@ META_HINT = "gs_prior_hint"
 @dataclass(frozen=True, slots=True)
 class RouteChoiceSpec:
     n_items: int = 400
-    # Share of items where route A is faster, i.e. where the hidden variable
-    # actually decides. The rest are answerable from the prompt alone.
+    # Share of items where the route carrying the concession is the faster one,
+    # i.e. where the hidden variable actually decides. The rest are answerable
+    # from the prompt alone.
     p_a_faster: float = 0.5
     # Share of items where the traveller accepts the relevant concession.
     p_accepts: float = 0.5
+    # Share of items where the concession sits on the route labelled A.
+    #
+    # Load-bearing at 0.5, and the reason is a confound rather than a
+    # preference. With the concession always on A, the reference action is B
+    # whenever the concession route is slower *or* the concession is
+    # unacceptable -- so B is correct on three quarters of items, and a model
+    # that simply always answers B scores 0.75 while reading nothing. Observed:
+    # Qwen2.5-1.5B-Instruct answers B on essentially every item. Randomizing
+    # which label carries the concession makes the marginal over reference
+    # actions symmetric, so label bias cannot masquerade as accuracy.
+    p_concession_on_a: float = 0.5
     variables: tuple[str, ...] = PREFERENCE_VARIABLES
     seed: int = 0
 
     def __post_init__(self) -> None:
         if self.n_items < 1:
             raise ValueError(f"n_items must be >= 1, got {self.n_items}")
-        for name, value in (("p_a_faster", self.p_a_faster), ("p_accepts", self.p_accepts)):
+        for name, value in (
+            ("p_a_faster", self.p_a_faster),
+            ("p_accepts", self.p_accepts),
+            ("p_concession_on_a", self.p_concession_on_a),
+        ):
             if not 0.0 <= value <= 1.0:
                 raise ValueError(f"{name} must be in [0, 1], got {value}")
         if len(self.variables) < 2:
@@ -170,26 +192,43 @@ class RouteChoiceItem:
     distance_b: int
     toll_a: int
     toll_b: int
-    requirement: str  # which concession route A needs
+    requirement: str  # which concession the concession route needs
+    concession_route: str  # "A" or "B" -- which label carries the requirement
     variables: tuple[str, ...]
     # --- source-private -------------------------------------------------
     acceptances: Mapping[str, bool]
 
     @property
-    def a_faster(self) -> bool:
-        return self.time_a < self.time_b
+    def other_route(self) -> str:
+        return "B" if self.concession_route == "A" else "A"
+
+    @property
+    def concession_time(self) -> int:
+        return self.time_a if self.concession_route == "A" else self.time_b
+
+    @property
+    def other_time(self) -> int:
+        return self.time_b if self.concession_route == "A" else self.time_a
+
+    @property
+    def concession_faster(self) -> bool:
+        return self.concession_time < self.other_time
 
     @property
     def needs_grounding(self) -> bool:
         """True when H(J | M_A) = 1 bit rather than 0."""
-        return self.a_faster
+        return self.concession_faster
 
     @property
     def reference_action(self) -> str:
         """The exactly-computable correct action."""
-        if not self.a_faster:
-            return "B"
-        return "A" if self.acceptances[self.requirement] else "B"
+        if not self.concession_faster:
+            return self.other_route
+        return (
+            self.concession_route
+            if self.acceptances[self.requirement]
+            else self.other_route
+        )
 
     @property
     def residual_deficit_bits(self) -> float:
@@ -198,11 +237,22 @@ class RouteChoiceItem:
 
     # ------------------------------------------------------------ prompt ---
     def route_text(self) -> str:
-        return (
-            f"Route A: {self.distance_a} km, toll {self.toll_a} EUR, "
-            f"{self.time_a} minutes. Requires {VARIABLE_PHRASES[self.requirement]}.\n"
-            f"Route B: {self.distance_b} km, toll {self.toll_b} EUR, "
-            f"{self.time_b} minutes. No special requirements."
+        def line(label: str, distance: int, toll: int, minutes: int) -> str:
+            requirement = (
+                f"Requires {VARIABLE_PHRASES[self.requirement]}."
+                if label == self.concession_route
+                else "No special requirements."
+            )
+            return (
+                f"Route {label}: {distance} km, toll {toll} EUR, "
+                f"{minutes} minutes. {requirement}"
+            )
+
+        return "\n".join(
+            [
+                line("A", self.distance_a, self.toll_a, self.time_a),
+                line("B", self.distance_b, self.toll_b, self.time_b),
+            ]
         )
 
     def prompt(self, constraints: str = NO_CONSTRAINTS) -> str:
@@ -240,10 +290,15 @@ class RouteChoiceItem:
                 META_REFERENCE_ACTION: self.reference_action,
                 META_SUFFICIENT: sufficient,
                 # What a model guessing without the missing variable would be
-                # drawn towards: route A looks better on every visible number
-                # when it is faster.
-                META_HINT: "A" if self.a_faster else "B",
+                # drawn towards: the faster route, which is the concession route
+                # exactly when grounding is needed.
+                META_HINT: (
+                    self.concession_route
+                    if self.concession_faster
+                    else self.other_route
+                ),
                 "requirement": self.requirement,
+                "concession_route": self.concession_route,
                 "needs_grounding": self.needs_grounding,
             },
         )
@@ -263,28 +318,35 @@ def generate_route_choice_items(spec: RouteChoiceSpec) -> list[RouteChoiceItem]:
     """Generate the task. Deterministic given the spec."""
     rng = np.random.default_rng([spec.seed, 7714, len(spec.variables)])
     n = spec.n_items
-    a_faster = rng.random(n) < spec.p_a_faster
+    concession_faster = rng.random(n) < spec.p_a_faster
+    concession_on_a = rng.random(n) < spec.p_concession_on_a
     requirement_idx = rng.integers(0, len(spec.variables), size=n)
     accept = rng.random((n, len(spec.variables))) < spec.p_accepts
 
-    times_b = rng.integers(60, 240, size=n)
+    other_times = rng.integers(60, 240, size=n)
     # A margin of at least five minutes, so "faster" is never a rounding
     # artifact a reader could dispute.
     deltas = rng.integers(5, 40, size=n)
-    times_a = np.where(a_faster, times_b - deltas, times_b + deltas)
+    concession_times = np.where(
+        concession_faster, other_times - deltas, other_times + deltas
+    )
 
     items: list[RouteChoiceItem] = []
     for i in range(n):
+        on_a = bool(concession_on_a[i])
+        time_a = int(concession_times[i]) if on_a else int(other_times[i])
+        time_b = int(other_times[i]) if on_a else int(concession_times[i])
         items.append(
             RouteChoiceItem(
                 item_id=f"route-{i:06d}",
-                time_a=int(times_a[i]),
-                time_b=int(times_b[i]),
+                time_a=time_a,
+                time_b=time_b,
                 distance_a=int(rng.integers(40, 400)),
                 distance_b=int(rng.integers(40, 400)),
                 toll_a=int(rng.integers(0, 30)),
                 toll_b=int(rng.integers(0, 30)),
                 requirement=spec.variables[requirement_idx[i]],
+                concession_route="A" if on_a else "B",
                 variables=tuple(spec.variables),
                 acceptances={
                     name: bool(accept[i, j]) for j, name in enumerate(spec.variables)

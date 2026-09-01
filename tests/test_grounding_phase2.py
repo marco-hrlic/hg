@@ -53,18 +53,45 @@ def items(n=200, **over):
 # ------------------------------------------------------------------- the task ---
 def test_the_rule_determines_the_reference_action():
     for item in items(500):
-        if not item.a_faster:
-            assert item.reference_action == "B"
+        if not item.concession_faster:
+            assert item.reference_action == item.other_route
         elif item.acceptances[item.requirement]:
-            assert item.reference_action == "A"
+            assert item.reference_action == item.concession_route
         else:
-            assert item.reference_action == "B"
+            assert item.reference_action == item.other_route
 
 
 def test_residual_deficit_is_one_bit_exactly_when_the_hidden_bit_decides():
     for item in items(300):
-        assert item.needs_grounding == item.a_faster
-        assert item.residual_deficit_bits == (1.0 if item.a_faster else 0.0)
+        assert item.needs_grounding == item.concession_faster
+        assert item.residual_deficit_bits == (1.0 if item.concession_faster else 0.0)
+
+
+def test_the_reference_action_marginal_is_symmetric():
+    """The confound this task originally had: with the concession always on
+    route A, B was correct on three quarters of items and a model that always
+    answered B scored 0.75 while reading nothing. Randomizing which label
+    carries the concession makes label bias score exactly chance."""
+    pool = items(4000)
+    share_a = sum(i.reference_action == "A" for i in pool) / len(pool)
+    assert abs(share_a - 0.5) < 0.03
+
+    # ...and symmetric within the subset where the hidden bit actually decides,
+    # which is the subset every grounding claim is about.
+    needy = [i for i in pool if i.needs_grounding]
+    share_a_needy = sum(i.reference_action == "A" for i in needy) / len(needy)
+    assert abs(share_a_needy - 0.5) < 0.04
+
+
+def test_the_concession_sits_on_either_label():
+    pool = items(2000)
+    on_a = sum(i.concession_route == "A" for i in pool) / len(pool)
+    assert abs(on_a - 0.5) < 0.04
+    for item in pool[:200]:
+        assert item.other_route != item.concession_route
+        assert VARIABLE_PHRASES[item.requirement] in item.route_text()
+        # Only the concession route carries a requirement.
+        assert item.route_text().count("No special requirements") == 1
 
 
 def test_the_withheld_variable_never_appears_in_the_ungrounded_prompt():
@@ -86,12 +113,15 @@ def test_the_withheld_variable_never_appears_in_the_ungrounded_prompt():
         for verdict in (f"{phrase} is acceptable", f"{phrase} is not acceptable"):
             assert verdict not in prompt
 
-        # The requirement itself is visible -- route A needs *something* -- and
-        # the rule and both actions are present, so the task is well posed.
+        # The requirement itself is visible -- one route needs *something* --
+        # and the rule and both actions are present, so the task is well posed.
         assert VARIABLE_PHRASES[item.requirement] in prompt
         for action in ACTIONS:
             assert action in prompt
-        assert "travel time" in prompt
+        # The rule turns on which route is slower, so both times must be shown.
+        assert "slower one" in prompt
+        assert f"{item.time_a} minutes" in prompt
+        assert f"{item.time_b} minutes" in prompt
 
 
 def test_a_grounded_prompt_does_state_the_verdict():
@@ -109,6 +139,17 @@ def test_a_grounded_prompt_does_state_the_verdict():
     assert expected in prompt
 
 
+def test_label_bias_is_reported_per_arm(tmp_path):
+    """A constant-answer model scores ~0.5 overall on this task; the split by
+    which action is correct is what distinguishes reading from guessing."""
+    cfg = phase2_config(tmp_path)
+    arms = arms_of(build_analysis(cfg, run_sweep(cfg)[0]))
+    fully_grounded = arms["b2_generic_ask"]
+    assert fully_grounded["accuracy_when_a_correct"] == 1.0
+    assert fully_grounded["accuracy_when_b_correct"] == 1.0
+    assert 0.3 < fully_grounded["share_answered_a"] < 0.7
+
+
 def test_the_prompt_shows_the_travel_times_the_rule_needs():
     for item in items(50):
         prompt = item.prompt()
@@ -116,7 +157,7 @@ def test_the_prompt_shows_the_travel_times_the_rule_needs():
         assert f"{item.time_b} minutes" in prompt
 
 
-def test_a_faster_route_a_has_a_real_margin():
+def test_the_faster_route_has_a_real_margin():
     """Not a rounding artifact a reader could dispute."""
     for item in items(300):
         assert abs(item.time_a - item.time_b) >= 5
@@ -272,15 +313,25 @@ def test_the_simulator_is_right_when_the_prompt_suffices_and_guesses_otherwise()
 
 def test_the_simulator_guesses_with_the_configured_bias():
     """A bias rather than a coin flip, because self-consistency cannot fix a
-    bias and that is what baseline B1 is for."""
+    bias and that is what baseline B1 is for.
+
+    Measured against the *hint* -- the visibly-faster route -- rather than
+    against the label "A": which label is faster is randomized, so a bias
+    towards A would now be a bias towards nothing in particular.
+    """
     backend = get_backend("grounding_simulator", seed=0, bias_strength=0.9)
     pool = [i for i in items(2000) if i.needs_grounding]
-    preds = backend.predict(
-        [i.inference_item() for i in pool], GenerationSettings()
-    )
-    # The hint on a grounding-needed item is always A (A is faster).
+    inference_items = [i.inference_item() for i in pool]
+    preds = backend.predict(inference_items, GenerationSettings())
+
+    hints = [ii.meta["gs_prior_hint"] for ii in inference_items]
+    share_hint = sum(p.label == h for p, h in zip(preds, hints)) / len(preds)
+    assert abs(share_hint - 0.9) < 0.05
+
+    # And the guess is not a label bias: it follows the faster route, which is
+    # A about half the time.
     share_a = sum(p.label == "A" for p in preds) / len(preds)
-    assert abs(share_a - 0.9) < 0.05
+    assert 0.35 < share_a < 0.65
 
 
 def test_greedy_decoding_is_deterministic_and_sampling_varies():

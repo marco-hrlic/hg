@@ -117,6 +117,14 @@ class ArmQueryMetrics:
     gold_match_rate: float | None
     # Internal compute, for the baselines that spend it instead of bits.
     mean_samples: float
+    # Accuracy split by which action is correct, and the share of items the arm
+    # answered "A". A model that always answers the same label scores ~0.5
+    # overall on this task and 0/1 on the two halves, so these three numbers
+    # separate "reads the prompt" from "has a label bias" -- which an aggregate
+    # accuracy cannot.
+    accuracy_when_a_correct: float | None
+    accuracy_when_b_correct: float | None
+    share_answered_a: float
     accuracy_ci: tuple[float, float] | None = None
     bits_ci: tuple[float, float] | None = None
 
@@ -139,6 +147,9 @@ class ArmQueryMetrics:
             "efficiency_denominator": self.mean_external_bits,
             "gold_match_rate": self.gold_match_rate,
             "mean_samples": self.mean_samples,
+            "accuracy_when_a_correct": self.accuracy_when_a_correct,
+            "accuracy_when_b_correct": self.accuracy_when_b_correct,
+            "share_answered_a": self.share_answered_a,
         }
 
 
@@ -198,7 +209,8 @@ def _episode(
         route=route.value,
         ai_private_state={
             "requirement": item.requirement,
-            "a_faster": item.a_faster,
+            "concession_route": item.concession_route,
+            "concession_faster": item.concession_faster,
             "time_a": item.time_a,
             "time_b": item.time_b,
             "prompt_version": PROMPT_VERSION,
@@ -473,6 +485,18 @@ def aggregate_baseline(
     samples = [float(e.metadata.get("n_samples", 1)) for e in episodes]
 
     excess_needed = [x for x, need in zip(excess, needs) if need]
+
+    references = [
+        str(e.hidden_reference_state.get("decision_variable", "")) for e in episodes
+    ]
+    correct_when = {
+        target: [
+            1.0 - e.final_loss
+            for e, ref in zip(episodes, references)
+            if ref == target
+        ]
+        for target in ACTIONS
+    }
     asked = [e for e in episodes if e.query is not None]
     gold_match = None
     if asked:
@@ -509,6 +533,15 @@ def aggregate_baseline(
         query_efficiency=information_efficiency(delta, mean_bits),
         gold_match_rate=gold_match,
         mean_samples=mean(samples),
+        accuracy_when_a_correct=(
+            mean(correct_when["A"]) if correct_when["A"] else None
+        ),
+        accuracy_when_b_correct=(
+            mean(correct_when["B"]) if correct_when["B"] else None
+        ),
+        share_answered_a=mean(
+            [1.0 if e.final_action == "A" else 0.0 for e in episodes]
+        ),
         accuracy_ci=acc_ci,
         bits_ci=bits_ci,
     )
@@ -820,8 +853,8 @@ def render_report(
         "",
         "## Results",
         "",
-        "| arm | accuracy | final loss | bits | resolution | Ω̂ (all) | Ω̂ (needs grounding) | ΔD/bit | gold match |",
-        "|---|---:|---:|---:|---:|---:|---:|---:|---:|",
+        "| arm | accuracy | acc\\|A | acc\\|B | says A | final loss | bits | resolution | Ω̂ (all) | Ω̂ (needs grounding) | ΔD/bit | gold match |",
+        "|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|",
     ]
     for a in analysis["arms"]:
         def fmt(value: Any, spec: str = ".4f") -> str:
@@ -829,6 +862,9 @@ def render_report(
 
         lines.append(
             f"| `{a['baseline']}` | {a['accuracy']:.4f} | "
+            f"{fmt(a['accuracy_when_a_correct'])} | "
+            f"{fmt(a['accuracy_when_b_correct'])} | "
+            f"{a['share_answered_a']:.4f} | "
             f"{a['mean_final_loss']:.4f} | {a['mean_external_bits']:.2f} | "
             f"{a['resolution_accuracy']:.4f} | "
             f"{a['mean_excess_response_cost']:+.4f} | "

@@ -70,19 +70,25 @@ def main() -> int:
     print()
 
     header = (
-        f"{'baseline':<22} {'accuracy':>8} {'loss':>7} {'bits':>6} "
-        f"{'resolve':>8} {'excess':>8} {'gold':>6}"
+        f"{'baseline':<22} {'accuracy':>8} {'acc|A':>7} {'acc|B':>7} "
+        f"{'saysA':>6} {'bits':>6} {'resolve':>8} {'excess':>8} {'gold':>6}"
     )
     print(header)
     print("-" * len(header))
+
+    def num(value, spec=".4f"):
+        return "—" if value is None else format(value, spec)
+
     for a in analysis["arms"]:
-        gold = a["gold_match_rate"]
         print(
             f"{a['baseline']:<22} {a['accuracy']:>8.4f} "
-            f"{a['mean_final_loss']:>7.4f} {a['mean_external_bits']:>6.2f} "
+            f"{num(a['accuracy_when_a_correct'], '.3f'):>7} "
+            f"{num(a['accuracy_when_b_correct'], '.3f'):>7} "
+            f"{a['share_answered_a']:>6.3f} "
+            f"{a['mean_external_bits']:>6.2f} "
             f"{a['resolution_accuracy']:>8.4f} "
             f"{a['mean_excess_response_cost']:>+8.4f} "
-            f"{(f'{gold:.2f}' if gold is not None else '—'):>6}"
+            f"{num(a['gold_match_rate'], '.2f'):>6}"
         )
 
     check = analysis.get("internal_compute_check") or {}
