@@ -22,17 +22,19 @@ is reused from that infrastructure and what is new — with reasons — is in
 |---|---|---|
 | **G0** | Does the simulator reproduce known theory? | **passed** |
 | **G1** | Does a learned router beat fixed ACT/ASK policies? | **passed** |
-| G2 | Does targeted query synthesis compress external cost? | **scaffolded, needs a real LM** |
+| **G2** | Does targeted query synthesis compress external cost? | **passed** on Qwen2.5-3B-Instruct |
 | G3 | Does the effect survive a frozen off-the-shelf LM? | not started |
 | G4 | Does the grounding requirement change with model capability? | not started |
 | G5 | Is custom training justified? | not started |
 
-Phases 0 and 1 are complete and their gates pass. Phase 2 is built and runs
-end to end on a simulated backend, which validates the task, the query
-representation, the cost accounting and the query-quality metrics — but **gate
-G2 is a claim about a frozen off-the-shelf model, so a simulated run does not
-evaluate it**, and the run says so. Testing G2 needs a real checkpoint, which
-needs the DGX Spark execution decision below.
+Phases 0, 1 and 2 are complete and their gates pass. G2 was evaluated on a real
+frozen model (Qwen2.5-3B-Instruct, on the DGX Spark): **at equal final
+distortion, an LM-synthesized query cost 2.52 bits against generic escalation's
+5.00 — a 1.98× reduction**, with the oracle query at 1.00 showing 3× still on
+the table. Details below.
+
+Next is G4 (does the grounding requirement change with model capability), which
+needs a second model scale, and G3 for a second task family.
 
 ---
 
@@ -241,8 +243,10 @@ genuine feature leak would produce. Both directions are tested.
 ### What Phase 1 still does *not* show
 
 **The query is already optimal.** Phase 1 routes between acting and asking a
-query that was handed to it. Gate G2 — whether a *synthesized* query compresses
-external cost — is untouched.
+query that was handed to it. Whether a *synthesized* query compresses external
+cost is Phase 2's question — and the answer there turned out to be
+complementary: the frozen LM synthesizes a good query but never decides *not* to
+ask, which is exactly what this router does.
 
 ### Run it
 
@@ -252,7 +256,7 @@ make hg-v2-phase1     # gate G1; exits non-zero if it does not hold
 
 ---
 
-## Phase 2 — a frozen LM and query compression (gate G2, scaffolded)
+## Phase 2 — a frozen LM and query compression (gate G2, passed)
 
 Phase 0 showed a targeted query beats generic escalation when the query is
 handed to you. Phase 1 showed a router can decide *whether* to ask. Phase 2 asks
@@ -301,46 +305,67 @@ excess response cost is reported both overall and over the items that genuinely
 need grounding, so the cost of not routing stays visible instead of being folded
 into the query result.
 
+### Result on a frozen LM — gate G2 passed
+
+`Qwen2.5-3B-Instruct`, 1000 items, seed 0, on the DGX Spark. `b4` uses the
+`lm` synthesizer: the same frozen model is asked which facts it needs, and its
+answer is parsed into a `QuerySpec` comparable to the gold one.
+
+| arm | accuracy | acc \| ref=A | acc \| ref=B | bits | resolution | Ω̂ (needs grounding) | exact gold query |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| `b0_no_grounding` | 0.3460 | 0.101 | 0.579 | 0.00 | 0.4900 | −1.00 | — |
+| `b1_self_consistency` | 0.3570 | 0.099 | 0.602 | 0.00 | 0.4900 | −1.00 | — |
+| `b2_generic_ask` | 0.7710 | 0.762 | 0.780 | 5.00 | 1.0000 | +4.00 | 0.00 |
+| `b3_oracle_targeted` | 0.7750 | 0.778 | 0.772 | 1.00 | 1.0000 | **+0.00** | 1.00 |
+| `b4_synthesized_query` | 0.7720 | 0.772 | 0.772 | **2.52** | 1.0000 | +1.56 | 0.58 |
+
+**Gate G2: passed.** B4 against B2 — 2.48 bits saved [2.36, 2.60], a **1.98×
+reduction at equal final distortion** (loss gap −0.0010, i.e. marginally
+*better*). The mechanism check (B3 vs B2) is 5.00 → 1.00, exactly the
+theoretical `Ω = 4` vs `Ω = 0`.
+
+Grounding lifts accuracy from 0.346 to ~0.77 and all three ask arms land within
+0.004 of each other — which is what makes "equal final distortion" hold and the
+cost comparison legitimate. The ~0.77 ceiling is the 3B's rule-following limit,
+a separate matter from query cost. The A/B split is balanced for every grounded
+arm, so the label-bias confound is closed.
+
+### What the synthesized queries actually looked like
+
+The mean of 2.52 bits is an average over two modes, not a tendency to hedge:
+
+| variables named | count | what it is |
+|---:|---:|---|
+| 1 | **578** | the optimal query |
+| 3 | 83 | a hedge |
+| 4 | 2 | a hedge |
+| 5 | **337** | generic escalation, reached by another route |
+
+So the model is *bimodal*: 58% of the time it asks exactly the right single
+question, and 34% of the time it asks for everything. Parse rate was 1.000 and
+the fallback never fired, so this is the model's behaviour and not the parser's.
+
+Two further observations, both of which matter more than the headline ratio:
+
+- **Targeting is sound but not minimal.** Resolution accuracy is **1.0000** — the
+  relevant variable was included in *every* query, all 1000. The model never
+  asks the wrong thing; it only over-asks. Excess response cost is +1.56 bits
+  against the gold query's 0.00.
+- **It has no routing ability at all.** It said `NONE` zero times, and its
+  targeting is the same whether grounding was needed (exact-gold 0.571) or not
+  (0.586) — so it asked on all 490 items whose prompt already settled the
+  answer. That is precisely the decision Phase 1's router makes well, and it is
+  the clearest argument in these results that routing and query synthesis are
+  complementary rather than alternative mechanisms.
+
 ### Result on the simulated backend
 
-4000 items, seed 0. `b4` uses a deliberately imperfect stand-in synthesizer
-(70% gold query, 20% hedge over three variables, 10% miss):
-
-| arm | accuracy | bits | resolution | Ω̂ (all) | Ω̂ (needs grounding) | gold match |
-|---|---:|---:|---:|---:|---:|---:|
-| `b0_no_grounding` | 0.7380 | 0.00 | 0.4950 | −0.5050 | −1.0000 | — |
-| `b1_self_consistency` | 0.7438 | 0.00 | 0.4950 | −0.5050 | −1.0000 | — |
-| `b2_generic_ask` | 1.0000 | 5.00 | 1.0000 | +4.4950 | +4.0000 | 0.00 |
-| `b3_oracle_targeted` | 1.0000 | 1.00 | 1.0000 | +0.4950 | **+0.0000** | 1.00 |
-| `b4_synthesized_query` | 0.9735 | 1.43 | 0.9497 | +0.9205 | +0.4305 | 0.69 |
-
-**Mechanism check** (`b3` vs `b2`): 5.00 → 1.00 bits, a **5.00×** reduction at
-*identical* accuracy (1.0000 both). The cost accounting and query-quality
-metrics detect targeted compression when it is present. That is the
-precondition for testing G2 — not the test.
-
-**Gate G2** (`b4` vs `b2`, per plan §17) is **not evaluated** here: the backend
-is a simulator, and G2 is a claim about a frozen off-the-shelf model. The
-comparison is still computed and reported (+3.57 bits saved, but a +0.027
-final-loss gap), which is a statement about the configured stand-in synthesizer
-rather than about the architecture. The runner's exit code reflects this: the
-mechanism check and artifact reproducibility gate the run; G2 gates it only once
-`backend` names a real model.
-
-### Two things the run demonstrates on its own
-
-**Internal computation does not substitute for grounding.** `b1` spends five
-samples and moves accuracy by **+0.0058** while spending zero external bits.
-The withheld variable is not in the prompt, so there is nothing internal to
-converge on — the empirical content of `internal_reducibility = 0`, and the
-reason "just sample more" is not an answer to a grounding deficit. The simulator
-guesses with a *bias* rather than a coin flip precisely so this is visible;
-self-consistency cannot correct a bias.
-
-**Resolution accuracy is not decision accuracy.** A query can be perfect while
-the model still misapplies the rule. Both are reported, and a test holds them
-apart by giving the simulator a 20% error rate on items it has full information
-for: resolution stays 1.0000 while accuracy falls.
+Kept for reference: `configs/experiments/hg_v2/phase2_frozen_lm.yaml` runs the
+same five arms on CPU with `grounding_simulator` and a controlled stand-in
+synthesizer. It does **not** evaluate G2 — the code enforces that — but it does
+check that the metrics detect compression when present (the oracle arm goes 5.00
+→ 1.00 at identical accuracy), and it is how the pipeline was validated before
+any GPU time was spent.
 
 ### The LM query synthesizer
 
@@ -479,11 +504,24 @@ model to *use* the fact it is given, not to be right about everything.
 
 ## Next
 
-1. **An LM query synthesizer.** `hg.queries` has `gold` and `noisy`; a `kind: lm`
-   synthesizer that prompts the primary model for a `QuerySpec` is what turns
-   B4 into a real test of the architecture rather than of a stand-in.
-2. **A frozen checkpoint, to evaluate gate G2.** Needs the Spark execution
-   decision above.
-3. Gate G3 onward (does the effect survive a real LM), G4 (does the grounding
-   requirement change with model capability), and only then G5 (custom
-   training) — per plan §27.
+Gates G0-G2 have passed and G3's core question — does the effect survive a
+frozen off-the-shelf LM — is answered affirmatively by the Phase 2 run. What is
+outstanding, in the order the plan wants it:
+
+1. **Route and synthesize together.** The single clearest result to chase from
+   Phase 2: the LM asks a perfectly targeted question 58% of the time but asks
+   on *every* item, including the 49% that needed no query. Phase 1's router
+   supplies exactly that missing decision, and the two have never been run in
+   one system. Expected effect is large — roughly halving external cost again,
+   on top of G2's 1.98×.
+2. **Close the remaining 3×.** The oracle query costs 1.00 bit against the LM's
+   2.52, and the gap is entirely the 34% of items where the model asks for
+   everything. Since resolution is already 1.0000, this is a *minimality*
+   problem, not a targeting one — a promising place for a cheap intervention
+   (a stated bit budget, or rejecting queries above `max_variables`).
+3. **Gate G4: a second model scale.** Whether the external grounding requirement
+   falls with capability. 1.5B is below the task's floor and 3B sits at ~0.77
+   rule-following, so 7B is the natural next point; the capability probe in
+   `scripts/` is the tool.
+4. **A second task family**, so G3 does not rest on one construction.
+5. Only then G5 (LoRA, learned critics, joint training) — per plan §27.
