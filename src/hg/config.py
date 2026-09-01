@@ -63,6 +63,16 @@ def _merge(base: Mapping[str, Any], override: Mapping[str, Any]) -> dict[str, An
     return out
 
 
+def read_config_file(path: str | Path) -> dict[str, Any]:
+    """Read one YAML config file with ${VAR} expansion.
+
+    The shared primitive behind `load_experiment` and the HG-v2 grounding
+    config loader, exposed so a second experiment family does not have to
+    re-implement reading-and-expanding (or reach into a private helper).
+    """
+    return _expand_env(_read_yaml(Path(path)))
+
+
 @dataclass(slots=True)
 class ModelConfig:
     """One model family in the diversity panel (protocol section 3)."""

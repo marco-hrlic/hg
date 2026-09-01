@@ -1,0 +1,41 @@
+# HG-v2 Phase 0 -- the exact synthetic complementarity experiment.
+#
+# The index problem: the source holds M_H = (X_0..X_{n-1}) i.i.d. Bernoulli(1/2),
+# the AI holds the index K, and the decision is J = X_K. So H(J | M_A) = 1 bit
+# exactly and the two states are jointly sufficient. No model is involved --
+# this run validates the abstractions against a theorem before any GPU time is
+# spent (plan sections 2.4 and 5).
+name: hg_v2_phase0_index
+
+task:
+  kind: index
+  # The sweep of plan section 7. Response cost for a generic ask is n bits and
+  # for a targeted ask is 1 bit, so the predicted separation grows across this
+  # range while decision quality stays identical.
+  n_bits: [2, 4, 8, 16, 32, 64]
+  # Per size, per policy. At 2000 the standard error on an accuracy is ~0.011,
+  # which is what makes "ACT approaches 0.5" checkable at a 0.05 tolerance.
+  n_items: 2000
+
+policies:
+  - act                   # guess now: accuracy ~0.5, 0 external bits
+  - ask_generic           # dump everything: accuracy 1, n bits
+  - ask_targeted          # ask for X_K: accuracy 1, 1 bit
+  - ask_targeted_ablated  # negative control: source does not hold X_K
+
+seed: 0
+n_bootstrap: 1000
+alpha: 0.05
+# Price of one external bit. Phase 0 reports raw bits, so this stays at 1.0;
+# Phase 1 sweeps it to trade decision loss against communication cost.
+lambda_bit: 1.0
+output_root: results
+
+# Acceptance criteria (plan section 8), declared here so the gate is config and
+# not a constant inside a script.
+gate:
+  act_accuracy_tol: 0.05
+  min_ask_accuracy: 1.0
+  expect_generic_bits_equal_n: true
+  expect_targeted_bits: 1.0
+  max_ablated_accuracy: 0.55

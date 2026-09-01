@@ -1,0 +1,54 @@
+# HG-v2 Phase 1 -- learned routing on a controlled task.
+#
+# The AI holds the index K and m noisy observations of X_K; the source holds
+# X_0..X_{n-1}. On a share of items the observations are noiseless, so J is
+# directly observable from M_A and asking is waste; elsewhere they are
+# unreliable and a 1-bit targeted ask resolves the decision. The optimal route
+# is therefore known per item from the counterfactuals (plan section 9).
+name: hg_v2_phase1_router
+
+task:
+  kind: noisy_index
+  n_bits: 8
+  n_items: 12000
+  # Odd, so the internal vote cannot tie.
+  n_observations: 5
+  # Share of items where M_A already determines J -- the plan's "with
+  # probability p, J is directly observable from M_A".
+  p_self_sufficient: 0.4
+  # Per-observation flip rates on the remaining items. Two levels, so internal
+  # agreement is informative about error probability without determining it.
+  error_rates: [0.25, 0.45]
+
+policies:
+  - always_act    # baseline the router must beat
+  - always_ask    # baseline the router must beat
+  - learned       # logistic router on internal-agreement features
+  - bayes_optimal # reference: exact P(wrong | observations) -- the ceiling for
+                  # any router built on these features
+  - oracle        # reference: clairvoyant, uses the realized counterfactual
+
+# The price of one external bit. Gate G1 is a claim about a *range* of prices,
+# so this is a grid, not a value. Below the base ACT error rate (~0.15) asking
+# is cheap; above it acting is cheap; the interesting region is in between.
+lambda_grid: [0.02, 0.05, 0.10, 0.15, 0.20, 0.30, 0.50]
+
+# Half the items fit the router, half score it. A router scored on its own
+# training items reports the fit, not the policy.
+train_fraction: 0.5
+
+router:
+  learning_rate: 0.5
+  n_steps: 2000
+  l2: 0.0001
+
+seed: 0
+n_bootstrap: 1000
+alpha: 0.05
+output_root: results
+
+gate:
+  # "Some nontrivial range of external-information costs" (plan section 11),
+  # made checkable: the router must beat both fixed policies, with an
+  # item-paired interval excluding zero, at at least this many prices.
+  min_winning_lambdas: 2

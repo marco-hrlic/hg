@@ -16,6 +16,12 @@ data/raw/*
 data/anchors/*
 data/splits/*
 data/processed/*
+# One directory per run: results/<timestamp>_<experiment>/. These hold the
+# item-level artifacts -- prediction matrices and grounding episodes -- which
+# are large (tens of MB) and regenerable from config + seed. The four patterns
+# below them predate per-run directories and no longer match anything a run
+# writes; they are kept so an older layout stays ignored.
+results/*/
 results/predictions/*
 results/matrices/*
 results/bootstrap/*

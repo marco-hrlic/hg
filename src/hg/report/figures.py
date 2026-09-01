@@ -122,3 +122,80 @@ def plot_race(
     fig.savefig(path)
     plt.close(fig)
     return True
+
+
+def plot_grounding_sweep(
+    path: str | Path,
+    series: Mapping[str, Sequence[tuple[float, float]]],
+    *,
+    xlabel: str,
+    ylabel: str,
+    title: str,
+    logx: bool = False,
+    logy: bool = False,
+    ylim_bottom: float | None = 0.0,
+    hline: float | None = None,
+    dashed: Sequence[str] = (),
+) -> bool:
+    """One line per series over a swept task parameter (HG-v2 Phase 0).
+
+    Follows this module's contract: the numbers behind the figure are always
+    written as CSV, and a missing matplotlib degrades rather than fails.
+
+    Both axes default to linear, and that default is load-bearing. A geometric
+    sweep (n = 2, 4, 8, ...) plotted on a log2 x-axis against a linear y-axis
+    turns a quantity that is *linear* in n -- like the n-bit cost of a generic
+    ask, or Omega = n - 1 -- into what looks like exponential growth. Reach for
+    `logx` only when the y quantity is bounded, so the x spacing cannot be
+    misread as a slope.
+    """
+    rows: list[dict[str, Any]] = [
+        {"series": name, "x": x, "y": y}
+        for name, points in series.items()
+        for x, y in points
+    ]
+    if rows:
+        from ..io import write_csv
+
+        write_csv(Path(path).with_suffix(".csv"), rows, columns=["series", "x", "y"])
+
+    if not _have_matplotlib() or not rows:
+        if not _have_matplotlib():
+            log.info("matplotlib not installed; wrote %s instead of a figure",
+                     Path(path).with_suffix(".csv"))
+        return False
+
+    import matplotlib
+
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+
+    fig, ax = plt.subplots(figsize=(6.0, 4.0), dpi=150)
+    for name, points in series.items():
+        xs = [p[0] for p in points]
+        ys = [p[1] for p in points]
+        if name in dashed:
+            ax.plot(
+                xs, ys, marker="o", label=name, linestyle="--",
+                linewidth=2.2, markersize=9, markerfacecolor="none", zorder=3,
+            )
+        else:
+            ax.plot(xs, ys, marker="o", label=name, zorder=2)
+    if hline is not None:
+        ax.axhline(hline, color="0.7", linewidth=0.8, linestyle="--", zorder=0)
+    ax.set_xlabel(xlabel)
+    ax.set_ylabel(ylabel)
+    ax.set_title(title)
+    if logx:
+        ax.set_xscale("log", base=2)
+    if logy:
+        ax.set_yscale("log", base=2)
+    elif ylim_bottom is not None:
+        ax.set_ylim(bottom=ylim_bottom)
+    ax.legend(frameon=False)
+    ax.spines[["top", "right"]].set_visible(False)
+    fig.tight_layout()
+    Path(path).parent.mkdir(parents=True, exist_ok=True)
+    fig.savefig(path)
+    plt.close(fig)
+    return True
