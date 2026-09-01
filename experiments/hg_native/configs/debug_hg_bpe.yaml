@@ -1,0 +1,19 @@
+# Same trunk shape as debug_hg.yaml, but vocab_size=16000 to match the real
+# trained tokenizer (experiments/hg_native/tokenizer/hg_native_bpe.json),
+# for runs using --tokenizer instead of the ByteTokenizer placeholder.
+variant: hg
+seed: 0
+transformer:
+  vocab_size: 16000
+  d_model: 384
+  n_layers: 6
+  n_heads: 8
+  n_kv_heads: 4
+  d_ff: 1024
+  max_seq_len: 128
+hg_latent:
+  hidden_dim: 256
+  latent_dim: 64
+  layers: 2
+heads:
+  n_actions: 7

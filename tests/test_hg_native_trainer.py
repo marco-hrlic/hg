@@ -13,6 +13,12 @@ from hg_native.model.hg_model import build_model
 from hg_native.training.dataset import SyntheticMix
 from hg_native.training.trainer import OptimConfig, TrainConfig, lr_at_step, train
 
+TOY_ORDINARY_LM_TEXTS = [
+    "Once upon a time there was a small robot who liked to help.",
+    "The sun was warm and the garden was full of flowers.",
+    "A little fox ran across the field looking for its friends.",
+]
+
 TINY_TRUNK = TransformerConfig(vocab_size=259, d_model=32, n_layers=2, n_heads=4, n_kv_heads=2, d_ff=64, max_seq_len=64)
 TINY_LATENT = HGLatentConfig(hidden_dim=16, latent_dim=8, layers=1)
 TINY_HEADS = HeadsConfig(n_decision_labels=2, n_actions=7, action_embed_dim=6, router_hidden_dim=12, n_routes=3, cost_dim=1)
@@ -112,6 +118,46 @@ def test_transition_loss_pulls_current_and_next_states_together():
     early = sum(m.losses["transition"] for m in history[:10]) / 10
     late = sum(m.losses["transition"] for m in history[-10:]) / 10
     assert late <= early * 1.5  # not blowing up; a strict decrease isn't guaranteed this early
+
+
+def test_train_config_rejects_out_of_range_ordinary_lm_ratio():
+    with pytest.raises(ValueError, match="ordinary_lm_ratio"):
+        TrainConfig(total_steps=1, batch_size=1, max_seq_len=48, seed=0, ordinary_lm_ratio=1.5)
+
+
+def test_ordinary_lm_disabled_by_default_no_extra_loss_key():
+    config = _tiny_baseline_config()
+    model = build_model(config)
+    train_cfg = TrainConfig(total_steps=3, batch_size=4, max_seq_len=48, seed=0)
+    history = train(model, config, train_cfg)
+    for m in history:
+        assert "ordinary_lm" not in m.losses
+
+
+def test_ordinary_lm_mixing_adds_a_loss_key_and_blends_into_lm():
+    config = _tiny_baseline_config()
+    model = build_model(config)
+    train_cfg = TrainConfig(
+        total_steps=3, batch_size=4, max_seq_len=48, seed=0,
+        ordinary_lm_texts=TOY_ORDINARY_LM_TEXTS, ordinary_lm_ratio=1.0,
+    )
+    history = train(model, config, train_cfg)
+    for m in history:
+        assert "ordinary_lm" in m.losses
+        # ratio=1.0 -> the blended "lm" term is exactly the ordinary_lm component.
+        assert m.losses["lm"] == pytest.approx(m.losses["ordinary_lm"])
+
+
+def test_ordinary_lm_mixing_works_for_hg_variant_too():
+    config = _tiny_hg_config()
+    model = build_model(config)
+    train_cfg = TrainConfig(
+        total_steps=3, batch_size=4, max_seq_len=48, seed=0, ordinary_lm_texts=TOY_ORDINARY_LM_TEXTS,
+    )
+    history = train(model, config, train_cfg)
+    for m in history:
+        assert "ordinary_lm" in m.losses
+        assert torch.isfinite(torch.tensor(m.losses["ordinary_lm"]))
 
 
 def test_train_step_deterministic_given_seed():

@@ -74,6 +74,42 @@ def render(episode: Episode) -> str:
     return renderer(episode)
 
 
+def _pad_and_truncate(ids: list[int], tokenizer: Tokenizer, max_seq_len: int) -> tuple[list[int], list[int], int]:
+    """Truncate to `max_seq_len` (keeping BOS and EOS) and right-pad.
+
+    Returns `(input_ids, attention_mask, last_real_index)` -- the index of
+    the final non-pad token (EOS, after any truncation), used as the
+    decision position for episodes and simply discarded for plain text.
+    """
+    if max_seq_len < 2:
+        raise ValueError(f"max_seq_len must allow at least BOS+EOS, got {max_seq_len}")
+    if len(ids) > max_seq_len:
+        eos = ids[-1]
+        ids = [*ids[: max_seq_len - 1], eos]  # keep BOS + truncate the middle, EOS always present
+    last_real_index = len(ids) - 1
+    pad_id = getattr(tokenizer, "PAD", 0)
+    n_pad = max_seq_len - len(ids)
+    input_ids = ids + [pad_id] * n_pad
+    attention_mask = [1] * len(ids) + [0] * n_pad
+    return input_ids, attention_mask, last_real_index
+
+
+def serialize_text(text: str, tokenizer: Tokenizer, max_seq_len: int) -> dict[str, Any]:
+    """Plain text (spec section 6's `ordinary_lm` component) -> token ids +
+    attention mask only -- no episode, so no HG head targets to compute."""
+    input_ids, attention_mask, _ = _pad_and_truncate(tokenizer.encode(text), tokenizer, max_seq_len)
+    return {"input_ids": input_ids, "attention_mask": attention_mask}
+
+
+def collate_text(examples: list[dict[str, Any]]) -> dict[str, Any]:
+    if not examples:
+        raise ValueError("collate_text requires at least one example")
+    return {
+        "input_ids": [ex["input_ids"] for ex in examples],
+        "attention_mask": [ex["attention_mask"] for ex in examples],
+    }
+
+
 def serialize_episode(episode: Episode, tokenizer: Tokenizer, max_seq_len: int) -> dict[str, Any]:
     """One episode -> fixed-length token ids, attention mask, and every head's target.
 
@@ -82,19 +118,7 @@ def serialize_episode(episode: Episode, tokenizer: Tokenizer, max_seq_len: int) 
     real token is exactly "after having seen the whole prompt" (spec section
     3.2's "at selected decision positions").
     """
-    if max_seq_len < 2:
-        raise ValueError(f"max_seq_len must allow at least BOS+EOS, got {max_seq_len}")
-
-    ids = tokenizer.encode(render(episode))
-    if len(ids) > max_seq_len:
-        eos = ids[-1]
-        ids = [*ids[: max_seq_len - 1], eos]  # keep BOS + truncate the middle, EOS always present
-
-    decision_position = len(ids) - 1  # index of EOS, before padding
-    pad_id = getattr(tokenizer, "PAD", 0)
-    n_pad = max_seq_len - len(ids)
-    input_ids = ids + [pad_id] * n_pad
-    attention_mask = [1] * len(ids) + [0] * n_pad
+    input_ids, attention_mask, decision_position = _pad_and_truncate(tokenizer.encode(render(episode)), tokenizer, max_seq_len)
 
     decision_label, decision_defined = targets.decision_target(episode)
     distortion_vec, distortion_mask = targets.distortion_target(episode)

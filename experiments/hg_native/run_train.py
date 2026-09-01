@@ -27,12 +27,14 @@ sys.path.insert(0, str(REPO_ROOT / "src"))
 import yaml  # noqa: E402
 
 from hg.io import ensure_dir, run_id  # noqa: E402
+from hg_native.data.tokenizer import BPETokenizer  # noqa: E402
 from hg_native.model.config import HGNativeConfig  # noqa: E402
 from hg_native.model.hg_model import build_model  # noqa: E402
 from hg_native.training.batch import ByteTokenizer, tokenizer_hash  # noqa: E402
 from hg_native.training.checkpoint import save_checkpoint  # noqa: E402
 from hg_native.training.dataset import SyntheticMix  # noqa: E402
 from hg_native.training.manifest import build_manifest, write_manifest  # noqa: E402
+from hg_native.training.ordinary_lm import load_tinystories_texts  # noqa: E402
 from hg_native.training.trainer import OptimConfig, TrainConfig, build_optimizer, train  # noqa: E402
 
 
@@ -46,6 +48,15 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--lr", type=float, default=3e-4)
     parser.add_argument("--output-root", default="results")
     parser.add_argument("--experiment-name", default="hg_native_smoke")
+    parser.add_argument(
+        "--tokenizer", default=None,
+        help="Path to a trained BPE tokenizer.json (see train_tokenizer.py). Default: ByteTokenizer (no corpus needed).",
+    )
+    parser.add_argument(
+        "--ordinary-lm-n-stories", type=int, default=0,
+        help="Mix in this many TinyStories examples as spec section 6's ordinary_lm component (0 = disabled).",
+    )
+    parser.add_argument("--ordinary-lm-ratio", type=float, default=0.8)
     return parser.parse_args()
 
 
@@ -53,11 +64,22 @@ def main() -> None:
     args = parse_args()
     config = HGNativeConfig.from_yaml(args.config)
     model = build_model(config)
-    tokenizer = ByteTokenizer()
+    tokenizer = BPETokenizer(args.tokenizer) if args.tokenizer else ByteTokenizer()
+    if tokenizer.vocab_size != config.transformer.vocab_size:
+        raise ValueError(
+            f"tokenizer vocab_size ({tokenizer.vocab_size}) does not match "
+            f"transformer.vocab_size in {args.config} ({config.transformer.vocab_size})"
+        )
+
+    ordinary_lm_texts = None
+    if args.ordinary_lm_n_stories > 0:
+        print(f"loading {args.ordinary_lm_n_stories} TinyStories examples for ordinary_lm...", file=sys.stderr)
+        ordinary_lm_texts = load_tinystories_texts(args.ordinary_lm_n_stories, seed=args.seed)
 
     train_cfg = TrainConfig(
         total_steps=args.total_steps, batch_size=args.batch_size, max_seq_len=args.max_seq_len,
         seed=args.seed, mix=SyntheticMix(),
+        ordinary_lm_texts=ordinary_lm_texts, ordinary_lm_ratio=args.ordinary_lm_ratio,
     )
     optim_cfg = OptimConfig(lr=args.lr)
 
@@ -90,10 +112,13 @@ def main() -> None:
         f"- variant: {config.variant}\n"
         f"- parameters: {model.num_parameters():,}\n"
         f"- steps: {args.total_steps}, batch_size: {args.batch_size}\n"
+        f"- tokenizer: {tokenizer_hash(tokenizer)}\n"
         f"- first-step total loss: {first.total:.4f}\n"
         f"- last-step total loss: {last.total:.4f}\n"
         f"- final lm loss: {last.losses['lm']:.4f}\n"
     )
+    if "ordinary_lm" in last.losses:
+        report += f"- final ordinary_lm loss: {last.losses['ordinary_lm']:.4f}\n"
     (run_dir / "report.md").write_text(report, encoding="utf-8")
     print(report, file=sys.stderr)
     print(f"wrote {run_dir}", file=sys.stderr)

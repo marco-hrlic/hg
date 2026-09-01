@@ -9,7 +9,7 @@ from hg_native.data.capability_refinement import generate_pair
 from hg_native.data.sequential_quotient import generate_trajectory
 from hg_native.data.static_hidden import generate_episode as gen_static_hidden
 from hg_native.training.actions import ACTIONS
-from hg_native.training.batch import ByteTokenizer, collate, render, serialize_episode
+from hg_native.training.batch import ByteTokenizer, collate, collate_text, render, serialize_episode, serialize_text
 
 ALL_FAMILY_EPISODES = [
     gen_static_hidden(0, "one_bit_deficit", 0),
@@ -116,6 +116,37 @@ def test_serialize_episode_targets_present_for_every_family():
 def test_collate_rejects_empty():
     with pytest.raises(ValueError, match="at least one example"):
         collate([])
+
+
+def test_serialize_text_shape_and_no_targets():
+    tok = ByteTokenizer()
+    out = serialize_text("Once upon a time there was a small robot.", tok, max_seq_len=32)
+    assert set(out) == {"input_ids", "attention_mask"}
+    assert len(out["input_ids"]) == 32
+    assert out["input_ids"][0] == tok.BOS
+
+
+def test_serialize_text_truncates_and_pads_like_episodes_do():
+    tok = ByteTokenizer()
+    long_text = "word " * 100
+    out = serialize_text(long_text, tok, max_seq_len=16)
+    assert len(out["input_ids"]) == 16
+    assert out["input_ids"][-1] in (tok.PAD, tok.EOS)  # either padded, or EOS lands exactly at the end
+    assert out["input_ids"][0] == tok.BOS
+
+
+def test_collate_text_rejects_empty():
+    with pytest.raises(ValueError, match="at least one example"):
+        collate_text([])
+
+
+def test_collate_text_stacks_fields():
+    tok = ByteTokenizer()
+    examples = [serialize_text(t, tok, max_seq_len=16) for t in ["hello", "goodbye", "a longer sentence here"]]
+    batch = collate_text(examples)
+    assert set(batch) == {"input_ids", "attention_mask"}
+    assert len(batch["input_ids"]) == 3
+    assert all(len(row) == 16 for row in batch["input_ids"])
 
 
 def test_collate_stacks_every_field():

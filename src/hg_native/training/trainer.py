@@ -2,8 +2,16 @@
 
 Minimal by design for the smoke/pilot stages (spec section 8.1/8.2): plain
 AdamW, cosine-with-warmup LR, gradient-norm clipping, the HG loss warm-up
-multiplier, no activation checkpointing, no distributed training, and (see
-`dataset.py`) no `ordinary_lm` corpus mixed in yet.
+multiplier, no activation checkpointing, no distributed training.
+
+`ordinary_lm` (spec section 6) is optional and off by default
+(`TrainConfig.ordinary_lm_texts=None`): passing a loaded text corpus (e.g.
+via `ordinary_lm.load_tinystories_texts`) mixes it in as a *separate*
+per-step batch through the trunk + LM head only (no HG heads run on plain
+text, which has no episode/decision structure to target), combined into the
+LM loss at `ordinary_lm_ratio` -- kept structurally separate from the main
+synthetic batch rather than interleaved into one sequence, since the HG
+target/masking machinery in `losses.py` assumes every row has an episode.
 """
 
 from __future__ import annotations
@@ -17,9 +25,10 @@ from torch import nn
 from hg_native.model.config import HGNativeConfig
 from hg_native.model.hg_model import HGNativeModel
 
-from .batch import ByteTokenizer, Tokenizer, collate, serialize_episode
+from .batch import ByteTokenizer, Tokenizer, collate, collate_text, serialize_episode, serialize_text
 from .dataset import SyntheticMix, sample_episodes, sample_transition_pairs
-from .losses import compute_losses, next_token_labels, targets_to_tensors, total_loss, transition_loss
+from .losses import compute_losses, lm_loss, next_token_labels, targets_to_tensors, total_loss, transition_loss
+from .ordinary_lm import sample_ordinary_lm_texts
 
 
 @dataclass(slots=True)
@@ -73,6 +82,15 @@ class TrainConfig:
     seed: int
     mix: SyntheticMix = field(default_factory=SyntheticMix)
     device: str = "cpu"
+    # spec section 6's ordinary_lm component. None (default) = disabled, so
+    # existing smoke runs/tests need no corpus and no network access.
+    ordinary_lm_texts: list[str] | None = None
+    ordinary_lm_ratio: float = 0.8
+    ordinary_lm_batch_size: int | None = None  # defaults to `batch_size` if unset
+
+    def __post_init__(self) -> None:
+        if not (0.0 <= self.ordinary_lm_ratio <= 1.0):
+            raise ValueError(f"ordinary_lm_ratio must be in [0, 1], got {self.ordinary_lm_ratio}")
 
 
 def _transition_loss_for_step(
@@ -109,6 +127,22 @@ def _transition_loss_for_step(
     return transition_loss(out_cur["s_next_hat"], s_next_target)
 
 
+def _ordinary_lm_loss_for_step(
+    model: HGNativeModel, tokenizer: Tokenizer, train_cfg: TrainConfig, step: int, device: str
+) -> torch.Tensor:
+    """The `ordinary_lm` component's LM loss for this step: plain text run
+    through the trunk + LM head only. No HG heads: `serialize_text` has no
+    episode to derive a decision position or targets from."""
+    batch_size = train_cfg.ordinary_lm_batch_size or train_cfg.batch_size
+    texts = sample_ordinary_lm_texts(train_cfg.ordinary_lm_texts, n=batch_size, start_index=step * batch_size)
+    raw = collate_text([serialize_text(t, tokenizer, train_cfg.max_seq_len) for t in texts])
+    ids = torch.tensor(raw["input_ids"], device=device)
+    attention_mask = torch.tensor(raw["attention_mask"], device=device)
+    labels = next_token_labels(ids, attention_mask)
+    logits = model.lm_logits(model.trunk(ids))
+    return lm_loss(logits, labels)
+
+
 def train_step(
     model: HGNativeModel,
     config: HGNativeConfig,
@@ -142,6 +176,16 @@ def train_step(
 
     if config.variant == "hg":
         losses["transition"] = _transition_loss_for_step(model, tokenizer, train_cfg, step, device)
+
+    if train_cfg.ordinary_lm_texts is not None:
+        ordinary_loss = _ordinary_lm_loss_for_step(model, tokenizer, train_cfg, step, device)
+        losses["ordinary_lm"] = ordinary_loss
+        # Blend into the single "lm" term total_loss weights, rather than
+        # adding a second independently-weighted term: spec section 6's
+        # data_mix describes one token stream that is 80% ordinary_lm, not
+        # two separately-priced losses.
+        losses["lm"] = train_cfg.ordinary_lm_ratio * ordinary_loss + (1 - train_cfg.ordinary_lm_ratio) * losses["lm"]
+
     hg_mult = config.loss_schedule.hg_multiplier(step / train_cfg.total_steps) if config.variant == "hg" else 0.0
     loss = total_loss(losses, config.loss_weights, hg_multiplier=hg_mult)
 
