@@ -431,37 +431,51 @@ own first page.
 ## Running a real model: the DGX Spark
 
 Phases 0 and 1 need no GPU, and Phase 2 runs on CPU with the simulated backend.
-A real checkpoint does need the Spark, and this repository and the sibling
-`research/` projects reach it by two different routes:
+A real checkpoint needs the Spark — an NVIDIA **GB10, aarch64**, 121 GB, behind
+the `Notch` VPN.
 
-- **`hg` today**: an NGC container (`docker/Dockerfile`, base
-  `nvcr.io/nvidia/pytorch`), pip-installing `requirements-gpu.txt`, entered
-  through the `hg` CLI.
-- **`research/gated-lm` and `research/snap-picker`**: direct `ssh notch@10.0.4.10`
-  (GB10, behind the `Notch` VPN), work dir `~/marco/`, and **uv** with the
-  CUDA-13 aarch64 wheels pinned per-platform:
+**This repository reaches it by ssh + uv, not through `docker/Dockerfile`.**
+That Dockerfile's container path has not been exercised on the GB10, and
+`pyproject.toml`'s `torch>=2.4` carries no aarch64/cu130 marker — so a bare
+`uv pip install -e ".[gpu]"` there resolves against default PyPI wheels. The
+CUDA-13 aarch64 index has to be pinned explicitly, which is what the sibling
+`research/gated-lm` and `research/snap-picker` projects do:
 
-  ```toml
-  [[tool.uv.index]]
-  name = "pytorch-cu130"
-  url = "https://download.pytorch.org/whl/cu130"
-  explicit = true
+```bash
+scripts/spark_deploy.sh setup          # rsync + create the venv with cu130 wheels
+scripts/spark_deploy.sh run 'experiments/hg_v2/run_phase2.py \
+  --config configs/experiments/hg_v2/phase2_qwen3b.yaml'
+```
 
-  [tool.uv.sources]
-  torch = [{ index = "pytorch-cu130", marker = "platform_machine == 'aarch64' and sys_platform == 'linux'" }]
-  ```
+Verified on the box: `torch 2.13.0+cu130` with CUDA available, `transformers
+5.16.1`, and the full test suite green on aarch64. Two things to know:
 
-  bf16 autocast on CUDA; `uv run` resolves the right wheels automatically.
+- The VPN drops intermittently. `nmcli connection up Notch` if the host stops
+  answering; the deploy script checks reachability first and says so.
+- `rsync --delete` keeps the remote tree an exact mirror, so a scratch script
+  written directly on the Spark disappears on the next sync. Keep throwaway
+  files outside the repo tree.
 
-The second route is the one currently known to work on the box. **This is the
-open decision blocking gate G2**: `hg`'s container path has not been exercised
-on the GB10 in this session, and `pyproject.toml`'s `torch>=2.4` carries no
-aarch64/cu130 pin, so a bare `uv pip install -e ".[gpu]"` on the Spark would
-resolve against default PyPI wheels.
+### Choosing a model: measure the capability floor first
 
----
+Gate G2 is a comparison *at equal final distortion*, so it presupposes the
+primary LM can use the information at all. Check that before spending a run.
+120 items, fully grounded, on the symmetric task:
 
----
+| model | says A, ungrounded | says A, grounded | acc \| ref=A | acc \| ref=B |
+|---|---:|---:|---:|---:|
+| Qwen2.5-1.5B-Instruct | 0.000 | 0.000 | 0.000 | 1.000 |
+| Qwen2.5-3B-Instruct | 0.000 | 0.342 | 0.607 | 0.739 |
+
+**1.5B is unusable here**: it answers the same label on every item and grounding
+changes nothing. On the *asymmetric* version of the task it scored 0.767
+accuracy while reading nothing — which is what prompted randomizing the labels
+(see the Phase 2 task section) and what makes the per-half split a permanent
+part of the metrics rather than a one-off check.
+
+3B responds to disclosed constraints (0% → 34% on the minority label) with
+imperfect rule-following, which is enough for G2: the comparison only needs the
+model to *use* the fact it is given, not to be right about everything.
 
 ## Next
 

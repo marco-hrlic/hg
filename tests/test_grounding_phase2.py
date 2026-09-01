@@ -118,8 +118,9 @@ def test_the_withheld_variable_never_appears_in_the_ungrounded_prompt():
         assert VARIABLE_PHRASES[item.requirement] in prompt
         for action in ACTIONS:
             assert action in prompt
-        # The rule turns on which route is slower, so both times must be shown.
-        assert "slower one" in prompt
+        # The rule turns on which route is slower, so both times must be shown
+        # and the rule must name the comparison.
+        assert f"is slower than route {item.other_route}" in prompt
         assert f"{item.time_a} minutes" in prompt
         assert f"{item.time_b} minutes" in prompt
 
@@ -155,6 +156,20 @@ def test_the_prompt_shows_the_travel_times_the_rule_needs():
         prompt = item.prompt()
         assert f"{item.time_a} minutes" in prompt
         assert f"{item.time_b} minutes" in prompt
+
+
+def test_the_rule_is_instantiated_with_this_item_s_labels():
+    """Abstract phrasing was measurably harder than the decision itself: a 3B
+    model scored below chance on "the route with the requirement", by always
+    choosing the route that carried it."""
+    for item in items(100):
+        rule = item.decision_rule()
+        assert f"Route {item.concession_route} requires" in rule
+        assert f"Route {item.other_route} requires nothing" in rule
+        assert VARIABLE_PHRASES[item.requirement] in rule
+        # No abstract indirection left in the rule.
+        assert "the other route" not in rule
+        assert "the route with the requirement" not in rule
 
 
 def test_the_faster_route_has_a_real_margin():
@@ -661,3 +676,29 @@ def test_the_ungrounded_pass_is_computed_once_per_run(tmp_path):
     finally:
         phase2_module.ungrounded_pass = original
     assert len(calls) == 1
+
+
+def test_the_shipped_real_model_config_loads(repo_root):
+    """The GPU config has to stay loadable from a CPU checkout, or a typo in it
+    is only discovered after a deploy."""
+    cfg = load_grounding_config(
+        repo_root / "configs" / "experiments" / "hg_v2" / "phase2_qwen3b.yaml"
+    )
+    assert cfg.task_kind == "route_choice"
+    assert cfg.raw["backend"] == "transformers"
+    assert "3B" in cfg.raw["backend_options"]["checkpoint"]
+    assert cfg.raw["synthesizer"]["kind"] == "lm"
+    # The label-bias fix must be in force for any real-model claim.
+    assert cfg.phase2_task.p_concession_on_a == 0.5
+
+
+def test_p_concession_on_a_survives_a_config_round_trip(tmp_path):
+    from hg.io import write_yaml
+
+    cfg = phase2_config(tmp_path, task={
+        "kind": "route_choice", "n_items": 10, "p_concession_on_a": 0.25,
+    })
+    assert cfg.phase2_task.p_concession_on_a == 0.25
+    resolved = tmp_path / "run" / "config.resolved.yaml"
+    write_yaml(resolved, cfg.resolved_dict())
+    assert load_grounding_config(resolved).phase2_task.p_concession_on_a == 0.25

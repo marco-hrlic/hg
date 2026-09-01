@@ -4,17 +4,20 @@
 # that the primary LM is real and the query in B4 is synthesized by that same
 # model rather than by a stand-in. Requires a GPU (see the DGX Spark section of
 # experiments/hg_v2/README.md).
-name: hg_v2_phase2_qwen15b
+name: hg_v2_phase2_qwen3b
 
 task:
   kind: route_choice
   # Smaller than the simulated run: `scoring_mode: rank` costs one forward pass
-  # per label per item, and B1 adds five sampled generations. At 1200 items the
-  # standard error on an accuracy is ~0.014, which is well inside the effect
-  # sizes this compares.
-  n_items: 1200
+  # per label *surface form* per item, and B1 adds five sampled generations. At
+  # 1000 items the standard error on an accuracy is ~0.016, well inside the
+  # effect sizes this compares.
+  n_items: 1000
   p_a_faster: 0.5
   p_accepts: 0.5
+  # Which label carries the concession. At 0.5 the marginal over correct actions
+  # is symmetric, so a model with a label bias scores chance instead of 0.75.
+  p_concession_on_a: 0.5
   variables:
     - mountain_roads
     - toll_roads
@@ -31,10 +34,17 @@ policies:
 
 backend: transformers
 backend_options:
-  # Ungated on the Hub, and inside the plan's 1B-3B band (section 12). The plan
-  # suggests google/gemma-3-1b-it, which is licence-gated and needs a token;
-  # the model is config-driven precisely so this is a one-line change.
-  checkpoint: Qwen/Qwen2.5-1.5B-Instruct
+  # Ungated on the Hub, and at the top of the plan's 1B-3B band (section 12).
+  # The plan suggests google/gemma-3-1b-it, which is licence-gated and needs a
+  # token; the model is config-driven precisely so this is a one-line change.
+  #
+  # NOT 1.5B. Measured on the Spark, 120 fully-grounded items: Qwen2.5-1.5B-
+  # Instruct answers the same label on every item and scores exactly 0.500 --
+  # chance on this task -- with grounding changing nothing. Gate G2 compares at
+  # equal final distortion, so it presupposes the model can use the information
+  # at all; 1.5B cannot. 3B goes from 0% to 34% on the minority label once the
+  # constraint is disclosed, which is enough.
+  checkpoint: Qwen/Qwen2.5-3B-Instruct
   dtype: bfloat16
   device_map: cuda
   # Rank the two allowed labels by continuation log-probability instead of

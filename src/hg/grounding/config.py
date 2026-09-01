@@ -155,6 +155,7 @@ class GroundingConfig:
                 "n_items": r.n_items,
                 "p_a_faster": r.p_a_faster,
                 "p_accepts": r.p_accepts,
+                "p_concession_on_a": r.p_concession_on_a,
                 "variables": list(r.variables),
             }
         return {
@@ -257,7 +258,8 @@ def load_grounding_config(
         from .phase2 import BASELINES as TASK_POLICIES
 
         unknown_task = set(task) - {
-            "kind", "n_items", "p_a_faster", "p_accepts", "variables", "seed",
+            "kind", "n_items", "p_a_faster", "p_accepts", "p_concession_on_a",
+            "variables", "seed",
         }
         if unknown_task:
             raise ConfigError(f"{path}: unknown task keys {sorted(unknown_task)}")
@@ -266,6 +268,7 @@ def load_grounding_config(
                 n_items=int(task.get("n_items", 400)),
                 p_a_faster=float(task.get("p_a_faster", 0.5)),
                 p_accepts=float(task.get("p_accepts", 0.5)),
+                p_concession_on_a=float(task.get("p_concession_on_a", 0.5)),
                 variables=tuple(task.get("variables") or PREFERENCE_VARIABLES),
                 seed=int(raw.get("seed", 0)),
             )

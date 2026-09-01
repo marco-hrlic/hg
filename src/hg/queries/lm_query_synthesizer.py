@@ -41,7 +41,6 @@ from typing import Any, Sequence
 from ..grounding.channels import QuerySpec
 from ..grounding.route_choice import (
     ACTIONS,
-    DECISION_RULE,
     VARIABLE_ALIASES,
     VARIABLE_PHRASES,
     RouteChoiceItem,
@@ -127,7 +126,7 @@ class LMQuerySynthesizer:
             QUERY_SYNTH_PROMPT_VERSION,
             item.route_text(),
             ACTIONS,
-            extra={"rule": DECISION_RULE, "available": available},
+            extra={"rule": item.decision_rule(), "available": available},
         )
 
     def _inference_items(self, items: Sequence[RouteChoiceItem]) -> list[InferenceItem]:

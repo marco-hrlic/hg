@@ -60,7 +60,10 @@ from .channels import QuerySpec, Response, log2_alphabet
 # rendered prompt. v3 randomizes which label carries the concession, which
 # changes the item distribution as well. A run is only comparable to another at
 # the same version.
-ROUTE_CHOICE_TASK_VERSION = "route-choice-v3"
+# v4 instantiates the decision rule with the actual route labels per item
+# instead of stating it over "the route with the requirement". See
+# `RouteChoiceItem.decision_rule` for the measurement that forced this.
+ROUTE_CHOICE_TASK_VERSION = "route-choice-v4"
 TASK_NAME = "route_choice"
 PROMPT_VERSION = "route_choice.v1"
 
@@ -104,16 +107,24 @@ VARIABLE_ALIASES = {
     "unpaved_roads": ("unpaved road", "unpaved roads", "unpaved", "gravel"),
 }
 
-# Stated over "the route with the requirement" rather than over route A, because
-# which label carries the requirement is randomized -- see
-# `RouteChoiceSpec.p_concession_on_a` for why that matters.
-DECISION_RULE = (
-    "- One route requires something of the traveller; the other requires "
-    "nothing.\n"
-    "- If the route with the requirement is the slower one, choose the other "
-    "route.\n"
-    "- Otherwise, choose the route with the requirement if that requirement is "
-    "acceptable to the traveller, and the other route if it is not."
+# The rule is instantiated per item (see `RouteChoiceItem.decision_rule`)
+# rather than being one fixed string, and that is a measurement result rather
+# than a stylistic choice.
+#
+# v3 stated it over "the route with the requirement" and "the other route", so
+# that one wording could serve either label assignment. Qwen2.5-3B-Instruct
+# scored 0.233 on it -- *below* chance, and almost exactly the 0.25 you get by
+# always choosing the route that carries the requirement. The indirection, not
+# the decision, was what it failed. Naming the routes explicitly removes the
+# indirection while keeping the label symmetry that v3 was introduced for.
+#
+# Kept as a module constant for the generic phrasing used in documentation and
+# in the query-synthesis prompt's fallback.
+DECISION_RULE_TEMPLATE = (
+    "- Route {concession} requires {phrase}. Route {other} requires nothing.\n"
+    "- If route {concession} is slower than route {other}, choose {other}.\n"
+    "- Otherwise, choose {concession} if {phrase} is acceptable to the "
+    "traveller, and {other} if it is not."
 )
 
 NO_CONSTRAINTS = "(nothing known about the traveller's preferences)"
@@ -236,6 +247,19 @@ class RouteChoiceItem:
         return 1.0 if self.needs_grounding else 0.0
 
     # ------------------------------------------------------------ prompt ---
+    def decision_rule(self) -> str:
+        """The rule, instantiated with this item's labels and requirement.
+
+        Concrete rather than abstract. See `DECISION_RULE_TEMPLATE` for the
+        measurement behind that: a 3B model scored below chance on the abstract
+        phrasing by always choosing the route carrying the requirement.
+        """
+        return DECISION_RULE_TEMPLATE.format(
+            concession=self.concession_route,
+            other=self.other_route,
+            phrase=VARIABLE_PHRASES[self.requirement],
+        )
+
     def route_text(self) -> str:
         def line(label: str, distance: int, toll: int, minutes: int) -> str:
             requirement = (
@@ -260,7 +284,7 @@ class RouteChoiceItem:
             PROMPT_VERSION,
             self.route_text(),
             ACTIONS,
-            extra={"rule": DECISION_RULE, "constraints": constraints},
+            extra={"rule": self.decision_rule(), "constraints": constraints},
         )
 
     def inference_item(
