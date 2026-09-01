@@ -926,6 +926,16 @@ def build_analysis(
     ]
     decomposition = [factorial_decomposition(arms, lam) for lam in lambdas]
     e3 = minimality_comparison(cfg, grouped, arms, lambdas)
+    # Any arm carrying a query source gives the same reference: the arms share
+    # one counterfactual cache, so `loss_act` / `loss_ask` / `bits_ask` are
+    # per-item facts rather than per-arm ones.
+    reference_source: list[GroundingEpisode] = []
+    for name in (H1_CHALLENGER, H1_BASELINE, ARM_B2):
+        matches = [eps for (arm, _lam), eps in grouped.items() if arm == name]
+        if matches:
+            reference_source = matches[0]
+            break
+    value = grounding_value_reference(reference_source, lambdas)
     simulated = str(cfg.raw.get("backend", "grounding_simulator")) == "grounding_simulator"
     return {
         "experiment": cfg.name,
@@ -939,6 +949,7 @@ def build_analysis(
         "h1_routing_benefit": [row for row in h1 if row.get("available")],
         "factorial_decomposition": decomposition,
         "minimality": e3,
+        "grounding_value": value,
         "router_calibration": (diagnostics or {}).get("calibration"),
         "gates": evaluate_gates(cfg, h1, e3, simulated),
     }
@@ -1222,6 +1233,118 @@ def minimality_comparison(
     }
 
 
+def grounding_value_reference(
+    episodes: Sequence[GroundingEpisode], lambdas: Sequence[float]
+) -> dict[str, Any]:
+    """What asking is worth, split by whether the item needed it at all.
+
+    The metric that decides how gate H1 should be read, and it is computed from
+    the counterfactuals every episode already carries -- no model calls, and any
+    arm's episodes give the same answer because they share one cache.
+
+    The waste rate treats a bit spent on an item with `H(J | M_A) = 0` as pure
+    loss, which is correct as *information* accounting: the answer cannot change
+    what the correct action is. It does not follow that the answer cannot change
+    what the model does. If a frozen LM applies a stated rule better when the
+    prompt also carries facts the rule does not need, then some of grounding's
+    value is prompt scaffolding rather than information, and a router that
+    correctly declines to ask pays for it in distortion.
+
+    So four policies are priced from the same episodes:
+
+        never        act on every item
+        always       ask on every item
+        structural   ask exactly where the residual deficit is nonzero -- the
+                     best any router could do from AI-visible state, since
+                     `needs_grounding` is determined by the prompt on this task
+        clairvoyant  per-item argmin, which no router can attain
+
+    `structural` is the honest ceiling for routing here. `clairvoyant` sits above
+    it by exploiting realized noise, which is why the oracle-route arms are
+    upper bounds rather than targets.
+    """
+    by_item: dict[str, GroundingEpisode] = {}
+    for e in episodes:
+        by_item.setdefault(e.item_id, e)
+    if not by_item:
+        return {"available": False, "reason": "no episodes"}
+
+    rows = list(by_item.values())
+    need = np.array([bool(e.metadata["grounding_required_gold"]) for e in rows])
+    loss_act = np.array([float(e.metadata["loss_act"]) for e in rows])
+    loss_ask = np.array([float(e.metadata["loss_ask"]) for e in rows])
+    bits = np.array([float(e.metadata["bits_ask"]) for e in rows])
+    if need.all() or not need.any():
+        split = None
+    else:
+        split = {
+            "needs_grounding": {
+                "n": int(need.sum()),
+                "act_error": float(loss_act[need].mean()),
+                "ask_error": float(loss_ask[need].mean()),
+                "value_of_asking": float((loss_act[need] - loss_ask[need]).mean()),
+            },
+            "does_not_need_grounding": {
+                "n": int((~need).sum()),
+                "act_error": float(loss_act[~need].mean()),
+                "ask_error": float(loss_ask[~need].mean()),
+                "value_of_asking": float((loss_act[~need] - loss_ask[~need]).mean()),
+            },
+        }
+
+    policies: list[dict[str, Any]] = []
+    for lam in lambdas:
+        structural_loss = np.where(need, loss_ask, loss_act)
+        structural_bits = np.where(need, bits, 0.0)
+        policies.append(
+            {
+                "lambda_bit": lam,
+                "never_cost": float(loss_act.mean()),
+                "always_cost": float(loss_ask.mean() + lam * bits.mean()),
+                "structural_cost": float(
+                    structural_loss.mean() + lam * structural_bits.mean()
+                ),
+                "clairvoyant_cost": float(
+                    np.minimum(loss_act, loss_ask + lam * bits).mean()
+                ),
+                "structural_beats_always": bool(
+                    structural_loss.mean() + lam * structural_bits.mean()
+                    < loss_ask.mean() + lam * bits.mean()
+                ),
+            }
+        )
+
+    note = None
+    if split is not None:
+        unneeded = split["does_not_need_grounding"]["value_of_asking"]
+        note = (
+            f"Asking is worth {split['needs_grounding']['value_of_asking']:+.3f} "
+            "in accuracy on items whose withheld variable decides, and "
+            f"{unneeded:+.3f} on items whose prompt already determines the "
+            "answer. The second number is the one that matters for how H1 reads."
+            + (
+                " It is materially positive: the model applies the stated rule "
+                "better when the prompt carries facts the rule does not need, "
+                "so part of grounding's value here is prompt scaffolding rather "
+                "than information. A router that correctly declines to ask on "
+                "those items pays for it in distortion, and the waste rate -- "
+                "correct as information accounting -- overstates what routing "
+                "can recover at this capability."
+                if unneeded > 0.05
+                else " It is not materially positive, so bits spent on "
+                "already-determined items are recoverable and the waste rate "
+                "reads as it is meant to."
+            )
+        )
+    return {
+        "available": True,
+        "n_items": len(rows),
+        "value_of_asking": split,
+        "policies": policies,
+        "note": note,
+    }
+
+
 def evaluate_gates(
     cfg: GroundingConfig,
     h1_rows: Sequence[Mapping[str, Any]],
@@ -1291,11 +1414,18 @@ def evaluate_gates(
                 "asking with the same query, over a range of prices. Routing "
                 "and query synthesis compose (hypothesis H-A)."
                 if h1_passed
-                else "Gate H1 not met. Falsification F1 is the reading to check "
-                "first: routing that worked on the synthetic task may not "
-                "transfer to the LM's own internal signal. Read the router "
-                "calibration before the arm table -- an estimator with no "
-                "discrimination cannot be rescued by a different threshold."
+                else "Gate H1 not met. Two readings have to be separated "
+                "before this is attributed to the router. Falsification F1 is "
+                "the first: routing that worked on the synthetic task may not "
+                "transfer to the LM's own internal signal, and an estimator "
+                "with no discrimination cannot be rescued by a different "
+                "threshold -- so read the router calibration before the arm "
+                "table. The second is prior to it and is decided by the "
+                "\"what asking is worth\" table: if asking materially improves "
+                "the decision even on items whose prompt already determines "
+                "the answer, then there is little for *any* router to recover "
+                "at this capability, and H1 is a statement about the model "
+                "rather than about the estimator."
             ),
         },
         "H2": {
@@ -1580,6 +1710,51 @@ def render_report(
         note = next((r.get("eta_q_note") for r in decomposition if r.get("eta_q_note")), None)
         if note:
             lines += ["", note]
+
+    value = analysis.get("grounding_value") or {}
+    if value.get("available") and value.get("value_of_asking"):
+        split = value["value_of_asking"]
+        lines += [
+            "",
+            "## What asking is worth, and to which items",
+            "",
+            "The waste rate counts a bit spent on an item with "
+            "`H(J | M_A) = 0` as pure loss. That is correct as *information* "
+            "accounting — the answer cannot change which action is right — but "
+            "it does not follow that the answer cannot change what the model "
+            "does. This table decides how gate H1 should be read.",
+            "",
+            "| items | n | error acting | error asking | value of asking |",
+            "|---|---:|---:|---:|---:|",
+        ]
+        for label, key in (
+            ("withheld variable decides", "needs_grounding"),
+            ("prompt already decides", "does_not_need_grounding"),
+        ):
+            row = split[key]
+            lines.append(
+                f"| {label} | {row['n']} | {row['act_error']:.3f} | "
+                f"{row['ask_error']:.3f} | {row['value_of_asking']:+.3f} |"
+            )
+        lines += ["", value["note"], ""]
+        lines += [
+            "Four policies priced from the same episodes. `structural` asks "
+            "exactly where the residual deficit is nonzero — the best any "
+            "router could do from AI-visible state, since `needs_grounding` is "
+            "determined by the prompt here. `clairvoyant` is the per-item "
+            "argmin and is unattainable; the gap between the two is how much of "
+            "the oracle-route arms is clairvoyance rather than structure.",
+            "",
+            "| λ | never | always | structural | clairvoyant | structural wins |",
+            "|---:|---:|---:|---:|---:|:---:|",
+        ]
+        for row in value["policies"]:
+            lines.append(
+                f"| {row['lambda_bit']:.2f} | {row['never_cost']:.4f} | "
+                f"{row['always_cost']:.4f} | {row['structural_cost']:.4f} | "
+                f"{row['clairvoyant_cost']:.4f} | "
+                f"{'yes' if row['structural_beats_always'] else 'no'} |"
+            )
 
     calibration = analysis.get("router_calibration") or {}
     if calibration.get("available"):

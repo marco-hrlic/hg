@@ -30,8 +30,8 @@ alongside them.
 | **G1** | Does a learned router beat fixed ACT/ASK policies? | **passed** |
 | **G2** | Does targeted query synthesis compress external cost? | **passed** on Qwen2.5-3B-Instruct |
 | **H0** | Does the whole bounded-query frontier reproduce `b*(n,r)`? | **passed** (E1) |
-| **H1** | Does routing buy anything on top of query synthesis? | see E2 below |
-| **H2** | Does a minimality intervention make the query cheaper? | see E3 below |
+| **H1** | Does routing buy anything on top of query synthesis? | **not met** on Qwen2.5-3B-Instruct |
+| **H2** | Does a minimality intervention make the query cheaper? | **passed** — η_Q = 1.000 |
 | H3 | Does a second model pass the capability floor? | not started |
 | H4 | Does the effect persist across two capable models? | not started |
 | H5 | Does it survive a second task family? | not started |
@@ -43,8 +43,27 @@ distortion, an LM-synthesized query cost 2.52 bits against generic escalation's
 5.00 — a 1.98× reduction**, with the oracle query at 1.00 showing 3× still on
 the table. Details below.
 
-Next is G4 (does the grounding requirement change with model capability), which
-needs a second model scale, and G3 for a second task family.
+E1 passed and E2/E3 ran on the same frozen model. **H2 passed decisively**: one
+sentence of instruction — "you may ask about at most one of the traveller's
+preferences" — takes the synthesized query from 2.440 bits to exactly 1.000 on
+every item at soundness 1.000, so η_Q goes from 0.640 to **1.000** and there is
+no oracle gap left to close on this task.
+
+**H1 was not met**, and the reason is not the router. On items whose prompt
+already determines the answer — where the withheld variable is
+information-theoretically irrelevant — disclosing it still cuts the model's
+error rate from 0.818 to 0.476. Part of grounding's value at 3B is *prompt
+scaffolding rather than information*, so a router that correctly declines to
+ask pays for it in distortion, and the best possible prompt-visible router does
+not beat always-ask below λ = 0.15. Separately, and confirming falsification F1,
+the model's own internal signals carry essentially no information about whether
+acting now is wrong (Brier 0.2223 against a constant predictor's 0.2266).
+
+Full write-up, in the improved plan's §22 format:
+[`plans/HG_v2_E1_E2_Results_Report.md`](../../plans/HG_v2_E1_E2_Results_Report.md).
+
+Next is H3/H4 — a second model scale, reframed to ask whether the value of
+irrelevant context falls with capability — and H5, a second task family.
 
 ---
 
