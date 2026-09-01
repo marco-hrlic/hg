@@ -1,0 +1,15 @@
+# spec section 8.2 pilot stage: Baseline-50M seed 0. ~56.9M params at
+# vocab_size=16000 (the real trained tokenizer) -- computed via
+# hg_native.model.config.estimate_param_count to actually land in the
+# spec section 3.1 "~50-70M" band (its own literal recommended YAML does
+# not; see [[hg-native-m0-project-state]]).
+variant: baseline
+seed: 0
+transformer:
+  vocab_size: 16000
+  d_model: 640
+  n_layers: 10
+  n_heads: 10
+  n_kv_heads: 5
+  d_ff: 1792
+  max_seq_len: 256

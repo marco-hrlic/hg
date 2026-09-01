@@ -69,11 +69,16 @@ def main() -> None:
         "--tokenizer", default=None,
         help="Path to the BPE tokenizer.json the checkpoint was trained with. Must match --config's vocab_size. Default: ByteTokenizer.",
     )
+    parser.add_argument("--device", default=None, help="torch device. Default: cuda if available, else cpu.")
     args = parser.parse_args()
 
+    import torch
+
+    device = args.device or ("cuda" if torch.cuda.is_available() else "cpu")
     config = HGNativeConfig.from_yaml(args.config)
     model = build_model(config)
-    load_checkpoint(args.checkpoint, model)
+    load_checkpoint(args.checkpoint, model, map_location=device)
+    model.to(device)
     tokenizer = BPETokenizer(args.tokenizer) if args.tokenizer else ByteTokenizer()
     if tokenizer.vocab_size != config.transformer.vocab_size:
         raise ValueError(
@@ -82,7 +87,7 @@ def main() -> None:
         )
 
     episodes = held_out_episode_set(args.seed, args.n_per_family)
-    preds = predict(model, tokenizer, episodes, max_seq_len=args.max_seq_len)
+    preds = predict(model, tokenizer, episodes, max_seq_len=args.max_seq_len, device=device)
 
     static_hidden_eps = [ep for ep in episodes if ep.family == "static_hidden"]
     static_hidden_idx = [i for i, ep in enumerate(episodes) if ep.family == "static_hidden"]
@@ -109,7 +114,7 @@ def main() -> None:
     }
 
     if len(sequential_eps) >= 10:
-        latents = extract_latents(model, tokenizer, sequential_eps, max_seq_len=args.max_seq_len)
+        latents = extract_latents(model, tokenizer, sequential_eps, max_seq_len=args.max_seq_len, device=device)
         metrics["N4_quotient_recovery"] = quotient_recovery(latents, sequential_eps, seed=args.seed)
 
     metrics = _json_safe(metrics)

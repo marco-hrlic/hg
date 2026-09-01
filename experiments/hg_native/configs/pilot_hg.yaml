@@ -1,0 +1,19 @@
+# Same trunk as pilot_baseline.yaml (spec section 2.1's matched-comparison
+# requirement) plus the default HG latent/heads. HG overhead over the
+# baseline trunk is ~0.45% at this size, well inside the <5% budget.
+variant: hg
+seed: 0
+transformer:
+  vocab_size: 16000
+  d_model: 640
+  n_layers: 10
+  n_heads: 10
+  n_kv_heads: 5
+  d_ff: 1792
+  max_seq_len: 256
+hg_latent:
+  hidden_dim: 256
+  latent_dim: 64
+  layers: 2
+heads:
+  n_actions: 7

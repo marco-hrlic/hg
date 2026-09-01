@@ -57,11 +57,19 @@ def parse_args() -> argparse.Namespace:
         help="Mix in this many TinyStories examples as spec section 6's ordinary_lm component (0 = disabled).",
     )
     parser.add_argument("--ordinary-lm-ratio", type=float, default=0.8)
+    parser.add_argument(
+        "--device", default=None,
+        help="torch device (e.g. cuda, cpu). Default: cuda if available, else cpu -- every prior run in this "
+        "project used TrainConfig's cpu default explicitly, which left the Spark's GPU unused.",
+    )
     return parser.parse_args()
 
 
 def main() -> None:
     args = parse_args()
+    import torch
+
+    device = args.device or ("cuda" if torch.cuda.is_available() else "cpu")
     config = HGNativeConfig.from_yaml(args.config)
     model = build_model(config)
     tokenizer = BPETokenizer(args.tokenizer) if args.tokenizer else ByteTokenizer()
@@ -78,12 +86,12 @@ def main() -> None:
 
     train_cfg = TrainConfig(
         total_steps=args.total_steps, batch_size=args.batch_size, max_seq_len=args.max_seq_len,
-        seed=args.seed, mix=SyntheticMix(),
+        seed=args.seed, mix=SyntheticMix(), device=device,
         ordinary_lm_texts=ordinary_lm_texts, ordinary_lm_ratio=args.ordinary_lm_ratio,
     )
     optim_cfg = OptimConfig(lr=args.lr)
 
-    print(f"variant={config.variant} params={model.num_parameters():,} steps={args.total_steps}", file=sys.stderr)
+    print(f"variant={config.variant} params={model.num_parameters():,} steps={args.total_steps} device={device}", file=sys.stderr)
     history = train(model, config, train_cfg, optim_cfg=optim_cfg, tokenizer=tokenizer)
 
     run_dir = ensure_dir(Path(args.output_root) / run_id(args.experiment_name, config.variant))
