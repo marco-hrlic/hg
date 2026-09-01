@@ -22,6 +22,7 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(REPO_ROOT / "src"))
 
 from hg_native.data import accessibility, capability_refinement, sequential_quotient, static_hidden  # noqa: E402
+from hg_native.data.tokenizer import BPETokenizer  # noqa: E402
 from hg_native.eval.capability import capability_floor  # noqa: E402
 from hg_native.eval.grounding import grounding_discrimination  # noqa: E402
 from hg_native.eval.latents import extract_latents  # noqa: E402
@@ -62,12 +63,21 @@ def main() -> None:
     parser.add_argument("--n-per-family", type=int, default=100)
     parser.add_argument("--seed", type=int, default=12345, help="Held-out eval seed, disjoint from any training seed")
     parser.add_argument("--output", default=None, help="Write metrics.json here; defaults to alongside --checkpoint")
+    parser.add_argument(
+        "--tokenizer", default=None,
+        help="Path to the BPE tokenizer.json the checkpoint was trained with. Must match --config's vocab_size. Default: ByteTokenizer.",
+    )
     args = parser.parse_args()
 
     config = HGNativeConfig.from_yaml(args.config)
     model = build_model(config)
     load_checkpoint(args.checkpoint, model)
-    tokenizer = ByteTokenizer()
+    tokenizer = BPETokenizer(args.tokenizer) if args.tokenizer else ByteTokenizer()
+    if tokenizer.vocab_size != config.transformer.vocab_size:
+        raise ValueError(
+            f"tokenizer vocab_size ({tokenizer.vocab_size}) does not match "
+            f"transformer.vocab_size in {args.config} ({config.transformer.vocab_size})"
+        )
 
     episodes = held_out_episode_set(args.seed, args.n_per_family)
     preds = predict(model, tokenizer, episodes, max_seq_len=args.max_seq_len)
