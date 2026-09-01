@@ -118,3 +118,14 @@ def generate_trajectory(seed: int, index: int, n_steps: int) -> list[Episode]:
 
 def generate_batch(seed: int, n_trajectories: int, n_steps: int) -> list[list[Episode]]:
     return [generate_trajectory(seed, i, n_steps) for i in range(n_trajectories)]
+
+
+def render_text(episode: Episode) -> str:
+    """Render one trajectory step. `h` is shown as UNKNOWN at every step
+    (the environment never re-states it -- see the module docstring)."""
+    lines = ["TASK SEQUENTIAL-CHOICE", f"t = {episode.metadata['t']}"]
+    for key, value in episode.visible_state.items():
+        lines.append(f"{key} = {value}")
+    lines.append(f"h = {episode.hidden_state['h']}")
+    lines.append("DECIDE OR REQUEST INFORMATION.")
+    return "\n".join(lines)

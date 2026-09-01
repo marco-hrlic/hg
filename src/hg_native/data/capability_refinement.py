@@ -88,3 +88,16 @@ def generate_pair(seed: int, index: int) -> dict[str, Episode]:
 
 def generate_batch(seed: int, n_pairs: int) -> list[dict[str, Episode]]:
     return [generate_pair(seed, i) for i in range(n_pairs)]
+
+
+def render_text(episode: Episode) -> str:
+    """`C.cost` is only quoted once `ACT_C` is actually a capability -- under
+    C1 the action doesn't exist yet, so its price isn't shown either."""
+    capability = episode.metadata["capability"]
+    lines = [f"TASK CAPABILITY-CHOICE (CAPABILITY = {capability})"]
+    for key, value in episode.visible_state.items():
+        if key == "C.cost" and capability == "C1":
+            continue
+        lines.append(f"{key} = {value}")
+    lines.append("DECIDE.")
+    return "\n".join(lines)
