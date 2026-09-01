@@ -11,14 +11,20 @@ task:
   kind: noisy_index
   n_bits: 8
   n_items: 12000
-  # Odd, so the internal vote cannot tie.
-  n_observations: 5
+  # Odd, so the internal vote cannot tie. Nine rather than five: with m
+  # observations the agreement features take only (m+1)/2 distinct values, and
+  # at m = 5 that is three levels -- coarse enough that any correctly-ordered
+  # estimator reproduces the exact Bayes policy and the learned-vs-ceiling
+  # comparison has no teeth. Nine gives five levels and a measurable
+  # estimation gap.
+  n_observations: 9
   # Share of items where M_A already determines J -- the plan's "with
   # probability p, J is directly observable from M_A".
   p_self_sufficient: 0.4
-  # Per-observation flip rates on the remaining items. Two levels, so internal
-  # agreement is informative about error probability without determining it.
-  error_rates: [0.25, 0.45]
+  # Per-observation flip rates on the remaining items. Three levels, so
+  # internal agreement is informative about error probability without
+  # determining it, and the posterior is a non-trivial mixture.
+  error_rates: [0.15, 0.30, 0.45]
 
 policies:
   - always_act    # baseline the router must beat
@@ -29,9 +35,14 @@ policies:
   - oracle        # reference: clairvoyant, uses the realized counterfactual
 
 # The price of one external bit. Gate G1 is a claim about a *range* of prices,
-# so this is a grid, not a value. Below the base ACT error rate (~0.15) asking
+# so this is a grid, not a value. Below the base ACT error rate (~0.095) asking
 # is cheap; above it acting is cheap; the interesting region is in between.
-lambda_grid: [0.02, 0.05, 0.10, 0.15, 0.20, 0.30, 0.50]
+#
+# Deliberately a regular grid rather than points chosen near the per-level error
+# probabilities. Those are where the learned and exact policies would diverge,
+# so picking them would be selecting the prices most likely to make the
+# estimation gap visible.
+lambda_grid: [0.01, 0.02, 0.05, 0.10, 0.15, 0.20, 0.30, 0.40]
 
 # Half the items fit the router, half score it. A router scored on its own
 # training items reports the fit, not the policy.

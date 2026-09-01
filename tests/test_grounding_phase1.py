@@ -13,6 +13,7 @@ import pytest
 
 from hg.config import ConfigError
 from hg.grounding.channels import Route
+from hg.grounding.episodes import GroundingEpisode
 from hg.grounding.config import load_grounding_config
 from hg.grounding.costs import (
     aggregate_route_arm,
@@ -456,26 +457,59 @@ def test_decision_state_marks_estimates_as_inexact():
     assert state["expected_loss_now"] == p
 
 
-def test_validity_check_flags_a_router_that_beats_its_ceiling():
-    """The check has to be able to fire, or it is decoration."""
-    from hg.grounding.costs import RouteMetrics
+def test_validity_check_flags_a_leaking_router(tmp_path):
+    """The check has to be able to fire, or it is decoration.
 
-    def arm(policy: str, cost: float) -> RouteMetrics:
-        return RouteMetrics(
-            policy=policy, task="noisy_index", n_items=10, lambda_bit=0.1,
-            route_accuracy=1.0, mean_final_loss=0.0, mean_loss_before=0.0,
-            delta_distortion=0.0, external_query_rate=0.0,
-            mean_external_bits=0.0, mean_total_cost=cost,
-            mean_oracle_cost=0.0, routing_regret=0.0,
-            information_efficiency=None,
-        )
+    Simulated by giving the "learned" arm the oracle's routes, which is what a
+    router that could see the reference decision would produce.
+    """
+    cfg = phase1_config(tmp_path, lambda_grid=[0.1], n_bootstrap=200)
+    episodes, _, _ = run_sweep(cfg)
+    leaked = []
+    for e in episodes:
+        if e.policy == "oracle":
+            copy = GroundingEpisode.from_dict(e.to_dict())
+            copy.policy = "learned"
+            leaked.append(copy)
+        elif e.policy != "learned":
+            leaked.append(e)
 
-    flagged = check_validity(
-        {("learned", 0.1): arm("learned", 0.01),
-         ("bayes_optimal", 0.1): arm("bayes_optimal", 0.05)}
+    analysis = build_analysis(cfg, leaked)
+    flagged = analysis["validity"]["learned_beats_its_ceiling_at"]
+    assert flagged, "a router routing like the oracle must be flagged"
+    assert "leak" in analysis["validity"]["note"]
+
+
+def test_validity_check_does_not_fire_on_sampling_noise(tmp_path):
+    """The complement of the test above, and the reason the check is a paired
+    bootstrap rather than a point comparison: at a price inside a divergence
+    window the learned router can be nominally cheaper than its own ceiling
+    without anything being wrong."""
+    cfg = phase1_config(
+        tmp_path,
+        task={
+            "kind": "noisy_index", "n_bits": 8, "n_items": 12000,
+            "n_observations": 9, "p_self_sufficient": 0.4,
+            "error_rates": [0.15, 0.30, 0.45],
+        },
+        lambda_grid=[0.05, 0.2],
+        n_bootstrap=0,
     )
-    assert flagged["learned_beats_its_ceiling_at"]
-    assert "leak" in flagged["note"]
+    sensitivity = build_analysis(cfg, run_sweep(cfg)[0])["estimation_sensitivity"]
+    widest = max(sensitivity["windows"], key=lambda w: w["width"])
+    inside = sum(widest["window"]) / 2
+
+    sub = tmp_path / "inside"
+    sub.mkdir(parents=True, exist_ok=True)
+    priced = phase1_config(
+        sub, task=cfg.raw["task"], lambda_grid=[inside], n_bootstrap=300
+    )
+    analysis = build_analysis(priced, run_sweep(priced)[0])
+    arms = {a["policy"]: a["mean_total_cost"] for a in analysis["arms"]}
+    # They really do diverge here...
+    assert arms["learned"] != arms["bayes_optimal"]
+    # ...and the check correctly declines to call it a leak.
+    assert analysis["validity"]["learned_beats_its_ceiling_at"] == []
 
 
 # ------------------------------------------------------------------ config ----
@@ -592,3 +626,66 @@ def test_a_phase1_run_directory_is_never_silently_overwritten(tmp_path, monkeypa
 
     with pytest.raises(FileExistsError, match="already exists"):
         phase1_module.write_run(cfg, episodes, diagnostics)
+
+
+def test_estimation_error_changes_routes_exactly_inside_a_divergence_window(tmp_path):
+    """Validates the sensitivity analysis by acting on its own prediction.
+
+    `estimation_sensitivity` claims the learned and exact policies differ only
+    for prices strictly between their two estimates at some feature level. So:
+    read a window off a first run, re-price at a lambda inside it, and the two
+    policies must now diverge -- while a lambda outside every window leaves them
+    identical. If this failed, the coincidence of costs reported elsewhere would
+    be unexplained rather than understood.
+    """
+    cfg = phase1_config(
+        tmp_path,
+        task={
+            "kind": "noisy_index",
+            "n_bits": 8,
+            "n_items": 12000,
+            "n_observations": 9,
+            "p_self_sufficient": 0.4,
+            "error_rates": [0.15, 0.30, 0.45],
+        },
+        lambda_grid=[0.05, 0.2],
+        n_bootstrap=0,
+    )
+    sensitivity = build_analysis(cfg, run_sweep(cfg)[0])["estimation_sensitivity"]
+    assert sensitivity["available"]
+
+    widest = max(sensitivity["windows"], key=lambda w: w["width"])
+    lo, hi = widest["window"]
+    assert hi > lo, "need a nonzero window to test with"
+    inside = (lo + hi) / 2
+    outside = hi + 10 * (hi - lo)
+
+    def costs_at(lam: float) -> tuple[float, float]:
+        sub = tmp_path / f"lam{lam}"
+        sub.mkdir(parents=True, exist_ok=True)
+        priced = phase1_config(
+            sub,
+            task=cfg.raw["task"],
+            lambda_grid=[lam],
+            n_bootstrap=0,
+        )
+        arms = {
+            a["policy"]: a["mean_total_cost"]
+            for a in build_analysis(priced, run_sweep(priced)[0])["arms"]
+        }
+        return arms["learned"], arms["bayes_optimal"]
+
+    learned_in, exact_in = costs_at(inside)
+    assert learned_in != exact_in, (
+        f"lambda={inside} is inside a divergence window {widest['window']} but "
+        "the policies did not diverge"
+    )
+    # Which way they diverge is not fixed. bayes_optimal is the ceiling in
+    # *expected* cost, and this is realized cost on finitely many items: the two
+    # policies differ only on items whose true error probability sits near the
+    # price of a bit, which is precisely where the realized rate can fall on
+    # either side of it. The difference must simply be small.
+    assert abs(learned_in - exact_in) < 0.01
+
+    learned_out, exact_out = costs_at(outside)
+    assert learned_out == exact_out

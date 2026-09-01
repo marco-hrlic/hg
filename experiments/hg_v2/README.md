@@ -139,12 +139,17 @@ a task where the optimal route varies per item **and is known**.
 
 ### The task: `noisy_index`
 
-Same index problem, but the AI also holds `m = 5` internal observations of
+Same index problem, but the AI also holds `m = 9` internal observations of
 `X_K`. On 40% of items they are noiseless — `J` is directly observable from
 `M_A` and asking is waste (the plan's "with probability p, J is directly
 observable"). On the rest each observation is independently flipped with rate
-0.25 or 0.45, so the AI's majority vote is unreliable and a 1-bit targeted ask
-resolves the decision.
+0.15, 0.30 or 0.45, so the AI's majority vote is unreliable and a 1-bit
+targeted ask resolves the decision.
+
+`m = 9` rather than 5: the agreement features take only `(m+1)/2` distinct
+values, and three levels is coarse enough that *any* correctly-ordered
+estimator reproduces the exact Bayes policy, leaving nothing to measure about
+estimation quality. Five levels gives the router room to be wrong.
 
 The noise is *graded* rather than binary on purpose. If the AI simply knew
 whether it was self-sufficient, the routing feature would predict the label
@@ -177,44 +182,64 @@ Mean total cost `C = L + λB` on held-out items (6000 items, seed 0):
 
 | λ | always_act | always_ask | **learned** | oracle | wins both? |
 |---:|---:|---:|---:|---:|:---:|
-| 0.02 | 0.1600 | 0.0200 | **0.0170** | 0.0032 | ✓ |
-| 0.05 | 0.1600 | 0.0500 | **0.0323** | 0.0080 | ✓ |
-| 0.10 | 0.1600 | 0.1000 | **0.0577** | 0.0160 | ✓ |
-| 0.15 | 0.1600 | 0.1500 | **0.0831** | 0.0240 | ✓ |
-| 0.20 | 0.1600 | 0.2000 | **0.1030** | 0.0320 | ✓ |
-| 0.30 | 0.1600 | 0.3000 | **0.1324** | 0.0480 | ✓ |
-| 0.50 | 0.1600 | 0.5000 | 0.1600 | 0.0800 | ✗ (ties always_act) |
+| 0.01 | 0.0908 | 0.0100 | **0.0056** | 0.0009 | ✓ |
+| 0.02 | 0.0908 | 0.0200 | **0.0103** | 0.0018 | ✓ |
+| 0.05 | 0.0908 | 0.0500 | **0.0231** | 0.0045 | ✓ |
+| 0.10 | 0.0908 | 0.1000 | **0.0380** | 0.0091 | ✓ |
+| 0.15 | 0.0908 | 0.1500 | **0.0524** | 0.0136 | ✓ |
+| 0.20 | 0.0908 | 0.2000 | **0.0662** | 0.0182 | ✓ |
+| 0.30 | 0.0908 | 0.3000 | **0.0806** | 0.0272 | ✓ |
+| 0.40 | 0.0908 | 0.4000 | 0.0908 | 0.0363 | ✗ (ties always_act) |
 
-**Gate G1 passed at 6 of 7 prices**, each with an item-paired bootstrap interval
-on the cost advantage that excludes zero. At λ = 0.50 no estimated error
+**Gate G1 passed at 7 of 8 prices**, each with an item-paired bootstrap interval
+on the cost advantage that excludes zero. At λ = 0.40 no estimated error
 probability exceeds the price of a bit, so the router correctly collapses to
 always-ACT and ties it — a tie is not counted as a win.
 
-The query rate falls monotonically as external bits get dearer (1.00 → 0.51 →
-0.29 → 0.00), which is the sanity check on the whole cost model.
+The query rate falls monotonically as external bits get dearer (0.54 → 0.43 →
+… → 0.00), which is the sanity check on the whole cost model.
 
-### What Phase 1 does *not* show
+### Estimation error vs. routing decisions
 
-Two limits, both recorded in the run's own report rather than left for a reader
-to discover:
+The learned router's per-level estimates are **not** exact — they differ from
+the exact posterior by up to 0.030 — yet its cost matches `bayes_optimal` at
+every swept price. That is worth quantifying rather than asserting, and the run
+does:
 
-1. **The learned router matches `bayes_optimal` exactly at every λ.** That
-   reference routes on the exact posterior `P(wrong | observations)`,
-   marginalizing the unknown noise level — the ceiling for any router built on
-   these features. Matching it is expected here: with `m = 5` the agreement
-   features take only **three** distinct values, and both policies are monotone
-   thresholds on that ordering, so there are few places for a threshold to
-   land. `diagnostics.json` prints the whole feature space with both estimates
-   and the realized error rate per level. Consequence: Phase 1 establishes that
-   routing has value, but this task is too coarse to discriminate a good
-   estimator from a perfect one.
-2. **The query is already optimal.** Phase 1 routes between acting and asking a
-   query that was handed to it. Gate G2 — whether a *synthesized* query
-   compresses external cost — is untouched.
+A route is chosen by comparing an estimate against λ, so the two policies differ
+only when λ falls strictly between their two estimates at some feature level.
+Each level contributes a divergence window of that width, and here the windows
+cover **0.052 of a λ span of 0.39 (13.4%)** — none of the eight swept prices
+lands inside one.
 
-A `validity` block in `analysis.json` checks the one outcome that would
-invalidate rather than fail the run: the learned router coming out *cheaper*
-than its own ceiling, which would mean information leaked into its features.
+| majority margin | learned P(wrong) | exact P(wrong) | divergence window |
+|---:|---:|---:|---|
+| 0.111 | 0.3577 | 0.3878 | width 0.0301 |
+| 0.333 | 0.1741 | 0.1903 | width 0.0162 |
+| 0.556 | 0.0660 | 0.0654 | width 0.0006 |
+| 0.778 | 0.0198 | 0.0154 | width 0.0043 |
+| 1.000 | 0.0013 | 0.0003 | width 0.0010 |
+
+So the coincidence is a **robustness property**, not an exact estimator: route
+decisions on this task tolerate estimation error of the size the router actually
+has. A test verifies the claim by acting on it — re-pricing at a λ *inside* the
+widest window makes the two policies diverge, and a λ outside every window
+leaves them identical.
+
+One subtlety that cost a false positive in an earlier version of the validity
+check: `bayes_optimal` is the ceiling in **expected** cost, while a run measures
+**realized** cost. The two policies differ only on items whose true error
+probability sits near the price of a bit — precisely where the realized rate can
+land on either side by chance — so the learned router can come out nominally
+cheaper than its own ceiling with nothing wrong. The check is therefore an
+item-paired bootstrap that flags only a *significant* advantage, which is what a
+genuine feature leak would produce. Both directions are tested.
+
+### What Phase 1 still does *not* show
+
+**The query is already optimal.** Phase 1 routes between acting and asking a
+query that was handed to it. Gate G2 — whether a *synthesized* query compresses
+external cost — is untouched.
 
 ### Run it
 

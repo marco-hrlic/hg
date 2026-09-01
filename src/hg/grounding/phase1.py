@@ -356,7 +356,10 @@ def build_analysis(
 
     comparisons = build_comparisons(cfg, grouped, arms)
     gate = evaluate_gate(cfg, comparisons)
-    validity = check_validity(arms)
+    validity = check_validity(
+        grouped, arms, n_boot=cfg.n_bootstrap, alpha=cfg.alpha, seed=cfg.seed
+    )
+    sensitivity = estimation_sensitivity(episodes)
     return {
         "experiment": cfg.name,
         "phase": "phase1",
@@ -366,59 +369,177 @@ def build_analysis(
         "lambda_grid": sorted({float(e.metadata["lambda_bit"]) for e in episodes}),
         "arms": arm_rows,
         "comparisons": comparisons,
+        "estimation_sensitivity": sensitivity,
         "validity": validity,
         "gate": gate,
     }
 
 
-def check_validity(
-    arms: Mapping[tuple[str, float], RouteMetrics], *, tolerance: float = 1e-9
+def estimation_sensitivity(
+    episodes: Sequence[GroundingEpisode],
 ) -> dict[str, Any]:
-    """Sanity checks that would indicate a leak rather than a result.
+    """How much of the price range is sensitive to the router's estimation error.
+
+    The learned router and `bayes_optimal` can produce identical *policies* while
+    holding different *estimates*, and the reason is worth quantifying rather
+    than asserting. A route is chosen by comparing an estimate against lambda,
+    so the two policies differ only when lambda falls strictly between their two
+    estimates for some feature level. Each level therefore contributes a
+    divergence window of width |p_learned - p_bayes|, and the union of those
+    windows is the set of prices at which estimation error changes a decision.
+
+    A small total width is a real robustness property: it says route decisions
+    on this task tolerate estimation error of the size the router actually has.
+    It is not the same claim as "the router is exact", and reporting only the
+    coincidence of costs would let those two be confused.
+
+    Computed from episodes alone: the learned arm carries its estimate in
+    `decision_state.expected_loss_now` and `bayes_optimal` carries the exact
+    posterior in the same field, both alongside the features they came from.
+    """
+    def levels(policy: str) -> dict[tuple[float, ...], float]:
+        out: dict[tuple[float, ...], float] = {}
+        for e in episodes:
+            if e.policy != policy:
+                continue
+            state = e.decision_state or {}
+            features = state.get("features") or {}
+            p = state.get("expected_loss_now")
+            if not features or p is None:
+                continue
+            out[tuple(features[name] for name in FEATURE_NAMES)] = float(p)
+        return out
+
+    learned = levels("learned")
+    exact = levels("bayes_optimal")
+    shared = sorted(set(learned) & set(exact))
+    if not shared:
+        return {
+            "available": False,
+            "reason": (
+                "needs both the learned and bayes_optimal policies in the run"
+            ),
+        }
+
+    windows: list[dict[str, Any]] = []
+    for key in shared:
+        lo, hi = sorted((learned[key], exact[key]))
+        windows.append(
+            {
+                **dict(zip(FEATURE_NAMES, key)),
+                "learned_p_wrong": learned[key],
+                "bayes_p_wrong": exact[key],
+                "window": [lo, hi],
+                "width": hi - lo,
+            }
+        )
+
+    lambdas = sorted({float(e.metadata["lambda_bit"]) for e in episodes})
+    span = (max(lambdas) - min(lambdas)) if len(lambdas) > 1 else 0.0
+    total_width = float(sum(w["width"] for w in windows))
+    inside = [
+        lam
+        for lam in lambdas
+        if any(w["window"][0] < lam < w["window"][1] for w in windows)
+    ]
+    return {
+        "available": True,
+        "n_feature_levels": len(shared),
+        "windows": windows,
+        "total_divergence_width": total_width,
+        "lambda_span": span,
+        "sensitive_share_of_span": (total_width / span) if span > 0 else None,
+        "lambdas_inside_a_window": inside,
+        "note": (
+            f"The learned router's estimates differ from the exact posterior by "
+            f"up to {max(w['width'] for w in windows):.4f}, but a route flips "
+            f"only for prices inside a divergence window. Those windows cover "
+            f"{total_width:.4f} of a lambda span of {span:.2f}"
+            + (
+                f" ({100 * total_width / span:.1f}%)" if span > 0 else ""
+            )
+            + (
+                f", and {len(inside)} of the {len(lambdas)} swept prices fall "
+                f"inside one: {inside}."
+                if inside
+                else f", and none of the {len(lambdas)} swept prices falls "
+                "inside one -- which is why the two policies coincide here "
+                "despite the router being inexact."
+            )
+        ),
+    }
+
+
+def check_validity(
+    grouped: Mapping[tuple[str, float], Sequence[GroundingEpisode]],
+    arms: Mapping[tuple[str, float], RouteMetrics],
+    *,
+    n_boot: int = 1000,
+    alpha: float = 0.05,
+    seed: int = 0,
+    tolerance: float = 1e-9,
+) -> dict[str, Any]:
+    """The one outcome that would invalidate a run rather than fail it.
 
     `bayes_optimal` uses the same features as the learned router plus exact
-    knowledge of the noise distribution, so it is the ceiling. A learned router
-    materially below its cost is evidence that the router saw something it
-    should not have -- reported loudly and separately from the gate, because it
-    would invalidate the gate rather than fail it.
+    knowledge of the noise distribution, so it is the ceiling -- but only in
+    *expected* cost. A run measures *realized* cost on finitely many items, and
+    the two policies differ only on items whose true error probability sits near
+    the price of a bit, which is exactly where the realized error rate can land
+    on either side of it by chance. So a raw point comparison is not evidence of
+    anything: the learned router coming out a hair cheaper at some price is
+    ordinary sampling noise, not a leak.
 
-    Matching the ceiling exactly is expected here and is not a problem: see
-    `feature_level_table` for why the feature space is coarse enough that both
-    policies land on the same thresholds.
+    The check therefore uses the item-paired bootstrap and flags only a
+    *significant* advantage over the ceiling. That is what a genuine leak --
+    features carrying the reference decision -- would look like, and it is not
+    what finite-sample luck looks like.
     """
     beaten: list[dict[str, Any]] = []
     matched: list[float] = []
-    for (policy, lam), arm in arms.items():
+    for (policy, lam), arm in sorted(arms.items(), key=lambda kv: kv[0][1]):
         if policy != "learned":
             continue
         ceiling = arms.get(("bayes_optimal", lam))
         if ceiling is None:
             continue
-        if arm.mean_total_cost < ceiling.mean_total_cost - tolerance:
+        if abs(arm.mean_total_cost - ceiling.mean_total_cost) <= tolerance:
+            matched.append(lam)
+            continue
+        adv = paired_cost_advantage(
+            grouped[("learned", lam)],
+            grouped[("bayes_optimal", lam)],
+            name=f"learned_vs_ceiling@lambda={lam}",
+            n_boot=max(n_boot, 1),
+            alpha=alpha,
+            seed=seed,
+        )
+        if adv.point > 0 and adv.ci_low > 0:
             beaten.append(
                 {
                     "lambda_bit": lam,
                     "learned_cost": arm.mean_total_cost,
                     "ceiling_cost": ceiling.mean_total_cost,
+                    "advantage": adv.point,
+                    "ci": [adv.ci_low, adv.ci_high],
                 }
             )
-        elif abs(arm.mean_total_cost - ceiling.mean_total_cost) <= tolerance:
-            matched.append(lam)
     return {
         "learned_beats_its_ceiling_at": beaten,
         "learned_matches_ceiling_at": sorted(matched),
         "note": (
-            "The learned router matching bayes_optimal exactly is expected on "
-            "this task: the agreement features take only a few distinct values, "
-            "and both policies are monotone thresholds on that ordering. It "
-            "means Phase 1 demonstrates routing value without discriminating a "
-            "good estimator from a perfect one. Beating the ceiling would be a "
-            "leak, not a result."
+            "The learned router matching bayes_optimal on cost does not mean "
+            "its estimates are exact -- see estimation_sensitivity for the "
+            "per-level gaps and for the width of the price windows in which "
+            "those gaps would change a route. Where the two do differ, neither "
+            "direction is significant: bayes_optimal is the ceiling in expected "
+            "cost, and a run measures realized cost, so small differences either "
+            "way are sampling noise."
             if not beaten
-            else "The learned router is cheaper than bayes_optimal, which uses "
-            "the same features plus exact knowledge of the noise distribution. "
-            "Check for information leaking into the router's features before "
-            "reading anything else in this run."
+            else "The learned router is significantly cheaper than "
+            "bayes_optimal, which uses the same features plus exact knowledge "
+            "of the noise distribution. Check for information leaking into the "
+            "router's features before reading anything else in this run."
         ),
     }
 
@@ -652,6 +773,25 @@ def render_report(
             f"| {c['lambda_bit']:.2f} | {cells[0]} | {cells[1]} | "
             f"{'**yes**' if c['beats_both'] else 'no'} |"
         )
+
+    sensitivity = analysis.get("estimation_sensitivity") or {}
+    if sensitivity.get("available"):
+        lines += [
+            "",
+            "## Estimation error vs. routing decisions",
+            "",
+            sensitivity["note"],
+            "",
+            "| majority margin | learned P(wrong) | exact P(wrong) | divergence window |",
+            "|---:|---:|---:|---|",
+        ]
+        for w in sorted(sensitivity["windows"], key=lambda r: r["majority_margin"]):
+            lines.append(
+                f"| {w['majority_margin']:.3f} | {w['learned_p_wrong']:.4f} | "
+                f"{w['bayes_p_wrong']:.4f} | "
+                f"[{w['window'][0]:.4f}, {w['window'][1]:.4f}] "
+                f"(width {w['width']:.4f}) |"
+            )
 
     validity = analysis.get("validity") or {}
     if validity:
