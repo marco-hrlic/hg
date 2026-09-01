@@ -31,6 +31,36 @@ Markov state `Z_t = (r_t, f_t, u_t, n_t, h)` (spec's own names):
 worked example (`S_t* = (r_t, f_t, h)`); `u_t`/`n_t` are still recorded in
 `full_state` for the quotient-probe irrelevant-variable baselines (spec
 section 10.6), just excluded from the quotient itself.
+
+KNOWN GAP, found via a real N4 quotient-probe run (`eval/quotient_probes.py`)
+rather than by inspection -- worth relaying to the theory/planning track per
+[[hg-theory-implementation-split]]:
+
+`render_text` (below) shows `r`, `f`, `u`, `n` as plain visible facts at
+every step and always shows `h = UNKNOWN`, because M0's model is a stateless
+per-episode forward pass with no cross-step memory or growing multi-turn
+context. Two consequences neither this generator nor the training loop
+currently work around:
+
+1. `h`'s true value is **not present in any single step's input, ever** --
+   not even at t>0 under the "idealized grounding-reuse policy" this module
+   assumes. A real run's linear probe for `h` came back at chance (0.48)
+   while `r`/`f`/`u`/`n` all came back near-perfect (>=0.99) -- not because
+   the model failed to compress, but because `u`/`n` are directly copied
+   from the visible input (trivial, not "quotient recovery" at all) while
+   `h` is information-theoretically unrecoverable from the given input.
+   `Q_sel` as currently computed is confounded by this: it compares
+   "visible and trivial" (`u`, `n`) against "invisible and impossible"
+   (`h`), not "compressed-in vs. correctly-excluded" as intended.
+2. Consequently, `N5_grounding_reuse`'s `repeated_ask_rate` can be driven to
+   0 by a router that has simply learned "never ask after t=0" as a
+   pattern over `t`/context shape, with no actual retained grounding of
+   `h` behind it -- because there is currently no mechanism (recurrent
+   state, or `h`'s disclosed value appended to later steps' text) through
+   which real retention could even occur or fail. Closing this needs an
+   explicit design decision (grow each step's context with prior turns'
+   text, or give the model persistent cross-step state) before N4/N5
+   results here should be read as evidence about grounding reuse per se.
 """
 
 from __future__ import annotations

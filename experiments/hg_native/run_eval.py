@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Evaluate a trained HG-variant checkpoint against spec section 10's metrics
-(gates N0, N1, N2, N3, N5 -- N4 quotient-probe recovery is not implemented
-yet, see [[hg-native-m0-project-state]]).
+(gates N0-N3, N4, N5 -- the full query-efficiency/soundness-minimality
+metrics from section 10.4 are still not implemented, see
+[[hg-native-m0-project-state]]).
 
 Usage:
     python experiments/hg_native/run_eval.py \
@@ -23,7 +24,9 @@ sys.path.insert(0, str(REPO_ROOT / "src"))
 from hg_native.data import accessibility, capability_refinement, sequential_quotient, static_hidden  # noqa: E402
 from hg_native.eval.capability import capability_floor  # noqa: E402
 from hg_native.eval.grounding import grounding_discrimination  # noqa: E402
+from hg_native.eval.latents import extract_latents  # noqa: E402
 from hg_native.eval.predict import predict  # noqa: E402
+from hg_native.eval.quotient_probes import quotient_recovery  # noqa: E402
 from hg_native.eval.reuse import future_external_bits, repeated_ask_rate  # noqa: E402
 from hg_native.eval.routing import route_accuracy, route_value_report  # noqa: E402
 from hg_native.eval.scaffolding import accessibility_discrimination, route_rates_on_zero_deficit  # noqa: E402
@@ -91,6 +94,10 @@ def main() -> None:
             "future_external_bits": future_external_bits(sequential_eps, preds.route_pred[sequential_idx]),
         },
     }
+
+    if len(sequential_eps) >= 10:
+        latents = extract_latents(model, tokenizer, sequential_eps, max_seq_len=args.max_seq_len)
+        metrics["N4_quotient_recovery"] = quotient_recovery(latents, sequential_eps, seed=args.seed)
 
     metrics = _json_safe(metrics)
     output_path = Path(args.output) if args.output else Path(args.checkpoint).parent.parent / "eval" / "metrics.json"
