@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import pytest
 
-from hg_native.data.sequential_quotient import generate_batch, generate_trajectory
+from hg_native.data.sequential_quotient import generate_batch, generate_trajectory, render_text
 
 SEEDS = (0, 1, 12345)
 N_TRAJECTORIES_PER_SEED = 60
@@ -118,6 +118,60 @@ def test_n_is_fresh_noise_not_constant():
         if len({ep.metadata["n"] for ep in traj}) > 1:
             return
     pytest.fail("n_t never varied within any trajectory across all seeds -- looks constant, not noise")
+
+
+# --- growing-context fix: h must actually be recoverable at t>0 ------------
+
+
+def test_t0_prompt_never_discloses_h():
+    for traj in _trajectories():
+        assert "ANSWER=h:" not in render_text(traj[0])
+        assert "h=UNKNOWN" in render_text(traj[0])
+
+
+def test_later_prompts_disclose_the_true_h_value():
+    for traj in _trajectories():
+        h_true = traj[0].full_state["h"]
+        for ep in traj[1:]:
+            assert f"ANSWER=h:{h_true}" in render_text(ep)
+
+
+def test_prompt_never_discloses_the_wrong_h_value():
+    wrong = {"YES": "NO", "NO": "YES"}
+    for traj in _trajectories():
+        h_true = traj[0].full_state["h"]
+        for ep in traj[1:]:
+            assert f"ANSWER=h:{wrong[h_true]}" not in render_text(ep)
+
+
+def test_prompt_grows_monotonically_with_t():
+    traj = generate_trajectory(0, 0, N_STEPS)
+    lengths = [len(render_text(ep)) for ep in traj]
+    assert lengths == sorted(lengths)
+    assert lengths[0] < lengths[-1]
+
+
+def test_prompt_at_t_is_a_prefix_of_the_prompt_at_t_plus_1_up_to_the_new_turn():
+    # Each step's prompt is the previous step's *history* (its own line plus
+    # outcome) followed by the new turn -- not merely "some longer string".
+    traj = generate_trajectory(0, 0, N_STEPS)
+    for t in range(len(traj) - 1):
+        this_prompt = render_text(traj[t])
+        next_prompt = render_text(traj[t + 1])
+        # The current turn's own line (everything before "DECIDE...") must
+        # reappear, augmented with its outcome, inside the next prompt.
+        this_turn_line = this_prompt.split("\nDECIDE")[0].split("\n")[-1]
+        assert this_turn_line in next_prompt
+
+
+def test_prompt_shape_matches_static_shorter_trajectory():
+    # The growing-context prompt at step t of a longer trajectory must
+    # exactly match step t of a shorter trajectory generated from the same
+    # (seed, index) -- the prefix-determinism guarantee extends to prompt_text.
+    long_traj = generate_trajectory(0, 0, 8)
+    short_traj = generate_trajectory(0, 0, 3)
+    for t in range(3):
+        assert render_text(long_traj[t]) == render_text(short_traj[t])
 
 
 # --- split isolation ---------------------------------------------------------

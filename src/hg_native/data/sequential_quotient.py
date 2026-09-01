@@ -32,35 +32,31 @@ worked example (`S_t* = (r_t, f_t, h)`); `u_t`/`n_t` are still recorded in
 `full_state` for the quotient-probe irrelevant-variable baselines (spec
 section 10.6), just excluded from the quotient itself.
 
-KNOWN GAP, found via a real N4 quotient-probe run (`eval/quotient_probes.py`)
-rather than by inspection -- worth relaying to the theory/planning track per
-[[hg-theory-implementation-split]]:
+GROWING-CONTEXT FIX (2026-09-01), replacing an earlier version that showed
+each step in isolation: a real N4 quotient-probe run against that version
+found `h`'s probe accuracy stuck at chance (0.48) while `r`/`f`/`u`/`n` all
+came back near-perfect -- not a compression failure, but because `h`'s true
+value was **not present in any single step's input, ever**, so there was
+nothing a stateless per-episode forward pass could possibly recover it
+from. Fixed by making each step's prompt the *whole trajectory prefix so
+far* (`render_text` below, via `metadata["prompt_text"]`, built once at
+generation time): turn 0's `ASK_h` is followed by a disclosed
+`ANSWER=h:<value>` line, which then stays in every later turn's context.
+This is the option chosen over giving the model persistent cross-step
+state (e.g. actually consuming the transition head's own prediction as
+memory): growing context needs no model change and applies identically to
+baseline and HG models, keeping the matched-comparison principle (spec
+section 2.1) intact, whereas bespoke memory would be a structural
+capability only the HG variant could have, confounding the comparison M0
+exists to make.
 
-`render_text` (below) shows `r`, `f`, `u`, `n` as plain visible facts at
-every step and always shows `h = UNKNOWN`, because M0's model is a stateless
-per-episode forward pass with no cross-step memory or growing multi-turn
-context. Two consequences neither this generator nor the training loop
-currently work around:
-
-1. `h`'s true value is **not present in any single step's input, ever** --
-   not even at t>0 under the "idealized grounding-reuse policy" this module
-   assumes. A real run's linear probe for `h` came back at chance (0.48)
-   while `r`/`f`/`u`/`n` all came back near-perfect (>=0.99) -- not because
-   the model failed to compress, but because `u`/`n` are directly copied
-   from the visible input (trivial, not "quotient recovery" at all) while
-   `h` is information-theoretically unrecoverable from the given input.
-   `Q_sel` as currently computed is confounded by this: it compares
-   "visible and trivial" (`u`, `n`) against "invisible and impossible"
-   (`h`), not "compressed-in vs. correctly-excluded" as intended.
-2. Consequently, `N5_grounding_reuse`'s `repeated_ask_rate` can be driven to
-   0 by a router that has simply learned "never ask after t=0" as a
-   pattern over `t`/context shape, with no actual retained grounding of
-   `h` behind it -- because there is currently no mechanism (recurrent
-   state, or `h`'s disclosed value appended to later steps' text) through
-   which real retention could even occur or fail. Closing this needs an
-   explicit design decision (grow each step's context with prior turns'
-   text, or give the model persistent cross-step state) before N4/N5
-   results here should be read as evidence about grounding reuse per se.
+Consequence worth remembering: the prompt now grows with `t`, so
+`max_seq_len` must cover the longest trajectory used, and a model that
+truncates history (spec section 4.2's `serialize_episode` keeps BOS +
+truncates the middle when a rendered prompt overflows) will lose the
+disclosed answer, silently reintroducing the old chance-level `h` recovery
+for steps far enough along -- not a bug, but a real context-length budget
+to respect when choosing `n_steps` and `max_seq_len` together.
 """
 
 from __future__ import annotations
@@ -74,12 +70,19 @@ def _draw_bit(rng) -> str:
     return "YES" if int(rng.integers(0, 2)) == 1 else "NO"
 
 
+def _render_turn(t: int, visible_state: dict[str, Any], h_display: str) -> str:
+    facts = " ".join(f"{key}={value}" for key, value in visible_state.items())
+    return f"T{t}: {facts} h={h_display}"
+
+
 def generate_trajectory(seed: int, index: int, n_steps: int) -> list[Episode]:
     """Generate one deterministic length-`n_steps` trajectory.
 
     Same (seed, index, n_steps) -> identical trajectory; a shorter prefix
     (same seed/index, smaller n_steps) is a strict prefix of a longer one,
-    since the RNG advances step-by-step rather than being re-seeded per call.
+    since the RNG advances step-by-step rather than being re-seeded per
+    call, and each step's `prompt_text` depends only on turns up to and
+    including itself, never on `n_steps`.
     """
     if n_steps < 1:
         raise ValueError(f"n_steps must be >= 1, got {n_steps}")
@@ -91,6 +94,7 @@ def generate_trajectory(seed: int, index: int, n_steps: int) -> list[Episode]:
     r = _draw_bit(rng)  # r_0 has no prior f to inherit from; drawn fresh
 
     episodes: list[Episode] = []
+    history_lines: list[str] = []  # completed turns, each with its outcome, so far
     for t in range(n_steps):
         f = _draw_bit(rng)  # f_t: fresh each step; becomes r_{t+1}
         n = _draw_bit(rng)  # n_t: fresh noise, never used
@@ -101,8 +105,11 @@ def generate_trajectory(seed: int, index: int, n_steps: int) -> list[Episode]:
         correct_action = "ASK_h" if needs_grounding else ground_truth_decision
 
         visible_state: dict[str, Any] = {"r": r, "f": f, "u": u, "n": n}
-        hidden_state = {"h": "UNKNOWN"}  # the environment never re-states h; retention is the model's job
+        hidden_state = {"h": "UNKNOWN"}  # this turn's own state: the environment never re-states h upfront
         full_state = {**visible_state, "h": h}
+
+        turn_line = _render_turn(t, visible_state, "UNKNOWN")
+        prompt_text = "\n".join([*history_lines, turn_line, "DECIDE OR REQUEST INFORMATION."])
 
         available_actions = ["ACT_A", "ACT_B", "ASK_h"]
         distortion_profile = {
@@ -128,19 +135,26 @@ def generate_trajectory(seed: int, index: int, n_steps: int) -> list[Episode]:
                 true_quotient_state={"r": r, "f": f, "h": h},
                 metadata={
                     "t": t,
-                    # n_steps deliberately not recorded: it would make a
-                    # shorter trajectory's episodes differ from the matching
-                    # prefix of a longer one generated from the same
-                    # (seed, index), breaking that determinism guarantee for
-                    # no benefit (len(trajectory) already gives it when the
-                    # whole list is in hand).
+                    # n_steps deliberately not recorded: see this function's
+                    # docstring on the prefix-determinism guarantee.
                     "ground_truth_decision": ground_truth_decision,
                     "grounded": grounded,
                     "u": u,  # persistent irrelevant, recorded for the quotient-probe baseline
                     "n": n,  # random irrelevant, recorded for the quotient-probe baseline
+                    "prompt_text": prompt_text,  # this turn's full growing-context prompt; see render_text
                 },
             )
         )
+
+        # Extend history for the *next* turn: this turn's own line, plus the
+        # teacher-forced action taken and (if it was ASK_h) the disclosed
+        # answer -- the actual channel through which later turns can recover
+        # h, replacing the earlier version's non-existent one.
+        outcome = f"{turn_line} -> ACTION={correct_action}"
+        if correct_action == "ASK_h":
+            outcome += f" ANSWER=h:{h}"
+        history_lines.append(outcome)
+
         r = f  # the exact transition: next step's current-relevant is this step's future-relevant
 
     return episodes
@@ -151,11 +165,9 @@ def generate_batch(seed: int, n_trajectories: int, n_steps: int) -> list[list[Ep
 
 
 def render_text(episode: Episode) -> str:
-    """Render one trajectory step. `h` is shown as UNKNOWN at every step
-    (the environment never re-states it -- see the module docstring)."""
-    lines = ["TASK SEQUENTIAL-CHOICE", f"t = {episode.metadata['t']}"]
-    for key, value in episode.visible_state.items():
-        lines.append(f"{key} = {value}")
-    lines.append(f"h = {episode.hidden_state['h']}")
-    lines.append("DECIDE OR REQUEST INFORMATION.")
-    return "\n".join(lines)
+    """Return this step's full growing-context prompt (built at generation
+    time in `generate_trajectory`, since building it requires the prior
+    turns' outcomes -- a single `Episode` in isolation, post-generation,
+    already has everything it needs baked into `metadata["prompt_text"]`,
+    keeping episodes self-contained/recomputable per spec section 4)."""
+    return episode.metadata["prompt_text"]
