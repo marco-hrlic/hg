@@ -69,7 +69,7 @@ def test_smoke_run_hg_every_head_has_finite_loss_and_multiplier_follows_schedule
     history = train(model, config, train_cfg)
     assert len(history) == 20
     for m in history:
-        assert {"lm", "decision", "quotient", "info_deficit", "accessibility", "route"} <= set(m.losses)
+        assert {"lm", "decision", "quotient", "info_deficit", "accessibility", "route", "transition"} <= set(m.losses)
         for v in m.losses.values():
             assert torch.isfinite(torch.tensor(v))
     # Default schedule: warmup_start_pct=0.10, warmup_end_pct=0.25 -> at
@@ -90,6 +90,28 @@ def test_smoke_run_checkpoint_and_gradient_finiteness_are_stable_across_seeds():
     early = sum(m.losses["lm"] for m in history[:10]) / 10
     late = sum(m.losses["lm"] for m in history[-10:]) / 10
     assert late < early
+
+
+def test_baseline_never_gets_a_transition_loss():
+    config = _tiny_baseline_config()
+    model = build_model(config)
+    train_cfg = TrainConfig(total_steps=5, batch_size=4, max_seq_len=48, seed=0)
+    history = train(model, config, train_cfg)
+    for m in history:
+        assert "transition" not in m.losses
+
+
+def test_transition_loss_pulls_current_and_next_states_together():
+    # A weak but real sanity check: training should not leave the transition
+    # loss exploding or growing -- with 60 steps on a trivial deterministic
+    # environment it should trend down or stay small, not blow up.
+    config = _tiny_hg_config()
+    model = build_model(config)
+    train_cfg = TrainConfig(total_steps=60, batch_size=4, max_seq_len=48, seed=0)
+    history = train(model, config, train_cfg)
+    early = sum(m.losses["transition"] for m in history[:10]) / 10
+    late = sum(m.losses["transition"] for m in history[-10:]) / 10
+    assert late <= early * 1.5  # not blowing up; a strict decrease isn't guaranteed this early
 
 
 def test_train_step_deterministic_given_seed():

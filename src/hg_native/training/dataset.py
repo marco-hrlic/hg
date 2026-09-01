@@ -51,6 +51,34 @@ class SyntheticMix:
         ]
 
 
+def sample_transition_pairs(
+    seed: int, n: int, n_steps: int = 4, start_index: int = 0
+) -> list[tuple[Episode, Episode]]:
+    """Sample `n` consecutive `(episode_t, episode_t+1)` pairs from Family C
+    trajectories, for training the transition head (spec section 3.3).
+
+    Note the actual generator's `Z_{t+1}` transition (`r_{t+1} = f_t`, see
+    `sequential_quotient.py`) does not depend on the action taken at all --
+    it is an exogenous process the model observes, not one it controls.
+    The spec's `g_T(S_t, A_t)` signature is action-conditioned regardless
+    (section 3.3), so training against this family is a valid (if slightly
+    degenerate) test of whether the transition head learns to *ignore* an
+    irrelevant action input, rather than of action-conditioned control.
+    """
+    if n < 1:
+        raise ValueError(f"n must be >= 1, got {n}")
+    if n_steps < 2:
+        raise ValueError(f"n_steps must be >= 2 to have a next step, got {n_steps}")
+    rng = rng_for(seed, "dataset_transition", start_index)
+    pairs: list[tuple[Episode, Episode]] = []
+    for offset in range(n):
+        index = start_index + offset
+        traj = sequential_quotient.generate_trajectory(seed, index, n_steps)
+        t = int(rng.integers(0, n_steps - 1))
+        pairs.append((traj[t], traj[t + 1]))
+    return pairs
+
+
 def sample_episodes(seed: int, n: int, mix: SyntheticMix | None = None, start_index: int = 0, n_steps_c: int = 4) -> list[Episode]:
     """Deterministically sample `n` episodes from the synthetic mixture.
 
