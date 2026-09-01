@@ -23,6 +23,9 @@ gpu = [
     "peft>=0.12",
     "accelerate>=0.33",
     "datasets>=2.20",
+    # Explicit even though transformers pulls it in transitively: hg_native's
+    # own tokenizer training (data/tokenizer.py) calls its API directly.
+    "tokenizers>=0.19",
 ]
 serve = ["vllm>=0.6"]
 dev = ["pytest>=8.0"]
