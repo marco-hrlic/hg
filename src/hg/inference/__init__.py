@@ -4,9 +4,10 @@ from .base import Backend, GenerationSettings, InferenceItem, Prediction, get_ba
 from .prompts import PROMPT_REGISTRY, render_prompt
 from .canonicalize import CanonicalizeResult, canonicalize
 
-# Registering the simulator on import keeps the backend registry non-empty on
-# a machine with no GPU stack, so the analysis pipeline is always runnable.
+# Registering the CPU simulators on import keeps the backend registry non-empty
+# on a machine with no GPU stack, so the analysis pipeline is always runnable.
 from . import simulator as _simulator  # noqa: F401
+from . import grounding_simulator as _grounding_simulator  # noqa: F401
 
 __all__ = [
     "Backend",

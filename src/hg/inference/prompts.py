@@ -91,9 +91,35 @@ PREFERENCE_V1 = PromptTemplate(
     ),
 )
 
+# v1 for the HG-v2 route-choice task (plan section 14). The decision rule
+# travels in the prompt so the correct action is machine-verifiable and does not
+# depend on the model's own preferences; what is deliberately *withheld* is one
+# variable the rule depends on, which the external source holds.
+#
+# `{constraints}` carries whatever the source has already told us -- empty on
+# the ungrounded baseline. Keeping it in the template rather than appending to
+# the case text means the grounded and ungrounded prompts differ in exactly one
+# place, so a cost difference between them cannot come from reformatting.
+ROUTE_CHOICE_V1 = PromptTemplate(
+    version="route_choice.v1",
+    instruction=(
+        "Choose a route by applying the rule below. Reply with exactly one of "
+        "the allowed labels and nothing else. Apply the rule even where your "
+        "own judgment would differ."
+    ),
+    body=(
+        "{instruction}\n\n"
+        "Rule:\n{rule}\n\n"
+        "Allowed labels: {labels}\n\n"
+        "Routes:\n{x}\n\n"
+        "Known traveller constraints:\n{constraints}\n\n"
+        "{answer_prefix}"
+    ),
+)
+
 PROMPT_REGISTRY: dict[str, PromptTemplate] = {
     t.version: t
-    for t in (CLASSIFY_V1, POLICY_V1, PREFERENCE_V1)
+    for t in (CLASSIFY_V1, POLICY_V1, PREFERENCE_V1, ROUTE_CHOICE_V1)
 }
 # Short aliases so dataset configs can say `prompt_version: classify.v1` or `v1`.
 PROMPT_REGISTRY["v1"] = CLASSIFY_V1

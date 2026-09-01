@@ -1,0 +1,82 @@
+# HG-v2 Phase 2 -- a frozen primary LM and the query-compression claim.
+#
+# The route-choice task (plan section 14): the decision rule travels in the
+# prompt, one decision-relevant variable is withheld and held by a simulated
+# traveller, the correct action is exactly computable, and the optimal query is
+# known algorithmically.
+#
+# IMPORTANT: with `backend: grounding_simulator` this run does NOT evaluate gate
+# G2. It validates that the task, the query representation, the cost accounting
+# and the query-quality metrics can detect query compression when it is present.
+# Point `backend` at a real checkpoint to test G2 (see the block at the bottom).
+name: hg_v2_phase2_frozen_lm
+
+task:
+  kind: route_choice
+  n_items: 4000
+  # Share of items where route A is faster, i.e. where the withheld bit decides.
+  p_a_faster: 0.5
+  p_accepts: 0.5
+  # The source holds an opinion on each. Generic escalation costs one bit per
+  # variable; the gold query costs one bit total, so Omega_generic = 4.
+  variables:
+    - mountain_roads
+    - toll_roads
+    - ferry_crossings
+    - night_driving
+    - unpaved_roads
+
+policies:
+  - b0_no_grounding       # frozen LM, no grounding
+  - b1_self_consistency   # frozen LM + more internal sampling
+  - b2_generic_ask        # frozen LM + generic ask-human escalation
+  - b3_oracle_targeted    # frozen LM + the gold targeted query
+  - b4_synthesized_query  # frozen LM + a synthesized query
+
+# The primary LM. Replaceable by design (plan section 12): nothing above this
+# line knows which backend produced the candidate action.
+backend: grounding_simulator
+backend_options:
+  # Applies the stated rule reliably when the prompt determines the answer, and
+  # guesses with a bias toward the visibly-better route when it does not.
+  error_rate_when_sufficient: 0.0
+  bias_strength: 0.8
+
+# B1's internal-compute budget. Deliberately more than one sample: the point is
+# that self-consistency cannot recover a variable that is absent from the
+# prompt, and that has to be demonstrated rather than asserted.
+self_consistency_samples: 5
+temperature: 0.7
+max_new_tokens: 4
+
+# B4's query synthesizer. `noisy` is a controlled stand-in with known failure
+# modes -- sometimes the gold query, sometimes a hedge over several variables
+# (resolves the decision but overpays), sometimes a miss. An LM synthesizer
+# replaces this once a real backend is wired in (plan section 15).
+synthesizer:
+  kind: noisy
+  p_correct: 0.7
+  p_superset: 0.2
+  n_extra: 2
+
+seed: 0
+n_bootstrap: 1000
+alpha: 0.05
+lambda_bit: 1.0
+output_root: results
+
+gate:
+  # How much worse b4's final loss may be than b2's and still count as equal
+  # decision quality. One-sided: deciding better is not cheating.
+  distortion_tolerance: 0.01
+
+# --- To actually test gate G2, replace the backend block above with: ---------
+#
+# backend: transformers
+# backend_options:
+#   checkpoint: google/gemma-3-1b-it     # 1B-3B instruct model, per plan §12
+#   dtype: bfloat16
+#
+# See experiments/hg_v2/README.md for the DGX Spark execution path, which is not
+# settled: this repository reaches the box through an NGC container while the
+# sibling research projects use ssh + uv with CUDA-13 aarch64 wheels.

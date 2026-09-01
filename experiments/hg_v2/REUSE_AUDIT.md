@@ -254,6 +254,10 @@ generic plot helper appended to `hg.report.figures`, and the
 Phase 1 added `src/hg/grounding/{noisy_index,phase1}.py`, the route-cost
 section of `costs.py`, and `src/hg/routing/{decision_state,grounding_router}.py`.
 
+Phase 2 added `src/hg/grounding/{route_choice,phase2}.py`, `src/hg/queries/`
+(the plan's §3 layout), `src/hg/inference/grounding_simulator.py`, and one
+prompt version in `hg.inference.prompts`.
+
 **No existing module is modified in a way that changes its behaviour**, so the
 M2-LLM experiment and its 162 tests are untouched.
 

@@ -22,14 +22,17 @@ is reused from that infrastructure and what is new — with reasons — is in
 |---|---|---|
 | **G0** | Does the simulator reproduce known theory? | **passed** |
 | **G1** | Does a learned router beat fixed ACT/ASK policies? | **passed** |
-| G2 | Does targeted query synthesis compress external cost? | not started |
+| G2 | Does targeted query synthesis compress external cost? | **scaffolded, needs a real LM** |
 | G3 | Does the effect survive a frozen off-the-shelf LM? | not started |
 | G4 | Does the grounding requirement change with model capability? | not started |
 | G5 | Is custom training justified? | not started |
 
-Phases 0 and 1 are complete. **Phase 2 has not been started**: it needs a
-frozen LM, and the decision about how this repository reaches the DGX Spark is
-still open (see below).
+Phases 0 and 1 are complete and their gates pass. Phase 2 is built and runs
+end to end on a simulated backend, which validates the task, the query
+representation, the cost accounting and the query-quality metrics — but **gate
+G2 is a claim about a frozen off-the-shelf model, so a simulated run does not
+evaluate it**, and the run says so. Testing G2 needs a real checkpoint, which
+needs the DGX Spark execution decision below.
 
 ---
 
@@ -249,6 +252,121 @@ make hg-v2-phase1     # gate G1; exits non-zero if it does not hold
 
 ---
 
+## Phase 2 — a frozen LM and query compression (gate G2, scaffolded)
+
+Phase 0 showed a targeted query beats generic escalation when the query is
+handed to you. Phase 1 showed a router can decide *whether* to ask. Phase 2 asks
+the question the architecture actually rests on: can the system decide *what* to
+ask, in natural language, and does that compress external cost?
+
+### The task: `route_choice` (plan §14)
+
+Two routes. The decision rule travels **in the prompt**, so the correct action
+never depends on the model's own preferences:
+
+```
+- If route A's travel time is longer than route B's, choose B.
+- Otherwise, if route A's requirement is acceptable to the traveller, choose A.
+- Otherwise choose B.
+```
+
+Route A requires one traveller concession — a mountain road, a toll, a ferry,
+night driving, an unpaved stretch. **Whether that concession is acceptable is
+withheld from the prompt** and held by a simulated traveller. So the residual
+deficit varies per item and is exact:
+
+| case | `H(J \| M_A)` | |
+|---|---:|---|
+| route A slower | 0 bits | the rule closes without the hidden variable |
+| route A faster | 1 bit | the withheld bit decides |
+
+The source holds an opinion on **every** concession. Generic escalation
+therefore costs one bit per variable (5 bits here) while the gold query costs 1 —
+Phase 0's structure again, now in natural language and with the query no longer
+given.
+
+### Baselines (plan §17)
+
+| arm | grounding | external bits |
+|---|---|---|
+| `b0_no_grounding` | none | 0 |
+| `b1_self_consistency` | none, 5 internal samples | 0 |
+| `b2_generic_ask` | source dumps every preference | 5 |
+| `b3_oracle_targeted` | the gold query | 1 |
+| `b4_synthesized_query` | a synthesized query | depends on the query |
+
+Every ask arm asks on **every** item, so the query is the only difference
+between them. Routing is Phase 1's contribution and G1 already measured it;
+excess response cost is reported both overall and over the items that genuinely
+need grounding, so the cost of not routing stays visible instead of being folded
+into the query result.
+
+### Result on the simulated backend
+
+4000 items, seed 0. `b4` uses a deliberately imperfect stand-in synthesizer
+(70% gold query, 20% hedge over three variables, 10% miss):
+
+| arm | accuracy | bits | resolution | Ω̂ (all) | Ω̂ (needs grounding) | gold match |
+|---|---:|---:|---:|---:|---:|---:|
+| `b0_no_grounding` | 0.7380 | 0.00 | 0.4950 | −0.5050 | −1.0000 | — |
+| `b1_self_consistency` | 0.7438 | 0.00 | 0.4950 | −0.5050 | −1.0000 | — |
+| `b2_generic_ask` | 1.0000 | 5.00 | 1.0000 | +4.4950 | +4.0000 | 0.00 |
+| `b3_oracle_targeted` | 1.0000 | 1.00 | 1.0000 | +0.4950 | **+0.0000** | 1.00 |
+| `b4_synthesized_query` | 0.9735 | 1.43 | 0.9497 | +0.9205 | +0.4305 | 0.69 |
+
+**Mechanism check** (`b3` vs `b2`): 5.00 → 1.00 bits, a **5.00×** reduction at
+*identical* accuracy (1.0000 both). The cost accounting and query-quality
+metrics detect targeted compression when it is present. That is the
+precondition for testing G2 — not the test.
+
+**Gate G2** (`b4` vs `b2`, per plan §17) is **not evaluated** here: the backend
+is a simulator, and G2 is a claim about a frozen off-the-shelf model. The
+comparison is still computed and reported (+3.57 bits saved, but a +0.027
+final-loss gap), which is a statement about the configured stand-in synthesizer
+rather than about the architecture. The runner's exit code reflects this: the
+mechanism check and artifact reproducibility gate the run; G2 gates it only once
+`backend` names a real model.
+
+### Two things the run demonstrates on its own
+
+**Internal computation does not substitute for grounding.** `b1` spends five
+samples and moves accuracy by **+0.0058** while spending zero external bits.
+The withheld variable is not in the prompt, so there is nothing internal to
+converge on — the empirical content of `internal_reducibility = 0`, and the
+reason "just sample more" is not an answer to a grounding deficit. The simulator
+guesses with a *bias* rather than a coin flip precisely so this is visible;
+self-consistency cannot correct a bias.
+
+**Resolution accuracy is not decision accuracy.** A query can be perfect while
+the model still misapplies the rule. Both are reported, and a test holds them
+apart by giving the simulator a 20% error rate on items it has full information
+for: resolution stays 1.0000 while accuracy falls.
+
+### Swapping in a real model
+
+The primary LM is replaceable from config (plan §12) — nothing above the
+backend knows what produced the candidate action:
+
+```yaml
+backend: transformers
+backend_options:
+  checkpoint: google/gemma-3-1b-it   # 1B–3B instruct, per plan §12
+  dtype: bfloat16
+```
+
+It drives the repository's existing `Backend` protocol, the same one the
+M2-LLM experiment uses, so there is no second model-loading path. What is still
+missing for a real run is an LM query synthesizer (`kind: lm` alongside `gold`
+and `noisy`), which is the natural first piece of Phase 2 proper.
+
+### Run it
+
+```bash
+make hg-v2-phase2
+```
+
+---
+
 ## Reading these results honestly
 
 Neither phase involves a model, and both reports say so on their own first page.
@@ -262,11 +380,11 @@ own first page.
 
 ---
 
-## Phase 2 and the DGX Spark
+## Running a real model: the DGX Spark
 
-Phase 0 and Phase 1 need no GPU. When Phase 2 introduces a frozen primary LM,
-note that this repository and the sibling `research/` projects reach the Spark
-by two different routes:
+Phases 0 and 1 need no GPU, and Phase 2 runs on CPU with the simulated backend.
+A real checkpoint does need the Spark, and this repository and the sibling
+`research/` projects reach it by two different routes:
 
 - **`hg` today**: an NGC container (`docker/Dockerfile`, base
   `nvcr.io/nvidia/pytorch`), pip-installing `requirements-gpu.txt`, entered
@@ -287,23 +405,23 @@ by two different routes:
 
   bf16 autocast on CUDA; `uv run` resolves the right wheels automatically.
 
-The second route is the one that is currently known to work on the box. Before
-Phase 2 spends GPU time, decide which one HG-v2 uses — `hg`'s container path
-has not been exercised on the GB10 in this session, and `pyproject.toml`'s
-`torch>=2.4` carries no aarch64/cu130 pin, so a bare `uv pip install -e ".[gpu]"`
-on the Spark would resolve against default PyPI wheels.
+The second route is the one currently known to work on the box. **This is the
+open decision blocking gate G2**: `hg`'s container path has not been exercised
+on the GB10 in this session, and `pyproject.toml`'s `torch>=2.4` carries no
+aarch64/cu130 pin, so a bare `uv pip install -e ".[gpu]"` on the Spark would
+resolve against default PyPI wheels.
 
 ---
 
 ---
 
-## Next: Phase 2 (not started)
+## Next
 
-A frozen off-the-shelf instruct model at 1–3B produces the AI's candidate
-action, on controlled natural-language tasks where one decision-relevant
-variable is withheld and the optimal query is known (plan §12–17). Gate G2 is
-the first real HG-v2 architectural result: at equal final distortion, does a
-synthesized targeted query cost fewer external bits than generic escalation?
-
-Blocked on nothing in this codebase, but see the Spark section above — decide
-the execution path before spending GPU time.
+1. **An LM query synthesizer.** `hg.queries` has `gold` and `noisy`; a `kind: lm`
+   synthesizer that prompts the primary model for a `QuerySpec` is what turns
+   B4 into a real test of the architecture rather than of a stand-in.
+2. **A frozen checkpoint, to evaluate gate G2.** Needs the Spark execution
+   decision above.
+3. Gate G3 onward (does the effect survive a real LM), G4 (does the grounding
+   requirement change with model capability), and only then G5 (custom
+   training) — per plan §27.

@@ -20,6 +20,7 @@ from typing import Any, Mapping
 
 from ..config import ConfigError, read_config_file
 from .noisy_index import NoisyIndexTaskSpec
+from .route_choice import PREFERENCE_VARIABLES, RouteChoiceSpec
 
 
 @dataclass(slots=True)
@@ -78,6 +79,26 @@ class Phase1Gate:
 
 
 @dataclass(slots=True)
+class Phase2Gate:
+    """Declared acceptance criterion for gate G2 (plan sections 17 and 27).
+
+    "At equal final distortion, does HG-v2 reduce external response cost?"
+
+    `distortion_tolerance` is how much worse the synthesized-query arm's final
+    loss may be than generic escalation's and still count as equal quality. It
+    is one-sided on purpose: a query policy that decides *better* has not
+    cheated, but one that buys cheapness with distortion has not compressed
+    anything.
+    """
+
+    distortion_tolerance: float = 0.01
+
+    def __post_init__(self) -> None:
+        if self.distortion_tolerance < 0:
+            raise ConfigError("gate.distortion_tolerance must be >= 0")
+
+
+@dataclass(slots=True)
 class GroundingConfig:
     name: str
     task_kind: str
@@ -85,6 +106,7 @@ class GroundingConfig:
     # Exactly one of these is set, according to `task_kind`.
     sweep: IndexSweep | None = None
     phase1_task: NoisyIndexTaskSpec | None = None
+    phase2_task: RouteChoiceSpec | None = None
     seed: int = 0
     n_bootstrap: int = 1000
     alpha: float = 0.05
@@ -99,7 +121,7 @@ class GroundingConfig:
     # Share of items used to fit the router; the rest is held out for scoring.
     train_fraction: float = 0.5
     output_root: Path = Path("results")
-    gate: Phase0Gate | Phase1Gate = field(default_factory=Phase0Gate)
+    gate: Phase0Gate | Phase1Gate | Phase2Gate = field(default_factory=Phase0Gate)
     # Where this config was loaded from, recorded so a run's manifest and its
     # reproduce command name the real file rather than a guess from the name.
     source_path: Path | None = None
@@ -114,7 +136,7 @@ class GroundingConfig:
                 "n_bits": list(self.sweep.n_bits),
                 "n_items": self.sweep.n_items,
             }
-        else:
+        elif self.task_kind == "noisy_index":
             t = self.phase1_task
             assert t is not None
             task = {
@@ -124,6 +146,16 @@ class GroundingConfig:
                 "n_observations": t.n_observations,
                 "p_self_sufficient": t.p_self_sufficient,
                 "error_rates": list(t.error_rates),
+            }
+        else:
+            r = self.phase2_task
+            assert r is not None
+            task = {
+                "kind": self.task_kind,
+                "n_items": r.n_items,
+                "p_a_faster": r.p_a_faster,
+                "p_accepts": r.p_accepts,
+                "variables": list(r.variables),
             }
         return {
             "name": self.name,
@@ -136,6 +168,12 @@ class GroundingConfig:
             "lambda_grid": list(self.lambda_grid),
             "train_fraction": self.train_fraction,
             "router": dict(self.raw.get("router") or {}),
+            "backend": self.raw.get("backend"),
+            "backend_options": dict(self.raw.get("backend_options") or {}),
+            "synthesizer": dict(self.raw.get("synthesizer") or {}),
+            "self_consistency_samples": self.raw.get("self_consistency_samples"),
+            "temperature": self.raw.get("temperature"),
+            "max_new_tokens": self.raw.get("max_new_tokens"),
             "output_root": str(self.output_root),
             "source_path": str(self.source_path) if self.source_path else None,
             "gate": {
@@ -145,7 +183,7 @@ class GroundingConfig:
 
 
 # Which task each phase uses, and which policy vocabulary and gate go with it.
-TASK_KINDS = ("index", "noisy_index")
+TASK_KINDS = ("index", "noisy_index", "route_choice")
 
 
 def load_grounding_config(
@@ -181,6 +219,7 @@ def load_grounding_config(
 
     sweep: IndexSweep | None = None
     phase1_task: NoisyIndexTaskSpec | None = None
+    phase2_task: RouteChoiceSpec | None = None
     gate_cls: type[Phase0Gate] | type[Phase1Gate]
 
     if kind == "index":
@@ -193,7 +232,7 @@ def load_grounding_config(
             n_bits=[int(n) for n in n_bits], n_items=int(task.get("n_items", 2000))
         )
         gate_cls = Phase0Gate
-    else:
+    elif kind == "noisy_index":
         from .phase1 import POLICIES as TASK_POLICIES
 
         unknown_task = set(task) - {
@@ -214,6 +253,25 @@ def load_grounding_config(
         except ValueError as exc:
             raise ConfigError(f"{path}: {exc}") from exc
         gate_cls = Phase1Gate
+    else:
+        from .phase2 import BASELINES as TASK_POLICIES
+
+        unknown_task = set(task) - {
+            "kind", "n_items", "p_a_faster", "p_accepts", "variables", "seed",
+        }
+        if unknown_task:
+            raise ConfigError(f"{path}: unknown task keys {sorted(unknown_task)}")
+        try:
+            phase2_task = RouteChoiceSpec(
+                n_items=int(task.get("n_items", 400)),
+                p_a_faster=float(task.get("p_a_faster", 0.5)),
+                p_accepts=float(task.get("p_accepts", 0.5)),
+                variables=tuple(task.get("variables") or PREFERENCE_VARIABLES),
+                seed=int(raw.get("seed", 0)),
+            )
+        except ValueError as exc:
+            raise ConfigError(f"{path}: {exc}") from exc
+        gate_cls = Phase2Gate
 
     policies = list(raw.get("policies") or TASK_POLICIES)
     unknown = [p for p in policies if p not in TASK_POLICIES]
@@ -254,6 +312,7 @@ def load_grounding_config(
         task_kind=kind,
         sweep=sweep,
         phase1_task=phase1_task,
+        phase2_task=phase2_task,
         policies=policies,
         seed=int(raw.get("seed", 0)),
         n_bootstrap=int(raw.get("n_bootstrap", 1000)),

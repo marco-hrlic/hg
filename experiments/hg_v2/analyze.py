@@ -23,7 +23,7 @@ sys.path.insert(0, str(REPO_ROOT / "src"))
 
 from hg.grounding.config import load_grounding_config  # noqa: E402
 from hg.grounding.episodes import GroundingRunDir  # noqa: E402
-from hg.grounding import phase0, phase1  # noqa: E402
+from hg.grounding import phase0, phase1, phase2  # noqa: E402
 
 # Which analysis a run directory gets is decided by the task its config names,
 # not by a flag the caller has to remember. A run directory carries its own
@@ -31,6 +31,7 @@ from hg.grounding import phase0, phase1  # noqa: E402
 ANALYZERS = {
     "index": phase0.analyze_run_dir,
     "noisy_index": phase1.analyze_run_dir,
+    "route_choice": phase2.analyze_run_dir,
 }
 
 
@@ -56,18 +57,38 @@ def main() -> int:
         return 2
     analysis = analyzer(args.run_dir, args.config)
 
+    gate = analysis.get("gate") or {}
+    # A gate can be reported but not *evaluated*: phase 2's G2 is a claim about
+    # a frozen off-the-shelf model, so a simulated run computes the comparison
+    # without it opening or closing the gate. Printing "FAILED" and exiting
+    # non-zero there would report a statement about a stand-in as a result.
+    evaluated = bool(gate.get("evaluated", True))
+
     if args.print_json:
         print(json.dumps(analysis, indent=2, default=str))
     else:
         print(Path(args.run_dir) / "report.md")
-        gate = analysis.get("gate") or {}
-        print(
-            f"gate {gate.get('gate')}: "
-            f"{'PASSED' if gate.get('passed') else 'FAILED'} — {gate.get('title')}"
-        )
+        if evaluated:
+            status = "PASSED" if gate.get("passed") else "FAILED"
+        else:
+            status = "not evaluated (simulated backend)"
+        print(f"gate {gate.get('gate')}: {status} — {gate.get('title')}")
         for f in gate.get("failures") or []:
             print(f"  - {f}")
-    return 0 if (analysis.get("gate") or {}).get("passed") else 1
+
+        mech = analysis.get("mechanism_check") or {}
+        if mech.get("available"):
+            print(
+                f"mechanism check ({mech['challenger']} vs {mech['baseline']}): "
+                f"{'detected' if mech['passed'] else 'NOT detected'}, "
+                f"{mech['bits_saved']:+.4f} bits saved"
+            )
+
+    if not evaluated:
+        # Fall back to the check a simulated run *can* fail.
+        mech = analysis.get("mechanism_check") or {}
+        return 0 if mech.get("passed", True) else 1
+    return 0 if gate.get("passed") else 1
 
 
 if __name__ == "__main__":
