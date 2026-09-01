@@ -37,10 +37,13 @@ sync_repo() {
   # --delete keeps the remote tree an exact mirror, which also means scratch
   # files written directly on the Spark are removed. Keep throwaway scripts
   # outside the repo tree, or they will vanish on the next sync.
+  # '/data' and '/results' are anchored to the repo root: an unanchored
+  # 'data' pattern also matches src/hg_native/data (the episode-schema and
+  # generator package), silently dropping it from every sync.
   rsync -az --delete \
-    --exclude '.venv' --exclude '.git' --exclude 'results' \
+    --exclude '.venv' --exclude '.git' \
     --exclude '__pycache__' --exclude '.pytest_cache' --exclude '*.pyc' \
-    --exclude 'data' \
+    --exclude '/data' --exclude '/results' \
     "${REPO_ROOT}/" "${SPARK_HOST}:${SPARK_DIR}/"
   echo "synced ${REPO_ROOT} -> ${SPARK_HOST}:${SPARK_DIR}"
 }
