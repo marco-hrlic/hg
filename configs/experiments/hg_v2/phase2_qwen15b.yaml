@@ -1,0 +1,70 @@
+# HG-v2 Phase 2 on a frozen off-the-shelf LM -- the run that evaluates gate G2.
+#
+# Same task, baselines and metrics as phase2_frozen_lm.yaml; the difference is
+# that the primary LM is real and the query in B4 is synthesized by that same
+# model rather than by a stand-in. Requires a GPU (see the DGX Spark section of
+# experiments/hg_v2/README.md).
+name: hg_v2_phase2_qwen15b
+
+task:
+  kind: route_choice
+  # Smaller than the simulated run: `scoring_mode: rank` costs one forward pass
+  # per label per item, and B1 adds five sampled generations. At 1200 items the
+  # standard error on an accuracy is ~0.014, which is well inside the effect
+  # sizes this compares.
+  n_items: 1200
+  p_a_faster: 0.5
+  p_accepts: 0.5
+  variables:
+    - mountain_roads
+    - toll_roads
+    - ferry_crossings
+    - night_driving
+    - unpaved_roads
+
+policies:
+  - b0_no_grounding
+  - b1_self_consistency
+  - b2_generic_ask
+  - b3_oracle_targeted
+  - b4_synthesized_query
+
+backend: transformers
+backend_options:
+  # Ungated on the Hub, and inside the plan's 1B-3B band (section 12). The plan
+  # suggests google/gemma-3-1b-it, which is licence-gated and needs a token;
+  # the model is config-driven precisely so this is a one-line change.
+  checkpoint: Qwen/Qwen2.5-1.5B-Instruct
+  dtype: bfloat16
+  device_map: cuda
+  # Rank the two allowed labels by continuation log-probability instead of
+  # generating. This removes the parser as a source of variance in the decision
+  # arms and yields a real class distribution. B1 is switched to sampled
+  # generation for its own passes, since ranking is deterministic.
+  scoring_mode: rank
+  batch_size: 16
+  max_input_tokens: 1024
+
+self_consistency_samples: 5
+temperature: 0.7
+max_new_tokens: 8
+
+synthesizer:
+  # The primary model is asked what it needs to know, and its answer is parsed
+  # into a QuerySpec that is directly comparable to the gold one.
+  kind: lm
+  max_new_tokens: 48
+  temperature: 0.0
+  # A query that cannot be parsed falls back to generic escalation. The
+  # conservative choice, and deliberately unflattering: asking nothing would let
+  # a model that failed to form a query score as cheap.
+  on_parse_failure: generic
+
+seed: 0
+n_bootstrap: 1000
+alpha: 0.05
+lambda_bit: 1.0
+output_root: results
+
+gate:
+  distortion_tolerance: 0.01

@@ -342,22 +342,70 @@ the model still misapplies the rule. Both are reported, and a test holds them
 apart by giving the simulator a 20% error rate on items it has full information
 for: resolution stays 1.0000 while accuracy falls.
 
+### The LM query synthesizer
+
+`hg.queries` offers three synthesizers, selected by config:
+
+| kind | what produces the query |
+|---|---|
+| `gold` | the algorithmic optimum — one bit, always the right variable |
+| `noisy` | a controlled stand-in with known failure modes, for validating the metrics |
+| `lm` | **the primary model itself**, asked what it needs to know |
+
+`kind: lm` is what makes B4 a test of the architecture rather than of a
+stand-in. Four design decisions determine what its numbers mean:
+
+- **The output space is variable names, not free text.** The model picks from a
+  listed set of available facts, so a synthesized query is directly comparable
+  to the gold `QuerySpec` — same representation, same cost function. The
+  measured quantity is *targeting*, not phrasing.
+- **The instruction says asking costs something** ("name as few as possible —
+  each one costs the traveller effort"). A prompt that merely asked "what do you
+  need?" invites hedging, and a hedge is precisely the failure mode G2 exists to
+  detect.
+- **An unparseable answer falls back to generic escalation.** Deliberately
+  unflattering: asking nothing would let a model that failed to form a query
+  score as *cheap*. The fallback rate is reported so the cost is attributable.
+- **`NONE` is honoured.** On an item whose prompt already settles the rule, the
+  right query is no query, and recognising that costs zero bits. This is the one
+  place B4 can legitimately beat the always-ask oracle B3 — routing and query
+  synthesis arriving in the same decision.
+
+Parsing matches canonical names and registered aliases ("tolls", "ferries",
+"night driving"), reads only the first line — small instruct models continue
+past the answer, and a later "I do not need tolls or ferries" would otherwise
+read as asking for them — and returns variables in the task's declared order so
+two models naming the same set produce the same query and the same cost.
+
 ### Swapping in a real model
 
-The primary LM is replaceable from config (plan §12) — nothing above the
-backend knows what produced the candidate action:
+The primary LM is replaceable from config (plan §12) — nothing above the backend
+knows what produced the candidate action. `configs/experiments/hg_v2/phase2_qwen15b.yaml`
+is the real run:
 
 ```yaml
 backend: transformers
 backend_options:
-  checkpoint: google/gemma-3-1b-it   # 1B–3B instruct, per plan §12
+  checkpoint: Qwen/Qwen2.5-1.5B-Instruct   # 1B-3B instruct, per plan §12
   dtype: bfloat16
+  scoring_mode: rank      # label log-probs, so no parser in the decision arms
+synthesizer:
+  kind: lm
 ```
 
-It drives the repository's existing `Backend` protocol, the same one the
-M2-LLM experiment uses, so there is no second model-loading path. What is still
-missing for a real run is an LM query synthesizer (`kind: lm` alongside `gold`
-and `noisy`), which is the natural first piece of Phase 2 proper.
+It drives the repository's existing `Backend` protocol — the same one the
+M2-LLM experiment uses — so there is no second model-loading path.
+
+The plan suggests `google/gemma-3-1b-it`, which is licence-gated and needs a
+Hub token; Qwen2.5-1.5B-Instruct is ungated and in the same size band. The model
+is config-driven precisely so this is a one-line change, and gate G4 will want
+at least two sizes or families anyway.
+
+One wrinkle worth knowing: `scoring_mode: rank` is deterministic — it scores each
+label's continuation log-probability and takes the argmax — so "five samples"
+from it would return the same answer five times and B1 would be B0 with a
+different name. B1 therefore switches the backend to sampled generation for its
+own passes, restoring the mode afterwards, which keeps the weights loaded once.
 
 ### Run it
 

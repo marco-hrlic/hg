@@ -575,3 +575,38 @@ def test_a_phase2_gate_key_is_rejected_for_a_phase1_config(tmp_path):
 def test_g2_pair_names_are_the_plan_s(tmp_path):
     assert G2_CHALLENGER == "b4_synthesized_query"
     assert G2_BASELINE == "b2_generic_ask"
+
+
+def test_every_arm_sees_the_same_ungrounded_action(tmp_path):
+    """The ungrounded pass is computed once and shared. That is what makes the
+    arms paired: initial_action identical by construction, not by coincidence."""
+    cfg = phase2_config(tmp_path)
+    episodes = run_sweep(cfg)[0]
+    by_policy: dict[str, dict[str, str]] = {}
+    for e in episodes:
+        by_policy.setdefault(e.policy, {})[e.item_id] = e.initial_action
+
+    reference = by_policy["b0_no_grounding"]
+    for policy, actions in by_policy.items():
+        assert actions == reference, f"{policy} saw a different ungrounded action"
+
+
+def test_the_ungrounded_pass_is_computed_once_per_run(tmp_path):
+    """Counted through the backend, because the saving is the point: a five-arm
+    run would otherwise spend five times the forward passes on it."""
+    from hg.grounding import phase2 as phase2_module
+
+    cfg = phase2_config(tmp_path)
+    calls: list[int] = []
+    original = phase2_module.ungrounded_pass
+
+    def counting(*args, **kwargs):
+        calls.append(1)
+        return original(*args, **kwargs)
+
+    phase2_module.ungrounded_pass = counting
+    try:
+        run_sweep(cfg)
+    finally:
+        phase2_module.ungrounded_pass = original
+    assert len(calls) == 1

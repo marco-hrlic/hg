@@ -117,9 +117,38 @@ ROUTE_CHOICE_V1 = PromptTemplate(
     ),
 )
 
+# v1 for HG-v2 query synthesis (plan section 15). The model is asked what it
+# needs to know, not what the answer is.
+#
+# Two properties are load-bearing. The output space is the *names* of available
+# variables, so a synthesized query is directly comparable to the gold
+# QuerySpec instead of needing free-text interpretation. And the instruction
+# asks for the fewest variables that settle the decision, because the quantity
+# under test is response cost: a prompt that merely said "what do you need"
+# invites hedging, and a hedge is the failure mode gate G2 is meant to detect.
+QUERY_SYNTH_V1 = PromptTemplate(
+    version="query_synth.v1",
+    instruction=(
+        "You must choose between the options below by applying the rule, but "
+        "some information is missing. Decide what to ask the traveller.\n"
+        "Reply with the names of the facts you need, comma-separated, taken "
+        "exactly from the list of available facts. Name as few as possible -- "
+        "each one costs the traveller effort. If the rule already settles the "
+        "choice with what you know, reply with the single word NONE."
+    ),
+    body=(
+        "{instruction}\n\n"
+        "Rule:\n{rule}\n\n"
+        "Options:\n{x}\n\n"
+        "Available facts you could ask about:\n{available}\n\n"
+        "{answer_prefix}"
+    ),
+    answer_prefix="Facts needed:",
+)
+
 PROMPT_REGISTRY: dict[str, PromptTemplate] = {
     t.version: t
-    for t in (CLASSIFY_V1, POLICY_V1, PREFERENCE_V1, ROUTE_CHOICE_V1)
+    for t in (CLASSIFY_V1, POLICY_V1, PREFERENCE_V1, ROUTE_CHOICE_V1, QUERY_SYNTH_V1)
 }
 # Short aliases so dataset configs can say `prompt_version: classify.v1` or `v1`.
 PROMPT_REGISTRY["v1"] = CLASSIFY_V1

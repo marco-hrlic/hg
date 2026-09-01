@@ -165,3 +165,18 @@ def test_parse_failure_rate_is_honoured():
 def test_unknown_simulator_option_rejected():
     with pytest.raises(ValueError, match="unknown simulator options"):
         run("qwen", "shared", nonsense=1)
+
+
+def test_label_forms_cover_both_prompt_styles():
+    """A chat-templated prompt ends at a token boundary, so the continuation is
+    "B"; a raw-text prompt ends mid-line, so it is " B" -- a different token.
+
+    Scoring only the spaced form measures the far tail of the distribution
+    whenever a chat template is applied, which is the default path. Observed on
+    Qwen2.5-1.5B-Instruct: -16.9 for " B" against -0.001 for "B".
+    """
+    from hg.inference.hf import TransformersBackend
+
+    forms = TransformersBackend._label_forms("B")
+    assert "B" in forms
+    assert " B" in forms

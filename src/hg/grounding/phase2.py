@@ -37,6 +37,7 @@ about an LLM. Gate G2 is only meaningful once `backend` names a real model.
 
 from __future__ import annotations
 
+import contextlib
 import logging
 import math
 import time
@@ -47,6 +48,7 @@ from typing import Any, Mapping, Sequence
 
 from ..inference.base import GenerationSettings, get_backend
 from ..io import git_commit, run_id, write_json, write_yaml
+from ..queries.lm_query_synthesizer import LMQuerySynthesizer
 from ..queries.synthetic import GoldQuerySynthesizer, NoisyQuerySynthesizer
 from ..report.figures import plot_grounding_sweep
 from .channels import QuerySpec, Route
@@ -141,6 +143,32 @@ class ArmQueryMetrics:
 
 
 # ------------------------------------------------------------------ running ---
+@contextlib.contextmanager
+def _generate_mode(backend):
+    """Temporarily put a backend into sampled-generation mode.
+
+    Baseline B1 needs *real* samples. The transformers backend defaults to
+    `scoring_mode: rank`, which scores each label's continuation log-probability
+    and takes the argmax -- a deterministic function of the prompt, so drawing
+    "k samples" from it would return the same answer k times and B1 would be B0
+    with a different name. Ranking is still the right default for the decision
+    arms, since it removes the parser as a source of variance.
+
+    Mutating and restoring the attribute rather than constructing a second
+    backend keeps the weights loaded once; a second instance would mean a second
+    copy of the model on the device for no scientific gain. A backend without the
+    attribute (the simulator) is left alone.
+    """
+    previous = getattr(backend, "scoring_mode", None)
+    if previous is not None:
+        backend.scoring_mode = "generate"
+    try:
+        yield backend
+    finally:
+        if previous is not None:
+            backend.scoring_mode = previous
+
+
 def _settings(cfg: GroundingConfig, *, temperature: float, seed: int) -> GenerationSettings:
     return GenerationSettings(
         temperature=temperature,
@@ -218,23 +246,39 @@ def _episode(
     return episode
 
 
+def ungrounded_pass(
+    items: Sequence[RouteChoiceItem], cfg: GroundingConfig, backend
+) -> dict[str, str]:
+    """What the model does with the prompt as given, computed once.
+
+    Every baseline needs this for `initial_loss`, and the prompt and decoding
+    are identical across them, so it is computed once and shared. Two reasons,
+    and the second is the important one: it removes four fifths of the forward
+    passes in a five-arm run, and it makes `initial_action` *identical* across
+    arms by construction rather than by coincidence -- which is what lets the
+    distortion reduction attributable to grounding be compared between them.
+    """
+    base_items = [item.inference_item() for item in items]
+    preds = backend.predict(base_items, _settings(cfg, temperature=0.0, seed=cfg.seed))
+    return {p.item_id: (p.label or ACTIONS[0]) for p in preds}
+
+
 def run_baseline(
     baseline: str,
     items: Sequence[RouteChoiceItem],
     cfg: GroundingConfig,
     backend,
+    diagnostics: dict[str, Any] | None = None,
+    before: Mapping[str, str] | None = None,
 ) -> list[GroundingEpisode]:
     """Run one baseline over every item."""
     lambda_bit = cfg.lambda_bit
     backend_name = getattr(backend, "name", "unknown")
     n_consistency = int(cfg.raw.get("self_consistency_samples", 5))
 
-    # Ungrounded first pass: what the model does with the prompt as given. Run
-    # for every baseline so `initial_loss` is comparable across arms and the
-    # distortion reduction attributable to grounding is well defined.
+    if before is None:
+        before = ungrounded_pass(items, cfg, backend)
     base_items = [item.inference_item() for item in items]
-    base_preds = backend.predict(base_items, _settings(cfg, temperature=0.0, seed=cfg.seed))
-    before = {p.item_id: (p.label or ACTIONS[0]) for p in base_preds}
 
     if baseline == "b0_no_grounding":
         return [
@@ -253,19 +297,31 @@ def run_baseline(
         # k independent draws, taken by varying the decoding seed. That is the
         # only way to get real samples through the Backend interface, and it
         # keeps the run reproducible.
-        for k in range(n_consistency):
-            preds = backend.predict(
-                base_items,
-                _settings(cfg, temperature=float(cfg.raw.get("temperature", 0.7)),
-                          seed=cfg.seed + 1000 + k),
-            )
-            for p in preds:
-                votes[p.item_id][p.label or ACTIONS[0]] += 1
+        with _generate_mode(backend):
+            for k in range(n_consistency):
+                preds = backend.predict(
+                    base_items,
+                    _settings(
+                        cfg,
+                        temperature=float(cfg.raw.get("temperature", 0.7)),
+                        seed=cfg.seed + 1000 + k,
+                    ),
+                )
+                for p in preds:
+                    # An unparseable sample is a real outcome of sampling, and
+                    # dropping it would flatter self-consistency. It votes for
+                    # nothing and the majority is taken over what parsed.
+                    if p.label is not None:
+                        votes[p.item_id][p.label] += 1
         return [
             _episode(
                 item, baseline, Route.ACT,
                 action_before=before[item.item_id],
-                action_after=votes[item.item_id].most_common(1)[0][0],
+                action_after=(
+                    votes[item.item_id].most_common(1)[0][0]
+                    if votes[item.item_id]
+                    else before[item.item_id]
+                ),
                 query=None, response=None, lambda_bit=lambda_bit,
                 n_samples=n_consistency, backend_name=backend_name,
             )
@@ -274,16 +330,31 @@ def run_baseline(
 
     # The three ask baselines differ only in which query they send.
     if baseline == "b2_generic_ask":
-        queries: list[QuerySpec] = [generic_query(item.variables) for item in items]
+        queries: list[QuerySpec | None] = [generic_query(item.variables) for item in items]
     else:
-        synthesizer = _synthesizer_for(baseline, cfg)
-        queries = [synthesizer.synthesize(item) for item in items]
+        synthesizer = _synthesizer_for(baseline, cfg, backend)
+        batch = getattr(synthesizer, "synthesize_batch", None)
+        if diagnostics is not None and hasattr(synthesizer, "summary"):
+            diagnostics.setdefault("synthesizer_runs", {})[baseline] = synthesizer
+        if batch is not None:
+            # The LM synthesizer needs one backend call for many items; a
+            # per-item loop on a real model wastes most of the GPU.
+            with _generate_mode(backend):
+                queries = list(batch(items))
+        else:
+            queries = [synthesizer.synthesize(item) for item in items]
 
-    responses = [TravellerSource(item).respond(q) for item, q in zip(items, queries)]
+    # A synthesizer may return None -- the LM answering "NONE", i.e. deciding no
+    # query is needed. That item is then an ACT, and it must cost zero bits
+    # rather than being quietly charged for a query that was never sent.
+    responses = [
+        TravellerSource(item).respond(query) if query is not None else None
+        for item, query in zip(items, queries)
+    ]
     grounded_items = [
         item.inference_item(
-            constraints_text(response.content),
-            revealed=tuple(response.content),
+            constraints_text(response.content) if response is not None else NO_CONSTRAINTS,
+            revealed=tuple(response.content) if response is not None else (),
         )
         for item, response in zip(items, responses)
     ]
@@ -292,10 +363,11 @@ def run_baseline(
     )
     after = {p.item_id: (p.label or ACTIONS[0]) for p in grounded_preds}
 
-    route = Route.ASK_GENERIC if baseline == "b2_generic_ask" else Route.ASK_TARGETED
+    asked_route = Route.ASK_GENERIC if baseline == "b2_generic_ask" else Route.ASK_TARGETED
     return [
         _episode(
-            item, baseline, route,
+            item, baseline,
+            asked_route if query is not None else Route.ACT,
             action_before=before[item.item_id],
             action_after=after[item.item_id],
             query=query, response=response, lambda_bit=lambda_bit,
@@ -305,7 +377,7 @@ def run_baseline(
     ]
 
 
-def _synthesizer_for(baseline: str, cfg: GroundingConfig):
+def _synthesizer_for(baseline: str, cfg: GroundingConfig, backend=None):
     if baseline == "b3_oracle_targeted":
         return GoldQuerySynthesizer()
     if baseline == "b4_synthesized_query":
@@ -316,10 +388,13 @@ def _synthesizer_for(baseline: str, cfg: GroundingConfig):
         if kind == "noisy":
             opts.setdefault("seed", cfg.seed)
             return NoisyQuerySynthesizer(**opts)
+        if kind == "lm":
+            if backend is None:
+                raise ValueError("the lm synthesizer needs the primary backend")
+            opts.setdefault("seed", cfg.seed)
+            return LMQuerySynthesizer(backend, **opts)
         raise ValueError(
-            f"unknown synthesizer kind {kind!r}; expected 'gold' or 'noisy'. "
-            "An LM synthesizer belongs here once a real backend is wired in "
-            "(plan section 15)."
+            f"unknown synthesizer kind {kind!r}; expected 'gold', 'noisy' or 'lm'"
         )
     raise ValueError(f"baseline {baseline!r} does not use a synthesizer")
 
@@ -335,10 +410,17 @@ def run_sweep(cfg: GroundingConfig) -> tuple[list[GroundingEpisode], dict[str, A
     backend_options.setdefault("seed", cfg.seed)
     backend = get_backend(backend_name, **backend_options)
     backend.load()
+    synth_holder: dict[str, Any] = {}
     try:
+        before = ungrounded_pass(items, cfg, backend)
         episodes: list[GroundingEpisode] = []
         for baseline in cfg.policies:
-            episodes.extend(run_baseline(baseline, items, cfg, backend))
+            episodes.extend(
+                run_baseline(
+                    baseline, items, cfg, backend,
+                    diagnostics=synth_holder, before=before,
+                )
+            )
             log.info("%s: %d episodes", baseline, len(items))
     finally:
         backend.unload()
@@ -356,6 +438,13 @@ def run_sweep(cfg: GroundingConfig) -> tuple[list[GroundingEpisode], dict[str, A
         "synthesizer": dict(cfg.raw.get("synthesizer") or {}),
         "example_prompt": items[0].prompt(),
         "is_simulated": backend_name == "grounding_simulator",
+        # How the synthesized queries were actually arrived at: parse rate,
+        # fallback rate, how many variables were named. Without this a B4 result
+        # cannot be attributed to targeting rather than to a parser.
+        "synthesizer_summary": {
+            name: obj.summary()
+            for name, obj in (synth_holder.get("synthesizer_runs") or {}).items()
+        },
     }
     return episodes, diagnostics
 

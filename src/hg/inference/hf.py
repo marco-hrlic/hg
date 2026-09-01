@@ -171,23 +171,58 @@ class TransformersBackend:
         return out
 
     def _label_logprob(self, prompt: str, label: str) -> float:
+        """Best length-normalized log-probability over the label's surface forms.
+
+        The surface form matters and cannot be assumed. A raw-text prompt ends
+        mid-line ("... Answer:"), so the continuation the model emits is
+        " B" -- with the leading space inside the token. A chat-templated prompt
+        ends at a token boundary ("<|im_start|>assistant\n"), so the
+        continuation is "B" with no space, a *different token id*.
+
+        Scoring only the spaced form -- which this method used to do -- measures
+        the wrong token whenever a chat template is applied. That is not a small
+        bias: on Qwen2.5-1.5B-Instruct the spaced form scored -16.9 against
+        -0.001 for the bare form, i.e. it was reading the far tail of the
+        distribution. Every label then scores near-uniformly badly, the argmax
+        is decided by tail noise, and the run looks like a model with no
+        discrimination rather than like a scoring bug. Since `scoring_mode:
+        rank` and `use_chat_template` are both defaults, this affected the
+        default path.
+
+        Taking the max over forms is robust to either prompt style without the
+        caller having to know which applies, and answers the question actually
+        being asked: did the model mean this label?
+        """
         import torch
 
         tok = self._tokenizer
         prompt_ids = tok(prompt, return_tensors="pt", add_special_tokens=True).input_ids
         if prompt_ids.shape[1] > self.max_input_tokens:
             prompt_ids = prompt_ids[:, -self.max_input_tokens :]
-        label_ids = tok(" " + label, return_tensors="pt", add_special_tokens=False).input_ids
-        input_ids = torch.cat([prompt_ids, label_ids], dim=1).to(self._model.device)
 
-        with torch.no_grad():
-            logits = self._model(input_ids=input_ids).logits
-        logprobs = torch.log_softmax(logits[:, :-1, :].float(), dim=-1)
-        n_label = label_ids.shape[1]
-        targets = input_ids[:, 1:]
-        picked = logprobs.gather(-1, targets.unsqueeze(-1)).squeeze(-1)
-        label_lp = picked[:, -n_label:].sum().item()
-        return label_lp / max(n_label, 1)
+        best = -math.inf
+        for form in self._label_forms(label):
+            label_ids = tok(
+                form, return_tensors="pt", add_special_tokens=False
+            ).input_ids
+            if label_ids.shape[1] == 0:
+                continue
+            input_ids = torch.cat([prompt_ids, label_ids], dim=1).to(self._model.device)
+
+            with torch.no_grad():
+                logits = self._model(input_ids=input_ids).logits
+            logprobs = torch.log_softmax(logits[:, :-1, :].float(), dim=-1)
+            n_label = label_ids.shape[1]
+            targets = input_ids[:, 1:]
+            picked = logprobs.gather(-1, targets.unsqueeze(-1)).squeeze(-1)
+            label_lp = picked[:, -n_label:].sum().item() / max(n_label, 1)
+            best = max(best, label_lp)
+        return best
+
+    @staticmethod
+    def _label_forms(label: str) -> tuple[str, ...]:
+        """Surface forms to score for one label, most likely first."""
+        return (label, " " + label)
 
     def _predict_generate(
         self, items: Sequence[InferenceItem], settings: GenerationSettings

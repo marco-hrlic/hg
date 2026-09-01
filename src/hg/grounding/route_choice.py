@@ -56,7 +56,10 @@ from ..inference.base import InferenceItem
 from ..inference.prompts import render_prompt
 from .channels import QuerySpec, Response, log2_alphabet
 
-ROUTE_CHOICE_TASK_VERSION = "route-choice-v1"
+# v2 changed two display phrases (see VARIABLE_PHRASES) and so changed the
+# rendered prompt. The items themselves are unchanged, but a run is only
+# comparable to another at the same version.
+ROUTE_CHOICE_TASK_VERSION = "route-choice-v2"
 TASK_NAME = "route_choice"
 PROMPT_VERSION = "route_choice.v1"
 
@@ -74,12 +77,30 @@ PREFERENCE_VARIABLES = (
 )
 
 # Human-readable phrasing, used both in the prompt and in the query text.
+#
+# Uniform noun phrases, one distinctive head word each. The v1 phrasings for
+# night driving and unpaved roads were both "... stretch ...", which made them
+# indistinguishable to any parser keying on the phrase and unmatchable from a
+# natural rendering like "night driving".
 VARIABLE_PHRASES = {
     "mountain_roads": "a mountain road",
     "toll_roads": "a toll road",
     "ferry_crossings": "a ferry crossing",
-    "night_driving": "a stretch that must be driven at night",
-    "unpaved_roads": "an unpaved stretch",
+    "night_driving": "driving at night",
+    "unpaved_roads": "an unpaved road",
+}
+
+# Surface forms a model might use for each variable, for parsing a synthesized
+# query back into a QuerySpec. Listed explicitly rather than derived from the
+# display phrase: derivation cannot know that "tolls", "ferries" and "night
+# driving" name these variables, and a parser that silently fails to match is
+# indistinguishable from a model that failed to ask.
+VARIABLE_ALIASES = {
+    "mountain_roads": ("mountain road", "mountain roads", "mountain"),
+    "toll_roads": ("toll road", "toll roads", "tolls", "toll"),
+    "ferry_crossings": ("ferry crossing", "ferry crossings", "ferries", "ferry"),
+    "night_driving": ("night driving", "driving at night", "night-driving", "night"),
+    "unpaved_roads": ("unpaved road", "unpaved roads", "unpaved", "gravel"),
 }
 
 DECISION_RULE = (
@@ -124,6 +145,12 @@ class RouteChoiceSpec:
         unknown = set(self.variables) - set(VARIABLE_PHRASES)
         if unknown:
             raise ValueError(f"no phrasing registered for {sorted(unknown)}")
+        missing_aliases = set(self.variables) - set(VARIABLE_ALIASES)
+        if missing_aliases:
+            raise ValueError(
+                f"no parse aliases registered for {sorted(missing_aliases)}: a "
+                "synthesized query naming them could never be parsed"
+            )
 
     @property
     def generic_bits(self) -> float:
