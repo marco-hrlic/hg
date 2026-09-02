@@ -17,7 +17,9 @@ target/masking machinery in `losses.py` assumes every row has an episode.
 from __future__ import annotations
 
 import math
+import time
 from dataclasses import dataclass, field
+from typing import Callable
 
 import torch
 from torch import nn
@@ -208,20 +210,56 @@ def train_step(
     )
 
 
+def format_progress_line(
+    metrics: StepMetrics, total_steps: int, tokens_per_sec: float, elapsed: float
+) -> str:
+    """Spec section 18's live-logging line: step/total loss/LM loss/HG
+    component losses/lr/grad norm/tokens-per-sec/elapsed/ETA. Pure formatting
+    -- factored out so `train()`'s default `log_fn` and any caller that wants
+    the same shape (e.g. `run_train.py`) share one implementation."""
+    remaining = max(0, total_steps - (metrics.step + 1))
+    per_step = elapsed / max(1, metrics.step + 1) if elapsed else 0.0
+    eta_seconds = per_step * remaining
+    components = " ".join(f"{k}={v:.4f}" for k, v in sorted(metrics.losses.items()) if k != "lm")
+    return (
+        f"step {metrics.step + 1}/{total_steps} "
+        f"total={metrics.total:.4f} lm={metrics.losses.get('lm', float('nan')):.4f} "
+        f"{components} lr={metrics.lr:.2e} grad_norm={metrics.grad_norm:.3f} "
+        f"tok/s={tokens_per_sec:.0f} elapsed={elapsed:.1f}s eta={eta_seconds:.1f}s"
+    )
+
+
 def train(
     model: HGNativeModel,
     config: HGNativeConfig,
     train_cfg: TrainConfig,
     optim_cfg: OptimConfig | None = None,
     tokenizer: Tokenizer | None = None,
+    log_interval: int = 0,
+    log_fn: Callable[[str], None] = print,
 ) -> list[StepMetrics]:
-    """Run `train_cfg.total_steps` optimizer steps; returns per-step metrics."""
+    """Run `train_cfg.total_steps` optimizer steps; returns per-step metrics.
+
+    `log_interval > 0` prints one progress line every that-many steps (spec
+    section 18: step/total loss/LM loss/HG component losses/lr/grad
+    norm/tokens-per-sec/elapsed/ETA) via `log_fn` (default `print`). This is
+    engineering hygiene only -- purely additive over `train_step`'s existing
+    math, so it changes nothing about optimization behavior or the returned
+    `StepMetrics` list.
+    """
     optim_cfg = optim_cfg or OptimConfig()
     tokenizer = tokenizer or ByteTokenizer()
     optimizer = build_optimizer(model, optim_cfg)
     model.to(train_cfg.device)
     model.train()
-    return [
-        train_step(model, config, optimizer, optim_cfg, tokenizer, train_cfg, step)
-        for step in range(train_cfg.total_steps)
-    ]
+    history: list[StepMetrics] = []
+    start = time.monotonic()
+    for step in range(train_cfg.total_steps):
+        metrics = train_step(model, config, optimizer, optim_cfg, tokenizer, train_cfg, step)
+        history.append(metrics)
+        if log_interval and (step % log_interval == 0 or step == train_cfg.total_steps - 1):
+            elapsed = time.monotonic() - start
+            tokens_seen = (step + 1) * train_cfg.batch_size * train_cfg.max_seq_len
+            tokens_per_sec = tokens_seen / elapsed if elapsed > 0 else 0.0
+            log_fn(format_progress_line(metrics, train_cfg.total_steps, tokens_per_sec, elapsed))
+    return history

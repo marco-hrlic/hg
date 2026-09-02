@@ -47,6 +47,29 @@ def config_hash(config_dict: dict[str, Any]) -> str:
     return hashlib.sha256(canonical.encode("utf-8")).hexdigest()
 
 
+def deploy_provenance(cwd: str | Path = ".") -> tuple[str | None, bool | None]:
+    """Fallback git SHA / dirty-tree status from plain files.
+
+    `scripts/spark_deploy.sh` rsyncs to the Spark with `.git` excluded (see
+    [[dgx-spark-access]]), which leaves `git_commit()`/`git_is_dirty()` with
+    nothing to shell out to. The deploy script writes `DEPLOY_GIT_SHA` and
+    `DEPLOY_GIT_DIRTY` at the repo root *before* that rsync, so they still
+    cross over even though `.git` itself does not; this reads them back.
+    Returns `(None, None)` if either file is absent (e.g. a plain local
+    checkout, where `git_commit()`/`git_is_dirty()` already work directly).
+    """
+    root = Path(cwd)
+    sha_path = root / "DEPLOY_GIT_SHA"
+    dirty_path = root / "DEPLOY_GIT_DIRTY"
+    sha = sha_path.read_text(encoding="utf-8").strip() if sha_path.exists() else ""
+    dirty: bool | None = None
+    if dirty_path.exists():
+        raw = dirty_path.read_text(encoding="utf-8").strip().lower()
+        if raw in ("true", "false"):
+            dirty = raw == "true"
+    return (sha or None, dirty)
+
+
 def data_generator_version() -> str:
     """Spec section 16 wants a "data-generator version"; the generators have
     no separate release scheme, so the commit they live at doubles as it."""
@@ -96,10 +119,16 @@ def build_manifest(
     extra: dict[str, Any] | None = None,
 ) -> RunManifest:
     env = _torch_environment()
+    commit = git_commit()
+    dirty = git_is_dirty()
+    if commit is None or dirty is None:
+        fallback_sha, fallback_dirty = deploy_provenance()
+        commit = commit if commit is not None else fallback_sha
+        dirty = dirty if dirty is not None else fallback_dirty
     return RunManifest(
         run_id=run_id,
-        git_commit=git_commit(),
-        git_dirty=git_is_dirty(),
+        git_commit=commit,
+        git_dirty=dirty,
         hostname=socket.gethostname(),
         device=env["device"],
         torch_version=env["torch_version"],

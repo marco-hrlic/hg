@@ -3,7 +3,7 @@
 Torch-free: takes a saved latent array (e.g. from `eval.latents.extract_latents`)
 plus Family C episodes, not a model, so probe results are recomputable from
 `latents.npy` + `episodes.jsonl` alone (spec section 4). No sklearn
-dependency -- `_fit_logistic_regression` is a small hand-rolled batch
+dependency -- `fit_logistic_regression` is a small hand-rolled batch
 gradient descent, since a d<=100-ish linear probe needs nothing fancier.
 """
 
@@ -22,7 +22,11 @@ RELEVANT_VARS = ("r", "f", "h")
 IRRELEVANT_VARS = ("u", "n")
 
 
-def _fit_logistic_regression(X: np.ndarray, y: np.ndarray, n_iters: int, lr: float, l2: float, seed: int) -> tuple[np.ndarray, float]:
+def fit_logistic_regression(X: np.ndarray, y: np.ndarray, n_iters: int, lr: float, l2: float, seed: int) -> tuple[np.ndarray, float]:
+    """Small hand-rolled batch gradient descent logistic regression -- shared
+    with `eval.confidence`'s `g_info`/`g_access` proxies (M0-R1 kickoff
+    section 8.2/8.3), which need the exact same fit-on-train-split machinery
+    but on confidence features rather than a latent array."""
     rng = np.random.default_rng(seed)
     n, d = X.shape
     w = np.zeros(d)
@@ -71,7 +75,7 @@ def probe_accuracy(
 
     mean, std = X[train_idx].mean(axis=0), X[train_idx].std(axis=0) + 1e-8
     X_train, X_test = (X[train_idx] - mean) / std, (X[test_idx] - mean) / std
-    w, b = _fit_logistic_regression(X_train, y_train, n_iters=n_iters, lr=lr, l2=l2, seed=seed)
+    w, b = fit_logistic_regression(X_train, y_train, n_iters=n_iters, lr=lr, l2=l2, seed=seed)
     pred = ((X_test @ w + b) > 0).astype(float)
     return {"accuracy": float((pred == y_test).mean()), "n_train": len(train_idx), "n_test": len(test_idx)}
 

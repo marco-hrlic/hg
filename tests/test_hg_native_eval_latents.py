@@ -7,7 +7,7 @@ import pytest
 torch = pytest.importorskip("torch")
 
 from hg_native.data.sequential_quotient import generate_batch
-from hg_native.eval.latents import extract_latents
+from hg_native.eval.latents import extract_hidden_states, extract_latents
 from hg_native.model.config import HeadsConfig, HGLatentConfig, HGNativeConfig, TransformerConfig
 from hg_native.model.hg_model import build_model
 from hg_native.training.batch import ByteTokenizer
@@ -43,3 +43,47 @@ def test_extract_latents_batching_does_not_change_result():
     small_batches = extract_latents(model, ByteTokenizer(), episodes, max_seq_len=48, batch_size=3)
     one_batch = extract_latents(model, ByteTokenizer(), episodes, max_seq_len=48, batch_size=1000)
     assert torch.allclose(torch.tensor(small_batches), torch.tensor(one_batch), atol=1e-5)
+
+
+# --- extract_hidden_states (M0-R1 kickoff section 4.1: raw vanilla control) ---
+
+
+def test_extract_hidden_states_works_for_baseline_model():
+    cfg = HGNativeConfig(variant="baseline", transformer=SMALL_TRUNK, seed=0)
+    model = build_model(cfg)
+    episodes = _episodes(10)
+    hidden = extract_hidden_states(model, ByteTokenizer(), episodes, max_seq_len=48)
+    assert hidden.shape == (10, SMALL_TRUNK.d_model)
+
+
+def test_extract_hidden_states_works_for_hg_model_too():
+    cfg = HGNativeConfig(variant="hg", transformer=SMALL_TRUNK, hg_latent=SMALL_LATENT, heads=SMALL_HEADS, seed=0)
+    model = build_model(cfg)
+    episodes = _episodes(10)
+    hidden = extract_hidden_states(model, ByteTokenizer(), episodes, max_seq_len=48)
+    assert hidden.shape == (10, SMALL_TRUNK.d_model)
+
+
+def test_extract_hidden_states_batching_does_not_change_result():
+    cfg = HGNativeConfig(variant="baseline", transformer=SMALL_TRUNK, seed=0)
+    model = build_model(cfg)
+    episodes = _episodes(20)
+    small_batches = extract_hidden_states(model, ByteTokenizer(), episodes, max_seq_len=48, batch_size=3)
+    one_batch = extract_hidden_states(model, ByteTokenizer(), episodes, max_seq_len=48, batch_size=1000)
+    assert torch.allclose(torch.tensor(small_batches), torch.tensor(one_batch), atol=1e-5)
+
+
+def test_extract_hidden_states_reads_the_same_position_as_extract_latents():
+    # Same decision-token position for HG and vanilla probes (kickoff
+    # section 19's required test): on an HG model, the raw trunk hidden
+    # state gathered by extract_hidden_states at `decision_position` is the
+    # exact input the HG latent projection (extract_latents) is built from,
+    # so the two must be gathered at the same position by construction.
+    cfg = HGNativeConfig(variant="hg", transformer=SMALL_TRUNK, hg_latent=SMALL_LATENT, heads=SMALL_HEADS, seed=0)
+    model = build_model(cfg)
+    episodes = _episodes(5)
+    hidden = extract_hidden_states(model, ByteTokenizer(), episodes, max_seq_len=48)
+    model.eval()
+    expected_latents = model.hg_latent(torch.tensor(hidden))
+    latents = extract_latents(model, ByteTokenizer(), episodes, max_seq_len=48)
+    assert torch.allclose(expected_latents, torch.tensor(latents), atol=1e-5)

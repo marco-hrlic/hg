@@ -33,6 +33,20 @@ check_vpn() {
   fi
 }
 
+write_deploy_provenance() {
+  # rsync excludes .git below, so a Spark-side manifest can't shell out to
+  # git for commit/dirty status (see [[dgx-spark-access]] and
+  # hg_native/training/manifest.py's `deploy_provenance` fallback). Record
+  # both as plain files at the repo root right before syncing, so they cross
+  # over even though .git itself does not.
+  git -C "${REPO_ROOT}" rev-parse HEAD > "${REPO_ROOT}/DEPLOY_GIT_SHA"
+  if [ -n "$(git -C "${REPO_ROOT}" status --porcelain)" ]; then
+    echo "true" > "${REPO_ROOT}/DEPLOY_GIT_DIRTY"
+  else
+    echo "false" > "${REPO_ROOT}/DEPLOY_GIT_DIRTY"
+  fi
+}
+
 sync_repo() {
   # --delete keeps the remote tree an exact mirror, which also means scratch
   # files written directly on the Spark are removed. Keep throwaway scripts
@@ -40,6 +54,7 @@ sync_repo() {
   # '/data' and '/results' are anchored to the repo root: an unanchored
   # 'data' pattern also matches src/hg_native/data (the episode-schema and
   # generator package), silently dropping it from every sync.
+  write_deploy_provenance
   rsync -az --delete \
     --exclude '.venv' --exclude '.git' \
     --exclude '__pycache__' --exclude '.pytest_cache' --exclude '*.pyc' \

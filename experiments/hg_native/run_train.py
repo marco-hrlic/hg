@@ -62,6 +62,10 @@ def parse_args() -> argparse.Namespace:
         help="torch device (e.g. cuda, cpu). Default: cuda if available, else cpu -- every prior run in this "
         "project used TrainConfig's cpu default explicitly, which left the Spark's GPU unused.",
     )
+    parser.add_argument(
+        "--log-interval", type=int, default=50,
+        help="Print a training-progress line every this many steps (spec section 18). 0 disables live logging.",
+    )
     return parser.parse_args()
 
 
@@ -92,7 +96,10 @@ def main() -> None:
     optim_cfg = OptimConfig(lr=args.lr)
 
     print(f"variant={config.variant} params={model.num_parameters():,} steps={args.total_steps} device={device}", file=sys.stderr)
-    history = train(model, config, train_cfg, optim_cfg=optim_cfg, tokenizer=tokenizer)
+    history = train(
+        model, config, train_cfg, optim_cfg=optim_cfg, tokenizer=tokenizer,
+        log_interval=args.log_interval, log_fn=lambda line: print(line, file=sys.stderr),
+    )
 
     run_dir = ensure_dir(Path(args.output_root) / run_id(args.experiment_name, config.variant))
     (run_dir / "config.yaml").write_text(yaml.safe_dump(_config_to_dict(config)), encoding="utf-8")

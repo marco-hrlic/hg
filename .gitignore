@@ -38,3 +38,8 @@ adapters/
 # Local overrides
 configs/**/local_*.yaml
 .env
+
+# Written by scripts/spark_deploy.sh right before each sync, so a Spark
+# manifest can recover git provenance despite the sync excluding .git.
+/DEPLOY_GIT_SHA
+/DEPLOY_GIT_DIRTY
