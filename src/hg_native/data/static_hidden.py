@@ -49,6 +49,14 @@ COST_LOW = 10
 COST_HIGH = 99
 DEFAULT_UNKNOWN_BIT = "NO"  # convention for guessing an unresolved rule bit
 
+# M1 kickoff section 6.4 (distractor-density OOD): the pool decorative
+# distractor names are drawn from, indexed 0.. by `n_distractor_visible`.
+# The first two entries are the original two names (`distractor_visible`'s
+# `_Rule.n_distractor_visible=2` default), so IID behavior is byte-identical
+# to before this pool existed; entries beyond that support OOD densities up
+# to `len(DISTRACTOR_NAMES)`.
+DISTRACTOR_NAMES: tuple[str, ...] = ("C.cost", "A.weight") + tuple(f"decoy_{i}.cost" for i in range(2, 30))
+
 
 @dataclass(frozen=True)
 class _Rule:
@@ -139,10 +147,10 @@ _RULES: dict[str, _Rule] = {
 }
 
 
-def _draw_costs(rng, force_b_cheaper: bool | None) -> tuple[int, int]:
+def _draw_costs(rng, force_b_cheaper: bool | None, cost_low: int, cost_high: int) -> tuple[int, int]:
     while True:
-        a_cost = int(rng.integers(COST_LOW, COST_HIGH + 1))
-        b_cost = int(rng.integers(COST_LOW, COST_HIGH + 1))
+        a_cost = int(rng.integers(cost_low, cost_high + 1))
+        b_cost = int(rng.integers(cost_low, cost_high + 1))
         if a_cost == b_cost:
             continue
         if force_b_cheaper is True and not (b_cost < a_cost):
@@ -156,14 +164,35 @@ def _draw_bit(rng) -> str:
     return "YES" if int(rng.integers(0, 2)) == 1 else "NO"
 
 
-def generate_episode(seed: int, subclass: str, index: int) -> Episode:
-    """Generate one deterministic episode of `subclass` (same seed+index+subclass -> identical episode)."""
+def generate_episode(
+    seed: int,
+    subclass: str,
+    index: int,
+    *,
+    cost_range: tuple[int, int] | None = None,
+    n_distractor_visible: int | None = None,
+) -> Episode:
+    """Generate one deterministic episode of `subclass` (same seed+index+subclass -> identical episode).
+
+    `cost_range`/`n_distractor_visible` default to `None`, reproducing
+    exactly today's behavior (`(COST_LOW, COST_HIGH)`, the subclass's own
+    `_Rule.n_distractor_visible`) -- an OOD pool (M1 kickoff section 6.3
+    parameter OOD / section 6.4 distractor-density OOD) passes an explicit
+    override instead. `_decide`/`_resolve_decision` never read either
+    knob, so overriding them changes only the *distribution* costs/decoys
+    are drawn from, never the decision rule itself.
+    """
     if subclass not in _RULES:
         raise ValueError(f"unknown static_hidden subclass {subclass!r}; expected one of {SUBCLASSES}")
     rule = _RULES[subclass]
     rng = rng_for(seed, "static_hidden", subclass, index)
 
-    a_cost, b_cost = _draw_costs(rng, rule.force_b_cheaper)
+    cost_low, cost_high = cost_range if cost_range is not None else (COST_LOW, COST_HIGH)
+    n_distractors = rule.n_distractor_visible if n_distractor_visible is None else n_distractor_visible
+    if n_distractors > len(DISTRACTOR_NAMES):
+        raise ValueError(f"n_distractor_visible={n_distractors} exceeds DISTRACTOR_NAMES pool size {len(DISTRACTOR_NAMES)}")
+
+    a_cost, b_cost = _draw_costs(rng, rule.force_b_cheaper, cost_low, cost_high)
     b_cheaper = b_cost < a_cost
     true_bits = {v: _draw_bit(rng) for v in rule.rule_vars}
     extra_bits = {v: _draw_bit(rng) for v in rule.extra_hidden_vars}
@@ -171,11 +200,11 @@ def generate_episode(seed: int, subclass: str, index: int) -> Episode:
         extra_bits["h2"] = true_bits["h1"]  # hard-wired copy, per _RULES doc
 
     visible_state: dict[str, Any] = {"A.cost": a_cost, "B.cost": b_cost}
-    for i in range(rule.n_distractor_visible):
+    for i in range(n_distractors):
         # Deterministic decorative distractors: not referenced by any rule,
         # not fed into any head's target, present purely to test that the
         # generator's own ground truth (and later, the model) ignores them.
-        visible_state[["C.cost", "A.weight"][i]] = int(rng.integers(COST_LOW, COST_HIGH + 1))
+        visible_state[DISTRACTOR_NAMES[i]] = int(rng.integers(cost_low, cost_high + 1))
 
     all_hidden_names = list(rule.rule_vars) + list(rule.extra_hidden_vars)
     hidden_state = {v: "UNKNOWN" for v in all_hidden_names}
@@ -226,31 +255,78 @@ def generate_episode(seed: int, subclass: str, index: int) -> Episode:
     )
 
 
-def generate_batch(seed: int, subclass: str, n_items: int) -> list[Episode]:
-    return [generate_episode(seed, subclass, i) for i in range(n_items)]
+def generate_batch(
+    seed: int,
+    subclass: str,
+    n_items: int,
+    *,
+    cost_range: tuple[int, int] | None = None,
+    n_distractor_visible: int | None = None,
+) -> list[Episode]:
+    return [
+        generate_episode(seed, subclass, i, cost_range=cost_range, n_distractor_visible=n_distractor_visible)
+        for i in range(n_items)
+    ]
 
 
-def render_text(episode: Episode) -> str:
+# M1 kickoff section 6.1 (lexical OOD): "do not allow shared sentence
+# templates between train and lexical-OOD test" -- every literal fragment
+# below is deliberately disjoint (down to the word level) from the
+# `"canonical"` fragments in `render_text`, so `hg_native.data.ood`'s
+# `assert_no_shared_lexical_templates` has something real to check.
+# `rule_text` itself (drawn from `_RULES`, not from either fragment set
+# below) is shared between surface forms on purpose: it is the substantive
+# statement of the decision rule, not decorative wording -- an OOD render
+# still has to describe the same logic, just never in the same sentence
+# scaffold around it.
+def _lexical_ood_key(key: str) -> str:
+    if key == "A.cost":
+        return "Option A price"
+    if key == "B.cost":
+        return "Option B price"
+    name, _, field = key.partition(".")
+    return f"Extra option {name} {field}"
+
+
+def render_text(episode: Episode, surface_form: str = "canonical") -> str:
     """Render the spec section 5.1 `TASK STATIC-CHOICE` text block for an episode.
 
-    `B.requires = h<k>` lines reflect the rule's structure (which hidden
-    variables it references), independent of whether this particular
-    instance's costs make that hidden variable decision-relevant — matching
-    the spec's own contrast example, where `B.requires = h3` is still shown
-    even though `h3` turns out to be irrelevant once B is not the cheaper
-    action.
+    `surface_form="canonical"` (default) is today's exact wording, unchanged.
+    `surface_form="lexical_ood"` (M1 kickoff section 6.1) renders the same
+    ground truth under a fully alternate vocabulary/serialization -- see
+    `hg_native.data.ood.lexical_ood_pool`.
     """
-    lines = ["TASK STATIC-CHOICE"]
-    for key, value in episode.visible_state.items():
-        lines.append(f"{key} = {value}")
-    for var in episode.metadata.get("rule_vars", ()):
-        lines.append(f"B.requires = {var}")
-    lines.append("RULE:")
-    lines.append(episode.metadata.get("rule_text", ""))
-    lines.append("KNOWN:")
-    for key, value in episode.visible_state.items():
-        lines.append(f"{key} = {value}")
-    for var, value in episode.hidden_state.items():
-        lines.append(f"{var} = {value}")
-    lines.append("DECIDE OR REQUEST INFORMATION.")
-    return "\n".join(lines)
+    if surface_form == "canonical":
+        lines = ["TASK STATIC-CHOICE"]
+        for key, value in episode.visible_state.items():
+            lines.append(f"{key} = {value}")
+        for var in episode.metadata.get("rule_vars", ()):
+            lines.append(f"B.requires = {var}")
+        lines.append("RULE:")
+        lines.append(episode.metadata.get("rule_text", ""))
+        lines.append("KNOWN:")
+        for key, value in episode.visible_state.items():
+            lines.append(f"{key} = {value}")
+        for var, value in episode.hidden_state.items():
+            lines.append(f"{var} = {value}")
+        lines.append("DECIDE OR REQUEST INFORMATION.")
+        return "\n".join(lines)
+    if surface_form == "lexical_ood":
+        # `B.requires = h<k>` reflects the rule's structure, independent of
+        # whether this instance's costs make it decision-relevant -- same
+        # contrast the canonical render's docstring notes, just reworded.
+        lines = ["OPTION SELECTION"]
+        for key, value in episode.visible_state.items():
+            lines.append(f"{_lexical_ood_key(key)}: {value}")
+        for var in episode.metadata.get("rule_vars", ()):
+            lines.append(f"Option B needs {var}")
+        lines.append("CONDITION:")
+        lines.append(episode.metadata.get("rule_text", ""))
+        lines.append("GIVEN:")
+        for key, value in episode.visible_state.items():
+            lines.append(f"{_lexical_ood_key(key)}: {value}")
+        for var, value in episode.hidden_state.items():
+            lines.append(f"{var}: {value}")
+        lines.append("MAKE YOUR CHOICE.")
+        return "\n".join(lines)
+    raise ValueError(f"unknown surface_form {surface_form!r}; expected 'canonical' or 'lexical_ood'")
