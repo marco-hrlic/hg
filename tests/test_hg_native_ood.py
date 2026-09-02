@@ -1,8 +1,8 @@
-"""M1 kickoff section 6 OOD split machinery -- Family A (lexical, parameter,
-distractor-density), Family B and Family C (parameter only). Structural
-OOD, Family D, and the other axes for Families B/C are follow-up slices or
-(for Family B/C's lexical/distractor axes) a deliberate non-fit -- see
-hg_native/data/ood.py's module docstring."""
+"""M1 kickoff section 6 OOD split machinery -- Family A (all 4 axes),
+Family B and Family C (parameter only). Family D and the other axes for
+Families B/C are follow-up slices or (for Family B/C's lexical/distractor
+axes) a deliberate non-fit -- see hg_native/data/ood.py's module
+docstring."""
 
 from __future__ import annotations
 
@@ -19,9 +19,12 @@ from hg_native.data.ood import (
     PARAMETER_OOD_COST_RANGE,
     SEQUENTIAL_QUOTIENT_IID_N_STEPS_RANGE,
     SEQUENTIAL_QUOTIENT_PARAMETER_OOD_N_STEPS_RANGE,
+    STRUCTURAL_OOD_CONDITION,
+    STRUCTURAL_TRAIN_CONDITIONS,
     accessibility_iid_pool,
     accessibility_parameter_ood_pool,
     assert_disjoint_ranges,
+    assert_no_shared_composition,
     assert_no_shared_lexical_templates,
     distractor_ood_pool,
     iid_pool,
@@ -29,7 +32,10 @@ from hg_native.data.ood import (
     parameter_ood_pool,
     sequential_quotient_iid_pool,
     sequential_quotient_parameter_ood_pool,
+    structural_iid_pool,
+    structural_ood_pool,
 )
+from hg_native.data.rule_expr import And, Var
 
 SUBCLASSES_WITH_A_RULE = ("one_bit_deficit", "no_deficit")  # a couple representative subclasses
 
@@ -306,3 +312,33 @@ def test_sequential_quotient_iid_pool_matches_direct_generation_for_a_fixed_n_st
         assert [ep.true_quotient_state for ep in sorted(steps, key=lambda e: e.metadata["t"])] == [
             ep.true_quotient_state for ep in direct
         ]
+
+
+# --- Family A: structural OOD ------------------------------------------------
+
+
+def test_assert_no_shared_composition_passes_on_the_real_train_ood_pair():
+    assert_no_shared_composition(STRUCTURAL_TRAIN_CONDITIONS, (STRUCTURAL_OOD_CONDITION,))  # must not raise
+
+
+def test_assert_no_shared_composition_raises_on_a_real_overlap():
+    with pytest.raises(ValueError, match="shared rule compositions"):
+        assert_no_shared_composition(STRUCTURAL_TRAIN_CONDITIONS, (And((Var("h1"),)),))  # exact match to a train condition
+
+
+def test_structural_iid_pool_tags_condition_metadata():
+    episodes = structural_iid_pool(seed=0, n_items=5)
+    assert len(episodes) == 5
+    assert all(ep.metadata["ood_condition"] == "iid" for ep in episodes)
+
+
+def test_structural_ood_pool_tags_condition_metadata_and_validates_disjointness():
+    episodes = structural_ood_pool(seed=0, n_items=5)
+    assert len(episodes) == 5
+    assert all(ep.metadata["ood_condition"] == "structural" for ep in episodes)
+    assert all(ep.metadata["condition_signature"] == STRUCTURAL_OOD_CONDITION.signature() for ep in episodes)
+
+
+def test_structural_ood_pool_rejects_a_condition_seen_in_training():
+    with pytest.raises(ValueError):
+        structural_ood_pool(seed=0, n_items=5, condition=STRUCTURAL_TRAIN_CONDITIONS[0])

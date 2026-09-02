@@ -10,23 +10,23 @@ convention.
 Coverage so far, one family at a time (see each family's section below for
 what's built and what's deliberately not, and why):
 
-- **Family A** (`static_hidden.py`): all 3 built axes -- lexical (6.1),
-  parameter (6.3), distractor-density (6.4).
+- **Family A** (`static_hidden.py`): lexical (6.1), parameter (6.3),
+  distractor-density (6.4), and now structural (6.2, via
+  `static_hidden.generate_structural_episode` + `rule_expr`) -- all 4
+  axes.
 - **Family B** (`accessibility.py`): parameter (6.3) only.
 - **Family C** (`sequential_quotient.py`): parameter (6.3) only.
 - **Family D** (`capability_refinement.py`): none yet -- no numeric-range
   knob exists at all (`Z=(r,f,u,n,v)` is all booleans), so none of the 3
-  built axes apply without a structural change to that generator, which is
-  a follow-up slice, not a fit to force here.
-
-Structural OOD (kickoff section 6.2) is deliberately not covered for any
-family -- it needs a rule-composition DSL none of the generators have
-(`static_hidden._decide` is a fixed AND-only conjunction).
+  numeric-range axes apply without a structural change to that generator,
+  which is a follow-up slice, not a fit to force here.
 """
 
 from __future__ import annotations
 
 from collections import Counter
+
+from hg_native.data.rule_expr import And, Expr, Not, Or, Var
 
 from hg_native.data import accessibility, sequential_quotient, static_hidden
 from hg_native.data.schema import Episode, rng_for
@@ -72,6 +72,18 @@ ACCESSIBILITY_PARAMETER_OOD_ADJ_RANGE = (50, 100)
 SEQUENTIAL_QUOTIENT_IID_N_STEPS_RANGE = (2, 6)
 SEQUENTIAL_QUOTIENT_PARAMETER_OOD_N_STEPS_RANGE = (7, 10)
 
+# Structural OOD (section 6.2), Family A only: two simple compositions
+# ("just h1", "h1 or h2") stand in for what training would see; the OOD
+# condition combines the same primitives (Var/And/Or/Not) into a shape
+# that never appears verbatim in the train set -- mirrors the kickoff's
+# own worked example ("J=(x1 AND h1)" / "J=(x2 OR h2)" in training vs.
+# "J=(x1 AND h1) OR (x2 AND NOT h2)" at test).
+STRUCTURAL_TRAIN_CONDITIONS: tuple[Expr, ...] = (
+    And((Var("h1"),)),
+    Or((Var("h1"), Var("h2"))),
+)
+STRUCTURAL_OOD_CONDITION: Expr = Or((And((Var("h1"),)), And((Var("h2"), Not(Var("h1"))))))
+
 
 def _tag(episodes: list[Episode], condition: str) -> list[Episode]:
     for ep in episodes:
@@ -94,6 +106,26 @@ def lexical_ood_pool(seed: int, subclass: str, n_items: int) -> list[Episode]:
 def parameter_ood_pool(seed: int, subclass: str, n_items: int, cost_range: tuple[int, int] = PARAMETER_OOD_COST_RANGE) -> list[Episode]:
     assert_disjoint_ranges(IID_COST_RANGE, cost_range)
     return _tag(static_hidden.generate_batch(seed, subclass, n_items, cost_range=cost_range), "parameter")
+
+
+def assert_no_shared_composition(train_conditions: tuple[Expr, ...], ood_conditions: tuple[Expr, ...]) -> None:
+    """Raise if any OOD condition's exact AST (`.signature()`, structural
+    identity -- not logical equivalence, see `rule_expr`'s module
+    docstring) already appears in the training set."""
+    train_sigs = {c.signature() for c in train_conditions}
+    ood_sigs = {c.signature() for c in ood_conditions}
+    shared = train_sigs & ood_sigs
+    if shared:
+        raise ValueError(f"shared rule compositions between train and OOD: {sorted(shared, key=repr)}")
+
+
+def structural_iid_pool(seed: int, n_items: int, condition: Expr = STRUCTURAL_TRAIN_CONDITIONS[0]) -> list[Episode]:
+    return _tag(static_hidden.generate_structural_batch(seed, n_items, condition), "iid")
+
+
+def structural_ood_pool(seed: int, n_items: int, condition: Expr = STRUCTURAL_OOD_CONDITION) -> list[Episode]:
+    assert_no_shared_composition(STRUCTURAL_TRAIN_CONDITIONS, (condition,))
+    return _tag(static_hidden.generate_structural_batch(seed, n_items, condition), "structural")
 
 
 def distractor_ood_pool(

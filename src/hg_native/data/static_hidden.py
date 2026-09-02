@@ -34,6 +34,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any
 
+from .rule_expr import Expr, render
 from .schema import Episode, rng_for
 
 SUBCLASSES = (
@@ -330,3 +331,91 @@ def render_text(episode: Episode, surface_form: str = "canonical") -> str:
         lines.append("MAKE YOUR CHOICE.")
         return "\n".join(lines)
     raise ValueError(f"unknown surface_form {surface_form!r}; expected 'canonical' or 'lexical_ood'")
+
+
+# --- structural OOD (M1 kickoff section 6.2) --------------------------------
+#
+# `_decide`/`_RULES` above (the 6 named subclasses) are untouched by
+# everything below -- this is a separate, additive code path so nothing
+# already relied on can regress. `_decide`'s fixed AND-only conjunction
+# only covers one composition shape; `generate_structural_episode`
+# generalizes to an arbitrary `rule_expr.Expr` (AND/OR/NOT) over however
+# many hidden bits the expression actually references.
+
+
+def _condition_key(condition: Expr) -> str:
+    return repr(condition.signature())
+
+
+def generate_structural_episode(seed: int, index: int, condition: Expr, *, cost_range: tuple[int, int] | None = None) -> Episode:
+    """`ACT_B` iff `b_cheaper AND condition.evaluate(bits)`, `bits` covering
+    exactly `condition.free_vars()`.
+
+    Ground truth conservatively declares *every* free var required
+    (`min_grounding_bits = len(free_vars)`, `correct_action` asks the
+    first one) -- the same single-hop-ASK simplification `multi_bit_deficit`
+    already documents (module docstring above): a genuinely
+    short-circuiting grounding cost for an OR-shaped condition (where one
+    bit can sometimes already determine the answer) is a bigger change
+    than this generator's scope. `distortion_profile` still resolves
+    exactly the asked variable and defaults the rest to `NO`
+    (`_resolve_decision`'s pattern), so it stays honest about partial asks.
+    """
+    rule_vars = tuple(sorted(condition.free_vars()))
+    if not rule_vars:
+        raise ValueError("condition must reference at least one free variable")
+    rng = rng_for(seed, "static_hidden_structural", _condition_key(condition), index)
+    cost_low, cost_high = cost_range if cost_range is not None else (COST_LOW, COST_HIGH)
+    a_cost, b_cost = _draw_costs(rng, True, cost_low, cost_high)  # force_b_cheaper=True, matches the deficit subclasses
+    b_cheaper = b_cost < a_cost
+    true_bits = {v: _draw_bit(rng) for v in rule_vars}
+
+    ground_truth_decision = "ACT_B" if (b_cheaper and condition.evaluate(true_bits)) else "ACT_A"
+    minimal_query_set = list(rule_vars)
+    correct_action = f"ASK_{minimal_query_set[0]}"
+
+    def _resolved_decision(asked: str | None) -> str:
+        resolved = dict.fromkeys(rule_vars, DEFAULT_UNKNOWN_BIT)
+        if asked is not None:
+            var = asked.removeprefix("ASK_")
+            if var in resolved:
+                resolved[var] = true_bits[var]
+        return "ACT_B" if (b_cheaper and condition.evaluate(resolved)) else "ACT_A"
+
+    available_actions = ["ACT_A", "ACT_B"] + [f"ASK_{v}" for v in rule_vars]
+    distortion_profile: dict[str, float] = {}
+    for action in available_actions:
+        if action in ("ACT_A", "ACT_B"):
+            distortion_profile[action] = 0.0 if action == ground_truth_decision else 1.0
+        else:
+            distortion_profile[action] = 0.0 if _resolved_decision(action) == ground_truth_decision else 1.0
+
+    visible_state: dict[str, Any] = {"A.cost": a_cost, "B.cost": b_cost}
+    hidden_state = {v: "UNKNOWN" for v in rule_vars}
+    full_state = {**visible_state, **true_bits}
+    condition_text = render(condition)
+
+    return Episode(
+        episode_id=f"static_hidden-structural-{_condition_key(condition)}-{seed}-{index}",
+        family="static_hidden",
+        visible_state=visible_state,
+        hidden_state=hidden_state,
+        full_state=full_state,
+        available_actions=available_actions,
+        correct_action=correct_action,
+        distortion_profile=distortion_profile,
+        needs_grounding=True,
+        min_grounding_bits=float(len(rule_vars)),
+        minimal_query_set=minimal_query_set,
+        metadata={
+            "subclass": "structural",
+            "rule_text": f"choose B iff B is cheaper AND {condition_text}; otherwise choose A.",
+            "rule_vars": list(rule_vars),
+            "ground_truth_decision": ground_truth_decision,
+            "condition_signature": condition.signature(),
+        },
+    )
+
+
+def generate_structural_batch(seed: int, n_items: int, condition: Expr, cost_range: tuple[int, int] | None = None) -> list[Episode]:
+    return [generate_structural_episode(seed, i, condition, cost_range=cost_range) for i in range(n_items)]
