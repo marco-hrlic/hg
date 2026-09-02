@@ -19,14 +19,17 @@ import json
 import sys
 from pathlib import Path
 
+import numpy as np
+
 REPO_ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(REPO_ROOT / "src"))
 
 from hg_native.data import accessibility, capability_refinement, ood, resource_allocation, sequential_quotient, static_hidden  # noqa: E402
 from hg_native.data.tokenizer import BPETokenizer  # noqa: E402
 from hg_native.eval.capability import capability_floor  # noqa: E402
+from hg_native.eval.decision_probe import DECISION_PROBE_FEATURE_NAMES, decision_probe_features, fit_decision_probe  # noqa: E402
 from hg_native.eval.grounding import grounding_discrimination  # noqa: E402
-from hg_native.eval.latents import extract_latents  # noqa: E402
+from hg_native.eval.latents import extract_hidden_states, extract_latents  # noqa: E402
 from hg_native.eval.ood_report import condition_matrix, rho_ood  # noqa: E402
 from hg_native.eval.predict import predict  # noqa: E402
 from hg_native.eval.query_efficiency import query_efficiency  # noqa: E402
@@ -39,6 +42,7 @@ from hg_native.model.config import HGNativeConfig  # noqa: E402
 from hg_native.model.hg_model import build_model  # noqa: E402
 from hg_native.training.batch import ByteTokenizer  # noqa: E402
 from hg_native.training.checkpoint import load_checkpoint  # noqa: E402
+from hg_native.training.targets import decision_target  # noqa: E402
 
 
 def held_out_episode_set(seed: int, n_per_family: int) -> list:
@@ -202,6 +206,41 @@ def main() -> None:
                 "query_efficiency": query_efficiency(structural_ood_eps, structural_ood_preds.distortion_hat),
             },
         }
+
+    if len(static_hidden_eps) >= 20:
+        # M1 kickoff section 12: the stronger vanilla control -- a linear
+        # probe on the raw trunk hidden state (extract_hidden_states works
+        # for either variant, reading out["h"] *before* any HG-specific
+        # latent projection, so this is directly comparable across
+        # baseline and HG checkpoints, unlike N4/N0 which need the HG
+        # latent). Reported for both variants, not just baseline: the
+        # interesting comparison is H_t^LM,raw's own decision-probe
+        # strength on each.
+        hidden = extract_hidden_states(model, tokenizer, static_hidden_eps, max_seq_len=args.max_seq_len, device=device)
+        rng = np.random.default_rng(args.seed)
+        perm = rng.permutation(len(static_hidden_eps))
+        n_fit = int(0.7 * len(perm))
+        fit_idx, eval_idx = perm[:n_fit], perm[n_fit:]
+        fit_eps = [static_hidden_eps[i] for i in fit_idx]
+        eval_eps = [static_hidden_eps[i] for i in eval_idx]
+        try:
+            probe = fit_decision_probe(hidden[fit_idx], fit_eps, seed=args.seed)
+            eval_features = decision_probe_features(probe, hidden[eval_idx])
+            eval_decisions = [decision_target(ep) for ep in eval_eps]
+            defined_mask = np.array([defined for _, defined in eval_decisions])
+            eval_labels = np.array([label for label, defined in eval_decisions if defined])
+            eval_pred = (probe.predict_proba(hidden[eval_idx][defined_mask]) > 0.5).astype(float)
+            metrics["M1_vanilla_decision_probe_control"] = {
+                "n_fit": len(fit_idx),
+                "n_eval": int(defined_mask.sum()),
+                "accuracy": float((eval_pred == eval_labels).mean()) if len(eval_labels) else float("nan"),
+                "feature_means": dict(zip(DECISION_PROBE_FEATURE_NAMES, np.asarray(eval_features).mean(axis=0).tolist())),
+            }
+        except ValueError as exc:
+            # Too few defined-decision examples in this particular
+            # held-out draw (e.g. a very small --n-per-family) -- report
+            # the gap explicitly rather than crashing the whole eval run.
+            metrics["M1_vanilla_decision_probe_control"] = {"error": str(exc)}
 
     metrics = _json_safe(metrics)
     output_path = Path(args.output) if args.output else Path(args.checkpoint).parent.parent / "eval" / "metrics.json"
