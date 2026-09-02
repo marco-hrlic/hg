@@ -1,16 +1,24 @@
-"""M1 kickoff section 6 OOD split machinery -- Family A only (lexical,
-parameter, distractor-density). Structural OOD and other families are
-follow-up slices, see hg_native/data/ood.py's module docstring."""
+"""M1 kickoff section 6 OOD split machinery -- Family A (lexical, parameter,
+distractor-density) and Family B (parameter only). Structural OOD, other
+families, and lexical/distractor-density for Family B are follow-up slices
+(or, for Family B's lexical/distractor axes, a deliberate non-fit -- see
+hg_native/data/ood.py's module docstring)."""
 
 from __future__ import annotations
 
 import pytest
 
-from hg_native.data import static_hidden
+from hg_native.data import accessibility, static_hidden
 from hg_native.data.ood import (
+    ACCESSIBILITY_IID_ADJ_RANGE,
+    ACCESSIBILITY_IID_BASE_RANGE,
+    ACCESSIBILITY_PARAMETER_OOD_ADJ_RANGE,
+    ACCESSIBILITY_PARAMETER_OOD_BASE_RANGE,
     DISTRACTOR_OOD_RANGE,
     IID_COST_RANGE,
     PARAMETER_OOD_COST_RANGE,
+    accessibility_iid_pool,
+    accessibility_parameter_ood_pool,
     assert_disjoint_ranges,
     assert_no_shared_lexical_templates,
     distractor_ood_pool,
@@ -171,5 +179,60 @@ def test_distractor_ood_pool_spans_the_declared_range_and_tags_metadata():
 
 def test_iid_pool_tags_condition_metadata():
     episodes = iid_pool(seed=0, subclass="no_deficit", n_items=5)
+    assert len(episodes) == 5
+    assert all(ep.metadata["ood_condition"] == "iid" for ep in episodes)
+
+
+# --- Family B (accessibility): parameter OOD only -----------------------------
+
+
+def test_accessibility_parameter_ood_default_range_matches_pre_slice_behavior():
+    ep_default = accessibility.generate_episode(0, "canonical_compact", 0)
+    ep_explicit_iid = accessibility.generate_episode(
+        0, "canonical_compact", 0, base_range=ACCESSIBILITY_IID_BASE_RANGE, adj_range=ACCESSIBILITY_IID_ADJ_RANGE
+    )
+    assert ep_default.visible_state == ep_explicit_iid.visible_state
+
+
+def test_accessibility_parameter_ood_components_within_new_bounds_and_outside_iid_bounds():
+    episodes = accessibility.generate_batch(
+        0, "canonical_compact", 50, base_range=ACCESSIBILITY_PARAMETER_OOD_BASE_RANGE, adj_range=ACCESSIBILITY_PARAMETER_OOD_ADJ_RANGE
+    )
+    base_lo, base_hi = ACCESSIBILITY_PARAMETER_OOD_BASE_RANGE
+    adj_lo, adj_hi = ACCESSIBILITY_PARAMETER_OOD_ADJ_RANGE
+    iid_base_lo, iid_base_hi = ACCESSIBILITY_IID_BASE_RANGE
+    iid_adj_lo, iid_adj_hi = ACCESSIBILITY_IID_ADJ_RANGE
+    for ep in episodes:
+        for prefix in ("A", "B"):
+            base = ep.visible_state[f"{prefix}.base"]
+            adj = ep.visible_state[f"{prefix}.adj"]
+            assert base_lo <= base <= base_hi
+            assert not (iid_base_lo <= base <= iid_base_hi)
+            assert adj_lo <= adj <= adj_hi
+            assert not (iid_adj_lo <= adj <= iid_adj_hi)
+
+
+def test_accessibility_parameter_ood_decision_rule_unaffected_by_range():
+    for ep in accessibility.generate_batch(
+        0, "canonical_compact", 30, base_range=ACCESSIBILITY_PARAMETER_OOD_BASE_RANGE, adj_range=ACCESSIBILITY_PARAMETER_OOD_ADJ_RANGE
+    ):
+        expected = "ACT_B" if ep.visible_state["B.cost"] < ep.visible_state["A.cost"] else "ACT_A"
+        assert ep.metadata["ground_truth_decision"] == expected
+        assert ep.correct_action == expected  # canonical_compact is ACCESSIBLE: no THINK needed
+
+
+def test_accessibility_parameter_ood_pool_validates_disjointness_and_tags_metadata():
+    episodes = accessibility_parameter_ood_pool(seed=0, subclass="canonical_compact", n_items=5)
+    assert len(episodes) == 5
+    assert all(ep.metadata["ood_condition"] == "parameter" for ep in episodes)
+
+
+def test_accessibility_parameter_ood_pool_rejects_an_overlapping_range():
+    with pytest.raises(ValueError):
+        accessibility_parameter_ood_pool(seed=0, subclass="canonical_compact", n_items=5, base_range=(30, 60))
+
+
+def test_accessibility_iid_pool_tags_condition_metadata():
+    episodes = accessibility_iid_pool(seed=0, subclass="canonical_compact", n_items=5)
     assert len(episodes) == 5
     assert all(ep.metadata["ood_condition"] == "iid" for ep in episodes)

@@ -63,13 +63,15 @@ def _apply(op: str, base: int, adj: int) -> int:
     return base + adj if op == "+" else base - adj
 
 
-def _draw_components(rng) -> _Components:
+def _draw_components(rng, base_range: tuple[int, int], adj_range: tuple[int, int]) -> _Components:
+    base_low, base_high = base_range
+    adj_low, adj_high = adj_range
     while True:
-        a_base = int(rng.integers(BASE_LOW, BASE_HIGH + 1))
-        a_adj = int(rng.integers(ADJ_LOW, ADJ_HIGH + 1))
+        a_base = int(rng.integers(base_low, base_high + 1))
+        a_adj = int(rng.integers(adj_low, adj_high + 1))
         a_op = "+" if int(rng.integers(0, 2)) == 1 else "-"
-        b_base = int(rng.integers(BASE_LOW, BASE_HIGH + 1))
-        b_adj = int(rng.integers(ADJ_LOW, ADJ_HIGH + 1))
+        b_base = int(rng.integers(base_low, base_high + 1))
+        b_adj = int(rng.integers(adj_low, adj_high + 1))
         b_op = "+" if int(rng.integers(0, 2)) == 1 else "-"
         a_cost = _apply(a_op, a_base, a_adj)
         b_cost = _apply(b_op, b_base, b_adj)
@@ -77,8 +79,22 @@ def _draw_components(rng) -> _Components:
             return _Components(a_base, a_adj, a_op, b_base, b_adj, b_op)
 
 
-def generate_episode(seed: int, subclass: str, index: int) -> Episode:
-    """Generate one deterministic episode of `subclass` (same seed+index+subclass -> identical episode)."""
+def generate_episode(
+    seed: int,
+    subclass: str,
+    index: int,
+    *,
+    base_range: tuple[int, int] | None = None,
+    adj_range: tuple[int, int] | None = None,
+) -> Episode:
+    """Generate one deterministic episode of `subclass` (same seed+index+subclass -> identical episode).
+
+    `base_range`/`adj_range` default to `None`, reproducing exactly today's
+    `(BASE_LOW, BASE_HIGH)`/`(ADJ_LOW, ADJ_HIGH)` -- an OOD pool (M1 kickoff
+    section 6.3 parameter OOD; see `hg_native.data.ood`) passes an explicit
+    override instead. `ground_truth_decision` is a plain cheaper-cost
+    comparison, unaffected by which range the components were drawn from.
+    """
     if subclass not in SUBCLASSES:
         raise ValueError(f"unknown accessibility subclass {subclass!r}; expected one of {SUBCLASSES}")
     # Keyed by (seed, index) only, *not* subclass: spec section 5.2 requires
@@ -86,7 +102,9 @@ def generate_episode(seed: int, subclass: str, index: int) -> Episode:
     # same (seed, index) must draw identical components across all 8
     # subclasses -- only `render_text`'s presentation may differ.
     rng = rng_for(seed, "accessibility", index)
-    c = _draw_components(rng)
+    resolved_base_range = base_range if base_range is not None else (BASE_LOW, BASE_HIGH)
+    resolved_adj_range = adj_range if adj_range is not None else (ADJ_LOW, ADJ_HIGH)
+    c = _draw_components(rng, resolved_base_range, resolved_adj_range)
     a_cost = _apply(c.a_op, c.a_base, c.a_adj)
     b_cost = _apply(c.b_op, c.b_base, c.b_adj)
     ground_truth_decision = "ACT_B" if b_cost < a_cost else "ACT_A"
@@ -138,8 +156,17 @@ def generate_episode(seed: int, subclass: str, index: int) -> Episode:
     )
 
 
-def generate_batch(seed: int, subclass: str, n_items: int) -> list[Episode]:
-    return [generate_episode(seed, subclass, i) for i in range(n_items)]
+def generate_batch(
+    seed: int,
+    subclass: str,
+    n_items: int,
+    *,
+    base_range: tuple[int, int] | None = None,
+    adj_range: tuple[int, int] | None = None,
+) -> list[Episode]:
+    return [
+        generate_episode(seed, subclass, i, base_range=base_range, adj_range=adj_range) for i in range(n_items)
+    ]
 
 
 def _render(subclass: str, components: _Components) -> str:

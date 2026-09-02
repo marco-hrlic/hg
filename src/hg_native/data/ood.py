@@ -10,20 +10,44 @@ convention.
 
 Structural OOD (kickoff section 6.2) is deliberately not covered here -- it
 needs a rule-composition DSL `static_hidden._decide` doesn't have (fixed
-AND-only conjunction) -- and neither is any family besides A. Both are
-follow-up slices.
+AND-only conjunction). Family B (`accessibility.py`) only gets parameter
+OOD (section 6.3), not lexical or distractor-density -- see the note above
+`ACCESSIBILITY_IID_BASE_RANGE` below for why those two don't transfer
+cleanly to that family. Families C/D and structural OOD for any family
+are follow-up slices.
 """
 
 from __future__ import annotations
 
 from collections import Counter
 
-from hg_native.data import static_hidden
+from hg_native.data import accessibility, static_hidden
 from hg_native.data.schema import Episode, rng_for
 
 IID_COST_RANGE = (static_hidden.COST_LOW, static_hidden.COST_HIGH)
 PARAMETER_OOD_COST_RANGE = (100, 199)
 DISTRACTOR_OOD_RANGE = (10, 30)  # kickoff section 6.4's own example band
+
+# Family B (accessibility.py) gets parameter OOD only. Its 8 subclasses
+# already render genuinely different *information layouts* (the family's
+# actual purpose), not different *vocabulary* for the same content the way
+# kickoff section 6.1's "Route A costs..." vs. "Option red incurs..."
+# example intends -- several subclasses share literal template lines
+# (`f"A.base = {c.a_base}"` appears verbatim in `reordered_form`,
+# `irrelevant_constraints_block`, `redundant_restatement`, and
+# `misleading_distractor_scaffold`), and `BASE_LOW..BASE_HIGH` (10-50) is
+# small enough that `assert_no_shared_lexical_templates`'s recurrence
+# heuristic would flag ordinary numeric coincidence as "leakage" rather
+# than real template reuse. Forcing a lexical-OOD split onto this family's
+# subclass axis would misrepresent section 6.1 and risk a flaky test, so
+# it's skipped rather than shoehorned in. Distractor-density doesn't apply
+# either: Family B's state is fixed at exactly 2 components, with no
+# "irrelevant visible variable count" axis the way `static_hidden`'s
+# decorative distractors or Family C/D's `u`/`n` have.
+ACCESSIBILITY_IID_BASE_RANGE = (accessibility.BASE_LOW, accessibility.BASE_HIGH)
+ACCESSIBILITY_IID_ADJ_RANGE = (accessibility.ADJ_LOW, accessibility.ADJ_HIGH)
+ACCESSIBILITY_PARAMETER_OOD_BASE_RANGE = (100, 200)
+ACCESSIBILITY_PARAMETER_OOD_ADJ_RANGE = (50, 100)
 
 
 def _tag(episodes: list[Episode], condition: str) -> list[Episode]:
@@ -66,6 +90,23 @@ def distractor_ood_pool(
         n_distractor_visible = int(count_rng.integers(lo, hi + 1))
         episodes.append(static_hidden.generate_episode(seed, subclass, i, n_distractor_visible=n_distractor_visible))
     return _tag(episodes, "distractor")
+
+
+def accessibility_iid_pool(seed: int, subclass: str, n_items: int) -> list[Episode]:
+    return _tag(accessibility.generate_batch(seed, subclass, n_items), "iid")
+
+
+def accessibility_parameter_ood_pool(
+    seed: int,
+    subclass: str,
+    n_items: int,
+    base_range: tuple[int, int] = ACCESSIBILITY_PARAMETER_OOD_BASE_RANGE,
+    adj_range: tuple[int, int] = ACCESSIBILITY_PARAMETER_OOD_ADJ_RANGE,
+) -> list[Episode]:
+    assert_disjoint_ranges(ACCESSIBILITY_IID_BASE_RANGE, base_range)
+    assert_disjoint_ranges(ACCESSIBILITY_IID_ADJ_RANGE, adj_range)
+    episodes = accessibility.generate_batch(seed, subclass, n_items, base_range=base_range, adj_range=adj_range)
+    return _tag(episodes, "parameter")
 
 
 def assert_no_shared_lexical_templates(
