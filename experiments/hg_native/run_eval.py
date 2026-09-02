@@ -1,9 +1,21 @@
 #!/usr/bin/env python3
-"""Evaluate a trained HG-variant checkpoint against spec section 10's metrics:
-gates N0-N5 plus query efficiency (section 10.4, Family A only -- see
+"""Evaluate a trained checkpoint against spec section 10's metrics: gates
+N0-N5 plus query efficiency (section 10.4, Family A only -- see
 `eval/query_efficiency.py`'s docstring for why M0's structured action space
 narrows soundness/minimality from the spec's original free-form-query
-framing).
+framing), plus every M1 kickoff block (OOD condition matrix, capability
+refinement, structural OOD, Family E transfer, vanilla decision-probe
+control).
+
+Most of this needs `config.variant == "hg"` -- `predict()` itself requires
+HG heads (`eval/predict.py`'s own hard requirement: a baseline model has no
+decision/distortion/route/info-deficit/accessibility heads to read), so
+N0-N5 and every M1 block built on top of `predict()`'s output are HG-only
+and silently skipped for a baseline checkpoint. The one thing that *does*
+run for a baseline checkpoint is `M1_vanilla_decision_probe_control`
+(kickoff section 12): it reads the raw trunk hidden state via
+`extract_hidden_states`, which works for either variant by design --
+that's the whole point of it as a baseline-vs-HG comparison.
 
 Usage:
     python experiments/hg_native/run_eval.py \
@@ -109,7 +121,6 @@ def main() -> None:
         )
 
     episodes = held_out_episode_set(args.seed, args.n_per_family)
-    preds = predict(model, tokenizer, episodes, max_seq_len=args.max_seq_len, device=device)
 
     static_hidden_eps = [ep for ep in episodes if ep.family == "static_hidden"]
     static_hidden_idx = [i for i, ep in enumerate(episodes) if ep.family == "static_hidden"]
@@ -117,25 +128,33 @@ def main() -> None:
     accessibility_idx = [i for i, ep in enumerate(episodes) if ep.family == "accessibility"]
     sequential_eps = [ep for ep in episodes if ep.family == "sequential_quotient"]
     sequential_idx = [i for i, ep in enumerate(episodes) if ep.family == "sequential_quotient"]
-
-    metrics = {
-        "n_episodes": len(episodes),
-        "N0_capability_floor": capability_floor(episodes, preds.decision_pred),
-        "N1_grounding_discrimination": grounding_discrimination(static_hidden_eps, preds.info_deficit_prob[static_hidden_idx]),
-        "N2_routing": {
-            "route_accuracy_lambda_1_1": route_accuracy(episodes, preds.route_pred),
-            "route_value_report": route_value_report(episodes, preds.route_pred, lambda_grid=[(0.1, 1.0), (1.0, 1.0), (10.0, 1.0)]),
-        },
-        "query_efficiency_static_hidden": query_efficiency(static_hidden_eps, preds.distortion_hat[static_hidden_idx]),
-        "N3_accessibility_discrimination": accessibility_discrimination(accessibility_eps, preds.accessibility_prob[accessibility_idx]),
-        "N3_route_rates_on_zero_deficit": route_rates_on_zero_deficit(accessibility_eps, preds.route_pred[accessibility_idx]),
-        "N5_grounding_reuse": {
-            "repeated_ask_rate": repeated_ask_rate(sequential_eps, preds.route_pred[sequential_idx]),
-            "future_external_bits": future_external_bits(sequential_eps, preds.route_pred[sequential_idx]),
-        },
-    }
-
     capability_refinement_eps = [ep for ep in episodes if ep.family == "capability_refinement"]
+
+    metrics: dict = {"n_episodes": len(episodes)}
+
+    if config.variant == "hg":
+        # predict() itself requires HG heads (eval/predict.py's own hard
+        # requirement) -- N0-N5 and every block built on preds below are
+        # HG-only. A baseline checkpoint gets none of this; see this
+        # script's module docstring for what it *does* get.
+        preds = predict(model, tokenizer, episodes, max_seq_len=args.max_seq_len, device=device)
+        metrics.update(
+            {
+                "N0_capability_floor": capability_floor(episodes, preds.decision_pred),
+                "N1_grounding_discrimination": grounding_discrimination(static_hidden_eps, preds.info_deficit_prob[static_hidden_idx]),
+                "N2_routing": {
+                    "route_accuracy_lambda_1_1": route_accuracy(episodes, preds.route_pred),
+                    "route_value_report": route_value_report(episodes, preds.route_pred, lambda_grid=[(0.1, 1.0), (1.0, 1.0), (10.0, 1.0)]),
+                },
+                "query_efficiency_static_hidden": query_efficiency(static_hidden_eps, preds.distortion_hat[static_hidden_idx]),
+                "N3_accessibility_discrimination": accessibility_discrimination(accessibility_eps, preds.accessibility_prob[accessibility_idx]),
+                "N3_route_rates_on_zero_deficit": route_rates_on_zero_deficit(accessibility_eps, preds.route_pred[accessibility_idx]),
+                "N5_grounding_reuse": {
+                    "repeated_ask_rate": repeated_ask_rate(sequential_eps, preds.route_pred[sequential_idx]),
+                    "future_external_bits": future_external_bits(sequential_eps, preds.route_pred[sequential_idx]),
+                },
+            }
+        )
 
     if len(sequential_eps) >= 10 and config.variant == "hg":
         latents = extract_latents(model, tokenizer, sequential_eps, max_seq_len=args.max_seq_len, device=device)
