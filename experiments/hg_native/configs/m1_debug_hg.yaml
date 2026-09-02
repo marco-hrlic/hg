@@ -1,0 +1,21 @@
+# Same trunk as m1_debug_baseline.yaml, but with the M1 (not M0) HG latent
+# shape -- hg_latent_dim=96, hidden_dim=384 (M0's debug configs used 64/256)
+# -- so a debug-scale smoke run actually exercises M1's latent dimensions,
+# not M0's. vocab_size=16000 matches the real trained tokenizer
+# (experiments/hg_native/tokenizer/hg_native_bpe.json); use with --tokenizer.
+variant: hg
+seed: 0
+transformer:
+  vocab_size: 16000
+  d_model: 384
+  n_layers: 6
+  n_heads: 8
+  n_kv_heads: 4
+  d_ff: 1024
+  max_seq_len: 128
+hg_latent:
+  hidden_dim: 384
+  latent_dim: 96
+  layers: 2
+heads:
+  n_actions: 7

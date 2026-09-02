@@ -1,0 +1,14 @@
+# Same trunk shape as debug_hg_bpe.yaml (vocab_size=16000, real trained
+# tokenizer) -- the debug-scale baseline half of the M1-shaped smoke pair,
+# stage M1-0 (kickoff section 16: "train a small debug model" before any
+# real 150M run).
+variant: baseline
+seed: 0
+transformer:
+  vocab_size: 16000
+  d_model: 384
+  n_layers: 6
+  n_heads: 8
+  n_kv_heads: 4
+  d_ff: 1024
+  max_seq_len: 128

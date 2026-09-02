@@ -257,3 +257,45 @@ def test_recommended_config_trunk_size_is_a_known_spec_discrepancy():
     n = estimate_param_count(baseline)
     assert n > 70_000_000
     assert n == 87_804_672
+
+
+def _m1_transformer() -> TransformerConfig:
+    # M1 kickoff section 3's suggested starting architecture verbatim
+    # (experiments/hg_native/configs/m1_{baseline,hg}.yaml).
+    return TransformerConfig(vocab_size=16000, d_model=896, n_layers=16, n_heads=14, n_kv_heads=7, d_ff=2560, max_seq_len=512)
+
+
+def test_m1_config_lands_in_the_130_to_170m_band_with_no_retuning():
+    # Unlike M0's own literal recommended config (~87.8M against a stated
+    # "~50-70M" target, see the discrepancy test above), the M1 kickoff's
+    # suggested architecture lands where it should as-is -- pinned here so a
+    # future edit to either the architecture or the counter formula gets
+    # caught immediately rather than surfacing as a surprise ~150M run.
+    trunk = _m1_transformer()
+    baseline = HGNativeConfig(variant="baseline", transformer=trunk)
+    hg = HGNativeConfig(
+        variant="hg",
+        transformer=trunk,
+        hg_latent=HGLatentConfig(hidden_dim=384, latent_dim=96, layers=2),
+        heads=HeadsConfig(n_actions=7),
+    )
+    n_baseline = estimate_param_count(baseline)
+    n_hg = estimate_param_count(hg)
+    assert n_baseline == 163_001_216
+    assert n_hg == 163_549_278
+    assert 130_000_000 <= n_baseline <= 170_000_000
+    assert 130_000_000 <= n_hg <= 170_000_000
+
+
+def test_m1_config_overhead_within_spec_target():
+    trunk = _m1_transformer()
+    baseline = HGNativeConfig(variant="baseline", transformer=trunk)
+    hg = HGNativeConfig(
+        variant="hg",
+        transformer=trunk,
+        hg_latent=HGLatentConfig(hidden_dim=384, latent_dim=96, layers=2),
+        heads=HeadsConfig(n_actions=7),
+    )
+    overhead = param_count_overhead(hg, baseline)
+    assert 0 <= overhead < 0.05
+    assert overhead < 0.01  # measured ~0.34% -- comfortably inside the stricter <2% preference too

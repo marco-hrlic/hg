@@ -16,7 +16,7 @@ ALL_FAMILY_EPISODES = [
     gen_static_hidden(0, "no_deficit", 0),
     gen_accessibility(0, "reordered_form", 0),
     generate_trajectory(0, 0, 3)[0],
-    generate_pair(0, 0)["z_C1"],
+    generate_pair(0, 0)["z_t0_C1"],
 ]
 
 

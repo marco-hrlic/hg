@@ -30,6 +30,7 @@ from hg_native.eval.latents import extract_latents  # noqa: E402
 from hg_native.eval.predict import predict  # noqa: E402
 from hg_native.eval.query_efficiency import query_efficiency  # noqa: E402
 from hg_native.eval.quotient_probes import quotient_recovery  # noqa: E402
+from hg_native.eval.refinement import refinement_report  # noqa: E402
 from hg_native.eval.reuse import future_external_bits, repeated_ask_rate  # noqa: E402
 from hg_native.eval.routing import route_accuracy, route_value_report  # noqa: E402
 from hg_native.eval.scaffolding import accessibility_discrimination, route_rates_on_zero_deficit  # noqa: E402
@@ -113,9 +114,21 @@ def main() -> None:
         },
     }
 
-    if len(sequential_eps) >= 10:
+    capability_refinement_eps = [ep for ep in episodes if ep.family == "capability_refinement"]
+
+    if len(sequential_eps) >= 10 and config.variant == "hg":
         latents = extract_latents(model, tokenizer, sequential_eps, max_seq_len=args.max_seq_len, device=device)
         metrics["N4_quotient_recovery"] = quotient_recovery(latents, sequential_eps, seed=args.seed)
+
+    if len(capability_refinement_eps) >= 10 and config.variant == "hg":
+        # M1 kickoff section 8.3/16 Stage M1-0: verify Delta_refine's
+        # plumbing on a real trained checkpoint (still a smoke check at
+        # debug scale, not a scientific claim -- see the kickoff's own
+        # "no scientific claims" instruction for this stage).
+        cap_latents = extract_latents(model, tokenizer, capability_refinement_eps, max_seq_len=args.max_seq_len, device=device)
+        metrics["M1_capability_refinement"] = refinement_report(
+            cap_latents, capability_refinement_eps, refining_var="v", control_var="u", seed=args.seed
+        )
 
     metrics = _json_safe(metrics)
     output_path = Path(args.output) if args.output else Path(args.checkpoint).parent.parent / "eval" / "metrics.json"

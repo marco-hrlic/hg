@@ -1,0 +1,15 @@
+# M1 kickoff section 3's suggested starting architecture, verified via
+# hg_native.model.config.estimate_param_count to land in the "~150M" /
+# 130-170M target band without retuning (unlike M0's own literal
+# recommended config, which needed adjustment -- see
+# [[hg-native-m0-project-state]]): baseline 163,001,216 params.
+variant: baseline
+seed: 0
+transformer:
+  vocab_size: 16000
+  d_model: 896
+  n_layers: 16
+  n_heads: 14
+  n_kv_heads: 7
+  d_ff: 2560
+  max_seq_len: 512

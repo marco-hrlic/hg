@@ -37,16 +37,17 @@ def test_decision_target_static_hidden_one_bit_deficit_uses_ground_truth_not_ask
 
 def test_decision_target_capability_refinement_c2_z_is_undefined():
     pair = generate_pair(0, 0)
-    assert pair["z_C2"].correct_action == "ACT_C"
-    label, defined = decision_target(pair["z_C2"])
+    assert pair["z_t0_C2"].correct_action == "ACT_C"
+    label, defined = decision_target(pair["z_t0_C2"])
     assert defined is False
 
 
 def test_decision_target_capability_refinement_c1_is_defined():
     pair = generate_pair(0, 0)
-    label, defined = decision_target(pair["z_C1"])
+    ep = pair["z_t0_C1"]
+    label, defined = decision_target(ep)
     assert defined is True
-    assert DEFAULT_DECISION_LABELS[label] == "A"
+    assert DEFAULT_DECISION_LABELS[label] == ep.correct_action[-1]  # "ACT_A"/"ACT_B" -> "A"/"B"
 
 
 # --- distortion_target ---------------------------------------------------

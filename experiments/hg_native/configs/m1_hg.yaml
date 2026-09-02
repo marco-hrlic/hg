@@ -1,0 +1,22 @@
+# Same trunk as m1_baseline.yaml (matched-comparison requirement, spec
+# section 2.1) plus the M1 kickoff section 4 HG latent (hg_latent_dim=96,
+# hidden_dim=384 -- up from M0's 64/256). HG overhead over the baseline
+# trunk is ~0.34% at this size (163,549,278 vs 163,001,216 params),
+# well inside the <5% (even <2%) budget with no retuning needed.
+# Values pinned in test_hg_native_config.py.
+variant: hg
+seed: 0
+transformer:
+  vocab_size: 16000
+  d_model: 896
+  n_layers: 16
+  n_heads: 14
+  n_kv_heads: 7
+  d_ff: 2560
+  max_seq_len: 512
+hg_latent:
+  hidden_dim: 384
+  latent_dim: 96
+  layers: 2
+heads:
+  n_actions: 7

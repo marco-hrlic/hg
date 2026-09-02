@@ -19,7 +19,7 @@ def _mixed_episodes(n=20):
 
 def test_business_decision_labels_excludes_family_d_third_action():
     pair = generate_pair(0, 0)
-    labels, mask = business_decision_labels_and_mask([pair["z_C1"], pair["z_C2"]])
+    labels, mask = business_decision_labels_and_mask([pair["z_t0_C1"], pair["z_t0_C2"]])
     assert bool(mask[0]) is True  # z_C1's decision is ACT_A -> defined
     assert bool(mask[1]) is False  # z_C2's decision is ACT_C -> undefined
 
@@ -52,7 +52,7 @@ def test_capability_floor_balanced_accuracy_handles_class_imbalance():
 
 def test_capability_floor_empty_when_no_defined_labels():
     pair = generate_pair(0, 0)
-    result = capability_floor([pair["z_C2"]], [0])
+    result = capability_floor([pair["z_t0_C2"]], [0])
     assert result["n"] == 0
 
 

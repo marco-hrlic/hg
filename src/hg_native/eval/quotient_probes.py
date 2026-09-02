@@ -80,23 +80,51 @@ def probe_accuracy(
     return {"accuracy": float((pred == y_test).mean()), "n_train": len(train_idx), "n_test": len(test_idx)}
 
 
-def _variable_label(episode: Episode, var: str) -> float:
-    value = episode.true_quotient_state[var] if var in RELEVANT_VARS else episode.metadata[var]
+def variable_label(episode: Episode, var: str) -> float:
+    """Look up `var`'s ground-truth value for one episode and encode it as
+    a 0/1 float for probing.
+
+    Looked up by dict membership, not by `var`'s presence in
+    `RELEVANT_VARS`/`IRRELEVANT_VARS` -- families other than sequential_quotient
+    (e.g. capability_refinement's M1 rework, which puts every one of
+    `r/f/u/n/v` in `true_quotient_state`) may not split relevant/irrelevant
+    across `true_quotient_state`/`metadata` the same way Family C does, so
+    this generalizes to "wherever the value actually is" instead of
+    hardcoding the split. Public (no leading underscore) so other eval
+    modules -- e.g. a capability-refinement Delta_refine metric -- can reuse
+    it instead of re-deriving the YES/NO -> 1.0/0.0 encoding.
+    """
+    if episode.true_quotient_state is not None and var in episode.true_quotient_state:
+        value = episode.true_quotient_state[var]
+    else:
+        value = episode.metadata[var]
     return 1.0 if value == "YES" else 0.0
 
 
-def quotient_recovery(latents, episodes: list[Episode], **probe_kwargs) -> dict:
+def quotient_recovery(
+    latents,
+    episodes: list[Episode],
+    relevant_vars: tuple[str, ...] = RELEVANT_VARS,
+    irrelevant_vars: tuple[str, ...] = IRRELEVANT_VARS,
+    **probe_kwargs,
+) -> dict:
     """Probe accuracy for every quotient/irrelevant variable, plus
     `Q_sel = mean(ProbeAcc_relevant) - mean(ProbeAcc_irrelevant)` (spec
-    section 10.6's optional selectivity score)."""
+    section 10.6's optional selectivity score).
+
+    `relevant_vars`/`irrelevant_vars` default to Family C's `(r, f, h)` /
+    `(u, n)` so every existing call site is unaffected; pass explicit tuples
+    to run this against another family (e.g. capability_refinement's
+    `r/f/v` vs. `u/n`, kickoff M1 section 10).
+    """
     if len(latents) != len(episodes):
         raise ValueError(f"{len(latents)} latents but {len(episodes)} episodes")
     probes = {}
-    for var in RELEVANT_VARS + IRRELEVANT_VARS:
-        labels = np.array([_variable_label(ep, var) for ep in episodes])
+    for var in relevant_vars + irrelevant_vars:
+        labels = np.array([variable_label(ep, var) for ep in episodes])
         probes[var] = probe_accuracy(latents, labels, **probe_kwargs)
 
-    relevant = [probes[v]["accuracy"] for v in RELEVANT_VARS if not math.isnan(probes[v]["accuracy"])]
-    irrelevant = [probes[v]["accuracy"] for v in IRRELEVANT_VARS if not math.isnan(probes[v]["accuracy"])]
+    relevant = [probes[v]["accuracy"] for v in relevant_vars if not math.isnan(probes[v]["accuracy"])]
+    irrelevant = [probes[v]["accuracy"] for v in irrelevant_vars if not math.isnan(probes[v]["accuracy"])]
     q_sel = float(np.mean(relevant) - np.mean(irrelevant)) if relevant and irrelevant else float("nan")
     return {"probes": probes, "q_sel": q_sel}
