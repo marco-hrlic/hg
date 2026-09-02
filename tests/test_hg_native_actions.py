@@ -28,6 +28,9 @@ def test_route_of():
     assert route_of("THINK") == "THINK"
     assert route_of("ASK_h1") == "ASK"
     assert route_of("ASK_h") == "ASK"
+    assert route_of("ALLOCATE_A") == "ACT"
+    assert route_of("ALLOCATE_B") == "ACT"
+    assert route_of("ASK_capacity") == "ASK"
 
 
 def test_route_of_rejects_unknown():
