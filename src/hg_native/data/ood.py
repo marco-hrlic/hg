@@ -1,5 +1,4 @@
-"""OOD split machinery -- M1 kickoff section 6 (lexical/parameter/
-distractor-density), Family A only in this slice.
+"""OOD split machinery -- M1 kickoff section 6.
 
 Mirrors the sibling `hg.diversity` package's philosophy (`hg/diversity/splits.py`'s
 assertive `SplitPlan.validate()`, `hg/diversity/overlap.py`'s "measure it,
@@ -8,20 +7,28 @@ sentence templates between train and lexical-OOD, an overlapping numeric
 range) is checked structurally and raises, rather than trusted by
 convention.
 
-Structural OOD (kickoff section 6.2) is deliberately not covered here -- it
-needs a rule-composition DSL `static_hidden._decide` doesn't have (fixed
-AND-only conjunction). Family B (`accessibility.py`) only gets parameter
-OOD (section 6.3), not lexical or distractor-density -- see the note above
-`ACCESSIBILITY_IID_BASE_RANGE` below for why those two don't transfer
-cleanly to that family. Families C/D and structural OOD for any family
-are follow-up slices.
+Coverage so far, one family at a time (see each family's section below for
+what's built and what's deliberately not, and why):
+
+- **Family A** (`static_hidden.py`): all 3 built axes -- lexical (6.1),
+  parameter (6.3), distractor-density (6.4).
+- **Family B** (`accessibility.py`): parameter (6.3) only.
+- **Family C** (`sequential_quotient.py`): parameter (6.3) only.
+- **Family D** (`capability_refinement.py`): none yet -- no numeric-range
+  knob exists at all (`Z=(r,f,u,n,v)` is all booleans), so none of the 3
+  built axes apply without a structural change to that generator, which is
+  a follow-up slice, not a fit to force here.
+
+Structural OOD (kickoff section 6.2) is deliberately not covered for any
+family -- it needs a rule-composition DSL none of the generators have
+(`static_hidden._decide` is a fixed AND-only conjunction).
 """
 
 from __future__ import annotations
 
 from collections import Counter
 
-from hg_native.data import accessibility, static_hidden
+from hg_native.data import accessibility, sequential_quotient, static_hidden
 from hg_native.data.schema import Episode, rng_for
 
 IID_COST_RANGE = (static_hidden.COST_LOW, static_hidden.COST_HIGH)
@@ -48,6 +55,22 @@ ACCESSIBILITY_IID_BASE_RANGE = (accessibility.BASE_LOW, accessibility.BASE_HIGH)
 ACCESSIBILITY_IID_ADJ_RANGE = (accessibility.ADJ_LOW, accessibility.ADJ_HIGH)
 ACCESSIBILITY_PARAMETER_OOD_BASE_RANGE = (100, 200)
 ACCESSIBILITY_PARAMETER_OOD_ADJ_RANGE = (50, 100)
+
+# Family C (sequential_quotient.py) gets parameter OOD only, via
+# `generate_trajectory`'s existing `n_steps` argument -- unlike Family A/B,
+# no new parameter needed to be added to the generator itself, and these
+# ranges are the kickoff's own section 6.3 worked example verbatim
+# ("training path lengths: 2-6, test path lengths: 7-10"). The IID range
+# also covers `training/dataset.py`'s existing `n_steps_c=4` default.
+# Lexical OOD doesn't fit: `render_text` returns
+# `metadata["prompt_text"]`, built once at generation time specifically to
+# carry the growing-context `ANSWER=h:<value>` disclosure the Family-C
+# memory-gap fix depends on (see that module's docstring) -- swapping in
+# alternate wording there risks breaking that disclosure mechanism, a
+# materially bigger change than a template swap. Distractor-density
+# doesn't fit either: `u`/`n` are each a single field, not a count.
+SEQUENTIAL_QUOTIENT_IID_N_STEPS_RANGE = (2, 6)
+SEQUENTIAL_QUOTIENT_PARAMETER_OOD_N_STEPS_RANGE = (7, 10)
 
 
 def _tag(episodes: list[Episode], condition: str) -> list[Episode]:
@@ -106,6 +129,39 @@ def accessibility_parameter_ood_pool(
     assert_disjoint_ranges(ACCESSIBILITY_IID_BASE_RANGE, base_range)
     assert_disjoint_ranges(ACCESSIBILITY_IID_ADJ_RANGE, adj_range)
     episodes = accessibility.generate_batch(seed, subclass, n_items, base_range=base_range, adj_range=adj_range)
+    return _tag(episodes, "parameter")
+
+
+def _draw_n_steps(seed: int, index: int, n_steps_range: tuple[int, int]) -> int:
+    # Own RNG stream, keyed separately from sequential_quotient's internal
+    # rng_for calls, so the draw doesn't perturb a given (seed, index)'s
+    # own r/f/u/n/h draws -- same convention as static_hidden's
+    # ood_distractor_count stream above.
+    lo, hi = n_steps_range
+    count_rng = rng_for(seed, "ood_n_steps", index)
+    return int(count_rng.integers(lo, hi + 1))
+
+
+def sequential_quotient_iid_pool(
+    seed: int, n_trajectories: int, n_steps_range: tuple[int, int] = SEQUENTIAL_QUOTIENT_IID_N_STEPS_RANGE
+) -> list[Episode]:
+    episodes = []
+    for i in range(n_trajectories):
+        n_steps = _draw_n_steps(seed, i, n_steps_range)
+        episodes += sequential_quotient.generate_trajectory(seed, i, n_steps)
+    return _tag(episodes, "iid")
+
+
+def sequential_quotient_parameter_ood_pool(
+    seed: int,
+    n_trajectories: int,
+    n_steps_range: tuple[int, int] = SEQUENTIAL_QUOTIENT_PARAMETER_OOD_N_STEPS_RANGE,
+) -> list[Episode]:
+    assert_disjoint_ranges(SEQUENTIAL_QUOTIENT_IID_N_STEPS_RANGE, n_steps_range)
+    episodes = []
+    for i in range(n_trajectories):
+        n_steps = _draw_n_steps(seed, i, n_steps_range)
+        episodes += sequential_quotient.generate_trajectory(seed, i, n_steps)
     return _tag(episodes, "parameter")
 
 

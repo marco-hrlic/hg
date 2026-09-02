@@ -1,14 +1,14 @@
 """M1 kickoff section 6 OOD split machinery -- Family A (lexical, parameter,
-distractor-density) and Family B (parameter only). Structural OOD, other
-families, and lexical/distractor-density for Family B are follow-up slices
-(or, for Family B's lexical/distractor axes, a deliberate non-fit -- see
-hg_native/data/ood.py's module docstring)."""
+distractor-density), Family B and Family C (parameter only). Structural
+OOD, Family D, and the other axes for Families B/C are follow-up slices or
+(for Family B/C's lexical/distractor axes) a deliberate non-fit -- see
+hg_native/data/ood.py's module docstring."""
 
 from __future__ import annotations
 
 import pytest
 
-from hg_native.data import accessibility, static_hidden
+from hg_native.data import accessibility, sequential_quotient, static_hidden
 from hg_native.data.ood import (
     ACCESSIBILITY_IID_ADJ_RANGE,
     ACCESSIBILITY_IID_BASE_RANGE,
@@ -17,6 +17,8 @@ from hg_native.data.ood import (
     DISTRACTOR_OOD_RANGE,
     IID_COST_RANGE,
     PARAMETER_OOD_COST_RANGE,
+    SEQUENTIAL_QUOTIENT_IID_N_STEPS_RANGE,
+    SEQUENTIAL_QUOTIENT_PARAMETER_OOD_N_STEPS_RANGE,
     accessibility_iid_pool,
     accessibility_parameter_ood_pool,
     assert_disjoint_ranges,
@@ -25,6 +27,8 @@ from hg_native.data.ood import (
     iid_pool,
     lexical_ood_pool,
     parameter_ood_pool,
+    sequential_quotient_iid_pool,
+    sequential_quotient_parameter_ood_pool,
 )
 
 SUBCLASSES_WITH_A_RULE = ("one_bit_deficit", "no_deficit")  # a couple representative subclasses
@@ -236,3 +240,69 @@ def test_accessibility_iid_pool_tags_condition_metadata():
     episodes = accessibility_iid_pool(seed=0, subclass="canonical_compact", n_items=5)
     assert len(episodes) == 5
     assert all(ep.metadata["ood_condition"] == "iid" for ep in episodes)
+
+
+# --- Family C (sequential_quotient): parameter OOD only -----------------------
+
+
+def test_sequential_quotient_iid_and_ood_ranges_are_disjoint():
+    assert_disjoint_ranges(SEQUENTIAL_QUOTIENT_IID_N_STEPS_RANGE, SEQUENTIAL_QUOTIENT_PARAMETER_OOD_N_STEPS_RANGE)  # must not raise
+
+
+def test_sequential_quotient_parameter_ood_pool_rejects_an_overlapping_range():
+    with pytest.raises(ValueError):
+        sequential_quotient_parameter_ood_pool(seed=0, n_trajectories=5, n_steps_range=(5, 8))
+
+
+def test_sequential_quotient_iid_pool_n_steps_stays_within_declared_range_and_varies():
+    episodes = sequential_quotient_iid_pool(seed=0, n_trajectories=60)
+    lo, hi = SEQUENTIAL_QUOTIENT_IID_N_STEPS_RANGE
+    trajectory_lengths = {}
+    for ep in episodes:
+        trajectory_lengths.setdefault(ep.sequential_state_id, 0)
+        trajectory_lengths[ep.sequential_state_id] += 1
+    assert set(trajectory_lengths.values()) <= set(range(lo, hi + 1))
+    assert len(set(trajectory_lengths.values())) > 1  # actually varies
+    assert all(ep.metadata["ood_condition"] == "iid" for ep in episodes)
+
+
+def test_sequential_quotient_parameter_ood_pool_n_steps_stays_within_declared_range_and_varies():
+    episodes = sequential_quotient_parameter_ood_pool(seed=0, n_trajectories=60)
+    lo, hi = SEQUENTIAL_QUOTIENT_PARAMETER_OOD_N_STEPS_RANGE
+    trajectory_lengths = {}
+    for ep in episodes:
+        trajectory_lengths.setdefault(ep.sequential_state_id, 0)
+        trajectory_lengths[ep.sequential_state_id] += 1
+    assert set(trajectory_lengths.values()) <= set(range(lo, hi + 1))
+    assert len(set(trajectory_lengths.values())) > 1
+    assert all(ep.metadata["ood_condition"] == "parameter" for ep in episodes)
+
+
+def test_sequential_quotient_ood_pool_ground_truth_invariants_hold_regardless_of_length():
+    episodes = sequential_quotient_parameter_ood_pool(seed=0, n_trajectories=20)
+    by_trajectory: dict[str, list] = {}
+    for ep in episodes:
+        by_trajectory.setdefault(ep.sequential_state_id, []).append(ep)
+    for steps in by_trajectory.values():
+        steps.sort(key=lambda ep: ep.metadata["t"])
+        assert steps[0].needs_grounding is True
+        assert all(not ep.needs_grounding for ep in steps[1:])
+        for prev, nxt in zip(steps, steps[1:]):
+            assert nxt.true_quotient_state["r"] == prev.true_quotient_state["f"]
+
+
+def test_sequential_quotient_iid_pool_matches_direct_generation_for_a_fixed_n_steps():
+    # The pool's own n_steps draw is a separate RNG stream (see
+    # ood._draw_n_steps) from sequential_quotient's internal draws, so for
+    # whatever n_steps a given index actually gets, the trajectory itself
+    # must be byte-identical to calling generate_trajectory directly.
+    episodes = sequential_quotient_iid_pool(seed=0, n_trajectories=5)
+    by_trajectory: dict[str, list] = {}
+    for ep in episodes:
+        by_trajectory.setdefault(ep.sequential_state_id, []).append(ep)
+    for sid, steps in by_trajectory.items():
+        index = int(sid.rsplit("-", 1)[-1])
+        direct = sequential_quotient.generate_trajectory(0, index, len(steps))
+        assert [ep.true_quotient_state for ep in sorted(steps, key=lambda e: e.metadata["t"])] == [
+            ep.true_quotient_state for ep in direct
+        ]
