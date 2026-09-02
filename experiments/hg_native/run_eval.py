@@ -22,14 +22,15 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(REPO_ROOT / "src"))
 
-from hg_native.data import accessibility, capability_refinement, sequential_quotient, static_hidden  # noqa: E402
+from hg_native.data import accessibility, capability_refinement, ood, sequential_quotient, static_hidden  # noqa: E402
 from hg_native.data.tokenizer import BPETokenizer  # noqa: E402
 from hg_native.eval.capability import capability_floor  # noqa: E402
 from hg_native.eval.grounding import grounding_discrimination  # noqa: E402
 from hg_native.eval.latents import extract_latents  # noqa: E402
+from hg_native.eval.ood_report import condition_matrix, rho_ood  # noqa: E402
 from hg_native.eval.predict import predict  # noqa: E402
 from hg_native.eval.query_efficiency import query_efficiency  # noqa: E402
-from hg_native.eval.quotient_probes import quotient_recovery  # noqa: E402
+from hg_native.eval.quotient_probes import IRRELEVANT_VARS, RELEVANT_VARS, quotient_recovery  # noqa: E402
 from hg_native.eval.refinement import refinement_report  # noqa: E402
 from hg_native.eval.reuse import future_external_bits, repeated_ask_rate  # noqa: E402
 from hg_native.eval.routing import route_accuracy, route_value_report  # noqa: E402
@@ -71,6 +72,14 @@ def main() -> None:
         help="Path to the BPE tokenizer.json the checkpoint was trained with. Must match --config's vocab_size. Default: ByteTokenizer.",
     )
     parser.add_argument("--device", default=None, help="torch device. Default: cuda if available, else cpu.")
+    parser.add_argument(
+        "--ood-n-trajectories", type=int, default=100,
+        help="Trajectory count per M1 OOD condition pool (kickoff section 6.3, Family C parameter OOD).",
+    )
+    parser.add_argument(
+        "--ood-n-boot", type=int, default=500,
+        help="Bootstrap draws for the M1 OOD condition matrix's Q_sel CI (smaller than condition_matrix's own 2000 default -- a plumbing check, not a confirmatory run).",
+    )
     args = parser.parse_args()
 
     import torch
@@ -119,6 +128,29 @@ def main() -> None:
     if len(sequential_eps) >= 10 and config.variant == "hg":
         latents = extract_latents(model, tokenizer, sequential_eps, max_seq_len=args.max_seq_len, device=device)
         metrics["N4_quotient_recovery"] = quotient_recovery(latents, sequential_eps, seed=args.seed)
+
+    if args.ood_n_trajectories >= 10 and config.variant == "hg":
+        # M1 kickoff section 10/11/20: IID vs. parameter-OOD Q_sel for
+        # Family C -- the only family with both true_quotient_state and an
+        # OOD pool builder so far (hg_native.data.ood, slice 4). A distinct
+        # seed for the OOD pool, matching held_out_episode_set's own
+        # seed-isolation convention above.
+        iid_episodes = ood.sequential_quotient_iid_pool(args.seed, args.ood_n_trajectories)
+        ood_episodes = ood.sequential_quotient_parameter_ood_pool(args.seed + 500_000, args.ood_n_trajectories)
+        iid_latents = extract_latents(model, tokenizer, iid_episodes, max_seq_len=args.max_seq_len, device=device)
+        ood_latents = extract_latents(model, tokenizer, ood_episodes, max_seq_len=args.max_seq_len, device=device)
+        matrix = condition_matrix(
+            {"iid": iid_latents, "parameter": ood_latents},
+            {"iid": iid_episodes, "parameter": ood_episodes},
+            relevant_vars=RELEVANT_VARS,
+            irrelevant_vars=IRRELEVANT_VARS,
+            n_boot=args.ood_n_boot,
+            seed=args.seed,
+        )
+        for condition in matrix:
+            matrix[condition]["q_sel_ci"] = matrix[condition]["q_sel_ci"].to_dict()  # BootstrapResult -> JSON-safe dict
+        matrix["rho_ood_parameter"] = rho_ood(matrix, "parameter")
+        metrics["M1_ood_condition_matrix"] = matrix
 
     if len(capability_refinement_eps) >= 10 and config.variant == "hg":
         # M1 kickoff section 8.3/16 Stage M1-0: verify Delta_refine's
