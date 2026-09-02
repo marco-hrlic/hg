@@ -11,10 +11,23 @@ eval function (`quotient_probes.quotient_recovery`'s default
 `RELEVANT_VARS`/`IRRELEVANT_VARS`, `ood_report.condition_matrix`) works on
 Family E's episodes with zero var-name overrides -- rendered under
 scheduling vocabulary (job urgency/capacity/site/weather instead of
-abstract r/f/u/n/h) and a distinct action vocabulary (`ALLOCATE_A`/
-`ALLOCATE_B`/`ASK_capacity` instead of `ACT_A`/`ACT_B`/`ASK_h`), so a probe
-genuinely has to generalize past the training families' exact wording and
-action names, not just their internal variable structure.
+abstract r/f/u/n/h), so a probe genuinely has to generalize past the
+training families' exact *wording*.
+
+Action names are **deliberately kept identical** to Family C's
+(`ACT_A`/`ACT_B`/`ASK_h`), not renamed the way the visible-state vocabulary
+is: `training.actions.ACTIONS` is the distortion/transition heads' fixed
+output width (`HeadsConfig.n_actions`, kept in lockstep with it by every
+HG config, see `training/actions.py`'s own docstring), and
+`serialize_episode`/`targets.distortion_target` compute those targets
+*unconditionally* for any episode passed through them -- including via
+`extract_latents`, the eval-only path this generator is meant for, not
+just training. A first attempt at renamed actions (`ALLOCATE_A`/
+`ALLOCATE_B`/`ASK_capacity`) broke exactly that path (`action_id` raising
+on an out-of-vocabulary name), caught by actually running a real eval
+smoke test, not by a unit test -- reusing the existing action names
+sidesteps the coupling entirely, since `quotient_recovery` (what this
+generator is actually evaluated with) never looks at actions at all.
 
 This is a disclosed simplification, not hidden: kickoff section 7's own
 framing is "test whether HG heads generalize to a new semantic domain
@@ -53,9 +66,9 @@ def _render_turn(t: int, visible_state: dict[str, Any], capacity_display: str) -
 def generate_trajectory(seed: int, index: int, n_steps: int) -> list[Episode]:
     """Generate one deterministic length-`n_steps` trajectory -- same
     determinism/prefix guarantees as `sequential_quotient.generate_trajectory`,
-    same growing-context disclosure mechanism (turn 0's `ASK_capacity` is
-    followed by a disclosed `ANSWER=capacity:<value>` line kept in every
-    later turn's context)."""
+    same growing-context disclosure mechanism (turn 0's `ASK_h` is followed
+    by a disclosed `ANSWER=capacity:<value>` line kept in every later
+    turn's context)."""
     if n_steps < 1:
         raise ValueError(f"n_steps must be >= 1, got {n_steps}")
     rng = rng_for(seed, "resource_allocation", index)
@@ -71,10 +84,10 @@ def generate_trajectory(seed: int, index: int, n_steps: int) -> list[Episode]:
         f = _draw_bit(rng)  # future_urgent: becomes r_{t+1}
         n = _draw_bit(rng)  # weather: irrelevant noise, fresh each step
 
-        ground_truth_decision = "ALLOCATE_B" if (r == "YES" and h == "YES") else "ALLOCATE_A"
+        ground_truth_decision = "ACT_B" if (r == "YES" and h == "YES") else "ACT_A"
         grounded = t > 0
         needs_grounding = not grounded
-        correct_action = "ASK_capacity" if needs_grounding else ground_truth_decision
+        correct_action = "ASK_h" if needs_grounding else ground_truth_decision
 
         visible_state: dict[str, Any] = {"urgent": r, "future_urgent": f, "priority_site": u, "weather": n}
         hidden_state = {"capacity": "UNKNOWN"}
@@ -83,11 +96,11 @@ def generate_trajectory(seed: int, index: int, n_steps: int) -> list[Episode]:
         turn_line = _render_turn(t, visible_state, "UNKNOWN")
         prompt_text = "\n".join([*history_lines, turn_line, "ALLOCATE OR REQUEST CAPACITY INFO."])
 
-        available_actions = ["ALLOCATE_A", "ALLOCATE_B", "ASK_capacity"]
+        available_actions = ["ACT_A", "ACT_B", "ASK_h"]
         distortion_profile = {
-            "ALLOCATE_A": 0.0 if ground_truth_decision == "ALLOCATE_A" else 1.0,
-            "ALLOCATE_B": 0.0 if ground_truth_decision == "ALLOCATE_B" else 1.0,
-            "ASK_capacity": 0.0,
+            "ACT_A": 0.0 if ground_truth_decision == "ACT_A" else 1.0,
+            "ACT_B": 0.0 if ground_truth_decision == "ACT_B" else 1.0,
+            "ASK_h": 0.0,
         }
 
         episodes.append(
@@ -121,7 +134,7 @@ def generate_trajectory(seed: int, index: int, n_steps: int) -> list[Episode]:
         )
 
         outcome = f"{turn_line} -> ACTION={correct_action}"
-        if correct_action == "ASK_capacity":
+        if correct_action == "ASK_h":
             outcome += f" ANSWER=capacity:{h}"
         history_lines.append(outcome)
 

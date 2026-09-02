@@ -75,7 +75,7 @@ def test_only_t0_needs_grounding():
         assert traj[0].needs_grounding is True
         assert traj[0].min_grounding_bits == 1.0
         assert traj[0].minimal_query_set == ["capacity"]
-        assert traj[0].correct_action == "ASK_capacity"
+        assert traj[0].correct_action == "ASK_h"
         assert traj[0].metadata["grounded"] is False
         for ep in traj[1:]:
             assert ep.needs_grounding is False
@@ -88,7 +88,7 @@ def test_correct_action_after_grounding_matches_true_decision():
     for traj in _trajectories():
         for ep in traj[1:]:
             urgent, capacity = ep.true_quotient_state["r"], ep.true_quotient_state["h"]
-            expected = "ALLOCATE_B" if (urgent == "YES" and capacity == "YES") else "ALLOCATE_A"
+            expected = "ACT_B" if (urgent == "YES" and capacity == "YES") else "ACT_A"
             assert ep.metadata["ground_truth_decision"] == expected
             assert ep.correct_action == expected
 
@@ -96,11 +96,11 @@ def test_correct_action_after_grounding_matches_true_decision():
 def test_distortion_profile_every_step():
     for traj in _trajectories():
         for ep in traj:
-            assert set(ep.distortion_profile) == {"ALLOCATE_A", "ALLOCATE_B", "ASK_capacity"}
-            assert ep.distortion_profile["ASK_capacity"] == 0.0
+            assert set(ep.distortion_profile) == {"ACT_A", "ACT_B", "ASK_h"}
+            assert ep.distortion_profile["ASK_h"] == 0.0
             gt = ep.metadata["ground_truth_decision"]
             assert ep.distortion_profile[gt] == 0.0
-            other = "ALLOCATE_A" if gt == "ALLOCATE_B" else "ALLOCATE_B"
+            other = "ACT_A" if gt == "ACT_B" else "ACT_B"
             assert ep.distortion_profile[other] == 1.0
 
 

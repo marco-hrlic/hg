@@ -6,6 +6,7 @@ import pytest
 
 from hg_native.data.accessibility import generate_episode as gen_accessibility
 from hg_native.data.capability_refinement import generate_pair
+from hg_native.data.resource_allocation import generate_trajectory as gen_resource_allocation
 from hg_native.data.sequential_quotient import generate_trajectory
 from hg_native.data.static_hidden import generate_episode as gen_static_hidden
 from hg_native.training.actions import ACTIONS
@@ -17,6 +18,7 @@ ALL_FAMILY_EPISODES = [
     gen_accessibility(0, "reordered_form", 0),
     generate_trajectory(0, 0, 3)[0],
     generate_pair(0, 0)["z_t0_C1"],
+    gen_resource_allocation(0, 0, 3)[0],  # Family E: eval-only renderer registration, see training/batch.py
 ]
 
 

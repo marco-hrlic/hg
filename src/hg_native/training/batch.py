@@ -17,7 +17,7 @@ from __future__ import annotations
 
 from typing import Any, Protocol
 
-from hg_native.data import accessibility, capability_refinement, sequential_quotient, static_hidden
+from hg_native.data import accessibility, capability_refinement, resource_allocation, sequential_quotient, static_hidden
 from hg_native.data.schema import Episode
 
 from . import targets
@@ -48,11 +48,17 @@ class ByteTokenizer:
 
 
 # One render_text per family (spec section 5's worked text-block formats).
+# "resource_allocation" (Family E, M1 kickoff section 7) is registered here
+# purely so `serialize_episode`/`extract_latents` can tokenize it for the
+# zero-shot transfer *eval* -- it is never included in training itself (see
+# that module's docstring), so being renderable here doesn't contradict
+# that.
 _RENDERERS = {
     "static_hidden": static_hidden.render_text,
     "accessibility": accessibility.render_text,
     "sequential_quotient": sequential_quotient.render_text,
     "capability_refinement": capability_refinement.render_text,
+    "resource_allocation": resource_allocation.render_text,
 }
 
 

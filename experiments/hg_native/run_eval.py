@@ -22,7 +22,7 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(REPO_ROOT / "src"))
 
-from hg_native.data import accessibility, capability_refinement, ood, sequential_quotient, static_hidden  # noqa: E402
+from hg_native.data import accessibility, capability_refinement, ood, resource_allocation, sequential_quotient, static_hidden  # noqa: E402
 from hg_native.data.tokenizer import BPETokenizer  # noqa: E402
 from hg_native.eval.capability import capability_floor  # noqa: E402
 from hg_native.eval.grounding import grounding_discrimination  # noqa: E402
@@ -79,6 +79,14 @@ def main() -> None:
     parser.add_argument(
         "--ood-n-boot", type=int, default=500,
         help="Bootstrap draws for the M1 OOD condition matrix's Q_sel CI (smaller than condition_matrix's own 2000 default -- a plumbing check, not a confirmatory run).",
+    )
+    parser.add_argument(
+        "--family-e-n-trajectories", type=int, default=100,
+        help="Trajectory count for the Family E (resource_allocation) zero-shot cross-family transfer check (kickoff section 7).",
+    )
+    parser.add_argument(
+        "--structural-n-items", type=int, default=100,
+        help="Episode count per structural-OOD condition pool (kickoff section 6.2, Family A).",
     )
     args = parser.parse_args()
 
@@ -161,6 +169,39 @@ def main() -> None:
         metrics["M1_capability_refinement"] = refinement_report(
             cap_latents, capability_refinement_eps, refining_var="v", control_var="u", seed=args.seed
         )
+
+    if args.family_e_n_trajectories >= 10 and config.variant == "hg":
+        # M1 kickoff section 7: zero-shot cross-family transfer. Family E
+        # is never included in training (resource_allocation.py's module
+        # docstring) -- a fresh disjoint seed here isn't required for
+        # split-isolation the way it is for the other blocks (there's no
+        # training exposure to be isolated *from*), but using one anyway
+        # keeps this block's provenance consistent with every other pool
+        # built in this script.
+        family_e_trajectories = resource_allocation.generate_batch(args.seed + 1_000_000, args.family_e_n_trajectories, n_steps=5)
+        family_e_eps = [ep for traj in family_e_trajectories for ep in traj]
+        family_e_latents = extract_latents(model, tokenizer, family_e_eps, max_seq_len=args.max_seq_len, device=device)
+        metrics["M1_family_e_zero_shot_transfer"] = quotient_recovery(family_e_latents, family_e_eps, seed=args.seed)
+
+    if args.structural_n_items >= 10 and config.variant == "hg":
+        # M1 kickoff section 6.2: structural OOD, Family A. capability_floor/
+        # query_efficiency (not quotient_recovery -- static_hidden has no
+        # true_quotient_state) computed separately for the IID-composition
+        # and structural-OOD-composition pools.
+        structural_iid_eps = ood.structural_iid_pool(args.seed, args.structural_n_items)
+        structural_ood_eps = ood.structural_ood_pool(args.seed + 500_000, args.structural_n_items)
+        structural_iid_preds = predict(model, tokenizer, structural_iid_eps, max_seq_len=args.max_seq_len, device=device)
+        structural_ood_preds = predict(model, tokenizer, structural_ood_eps, max_seq_len=args.max_seq_len, device=device)
+        metrics["M1_structural_ood"] = {
+            "iid": {
+                "N0_capability_floor": capability_floor(structural_iid_eps, structural_iid_preds.decision_pred),
+                "query_efficiency": query_efficiency(structural_iid_eps, structural_iid_preds.distortion_hat),
+            },
+            "structural": {
+                "N0_capability_floor": capability_floor(structural_ood_eps, structural_ood_preds.decision_pred),
+                "query_efficiency": query_efficiency(structural_ood_eps, structural_ood_preds.distortion_hat),
+            },
+        }
 
     metrics = _json_safe(metrics)
     output_path = Path(args.output) if args.output else Path(args.checkpoint).parent.parent / "eval" / "metrics.json"

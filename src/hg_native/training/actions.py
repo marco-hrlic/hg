@@ -12,20 +12,18 @@ Not pinned by the spec (section 3.3 only fixes the *route* set
 implementation choice, flagged per [[hg-theory-implementation-split]].
 
 `resource_allocation.py` (Family E, M1 kickoff section 7) deliberately
-uses its own action names (`ALLOCATE_A`/`ALLOCATE_B`/`ASK_capacity`) that
-are **not** added here: `len(ACTIONS)` is the distortion/transition
-heads' fixed output width (`HeadsConfig.n_actions`, kept in lockstep with
-it by every HG config), so growing this tuple is a breaking change to
-every existing trained checkpoint and config unless `n_actions` is bumped
-everywhere in the same commit -- confirmed the hard way (extending this
-tuple to include Family E's actions broke `distortion_target`'s output
-shape against every HG config's `n_actions: 7`, caught by the training
-smoke tests on the Spark). Since Family E is never trained against these
-heads at all (see that module's docstring -- it's a zero-shot,
-eval-only probe), its action names have no reason to be in this shared
-vocabulary; if a future slice trains on Family E, `ACTIONS` and every HG
-config's `heads.n_actions` must grow together, deliberately, not as a
-side effect of adding a new generator.
+**reuses** `ACT_A`/`ACT_B`/`ASK_h` verbatim rather than inventing its own
+action names: `len(ACTIONS)` is the distortion/transition heads' fixed
+output width (`HeadsConfig.n_actions`, kept in lockstep with it by every
+HG config), and `serialize_episode`/`targets.distortion_target` compute
+those targets *unconditionally* for any episode passed through them --
+including via `extract_latents`, the eval-only path Family E is actually
+used through. A first attempt at renamed Family-E action names broke
+exactly that path (`action_id` raising on an out-of-vocabulary name, and
+before that, growing this tuple to include them broke every existing HG
+config's `distortion_target`-vs-model-output shape) -- both caught by
+actually running a real training/eval smoke test on the Spark, not by a
+unit test. See `resource_allocation.py`'s own docstring for the full story.
 """
 
 from __future__ import annotations
@@ -57,12 +55,8 @@ def action_name(idx: int) -> str:
 
 
 def route_of(action: str) -> str:
-    """Which of the spec section 3.3 routes {ACT, THINK, ASK} an action belongs to.
-
-    `ALLOCATE_*` (Family E, `resource_allocation.py`) maps to `ACT`, same
-    as `ACT_*` -- both are "do the business decision now" actions, just
-    named differently per generator (this file's own module docstring)."""
-    if action.startswith("ACT_") or action.startswith("ALLOCATE_"):
+    """Which of the spec section 3.3 routes {ACT, THINK, ASK} an action belongs to."""
+    if action.startswith("ACT_"):
         return "ACT"
     if action == "THINK":
         return "THINK"
