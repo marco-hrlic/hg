@@ -292,7 +292,53 @@ def rules_v11_section(v1: dict[str, Any], v11: dict[str, Any]) -> list[str]:
       "precision: toolshare 0.80 vs 0.67, ledgerlite 1.00 vs 0.67. D still has higher recall on ledgerlite (1.00 vs "
       "0.75) and costs about a tenth of the tokens.")
     A("* **Recommendation.** Adopt v1.1 as an opt-in rule set rather than a new default until it has been checked "
-      "against independent labels and the v0.2 corpus. Address the contract-test gap separately.")
+      "against independent labels and the v0.2 corpus. Section 13 addresses the contract-test gap.")
+    A("")
+    return L
+
+
+def rules_v12_section(v1: dict[str, Any], v11: dict[str, Any], v12: dict[str, Any]) -> list[str]:
+    preds_p = HERE / "out" / "live_rules_v1.2" / "predictions.json"
+    rp = (json.loads(preds_p.read_text()) if preds_p.exists() else {}).get("replay", {})
+    n_live = sum(len(v) for v in rp.get("live_calls", {}).values())
+    L: list[str] = []
+    A = L.append
+    A("## 13. Engine rule set v1.2: implementation change → contract tests")
+    A("")
+    A("**Change.** v1.2 is v1.1 plus one rule. When a component's code changes, the tests that verify a contract "
+      "the component is constrained by get `rerun_test`. A code change means the component is the changed node, or "
+      "one of its artifacts changed. The contract itself gets no obligation. A `review_implementation` request that a "
+      "requirement edit sends to a component does not trigger it: a first version did, which added wording-only false "
+      "alarms on toolshare, so it was narrowed before this run.")
+    A("")
+    A(f"**Method.** Replayed from the v1.1 run (`--replay-from out/live_rules_v1.1`), whose traces include G2's "
+      f"challenge calls: {rp.get('replayed_calls', '—')} calls replayed, {n_live} live. Every arm, G2 included, is an "
+      "exact rule-only comparison against v1.1. Against v1, D/G0/G1/H are exact, and G2 carries the fresh challenge "
+      "sample described in section 12.")
+    A("")
+    A("| Project | Arm | Recall v1 → v1.1 → v1.2 | Precision v1 → v1.1 → v1.2 | Critical missed (v1.2) | Missed (v1.2) | E4 false alarms v1.1 → v1.2 |")
+    A("|---|---|---|---|---|---|---|")
+    for proj in sorted(v12["projects"]):
+        for arm in ARMS:
+            i = [m["projects"][proj]["arms"][arm]["impact_E5"] for m in (v1, v11, v12)]
+            n = [(m["projects"][proj]["arms"][arm].get("negative_E4") or {}) for m in (v11, v12)]
+            e4 = f"{n[0]['false_alarms']} → {n[1]['false_alarms']}" if all(x.get("measured") for x in n) else "—"
+            A(f"| {proj} | {arm} | {' → '.join(f(x.get('recall')) for x in i)} | "
+              f"{' → '.join(f(x.get('precision')) for x in i)} | {f(i[2].get('critical_missed'))} | {f(i[2].get('fn'))} | {e4} |")
+    A("")
+    A("### 13.1 Reading")
+    A("")
+    A("* **The contract-test gap is closed.** On ledgerlite, `TEST-MONEY-FORMAT` is now reached in every graph arm, "
+      "and the maintained graphs (G1, G2) and H reach recall 1.00 at precision 1.00. G0 rises from 0.25 to 0.50 but "
+      "still misses both critical targets, because it never learned the code-only dependency.")
+    A("* **No side effects in this material.** Toolshare and every E4 count are unchanged from v1.1. The toolshare "
+      "probe is a contract change, which already reached its tests under v1.")
+    A("* **Against arm D.** With v1.2, the maintained graph G1 matches D's recall in both projects (1.00) with higher "
+      "precision: ledgerlite 1.00 vs 0.67, toolshare 0.80 vs 0.67. The remaining graph-side false positive is v1.1's "
+      "`REQ-PLACE-HOLD` on toolshare. D is still about ten times cheaper in tokens.")
+    A("* **Caveat.** These two rules were designed after seeing exactly these misses, on the same two projects. "
+      "That makes this a fit, not a test. The evidence that they generalise has to come from the v0.2 corpus and "
+      "independently labelled material.")
     A("")
     return L
 
@@ -363,15 +409,21 @@ def main() -> int:
           "it implements, removes the critical ledgerlite miss in every graph arm that has the code-only dependency "
           "(G1/G2/H recall 0.50 → 0.75, precision unchanged). On toolshare it costs precision (1.00 → 0.80, one "
           "unaffected requirement flagged). It is opt-in; v1 remains the default.")
+    if live is not None and (HERE / "out" / "live_rules_v1.2" / "metrics.json").exists():
+        A("* **Engine rule set v1.2 (section 13)** adds test re-runs for the contracts of a component whose code "
+          "changed. On ledgerlite, the maintained graphs reach recall 1.00 at precision 1.00, and nothing else "
+          "changes. With v1.2, G1 matches the document-only arm D on recall in both projects at higher precision, and "
+          "D stays about ten times cheaper. Both rules were fitted to these misses; they still need an out-of-sample "
+          "check.")
     if live is None:
         A("* **Recommendation:** run the frozen live protocol (`--mode live`) with a configured model before building "
           "anything else; separately, decide whether `check_contract` on an implementing component should reach the "
           "requirement it implements (a versioned engine change with its own before/after).")
     else:
         A("* **Recommendation:** have someone other than the fixture author label the E5 impacts and repeat the live run "
-          "(more than one sample) before drawing conclusions. Evaluate rule set v1.1 on the v0.2 corpus and decide "
-          "whether to make it the default. Close the remaining gap, where an implementation change to a provider does "
-          "not reach the tests of its contract (`TEST-MONEY-FORMAT`), as a separate versioned rule.")
+          "(more than one sample) before drawing conclusions. Evaluate rule sets v1.1 and v1.2 on the v0.2 corpus, which "
+          "they were not fitted to, before making either the default. Investigate v1.1's precision cost: it flags every "
+          "requirement of a flagged consumer.")
     A("")
     A("## 1. Baseline verification (M0)")
     A("")
@@ -530,6 +582,10 @@ def main() -> int:
         if v11_p.exists():
             A("")
             L += rules_v11_section(live, json.loads(v11_p.read_text()))
+            v12_p = HERE / "out" / "live_rules_v1.2" / "metrics.json"
+            if v12_p.exists():
+                A("")
+                L += rules_v12_section(live, json.loads(v11_p.read_text()), json.loads(v12_p.read_text()))
     A("")
     (HERE / "RESULTS.md").write_text("\n".join(L))
     print(f"wrote {HERE / 'RESULTS.md'}")

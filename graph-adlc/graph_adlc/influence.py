@@ -53,7 +53,10 @@ N(component)           then verifies T(test) -> K
 
 Under v1 an implementation change to a component never reaches the tests that verify the contracts it is
 constrained by (v0.3 ledgerlite TEST-MONEY-FORMAT): those tests are exactly how a contract break is caught.
-The contract itself gets no obligation, because its text did not change.
+The contract itself gets no obligation, because its text did not change. The rule fires only for an actual code
+change: the component is the changed node, or one of its artifacts changed (arrival via realized_by). A
+``review_implementation`` that a requirement edit sends to its component is a review request, not a code change,
+so it does not trigger test re-runs.
 """
 
 from __future__ import annotations
@@ -376,9 +379,17 @@ class InfluenceEngine:
                                       "(terminal until a violation is established)")
                 elif kind == NodeKind.COMPONENT and rel == R.DEPENDS_ON and not outgoing:
                     out += self._cross_provider_boundary(ev, edge, state, other)
-                elif self.rules == "v1.2" and kind == NodeKind.COMPONENT and rel == R.CONSTRAINED_BY and outgoing:
+                elif self.rules == "v1.2" and kind == NodeKind.COMPONENT and rel == R.CONSTRAINED_BY and outgoing \
+                        and self._code_changed(ev):
                     out += self._contract_tests(ev, edge, state, other)
         return out
+
+    def _code_changed(self, ev: Event) -> bool:
+        """The component itself changed, or it was reached from a changed artifact (realized_by)."""
+        if ev.is_origin:
+            return True
+        arrived = self.g.edges.get(ev.path[-1]) if ev.path else None
+        return arrived is not None and arrived[0].relation == R.REALIZED_BY
 
     def _contract_tests(self, ev: Event, c_edge: Edge, c_state: str, contract: str) -> list[Event]:
         """v1.2: implementation change at a component -> tests verifying a contract it is constrained by."""

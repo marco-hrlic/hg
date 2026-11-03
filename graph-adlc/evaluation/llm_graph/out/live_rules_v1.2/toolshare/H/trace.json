@@ -1,0 +1,114 @@
+{
+ "arm": "H",
+ "commits": {
+  "c1": "d1ca69603f4828bb812eba1e72f15c756ade52a4",
+  "c2": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+ },
+ "events": [],
+ "influence_rules": "v1.2",
+ "negative": {
+  "E4": {
+   "engine_semantic_probe": {
+    "aspect": "semantic",
+    "graph_revision": 1,
+    "node_id": "REQ-READY-NOTICE",
+    "pairs": [
+     [
+      "CAP-NOTIFY",
+      "review_spec"
+     ],
+     [
+      "CMP-HOLDS",
+      "check_contract"
+     ],
+     [
+      "CMP-NOTIFY",
+      "review_implementation"
+     ],
+     [
+      "REQ-HOLD-EXPIRY",
+      "check_contract"
+     ],
+     [
+      "REQ-PLACE-HOLD",
+      "check_contract"
+     ]
+    ],
+    "present": true,
+    "provisional": [
+     "CMP-HOLDS",
+     "REQ-HOLD-EXPIRY",
+     "REQ-PLACE-HOLD"
+    ],
+    "pruned": [],
+    "targets": [
+     "CAP-NOTIFY",
+     "CMP-HOLDS",
+     "CMP-NOTIFY",
+     "REQ-HOLD-EXPIRY",
+     "REQ-PLACE-HOLD"
+    ]
+   },
+   "note": "no maintenance loop: the engine has no editorial aspect"
+  }
+ },
+ "prediction": {
+  "E5": {
+   "aspect": "contract",
+   "graph_revision": 1,
+   "node_id": "CON-NOTICE-FORMAT",
+   "pairs": [
+    [
+     "CMP-HOLDS",
+     "check_contract"
+    ],
+    [
+     "CMP-NOTIFY",
+     "check_contract"
+    ],
+    [
+     "CMP-NOTIFY",
+     "review_implementation"
+    ],
+    [
+     "REQ-HOLD-EXPIRY",
+     "check_contract"
+    ],
+    [
+     "REQ-PLACE-HOLD",
+     "check_contract"
+    ],
+    [
+     "REQ-READY-NOTICE",
+     "check_contract"
+    ],
+    [
+     "TEST-NOTICE-FORMAT",
+     "rerun_test"
+    ]
+   ],
+   "present": true,
+   "provisional": [],
+   "pruned": [],
+   "targets": [
+    "CMP-HOLDS",
+    "CMP-NOTIFY",
+    "REQ-HOLD-EXPIRY",
+    "REQ-PLACE-HOLD",
+    "REQ-READY-NOTICE",
+    "TEST-NOTICE-FORMAT"
+   ]
+  }
+ },
+ "probe": {
+  "aspect": "contract",
+  "description": "Notification format contract changes: SMS allowed (160-character bodies) and every message must state the desk opening hours.",
+  "event": "E5",
+  "node_id": "CON-NOTICE-FORMAT"
+ },
+ "project": "toolshare",
+ "replay": {
+  "calls": [],
+  "from": "evaluation/llm_graph/out/live_rules_v1.1"
+ }
+}

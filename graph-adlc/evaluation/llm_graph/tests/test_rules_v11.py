@@ -96,3 +96,13 @@ def test_v12_adds_nothing_to_a_contract_change_and_v1_never_has_the_rule(tmp_pat
     assert ("TEST-NOTICE-FORMAT", "rerun_test") not in v1
     assert ("TEST-NOTICE-FORMAT", "rerun_test") in _pairs(_ref(tmp_path, "toolshare", "v1.2"), "CMP-NOTIFY",
                                                           "implementation")
+
+
+def test_v12_fires_for_code_changes_only_not_for_review_requests_from_a_requirement_edit(tmp_path):
+    # A semantic edit to REQ-READY-NOTICE sends review_implementation to CMP-NOTIFY; that is not a code change.
+    v11 = _pairs(_ref(tmp_path, "toolshare", "v1.1"), "REQ-READY-NOTICE", "semantic")
+    v12 = _pairs(_ref(tmp_path, "toolshare", "v1.2"), "REQ-READY-NOTICE", "semantic")
+    assert set(v12) == set(v11)
+    # ...but a changed source file of CMP-NOTIFY is one.
+    art = _pairs(_ref(tmp_path, "toolshare", "v1.2"), "ART-NOTIFY", "implementation")
+    assert ("TEST-NOTICE-FORMAT", "rerun_test") in art
