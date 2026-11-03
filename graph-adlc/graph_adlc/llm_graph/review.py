@@ -215,6 +215,20 @@ def policy_reviewer(name: str = "policy:conservative-v1") -> Callable[[Proposal,
                 out.append(Decision(o.op_id, "reject", name, "policy: failed validation"))
             else:
                 out.append(Decision(o.op_id, "defer", name, "policy: quarantined; needs a human decision"))
+        # An accepted edge cannot land without its new endpoint node: defer it with the node. (Before this, an
+        # admissible auto-generated `blocks` edge next to a quarantined question node made the review error out.
+        # Inputs that did not error are decided exactly as before.)
+        accepted = {d.op_id for d in out if d.decision == "accept"}
+        new_nodes = {o.payload["node"]["id"]: o.op_id for o in proposal.operations if o.kind == "add_node"}
+        for i, o in enumerate(proposal.operations):
+            if o.kind != "add_edge" or o.op_id not in accepted:
+                continue
+            missing = [new_nodes[e] for e in (o.payload["edge"]["src"], o.payload["edge"]["dst"])
+                       if e in new_nodes and new_nodes[e] not in accepted
+                       and report["ops"][new_nodes[e]]["verdict"] != "duplicate"]
+            if missing:
+                out[i] = Decision(o.op_id, "defer", name,
+                                  f"policy: endpoint op {', '.join(missing)} not accepted; deferred with it")
         return out
 
     return decide

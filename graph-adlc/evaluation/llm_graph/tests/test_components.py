@@ -221,3 +221,20 @@ def test_max_tokens_override_is_explicit_sent_and_recorded(monkeypatch):
         monkeypatch.setenv("GADLC_LLM_MAX_TOKENS", "lots")
         with pytest.raises(LLMNotConfigured):
             client_from_env()
+
+
+def test_policy_defers_edges_whose_new_endpoint_is_not_accepted():
+    # Live run 2 crashed here: admissible auto `blocks` edge, quarantined auto question node (toolshare/G1, P-0004).
+    from types import SimpleNamespace as NS
+
+    from graph_adlc.llm_graph.review import check_decisions, policy_reviewer
+    ops = [NS(op_id="auto-q1", kind="add_node", payload={"node": {"id": "Q-P-0004-C1"}}),
+           NS(op_id="auto-q1-b1", kind="add_edge", payload={"edge": {"src": "Q-P-0004-C1", "dst": "CMP-X"}}),
+           NS(op_id="op-1", kind="add_edge", payload={"edge": {"src": "CMP-X", "dst": "CMP-Y"}})]
+    report = {"ops": {"auto-q1": {"verdict": "quarantined", "findings": []},
+                      "auto-q1-b1": {"verdict": "admissible", "findings": []},
+                      "op-1": {"verdict": "admissible", "findings": []}}}
+    proposal = NS(proposal_id="P-0004", operations=ops)
+    ds = policy_reviewer()(proposal, report)
+    assert [d.decision for d in ds] == ["defer", "defer", "accept"]
+    assert check_decisions(proposal, report, ds) == []
