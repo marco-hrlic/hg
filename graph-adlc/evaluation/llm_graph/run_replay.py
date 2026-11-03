@@ -44,7 +44,7 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--out", default=None, help="output dir (default evaluation/llm_graph/out/<mode>)")
     ap.add_argument("--projects", nargs="*", default=list(PROJECTS))
     ap.add_argument("--arms", nargs="*", default=None, help="subset of arms to run (default: all for the mode)")
-    ap.add_argument("--influence-rules", choices=("v1", "v1.1"), default="v1",
+    ap.add_argument("--influence-rules", choices=("v1", "v1.1", "v1.2"), default="v1",
                     help="engine influence rule set (default v1, the frozen engine); see graph_adlc/influence.py")
     ap.add_argument("--replay-from", default=None,
                     help="live only: a previous live run dir. Its recorded model outputs are reused whenever the prompt "

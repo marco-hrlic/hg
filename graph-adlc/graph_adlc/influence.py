@@ -43,6 +43,17 @@ via depends_on         changed provider)
 Under v1 a consumer's ``check_contract`` is terminal, so a broken consumer never reaches the requirement it
 implements (v0.2 "premature terminal propagation"; v0.3 ledgerlite REQ-CSV-EXPORT). v1.1 takes exactly one more
 hop and stops. It inherits the consumer's provisional and hypothesized flags.
+
+``v1.2`` is v1.1 plus one rule:
+
+=====================  ===============================  ===================================  =========
+implementation at      constrained_by N -> contract K,  rerun_test on T                      yes
+N(component)           then verifies T(test) -> K
+=====================  ===============================  ===================================  =========
+
+Under v1 an implementation change to a component never reaches the tests that verify the contracts it is
+constrained by (v0.3 ledgerlite TEST-MONEY-FORMAT): those tests are exactly how a contract break is caught.
+The contract itself gets no obligation, because its text did not change.
 """
 
 from __future__ import annotations
@@ -65,7 +76,7 @@ from .models import (
 )
 
 R, O, A = Relation, Obligation, Aspect
-RULESETS = ("v1", "v1.1")
+RULESETS = ("v1", "v1.1", "v1.2")  # each later set includes the earlier rules
 DEFAULT_RULES = "v1"
 
 
@@ -205,7 +216,7 @@ class InfluenceEngine:
             if not ev.is_origin:
                 self._record(ev)
             if ev.terminal:
-                if self.rules == "v1.1":
+                if self.rules in ("v1.1", "v1.2"):
                     queue.extend(self._consumer_requirement_reach(ev))
                 continue
             for nxt in self._propagate(ev):
@@ -365,6 +376,23 @@ class InfluenceEngine:
                                       "(terminal until a violation is established)")
                 elif kind == NodeKind.COMPONENT and rel == R.DEPENDS_ON and not outgoing:
                     out += self._cross_provider_boundary(ev, edge, state, other)
+                elif self.rules == "v1.2" and kind == NodeKind.COMPONENT and rel == R.CONSTRAINED_BY and outgoing:
+                    out += self._contract_tests(ev, edge, state, other)
+        return out
+
+    def _contract_tests(self, ev: Event, c_edge: Edge, c_state: str, contract: str) -> list[Event]:
+        """v1.2: implementation change at a component -> tests verifying a contract it is constrained by."""
+        out: list[Event] = []
+        for t_edge, t_state in self.g.incident(contract):
+            if t_edge.relation != R.VERIFIES or t_edge.dst != contract or self.g.kind(t_edge.src) != NodeKind.TEST:
+                continue
+            via = Event(contract, A.CONTRACT, None, ev.origin, ev.op_index, ev.path + (c_edge.id,), True,
+                        ev.hypothesized or c_edge.hypothesized, ev.provisional)
+            states = {c_state, t_state}
+            state = "removed" if "removed" in states else ("added" if "added" in states else "kept")
+            out += self._emit(via, t_edge, state, t_edge.src, A.CONTRACT, O.RERUN_TEST, True,
+                              f"implementation of {ev.node} changed; test verifying its contract {contract} must be "
+                              "re-run (rules v1.2)")
         return out
 
     # ------------------------------------------------------------------

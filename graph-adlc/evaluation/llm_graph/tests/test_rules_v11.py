@@ -9,9 +9,13 @@ from graph_adlc.influence import check_rules
 
 
 def _ref(tmp_path, project, rules):
-    app = GraphADLC(str(tmp_path / f"{project}-{rules}.sqlite"), influence_rules=rules)
+    n = next(_ref.counter)
+    app = GraphADLC(str(tmp_path / f"{project}-{rules}-{n}.sqlite"), influence_rules=rules)
     app.seed_graph(json.loads((HERE / "reference" / f"{project}.json").read_text()))
     return app
+
+
+_ref.counter = __import__("itertools").count()
 
 
 def _pairs(app, node, aspect):
@@ -73,3 +77,22 @@ def test_replay_client_serves_identical_prompts_and_falls_back_otherwise():
     strict = rl.ReplayClient(rl.recorded_calls(trace), live, "src", strict=True)
     with pytest.raises(RuntimeError):
         strict.complete("S", "changed", call_key="k")
+
+
+def test_v12_reruns_tests_of_the_contracts_an_implementation_change_is_constrained_by(tmp_path):
+    v11 = _pairs(_ref(tmp_path, "ledgerlite", "v1.1"), "CMP-MONEY", "implementation")
+    v12 = _pairs(_ref(tmp_path, "ledgerlite", "v1.2"), "CMP-MONEY", "implementation")
+    assert set(v12) - set(v11) == {("TEST-MONEY-FORMAT", "rerun_test")}   # the v0.3 contract-test miss
+    rec = v12[("TEST-MONEY-FORMAT", "rerun_test")]
+    assert "rules v1.2" in rec.reason and len(rec.path) == 2             # constrained_by, then verifies
+    assert ("CON-MONEY-FORMAT", "check_contract") not in v12             # the unchanged contract is not flagged
+
+
+def test_v12_adds_nothing_to_a_contract_change_and_v1_never_has_the_rule(tmp_path):
+    v11 = _pairs(_ref(tmp_path, "toolshare", "v1.1"), "CON-NOTICE-FORMAT", "contract")
+    v12 = _pairs(_ref(tmp_path, "toolshare", "v1.2"), "CON-NOTICE-FORMAT", "contract")
+    assert set(v12) == set(v11)
+    v1 = _pairs(_ref(tmp_path, "toolshare", "v1"), "CMP-NOTIFY", "implementation")
+    assert ("TEST-NOTICE-FORMAT", "rerun_test") not in v1
+    assert ("TEST-NOTICE-FORMAT", "rerun_test") in _pairs(_ref(tmp_path, "toolshare", "v1.2"), "CMP-NOTIFY",
+                                                          "implementation")
