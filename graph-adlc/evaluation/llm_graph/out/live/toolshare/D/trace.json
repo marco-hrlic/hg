@@ -1,0 +1,331 @@
+{
+ "arm": "D",
+ "call": {
+  "call_key": "toolshare/D/direct_impact",
+  "client": {
+   "api_key_env": "OPENAI_API_KEY",
+   "base_url": "https://api.openai.com",
+   "is_fake": false,
+   "json_mode": true,
+   "max_output_tokens": 32000,
+   "model": "gpt-6.1-terra",
+   "provider": "openai",
+   "temperature": null
+  },
+  "input": {
+   "chars": 10557,
+   "diffs": [],
+   "limits": {
+    "max_chars_per_doc": 12000,
+    "max_total_chars": 60000
+   },
+   "packed_sources_sha256": "f3a6f2a541e8881e3e901499b9e64b9d3d7d123443f90ca64f10e2997c36be93",
+   "sha256": "6c37a00197d9ccfd022b8c8338b87885fac702af2030c143dd45a7c961e8c711",
+   "sources": [
+    {
+     "line_count": 14,
+     "origin": "file",
+     "path": "discovery/stakeholder_notes.md",
+     "project": "toolshare",
+     "sha256": "e9a2bdd034c3f226aeaf5dcb1cadea9d6ce03f0f2a9acf9a88ac051469ef64b8",
+     "source_id": "toolshare:discovery/stakeholder_notes.md",
+     "source_type": "stakeholder_notes",
+     "version": "2026-08-28"
+    },
+    {
+     "line_count": 12,
+     "origin": "file",
+     "path": "spec/architecture.md",
+     "project": "toolshare",
+     "sha256": "1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300",
+     "source_id": "toolshare:spec/architecture.md",
+     "source_type": "architecture",
+     "version": "2026-09-02"
+    },
+    {
+     "line_count": 38,
+     "origin": "file",
+     "path": "spec/requirements.md",
+     "project": "toolshare",
+     "sha256": "ff5dae59d469eaa8e5ccd104ce6857802879e3b97104182b938c13f84f1fe755",
+     "source_id": "toolshare:spec/requirements.md",
+     "source_type": "requirements",
+     "version": "draft-4"
+    },
+    {
+     "commit": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa",
+     "line_count": 10,
+     "origin": "git",
+     "path": "tests/test_holds.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "1d75cbe25e962f50d6f2b7d6dc3f1bfbc0535f1fa588658d75a13e6bdd0a413b",
+     "source_id": "git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:tests/test_holds.py",
+     "source_type": "test",
+     "version": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+    },
+    {
+     "commit": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa",
+     "line_count": 14,
+     "origin": "git",
+     "path": "tests/test_notifications.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "5723cb01fb2199145f4388ba8e9c0359c7c874acef4cd626516428337b5cd1e4",
+     "source_id": "git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:tests/test_notifications.py",
+     "source_type": "test",
+     "version": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+    },
+    {
+     "commit": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa",
+     "line_count": 0,
+     "origin": "git",
+     "path": "toolshare/__init__.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "source_id": "git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:toolshare/__init__.py",
+     "source_type": "code",
+     "version": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+    },
+    {
+     "commit": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa",
+     "line_count": 30,
+     "origin": "git",
+     "path": "toolshare/holds.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "b3024276c517744afea68dfec8b1041dc3e488d6125307cb1a36f40819fe1ecf",
+     "source_id": "git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:toolshare/holds.py",
+     "source_type": "code",
+     "version": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+    },
+    {
+     "commit": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa",
+     "line_count": 15,
+     "origin": "git",
+     "path": "toolshare/inventory.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "5d5448a350375901f733929d43320921ed02ef91bd84d306a0fa7f0ade64f557",
+     "source_id": "git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:toolshare/inventory.py",
+     "source_type": "code",
+     "version": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+    },
+    {
+     "commit": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa",
+     "line_count": 14,
+     "origin": "git",
+     "path": "toolshare/notifications.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "ae80be0576750da1fc879a76854887e3233dfbcab1c6b301b84ae84d16dd33b7",
+     "source_id": "git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:toolshare/notifications.py",
+     "source_type": "code",
+     "version": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+    }
+   ],
+   "truncation": []
+  },
+  "is_fake": false,
+  "latency_ms": 23608.2,
+  "model_reported": "gpt-6.1-terra",
+  "output": {
+   "chars": 6099,
+   "sha256": "c3550f6f380d2ec38dd4ac76fd3518560e835416ea0d9870d6cd27da4f8d923f",
+   "text": "{\n  \"impacts\": [\n    {\n      \"target\": \"CON-NOTICE-FORMAT\",\n      \"obligation\": \"check_contract\",\n      \"reason\": \"The accepted contract already permits SMS and requires desk opening hours. Re-check its application to every notification and both channel-specific length limits.\",\n      \"source_evidence\": [\n        {\n          \"source_id\": \"toolshare:spec/requirements.md\",\n          \"sha256\": \"ff5dae59d469eaa8e5ccd104ce6857802879e3b97104182b938c13f84f1fe755\",\n          \"lines\": [35, 36, 37, 38],\n          \"excerpt\": \"They are sent by email or, if the member prefers, by SMS. An SMS body is at most 160 characters; an email has a subject line and at most 500 characters of body text. Every message states the desk opening hours (Tue/Thu/Sat).\"\n        }\n      ]\n    },\n    {\n      \"target\": \"REQ-READY-NOTICE\",\n      \"obligation\": \"review_spec\",\n      \"reason\": \"The ready-notice requirement specifies email, while the accepted format contract permits SMS according to member preference. Resolve the channel wording while preserving the tool and pickup-deadline content.\",\n      \"source_evidence\": [\n        {\n          \"source_id\": \"toolshare:spec/requirements.md\",\n          \"sha256\": \"ff5dae59d469eaa8e5ccd104ce6857802879e3b97104182b938c13f84f1fe755\",\n          \"lines\": [31, 32, 33, 35, 36],\n          \"excerpt\": \"When a held tool is ready to be picked up, we notify the member by email. ... The email names the tool and the pickup deadline. ... They are sent by email or, if the member prefers, by SMS.\"\n        }\n      ]\n    },\n    {\n      \"target\": \"toolshare:spec/architecture.md\",\n      \"obligation\": \"review_spec\",\n      \"reason\": \"The architecture describes the notification service as sending member emails, so its channel description needs review against the SMS-capable contract.\",\n      \"source_evidence\": [\n        {\n          \"source_id\": \"toolshare:spec/architecture.md\",\n          \"sha256\": \"1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300\",\n          \"lines\": [9, 10],\n          \"excerpt\": \"CMP-NOTIFY, the notification service (`toolshare/notifications.py`), sends member emails and implements REQ-READY-NOTICE. Every message it sends must follow CON-NOTICE-FORMAT.\"\n        }\n      ]\n    },\n    {\n      \"target\": \"CMP-NOTIFY\",\n      \"obligation\": \"review_implementation\",\n      \"reason\": \"The service implements only email and a 500-character limit; its ready message omits opening hours. Review channel selection, SMS limits and required content for all messages.\",\n      \"source_evidence\": [\n        {\n          \"source_id\": \"git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:toolshare/notifications.py\",\n          \"sha256\": \"ae80be0576750da1fc879a76854887e3233dfbcab1c6b301b84ae84d16dd33b7\",\n          \"lines\": [1, 4, 7, 8, 9, 10, 13, 14],\n          \"excerpt\": \"Member notifications (plain-text email). ... MAX_BODY = 500 ... def send_email(member: str, subject: str, body: str) ... def send_ready_notice(member: str, tool: str, deadline: str) ... Your hold on {tool} is ready. Collect it by {deadline}.\"\n        }\n      ]\n    },\n    {\n      \"target\": \"CMP-HOLDS\",\n      \"obligation\": \"review_implementation\",\n      \"reason\": \"Hold expiry directly sends an email whose body omits opening hours; this notification path must also comply with the changed format and applicable channel preference.\",\n      \"source_evidence\": [\n        {\n          \"source_id\": \"git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:toolshare/holds.py\",\n          \"sha256\": \"b3024276c517744afea68dfec8b1041dc3e488d6125307cb1a36f40819fe1ecf\",\n          \"lines\": [6, 23, 24, 25, 26, 27, 28, 29],\n          \"excerpt\": \"from toolshare.notifications import send_email ... send_email(lapsed, f\\\"Your hold on {tool} has lapsed\\\", ... \\\"member in the queue. You can place a new hold at any time.\\\")\"\n        }\n      ]\n    },\n    {\n      \"target\": \"TEST-NOTICE-FORMAT\",\n      \"obligation\": \"rerun_test\",\n      \"reason\": \"Extend and rerun the format tests for SMS selection and the 160-character boundary, opening hours on every message, and retained email and ready-notice requirements.\",\n      \"source_evidence\": [\n        {\n          \"source_id\": \"git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:tests/test_notifications.py\",\n          \"sha256\": \"5723cb01fb2199145f4388ba8e9c0359c7c874acef4cd626516428337b5cd1e4\",\n          \"lines\": [6, 7, 8, 9, 12, 13, 14],\n          \"excerpt\": \"assert msg[\\\"subject\\\"] and len(msg[\\\"body\\\"]) <= 500 ... notifications.send_email(\\\"ana\\\", \\\"s\\\", \\\"x\\\" * 501)\"\n        },\n        {\n          \"source_id\": \"toolshare:spec/architecture.md\",\n          \"sha256\": \"1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300\",\n          \"lines\": [11, 12],\n          \"excerpt\": \"TEST-NOTICE-FORMAT (`tests/test_notifications.py`) checks messages against CON-NOTICE-FORMAT.\"\n        }\n      ]\n    },\n    {\n      \"target\": \"TEST-HOLD-QUEUE\",\n      \"obligation\": \"rerun_test\",\n      \"reason\": \"The expiry test invokes the holds notification path and checks its recipient; rerun it after changing that path and cover format compliance for the lapse message.\",\n      \"source_evidence\": [\n        {\n          \"source_id\": \"git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:tests/test_holds.py\",\n          \"sha256\": \"1d75cbe25e962f50d6f2b7d6dc3f1bfbc0535f1fa588658d75a13e6bdd0a413b\",\n          \"lines\": [4, 8, 9, 10],\n          \"excerpt\": \"def test_queue_order_and_expiry(): ... assert holds.expire_hold(\\\"drill\\\") == \\\"ben\\\" ... assert notifications.OUTBOX[-1][\\\"to\\\"] == \\\"ana\\\"\"\n        }\n      ]\n    }\n  ],\n  \"unresolved_questions\": [\n    \"Does SMS replace the email requirement for ready notices when a member prefers SMS, or must ready notices still always be emailed?\",\n    \"Where are member channel preferences and SMS destinations obtained, and what happens when they are unavailable?\",\n    \"Are Tue/Thu/Sat sufficient as opening-hours content, or must messages include specific opening and closing times?\",\n    \"How should messages handle tool names or deadlines that make required content exceed the applicable body limit?\"\n  ]\n}"
+  },
+  "parse": {
+   "ok": true
+  },
+  "prompt": {
+   "prompt_id": "direct_impact",
+   "sha256": "97e97646aa03f089c90a41308bccd930cf228c138043640bfac8027a7b88e6f5",
+   "version": "v1"
+  },
+  "stop_reason": "stop",
+  "usage": {
+   "input_tokens": 3408,
+   "output_tokens": 1989
+  }
+ },
+ "client": {
+  "api_key_env": "OPENAI_API_KEY",
+  "base_url": "https://api.openai.com",
+  "is_fake": false,
+  "json_mode": true,
+  "max_output_tokens": 32000,
+  "model": "gpt-6.1-terra",
+  "provider": "openai",
+  "temperature": null
+ },
+ "prediction": {
+  "E5": {
+   "raw": {
+    "impacts": [
+     {
+      "obligation": "check_contract",
+      "reason": "The accepted contract already permits SMS and requires desk opening hours. Re-check its application to every notification and both channel-specific length limits.",
+      "source_evidence": [
+       {
+        "excerpt": "They are sent by email or, if the member prefers, by SMS. An SMS body is at most 160 characters; an email has a subject line and at most 500 characters of body text. Every message states the desk opening hours (Tue/Thu/Sat).",
+        "lines": [
+         35,
+         36,
+         37,
+         38
+        ],
+        "sha256": "ff5dae59d469eaa8e5ccd104ce6857802879e3b97104182b938c13f84f1fe755",
+        "source_id": "toolshare:spec/requirements.md"
+       }
+      ],
+      "target": "CON-NOTICE-FORMAT"
+     },
+     {
+      "obligation": "review_spec",
+      "reason": "The ready-notice requirement specifies email, while the accepted format contract permits SMS according to member preference. Resolve the channel wording while preserving the tool and pickup-deadline content.",
+      "source_evidence": [
+       {
+        "excerpt": "When a held tool is ready to be picked up, we notify the member by email. ... The email names the tool and the pickup deadline. ... They are sent by email or, if the member prefers, by SMS.",
+        "lines": [
+         31,
+         32,
+         33,
+         35,
+         36
+        ],
+        "sha256": "ff5dae59d469eaa8e5ccd104ce6857802879e3b97104182b938c13f84f1fe755",
+        "source_id": "toolshare:spec/requirements.md"
+       }
+      ],
+      "target": "REQ-READY-NOTICE"
+     },
+     {
+      "obligation": "review_spec",
+      "reason": "The architecture describes the notification service as sending member emails, so its channel description needs review against the SMS-capable contract.",
+      "source_evidence": [
+       {
+        "excerpt": "CMP-NOTIFY, the notification service (`toolshare/notifications.py`), sends member emails and implements REQ-READY-NOTICE. Every message it sends must follow CON-NOTICE-FORMAT.",
+        "lines": [
+         9,
+         10
+        ],
+        "sha256": "1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300",
+        "source_id": "toolshare:spec/architecture.md"
+       }
+      ],
+      "target": "toolshare:spec/architecture.md"
+     },
+     {
+      "obligation": "review_implementation",
+      "reason": "The service implements only email and a 500-character limit; its ready message omits opening hours. Review channel selection, SMS limits and required content for all messages.",
+      "source_evidence": [
+       {
+        "excerpt": "Member notifications (plain-text email). ... MAX_BODY = 500 ... def send_email(member: str, subject: str, body: str) ... def send_ready_notice(member: str, tool: str, deadline: str) ... Your hold on {tool} is ready. Collect it by {deadline}.",
+        "lines": [
+         1,
+         4,
+         7,
+         8,
+         9,
+         10,
+         13,
+         14
+        ],
+        "sha256": "ae80be0576750da1fc879a76854887e3233dfbcab1c6b301b84ae84d16dd33b7",
+        "source_id": "git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:toolshare/notifications.py"
+       }
+      ],
+      "target": "CMP-NOTIFY"
+     },
+     {
+      "obligation": "review_implementation",
+      "reason": "Hold expiry directly sends an email whose body omits opening hours; this notification path must also comply with the changed format and applicable channel preference.",
+      "source_evidence": [
+       {
+        "excerpt": "from toolshare.notifications import send_email ... send_email(lapsed, f\"Your hold on {tool} has lapsed\", ... \"member in the queue. You can place a new hold at any time.\")",
+        "lines": [
+         6,
+         23,
+         24,
+         25,
+         26,
+         27,
+         28,
+         29
+        ],
+        "sha256": "b3024276c517744afea68dfec8b1041dc3e488d6125307cb1a36f40819fe1ecf",
+        "source_id": "git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:toolshare/holds.py"
+       }
+      ],
+      "target": "CMP-HOLDS"
+     },
+     {
+      "obligation": "rerun_test",
+      "reason": "Extend and rerun the format tests for SMS selection and the 160-character boundary, opening hours on every message, and retained email and ready-notice requirements.",
+      "source_evidence": [
+       {
+        "excerpt": "assert msg[\"subject\"] and len(msg[\"body\"]) <= 500 ... notifications.send_email(\"ana\", \"s\", \"x\" * 501)",
+        "lines": [
+         6,
+         7,
+         8,
+         9,
+         12,
+         13,
+         14
+        ],
+        "sha256": "5723cb01fb2199145f4388ba8e9c0359c7c874acef4cd626516428337b5cd1e4",
+        "source_id": "git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:tests/test_notifications.py"
+       },
+       {
+        "excerpt": "TEST-NOTICE-FORMAT (`tests/test_notifications.py`) checks messages against CON-NOTICE-FORMAT.",
+        "lines": [
+         11,
+         12
+        ],
+        "sha256": "1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300",
+        "source_id": "toolshare:spec/architecture.md"
+       }
+      ],
+      "target": "TEST-NOTICE-FORMAT"
+     },
+     {
+      "obligation": "rerun_test",
+      "reason": "The expiry test invokes the holds notification path and checks its recipient; rerun it after changing that path and cover format compliance for the lapse message.",
+      "source_evidence": [
+       {
+        "excerpt": "def test_queue_order_and_expiry(): ... assert holds.expire_hold(\"drill\") == \"ben\" ... assert notifications.OUTBOX[-1][\"to\"] == \"ana\"",
+        "lines": [
+         4,
+         8,
+         9,
+         10
+        ],
+        "sha256": "1d75cbe25e962f50d6f2b7d6dc3f1bfbc0535f1fa588658d75a13e6bdd0a413b",
+        "source_id": "git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:tests/test_holds.py"
+       }
+      ],
+      "target": "TEST-HOLD-QUEUE"
+     }
+    ],
+    "unresolved_questions": [
+     "Does SMS replace the email requirement for ready notices when a member prefers SMS, or must ready notices still always be emailed?",
+     "Where are member channel preferences and SMS destinations obtained, and what happens when they are unavailable?",
+     "Are Tue/Thu/Sat sufficient as opening-hours content, or must messages include specific opening and closing times?",
+     "How should messages handle tool names or deadlines that make required content exceed the applicable body limit?"
+    ]
+   },
+   "targets": [
+    "CMP-HOLDS",
+    "CMP-NOTIFY",
+    "CON-NOTICE-FORMAT",
+    "REQ-READY-NOTICE",
+    "TEST-HOLD-QUEUE",
+    "TEST-NOTICE-FORMAT",
+    "toolshare:spec/architecture.md"
+   ]
+  }
+ },
+ "project": "toolshare"
+}
