@@ -1,0 +1,31 @@
+{
+  "id": "SC-12",
+  "dataset_version": "1.0",
+  "family": "contract",
+  "tags": [
+    "consumer_break",
+    "contract_change"
+  ],
+  "description": "CON-INVENTORY-API returns ttl_seconds (relative) instead of an absolute expires_at timestamp.",
+  "seed_ref": "evaluation/scenarios/seeds/orders_seed.json",
+  "setup": [],
+  "proposal": {
+    "base_graph_revision": 1,
+    "actor": "change-author",
+    "rationale": "Clock skew between services; switch to a relative TTL.",
+    "operations": [
+      {
+        "op": "update_node",
+        "id": "CON-INVENTORY-API",
+        "expected_rev": 1,
+        "aspect": "contract",
+        "patch": {
+          "body": "reserve(sku, qty) returns {reservation_id, ttl_seconds}; ttl_seconds is the remaining lifetime of the reservation. Reservations are atomic.",
+          "data": {
+            "version": "2.0"
+          }
+        }
+      }
+    ]
+  }
+}

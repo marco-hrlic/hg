@@ -1,0 +1,50 @@
+{
+  "scenario_id": "SC-10",
+  "oracle_version": "1.0",
+  "ground_facts": [
+    "The helper generates a fresh idempotency key per attempt: retries can double charge (contract violated; preservation check failed).",
+    "The key helper is shared by the first charge attempt, so REQ-CHARGE is also at risk.",
+    "Reporting faithfully shows whatever transactions exist; it does not need to change."
+  ],
+  "necessary_checks": [
+    {
+      "target_id": "TEST-RETRY",
+      "obligation": "rerun_test",
+      "severity": "critical",
+      "reason": "exercises the broken path"
+    },
+    {
+      "target_id": "REQ-RETRY",
+      "obligation": "check_contract",
+      "severity": "critical",
+      "reason": "violation established"
+    },
+    {
+      "target_id": "REQ-CHARGE",
+      "obligation": "check_contract",
+      "severity": "major",
+      "reason": "shares the key helper"
+    }
+  ],
+  "unknown_checks": [],
+  "material_impacts": [
+    {
+      "target_id": "REQ-RETRY",
+      "reason": "behaviour broken"
+    },
+    {
+      "target_id": "REQ-CHARGE",
+      "reason": "behaviour at risk"
+    }
+  ],
+  "explicitly_not_required": [
+    {
+      "target_id": "CMP-REPORTING",
+      "reason": "consumer does not rely on idempotency semantics"
+    }
+  ],
+  "reviewers": [
+    "reviewer-1 (Claude coding agent, acting as architect+engineer; single reviewer)"
+  ],
+  "adjudication_notes": "Blind first draft written from the scenario description, the readable seed specification and the stipulated ground facts, before any method prediction for this scenario was generated. Single reviewer; no second-reviewer adjudication. Reviewer had read the v0.1 rule table beforehand (see LABELING_GUIDE.md, 'Known threats')."
+}

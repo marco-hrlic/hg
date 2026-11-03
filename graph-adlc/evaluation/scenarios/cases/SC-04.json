@@ -1,0 +1,42 @@
+{
+  "id": "SC-04",
+  "dataset_version": "1.0",
+  "family": "semantic",
+  "tags": [
+    "leaf",
+    "acceptance_criteria",
+    "reverse_question_link"
+  ],
+  "description": "After refinement, REQ-RETRY raises the attempt bound from three to five.",
+  "seed_ref": "fixtures/payment_seed.json",
+  "setup": [
+    {
+      "type": "commit",
+      "delta_ref": "fixtures/retry_refinement.json"
+    }
+  ],
+  "proposal": {
+    "base_graph_revision": 2,
+    "actor": "change-author",
+    "rationale": "Gateway SRE asked for more retry headroom during brown-outs.",
+    "operations": [
+      {
+        "op": "update_node",
+        "id": "REQ-RETRY",
+        "expected_rev": 2,
+        "aspect": "semantic",
+        "patch": {
+          "body": "Retry only transient gateway errors up to five attempts, using bounded exponential backoff and a stable idempotency key.",
+          "data": {
+            "acceptance_criteria": [
+              "At most five attempts are made",
+              "Backoff increases between retries with a configured upper limit",
+              "Every attempt uses the original idempotency key",
+              "Permanent failures are not retried"
+            ]
+          }
+        }
+      }
+    ]
+  }
+}

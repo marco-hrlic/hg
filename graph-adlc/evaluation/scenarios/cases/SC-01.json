@@ -1,0 +1,34 @@
+{
+  "id": "SC-01",
+  "dataset_version": "1.0",
+  "family": "semantic",
+  "tags": [
+    "leaf",
+    "acceptance_criteria",
+    "shared_component_fanout"
+  ],
+  "description": "REQ-CHARGE gains an acceptance criterion: the response also returns the gateway authorization code.",
+  "seed_ref": "fixtures/payment_seed.json",
+  "setup": [],
+  "proposal": {
+    "base_graph_revision": 1,
+    "actor": "change-author",
+    "rationale": "Finance needs the gateway authorization code returned with every successful charge.",
+    "operations": [
+      {
+        "op": "update_node",
+        "id": "REQ-CHARGE",
+        "expected_rev": 1,
+        "aspect": "semantic",
+        "patch": {
+          "data": {
+            "acceptance_criteria": [
+              "An authorized request creates one transaction",
+              "A successful request returns a transaction ID and the gateway authorization code"
+            ]
+          }
+        }
+      }
+    ]
+  }
+}

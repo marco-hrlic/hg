@@ -1,0 +1,38 @@
+{
+  "config_version": "1.0",
+  "frozen": "before any method run on the corpus (see git history: oracle freeze commit)",
+  "methods": {
+    "A": {
+      "description": "Deterministic document baseline: ID/cross-reference retrieval over the rendered spec",
+      "seeds": "ids of nodes in node operations; for edge operations both endpoints are emitted as targets (depth 0) and are not expanded",
+      "hops": 1,
+      "retrieval_budget_sections": 12,
+      "rank": "hop distance, then section id",
+      "exclude_seed_sections": true,
+      "obligation_by_target_kind": {
+        "test": "rerun_test",
+        "component": {"if_seed_kind_in": ["contract", "component", "artifact"], "then": "check_contract", "else": "review_implementation"},
+        "requirement": {"if_seed_kind_in": ["contract", "component", "artifact"], "then": "check_contract", "else": "review_spec"},
+        "goal": "review_spec", "capability": "review_spec", "question": "review_spec",
+        "contract": "check_contract", "artifact": "review_implementation"
+      },
+      "unconfirmed_reference_adds": "investigate_unknown"
+    },
+    "A2": {"description": "Sensitivity condition, separately reported: method A with hops = 2", "hops": 2,
+            "retrieval_budget_sections": 12},
+    "B": {"description": "GraphADLC.propose(delta) with no evidence_refs (pruning cannot fire)"},
+    "C": {"description": "GraphADLC.propose(delta) with evidence_refs = every evidence record available in the scenario"}
+  },
+  "normalization": {
+    "obligation_equivalence_map": {},
+    "artifact_collapse": "artifact target -> the component with a realized_by edge to it in the scenario's pre-change graph",
+    "excluded_targets": "nodes directly modified by node operations (after artifact collapse); counted separately",
+    "dedupe_key": ["scenario_id", "method", "target_id", "obligation"]
+  },
+  "scoring": {
+    "primary_unit": "(target, obligation) pair",
+    "secondary_unit": "target",
+    "unknown_handling": "excluded from judged universe; best/worst-case sensitivity reported",
+    "zero_denominator": null
+  }
+}

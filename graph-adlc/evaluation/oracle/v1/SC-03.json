@@ -1,0 +1,40 @@
+{
+  "scenario_id": "SC-03",
+  "oracle_version": "1.0",
+  "ground_facts": [
+    "The payment code only supports cards today; no code change follows.",
+    "Children are card-agnostic in wording; they must be checked not to promise wallet support."
+  ],
+  "necessary_checks": [
+    {
+      "target_id": "REQ-CHARGE",
+      "obligation": "review_spec",
+      "severity": "minor",
+      "reason": "child must be consistent with narrowed parent scope"
+    },
+    {
+      "target_id": "REQ-RETRY",
+      "obligation": "review_spec",
+      "severity": "minor",
+      "reason": "child must be consistent with narrowed parent scope"
+    }
+  ],
+  "unknown_checks": [
+    {
+      "target_id": "GOAL-CHECKOUT",
+      "obligation": "review_spec",
+      "reason": "whether card-only still satisfies 'customers can pay' is a product judgement"
+    }
+  ],
+  "material_impacts": [],
+  "explicitly_not_required": [
+    {
+      "target_id": "CMP-PAYMENT",
+      "reason": "already card-only"
+    }
+  ],
+  "reviewers": [
+    "reviewer-1 (Claude coding agent, acting as architect+engineer; single reviewer)"
+  ],
+  "adjudication_notes": "Blind first draft written from the scenario description, the readable seed specification and the stipulated ground facts, before any method prediction for this scenario was generated. Single reviewer; no second-reviewer adjudication. Reviewer had read the v0.1 rule table beforehand (see LABELING_GUIDE.md, 'Known threats')."
+}

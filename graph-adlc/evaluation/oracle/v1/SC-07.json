@@ -1,0 +1,65 @@
+{
+  "scenario_id": "SC-07",
+  "oracle_version": "1.0",
+  "ground_facts": [
+    "Retry code does not track key age; retrying with a key older than 24h can double charge (violates the new clause).",
+    "A client re-submitting a charge after 24h with the same key is no longer protected; REQ-CHARGE's 'one transaction' must be re-checked.",
+    "TEST-RETRY verifies the contract and needs a window case.",
+    "Reporting reads transaction data whose shape does not change."
+  ],
+  "necessary_checks": [
+    {
+      "target_id": "CMP-PAYMENT",
+      "obligation": "check_contract",
+      "severity": "critical",
+      "reason": "constrained component violates the new clause"
+    },
+    {
+      "target_id": "REQ-RETRY",
+      "obligation": "check_contract",
+      "severity": "critical",
+      "reason": "constrained requirement must state/handle the window"
+    },
+    {
+      "target_id": "REQ-CHARGE",
+      "obligation": "check_contract",
+      "severity": "major",
+      "reason": "constrained requirement; resubmission after 24h"
+    },
+    {
+      "target_id": "TEST-RETRY",
+      "obligation": "rerun_test",
+      "severity": "critical",
+      "reason": "verifies the changed contract"
+    }
+  ],
+  "unknown_checks": [],
+  "material_impacts": [
+    {
+      "target_id": "CMP-PAYMENT",
+      "reason": "code must change"
+    },
+    {
+      "target_id": "REQ-RETRY",
+      "reason": "acceptance criteria must change"
+    }
+  ],
+  "explicitly_not_required": [
+    {
+      "target_id": "CMP-REPORTING",
+      "reason": "data shape unchanged"
+    },
+    {
+      "target_id": "Q-RETRY-BOUNDS",
+      "reason": "attempt bound unchanged"
+    },
+    {
+      "target_id": "CAP-PAYMENTS",
+      "reason": "scope unchanged"
+    }
+  ],
+  "reviewers": [
+    "reviewer-1 (Claude coding agent, acting as architect+engineer; single reviewer)"
+  ],
+  "adjudication_notes": "Blind first draft written from the scenario description, the readable seed specification and the stipulated ground facts, before any method prediction for this scenario was generated. Single reviewer; no second-reviewer adjudication. Reviewer had read the v0.1 rule table beforehand (see LABELING_GUIDE.md, 'Known threats')."
+}

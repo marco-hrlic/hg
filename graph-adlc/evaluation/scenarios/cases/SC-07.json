@@ -1,0 +1,20 @@
+{
+  "id": "SC-07",
+  "dataset_version": "1.0",
+  "family": "contract",
+  "tags": [
+    "contract_change",
+    "demo_step_D"
+  ],
+  "description": "The v0.1 demo step D: CON-IDEMPOTENCY now states the provider honours keys only for 24h.",
+  "seed_ref": "fixtures/payment_seed.json",
+  "setup": [
+    {
+      "type": "commit",
+      "delta_ref": "fixtures/retry_refinement.json"
+    }
+  ],
+  "proposal": {
+    "delta_ref": "fixtures/idempotency_window_change.json"
+  }
+}

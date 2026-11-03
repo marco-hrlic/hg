@@ -1,0 +1,49 @@
+{
+  "id": "SC-21",
+  "dataset_version": "1.0",
+  "family": "structure",
+  "tags": [
+    "cycle",
+    "multihop"
+  ],
+  "description": "With a dependency cycle (CMP-PAYMENT also depends on CMP-REPORTING for fraud limits), CMP-REPORTING's totals start excluding refunds.",
+  "seed_ref": "fixtures/payment_seed.json",
+  "setup": [
+    {
+      "type": "commit",
+      "delta": {
+        "base_graph_revision": 1,
+        "actor": "change-author",
+        "rationale": "Fraud limits use daily totals from reporting.",
+        "operations": [
+          {
+            "op": "add_edge",
+            "edge": {
+              "id": "E17",
+              "src": "CMP-PAYMENT",
+              "dst": "CMP-REPORTING",
+              "relation": "depends_on",
+              "status": "confirmed"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "proposal": {
+    "base_graph_revision": 2,
+    "actor": "change-author",
+    "rationale": "Summary totals exclude refunded transactions.",
+    "operations": [
+      {
+        "op": "update_node",
+        "id": "CMP-REPORTING",
+        "expected_rev": 1,
+        "aspect": "semantic",
+        "patch": {
+          "body": "Provides transaction summaries. Totals exclude refunded transactions."
+        }
+      }
+    ]
+  }
+}

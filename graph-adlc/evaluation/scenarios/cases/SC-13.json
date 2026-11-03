@@ -1,0 +1,33 @@
+{
+  "id": "SC-13",
+  "dataset_version": "1.0",
+  "family": "implementation",
+  "tags": [
+    "internal_refactor",
+    "artifact_origin",
+    "code_only"
+  ],
+  "description": "Logging-only change in the payment implementation file.",
+  "seed_ref": "fixtures/payment_seed.json",
+  "setup": [],
+  "proposal": {
+    "base_graph_revision": 1,
+    "actor": "change-author",
+    "rationale": "Structured logging in the payment module.",
+    "operations": [
+      {
+        "op": "update_node",
+        "id": "ART-PAYMENT",
+        "expected_rev": 1,
+        "aspect": "implementation",
+        "patch": {
+          "data": {
+            "path": "src/payment_service.py",
+            "notes": "structured logging"
+          },
+          "body": "Implementation file in the example repository (structured logging)."
+        }
+      }
+    ]
+  }
+}

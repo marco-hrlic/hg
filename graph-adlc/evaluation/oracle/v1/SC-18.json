@@ -1,0 +1,39 @@
+{
+  "scenario_id": "SC-18",
+  "oracle_version": "1.0",
+  "ground_facts": [
+    "Reporting now reads a ledger replica (up to 5 min lag) instead of calling the payment service.",
+    "The replica is fed by database replication; the payment service code is unaffected."
+  ],
+  "necessary_checks": [
+    {
+      "target_id": "CMP-REPORTING",
+      "obligation": "check_contract",
+      "severity": "major",
+      "reason": "new data source must provide the same data"
+    },
+    {
+      "target_id": "REQ-REPORT",
+      "obligation": "check_contract",
+      "severity": "major",
+      "reason": "freshness/completeness may change; no test"
+    }
+  ],
+  "unknown_checks": [],
+  "material_impacts": [
+    {
+      "target_id": "CMP-REPORTING",
+      "reason": "data source changes"
+    }
+  ],
+  "explicitly_not_required": [
+    {
+      "target_id": "CMP-PAYMENT",
+      "reason": "loses a consumer only"
+    }
+  ],
+  "reviewers": [
+    "reviewer-1 (Claude coding agent, acting as architect+engineer; single reviewer)"
+  ],
+  "adjudication_notes": "Blind first draft written from the scenario description, the readable seed specification and the stipulated ground facts, before any method prediction for this scenario was generated. Single reviewer; no second-reviewer adjudication. Reviewer had read the v0.1 rule table beforehand (see LABELING_GUIDE.md, 'Known threats')."
+}

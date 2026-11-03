@@ -1,0 +1,65 @@
+{
+  "scenario_id": "SC-05",
+  "oracle_version": "1.0",
+  "ground_facts": [
+    "CMP-NOTIFIER computes the threshold and must implement the relative rule.",
+    "Reservation events carry only {sku, on_hand}; max stock is not available to the notifier, so CMP-INVENTORY must add it (unregistered dependency notifier -> inventory events).",
+    "TEST-LOW-STOCK asserts the fixed 10-unit threshold.",
+    "Q-ALERT-THRESHOLD (resolved) records the fixed 10-unit answer."
+  ],
+  "necessary_checks": [
+    {
+      "target_id": "CMP-NOTIFIER",
+      "obligation": "review_implementation",
+      "severity": "major",
+      "reason": "threshold logic changes"
+    },
+    {
+      "target_id": "CMP-INVENTORY",
+      "obligation": "review_implementation",
+      "severity": "major",
+      "reason": "events must carry max stock; dependency not registered"
+    },
+    {
+      "target_id": "TEST-LOW-STOCK",
+      "obligation": "rerun_test",
+      "severity": "major",
+      "reason": "asserts the old threshold"
+    },
+    {
+      "target_id": "Q-ALERT-THRESHOLD",
+      "obligation": "review_spec",
+      "severity": "minor",
+      "reason": "resolved answer superseded"
+    }
+  ],
+  "unknown_checks": [],
+  "material_impacts": [
+    {
+      "target_id": "CMP-NOTIFIER",
+      "reason": "logic"
+    },
+    {
+      "target_id": "CMP-INVENTORY",
+      "reason": "event payload"
+    }
+  ],
+  "explicitly_not_required": [
+    {
+      "target_id": "CMP-ORDERS",
+      "reason": "additive event field irrelevant to ordering"
+    },
+    {
+      "target_id": "REQ-ORDER-EMAIL",
+      "reason": "unrelated"
+    },
+    {
+      "target_id": "CAP-NOTIFY",
+      "reason": "scope unchanged"
+    }
+  ],
+  "reviewers": [
+    "reviewer-1 (Claude coding agent, acting as architect+engineer; single reviewer)"
+  ],
+  "adjudication_notes": "Blind first draft written from the scenario description, the readable seed specification and the stipulated ground facts, before any method prediction for this scenario was generated. Single reviewer; no second-reviewer adjudication. Reviewer had read the v0.1 rule table beforehand (see LABELING_GUIDE.md, 'Known threats')."
+}

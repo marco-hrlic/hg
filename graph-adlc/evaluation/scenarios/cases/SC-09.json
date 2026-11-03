@@ -1,0 +1,42 @@
+{
+  "id": "SC-09",
+  "dataset_version": "1.0",
+  "family": "contract",
+  "tags": [
+    "contract_preserved",
+    "evidence_valid",
+    "pruning"
+  ],
+  "description": "Internal refactor of CMP-PAYMENT's retry loop with a passing, current contract-preservation record.",
+  "seed_ref": "fixtures/payment_seed.json",
+  "setup": [
+    {
+      "type": "evidence",
+      "node_id": "CMP-PAYMENT",
+      "kind": "contract_preservation",
+      "result": "passed",
+      "code_rev": "git:proposed",
+      "details": {
+        "note": "idempotency contract suite green on the refactored code"
+      }
+    }
+  ],
+  "proposal": {
+    "base_graph_revision": 1,
+    "actor": "change-author",
+    "rationale": "Extract the retry loop into a helper; no behaviour change.",
+    "operations": [
+      {
+        "op": "update_node",
+        "id": "CMP-PAYMENT",
+        "expected_rev": 1,
+        "aspect": "implementation",
+        "patch": {
+          "data": {
+            "implementation_note": "retry loop extracted into a helper"
+          }
+        }
+      }
+    ]
+  }
+}

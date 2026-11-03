@@ -1,0 +1,35 @@
+{
+  "id": "SC-05",
+  "dataset_version": "1.0",
+  "family": "semantic",
+  "tags": [
+    "missing_edge",
+    "acceptance_criteria",
+    "prose_reference"
+  ],
+  "description": "REQ-LOW-STOCK-ALERT switches from a fixed 10-unit threshold to 5% of each SKU's maximum stock.",
+  "seed_ref": "evaluation/scenarios/seeds/orders_seed.json",
+  "setup": [],
+  "proposal": {
+    "base_graph_revision": 1,
+    "actor": "change-author",
+    "rationale": "Merchandising wants a relative threshold per SKU.",
+    "operations": [
+      {
+        "op": "update_node",
+        "id": "REQ-LOW-STOCK-ALERT",
+        "expected_rev": 1,
+        "aspect": "semantic",
+        "patch": {
+          "body": "Merchandising is alerted when on-hand stock of a SKU falls below 5% of that SKU's configured maximum stock. Alerts are produced from the reservation events emitted by CMP-INVENTORY.",
+          "data": {
+            "acceptance_criteria": [
+              "An alert is raised when on-hand stock drops below 5% of the SKU's maximum stock",
+              "At most one alert per SKU per day"
+            ]
+          }
+        }
+      }
+    ]
+  }
+}

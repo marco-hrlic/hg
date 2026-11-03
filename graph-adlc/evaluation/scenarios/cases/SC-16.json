@@ -1,0 +1,31 @@
+{
+  "id": "SC-16",
+  "dataset_version": "1.0",
+  "family": "implementation",
+  "tags": [
+    "missing_edge",
+    "observable_behavior",
+    "code_only"
+  ],
+  "description": "CMP-INVENTORY moves to DB row locks and emits reservation events only after commit.",
+  "seed_ref": "evaluation/scenarios/seeds/orders_seed.json",
+  "setup": [],
+  "proposal": {
+    "base_graph_revision": 1,
+    "actor": "change-author",
+    "rationale": "Replace in-process locks with row locks; emit events after commit.",
+    "operations": [
+      {
+        "op": "update_node",
+        "id": "CMP-INVENTORY",
+        "expected_rev": 1,
+        "aspect": "implementation",
+        "patch": {
+          "data": {
+            "implementation_note": "row-level locks; reservation events emitted after commit"
+          }
+        }
+      }
+    ]
+  }
+}

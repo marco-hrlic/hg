@@ -1,0 +1,63 @@
+{
+  "id": "SC-24",
+  "dataset_version": "1.0",
+  "family": "adversarial",
+  "tags": [
+    "hypothesized_edge",
+    "unknown_boundary",
+    "evidence_valid",
+    "pruning"
+  ],
+  "description": "A hypothesized CMP-NOTIFIER -> CMP-INVENTORY edge exists; CMP-INVENTORY adds warehouse_id to its events, with passing preservation evidence for the inventory API.",
+  "seed_ref": "evaluation/scenarios/seeds/orders_seed.json",
+  "setup": [
+    {
+      "type": "commit",
+      "delta": {
+        "base_graph_revision": 1,
+        "actor": "change-author",
+        "rationale": "Suspected dependency of the notifier on inventory events.",
+        "operations": [
+          {
+            "op": "add_edge",
+            "edge": {
+              "id": "O34",
+              "src": "CMP-NOTIFIER",
+              "dst": "CMP-INVENTORY",
+              "relation": "depends_on",
+              "status": "hypothesized"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "evidence",
+      "node_id": "CMP-INVENTORY",
+      "kind": "contract_preservation",
+      "result": "passed",
+      "code_rev": "git:proposed",
+      "details": {
+        "note": "inventory API contract suite green on the new code"
+      }
+    }
+  ],
+  "proposal": {
+    "base_graph_revision": 2,
+    "actor": "change-author",
+    "rationale": "Add warehouse_id to reservation events.",
+    "operations": [
+      {
+        "op": "update_node",
+        "id": "CMP-INVENTORY",
+        "expected_rev": 1,
+        "aspect": "implementation",
+        "patch": {
+          "data": {
+            "implementation_note": "reservation events carry warehouse_id"
+          }
+        }
+      }
+    ]
+  }
+}

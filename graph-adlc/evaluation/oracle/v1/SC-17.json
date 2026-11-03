@@ -1,0 +1,28 @@
+{
+  "scenario_id": "SC-17",
+  "oracle_version": "1.0",
+  "ground_facts": [
+    "Query rewrite inside reporting; must return identical summaries.",
+    "No registered test verifies REQ-REPORT."
+  ],
+  "necessary_checks": [
+    {
+      "target_id": "REQ-REPORT",
+      "obligation": "check_contract",
+      "severity": "major",
+      "reason": "implemented requirement; no test covers it"
+    }
+  ],
+  "unknown_checks": [],
+  "material_impacts": [],
+  "explicitly_not_required": [
+    {
+      "target_id": "CMP-PAYMENT",
+      "reason": "provider unaffected by consumer internals"
+    }
+  ],
+  "reviewers": [
+    "reviewer-1 (Claude coding agent, acting as architect+engineer; single reviewer)"
+  ],
+  "adjudication_notes": "Blind first draft written from the scenario description, the readable seed specification and the stipulated ground facts, before any method prediction for this scenario was generated. Single reviewer; no second-reviewer adjudication. Reviewer had read the v0.1 rule table beforehand (see LABELING_GUIDE.md, 'Known threats')."
+}

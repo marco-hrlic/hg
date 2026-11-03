@@ -1,0 +1,47 @@
+{
+  "scenario_id": "SC-01",
+  "oracle_version": "1.0",
+  "ground_facts": [
+    "CMP-PAYMENT must add the authorization code to the charge response (code change).",
+    "Reporting reads transaction records through an explicit column list; an extra field does not affect it.",
+    "TEST-RETRY counts transactions and compares IDs across retries; response shape is irrelevant to it.",
+    "No registered test verifies REQ-CHARGE (coverage gap; not scorable)."
+  ],
+  "necessary_checks": [
+    {
+      "target_id": "CMP-PAYMENT",
+      "obligation": "review_implementation",
+      "severity": "major",
+      "reason": "implementing component must return the new field"
+    }
+  ],
+  "unknown_checks": [],
+  "material_impacts": [
+    {
+      "target_id": "CMP-PAYMENT",
+      "reason": "response gains a field"
+    }
+  ],
+  "explicitly_not_required": [
+    {
+      "target_id": "CMP-REPORTING",
+      "reason": "additive field; reporting unaffected"
+    },
+    {
+      "target_id": "REQ-RETRY",
+      "reason": "retry semantics unchanged"
+    },
+    {
+      "target_id": "CAP-PAYMENTS",
+      "reason": "capability scope unchanged"
+    },
+    {
+      "target_id": "TEST-RETRY",
+      "reason": "test does not inspect response fields"
+    }
+  ],
+  "reviewers": [
+    "reviewer-1 (Claude coding agent, acting as architect+engineer; single reviewer)"
+  ],
+  "adjudication_notes": "Blind first draft written from the scenario description, the readable seed specification and the stipulated ground facts, before any method prediction for this scenario was generated. Single reviewer; no second-reviewer adjudication. Reviewer had read the v0.1 rule table beforehand (see LABELING_GUIDE.md, 'Known threats')."
+}

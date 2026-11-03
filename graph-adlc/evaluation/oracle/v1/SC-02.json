@@ -1,0 +1,24 @@
+{
+  "scenario_id": "SC-02",
+  "oracle_version": "1.0",
+  "ground_facts": [
+    "Wording-only change; meaning and acceptance criteria identical."
+  ],
+  "necessary_checks": [],
+  "unknown_checks": [],
+  "material_impacts": [],
+  "explicitly_not_required": [
+    {
+      "target_id": "CMP-REPORTING",
+      "reason": "no behaviour change"
+    },
+    {
+      "target_id": "CAP-REPORTING",
+      "reason": "no scope change"
+    }
+  ],
+  "reviewers": [
+    "reviewer-1 (Claude coding agent, acting as architect+engineer; single reviewer)"
+  ],
+  "adjudication_notes": "Blind first draft written from the scenario description, the readable seed specification and the stipulated ground facts, before any method prediction for this scenario was generated. Single reviewer; no second-reviewer adjudication. Reviewer had read the v0.1 rule table beforehand (see LABELING_GUIDE.md, 'Known threats')."
+}

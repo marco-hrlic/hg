@@ -1,0 +1,64 @@
+{
+  "scenario_id": "SC-23",
+  "oracle_version": "1.0",
+  "ground_facts": [
+    "CMP-ORDERS publishes the event; CMP-NOTIFIER reads 'total' to fill the email template.",
+    "TEST-EMAIL renders from a sample OrderPlaced event using the old field name.",
+    "TEST-ORDER-FLOW does not inspect published events."
+  ],
+  "necessary_checks": [
+    {
+      "target_id": "CMP-ORDERS",
+      "obligation": "check_contract",
+      "severity": "critical",
+      "reason": "publisher constrained by the contract"
+    },
+    {
+      "target_id": "CMP-NOTIFIER",
+      "obligation": "check_contract",
+      "severity": "critical",
+      "reason": "consumer reads the renamed field"
+    },
+    {
+      "target_id": "TEST-EMAIL",
+      "obligation": "rerun_test",
+      "severity": "critical",
+      "reason": "fixture uses old field; two hops from the contract"
+    }
+  ],
+  "unknown_checks": [
+    {
+      "target_id": "REQ-ORDER-EMAIL",
+      "obligation": "check_contract",
+      "reason": "covered by TEST-EMAIL; discretionary"
+    }
+  ],
+  "material_impacts": [
+    {
+      "target_id": "CMP-NOTIFIER",
+      "reason": "breaks unless adapted"
+    },
+    {
+      "target_id": "TEST-EMAIL",
+      "reason": "fixture"
+    }
+  ],
+  "explicitly_not_required": [
+    {
+      "target_id": "REQ-PLACE-ORDER",
+      "reason": "UI total, not the event"
+    },
+    {
+      "target_id": "CON-EMAIL-TEMPLATE",
+      "reason": "template variables unchanged"
+    },
+    {
+      "target_id": "TEST-ORDER-FLOW",
+      "reason": "does not inspect events"
+    }
+  ],
+  "reviewers": [
+    "reviewer-1 (Claude coding agent, acting as architect+engineer; single reviewer)"
+  ],
+  "adjudication_notes": "Blind first draft written from the scenario description, the readable seed specification and the stipulated ground facts, before any method prediction for this scenario was generated. Single reviewer; no second-reviewer adjudication. Reviewer had read the v0.1 rule table beforehand (see LABELING_GUIDE.md, 'Known threats')."
+}

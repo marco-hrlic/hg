@@ -1,0 +1,43 @@
+{
+  "id": "SC-14",
+  "dataset_version": "1.0",
+  "family": "implementation",
+  "tags": [
+    "shared_component",
+    "evidence_valid_incomplete",
+    "pruning",
+    "unsafe_prune_candidate"
+  ],
+  "description": "CMP-MONEY's formatter starts inserting thousands separators; the preservation check passed because its table has no amounts >= 1000.",
+  "seed_ref": "evaluation/scenarios/seeds/orders_seed.json",
+  "setup": [
+    {
+      "type": "evidence",
+      "node_id": "CMP-MONEY",
+      "kind": "contract_preservation",
+      "result": "passed",
+      "code_rev": "git:proposed",
+      "details": {
+        "note": "TEST-MONEY table green on the new formatter"
+      }
+    }
+  ],
+  "proposal": {
+    "base_graph_revision": 1,
+    "actor": "change-author",
+    "rationale": "Readability: group thousands in formatted amounts.",
+    "operations": [
+      {
+        "op": "update_node",
+        "id": "CMP-MONEY",
+        "expected_rev": 1,
+        "aspect": "implementation",
+        "patch": {
+          "data": {
+            "implementation_note": "format() inserts ',' thousands separators"
+          }
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "scenario_id": "SC-08",
+  "oracle_version": "1.0",
+  "ground_facts": [
+    "CMP-REPORTING sums and displays the stored decimal amounts; integer cents would be shown 100x too large.",
+    "The payment->reporting data contract is informal (no contract node).",
+    "The gateway call already uses minor units; only storage changes. REQ-CHARGE/REQ-RETRY behaviour is unaffected.",
+    "TEST-RETRY counts transactions and does not inspect amounts."
+  ],
+  "necessary_checks": [
+    {
+      "target_id": "CMP-REPORTING",
+      "obligation": "check_contract",
+      "severity": "critical",
+      "reason": "consumer interprets amounts"
+    },
+    {
+      "target_id": "REQ-REPORT",
+      "obligation": "check_contract",
+      "severity": "major",
+      "reason": "summary values change; no registered test covers it"
+    }
+  ],
+  "unknown_checks": [],
+  "material_impacts": [
+    {
+      "target_id": "CMP-REPORTING",
+      "reason": "would display wrong amounts unless adapted"
+    }
+  ],
+  "explicitly_not_required": [
+    {
+      "target_id": "REQ-CHARGE",
+      "reason": "requirement concerns creation/ID only"
+    },
+    {
+      "target_id": "REQ-RETRY",
+      "reason": "retry semantics unchanged"
+    },
+    {
+      "target_id": "TEST-RETRY",
+      "reason": "does not inspect amounts"
+    },
+    {
+      "target_id": "CON-IDEMPOTENCY",
+      "reason": "unchanged"
+    }
+  ],
+  "reviewers": [
+    "reviewer-1 (Claude coding agent, acting as architect+engineer; single reviewer)"
+  ],
+  "adjudication_notes": "Blind first draft written from the scenario description, the readable seed specification and the stipulated ground facts, before any method prediction for this scenario was generated. Single reviewer; no second-reviewer adjudication. Reviewer had read the v0.1 rule table beforehand (see LABELING_GUIDE.md, 'Known threats')."
+}

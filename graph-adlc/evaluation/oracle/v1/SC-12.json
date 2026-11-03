@@ -1,0 +1,77 @@
+{
+  "scenario_id": "SC-12",
+  "oracle_version": "1.0",
+  "ground_facts": [
+    "CMP-INVENTORY must emit ttl_seconds.",
+    "CMP-ORDERS parses expires_at to schedule order-hold cancellation.",
+    "TEST-ORDER-FLOW's inventory stub returns expires_at; TEST-RESERVE asserts expiry.",
+    "CMP-NOTIFIER never sees reservation API responses."
+  ],
+  "necessary_checks": [
+    {
+      "target_id": "CMP-INVENTORY",
+      "obligation": "check_contract",
+      "severity": "critical",
+      "reason": "provider must implement the new contract"
+    },
+    {
+      "target_id": "CMP-ORDERS",
+      "obligation": "check_contract",
+      "severity": "critical",
+      "reason": "consumer parses the changed field"
+    },
+    {
+      "target_id": "REQ-PLACE-ORDER",
+      "obligation": "check_contract",
+      "severity": "major",
+      "reason": "constrained; hold/cancel flow depends on expiry"
+    },
+    {
+      "target_id": "REQ-RESERVE-STOCK",
+      "obligation": "check_contract",
+      "severity": "major",
+      "reason": "constrained; expiry representation changes"
+    },
+    {
+      "target_id": "TEST-ORDER-FLOW",
+      "obligation": "rerun_test",
+      "severity": "critical",
+      "reason": "verifies the contract; stub must change"
+    },
+    {
+      "target_id": "TEST-RESERVE",
+      "obligation": "rerun_test",
+      "severity": "major",
+      "reason": "asserts expiry"
+    }
+  ],
+  "unknown_checks": [],
+  "material_impacts": [
+    {
+      "target_id": "CMP-INVENTORY",
+      "reason": "code"
+    },
+    {
+      "target_id": "CMP-ORDERS",
+      "reason": "code"
+    },
+    {
+      "target_id": "TEST-ORDER-FLOW",
+      "reason": "stub"
+    }
+  ],
+  "explicitly_not_required": [
+    {
+      "target_id": "CMP-NOTIFIER",
+      "reason": "does not use the API"
+    },
+    {
+      "target_id": "REQ-LOW-STOCK-ALERT",
+      "reason": "unrelated"
+    }
+  ],
+  "reviewers": [
+    "reviewer-1 (Claude coding agent, acting as architect+engineer; single reviewer)"
+  ],
+  "adjudication_notes": "Blind first draft written from the scenario description, the readable seed specification and the stipulated ground facts, before any method prediction for this scenario was generated. Single reviewer; no second-reviewer adjudication. Reviewer had read the v0.1 rule table beforehand (see LABELING_GUIDE.md, 'Known threats')."
+}

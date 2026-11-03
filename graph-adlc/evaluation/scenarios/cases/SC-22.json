@@ -1,0 +1,34 @@
+{
+  "id": "SC-22",
+  "dataset_version": "1.0",
+  "family": "adversarial",
+  "tags": [
+    "missing_edge",
+    "multihop",
+    "shared_component_fanout"
+  ],
+  "description": "REQ-CHARGE changes the transaction identifier from numeric to a UUID string; the reporting dependency on IDs is not registered.",
+  "seed_ref": "fixtures/payment_seed.json",
+  "setup": [],
+  "proposal": {
+    "base_graph_revision": 1,
+    "actor": "change-author",
+    "rationale": "Use UUIDs for transaction IDs.",
+    "operations": [
+      {
+        "op": "update_node",
+        "id": "REQ-CHARGE",
+        "expected_rev": 1,
+        "aspect": "semantic",
+        "patch": {
+          "data": {
+            "acceptance_criteria": [
+              "An authorized request creates one transaction",
+              "A successful request returns a transaction ID as a UUID string"
+            ]
+          }
+        }
+      }
+    ]
+  }
+}

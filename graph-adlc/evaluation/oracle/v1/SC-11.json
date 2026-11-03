@@ -1,0 +1,38 @@
+{
+  "scenario_id": "SC-11",
+  "oracle_version": "1.0",
+  "ground_facts": [
+    "Same refactor as SC-09; behaviour preserved, but the only preservation record predates CON-IDEMPOTENCY r2.",
+    "Reporting relies only on transaction records."
+  ],
+  "necessary_checks": [
+    {
+      "target_id": "TEST-RETRY",
+      "obligation": "rerun_test",
+      "severity": "major",
+      "reason": "exercises refactored code"
+    }
+  ],
+  "unknown_checks": [
+    {
+      "target_id": "REQ-RETRY",
+      "obligation": "check_contract",
+      "reason": "redundant with the test re-run; discretionary"
+    }
+  ],
+  "material_impacts": [],
+  "explicitly_not_required": [
+    {
+      "target_id": "CMP-REPORTING",
+      "reason": "consumer relies only on transaction records"
+    },
+    {
+      "target_id": "REQ-CHARGE",
+      "reason": "charge path untouched"
+    }
+  ],
+  "reviewers": [
+    "reviewer-1 (Claude coding agent, acting as architect+engineer; single reviewer)"
+  ],
+  "adjudication_notes": "Blind first draft written from the scenario description, the readable seed specification and the stipulated ground facts, before any method prediction for this scenario was generated. Single reviewer; no second-reviewer adjudication. Reviewer had read the v0.1 rule table beforehand (see LABELING_GUIDE.md, 'Known threats'). Not pruning CMP-REPORTING here is the correct conservative rule outcome but is still not an oracle-required check."
+}

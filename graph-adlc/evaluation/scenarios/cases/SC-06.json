@@ -1,0 +1,28 @@
+{
+  "id": "SC-06",
+  "dataset_version": "1.0",
+  "family": "semantic",
+  "tags": [
+    "true_negative",
+    "harmless_wording"
+  ],
+  "description": "Spelling change in the REQ-ORDER-EMAIL title.",
+  "seed_ref": "evaluation/scenarios/seeds/orders_seed.json",
+  "setup": [],
+  "proposal": {
+    "base_graph_revision": 1,
+    "actor": "change-author",
+    "rationale": "House style: 'e-mail'.",
+    "operations": [
+      {
+        "op": "update_node",
+        "id": "REQ-ORDER-EMAIL",
+        "expected_rev": 1,
+        "aspect": "semantic",
+        "patch": {
+          "title": "Send order confirmation e-mail"
+        }
+      }
+    ]
+  }
+}

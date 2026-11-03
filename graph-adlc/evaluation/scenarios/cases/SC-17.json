@@ -1,0 +1,30 @@
+{
+  "id": "SC-17",
+  "dataset_version": "1.0",
+  "family": "implementation",
+  "tags": [
+    "internal_refactor",
+    "consumer_side"
+  ],
+  "description": "Query optimisation inside CMP-REPORTING.",
+  "seed_ref": "fixtures/payment_seed.json",
+  "setup": [],
+  "proposal": {
+    "base_graph_revision": 1,
+    "actor": "change-author",
+    "rationale": "Summary query uses an index-only scan.",
+    "operations": [
+      {
+        "op": "update_node",
+        "id": "CMP-REPORTING",
+        "expected_rev": 1,
+        "aspect": "implementation",
+        "patch": {
+          "data": {
+            "implementation_note": "summary query rewritten for an index-only scan"
+          }
+        }
+      }
+    ]
+  }
+}

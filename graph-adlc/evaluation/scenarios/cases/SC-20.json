@@ -1,0 +1,32 @@
+{
+  "id": "SC-20",
+  "dataset_version": "1.0",
+  "family": "structure",
+  "tags": [
+    "readiness_only",
+    "no_code"
+  ],
+  "description": "Q-ALERT-THRESHOLD is reopened as a blocking question; no code changes.",
+  "seed_ref": "evaluation/scenarios/seeds/orders_seed.json",
+  "setup": [],
+  "proposal": {
+    "base_graph_revision": 1,
+    "actor": "change-author",
+    "rationale": "Merchandising is reconsidering the threshold.",
+    "operations": [
+      {
+        "op": "update_node",
+        "id": "Q-ALERT-THRESHOLD",
+        "expected_rev": 1,
+        "aspect": "semantic",
+        "patch": {
+          "body": "Merchandising is reconsidering a percentage-based threshold.",
+          "data": {
+            "blocking": true,
+            "state": "open"
+          }
+        }
+      }
+    ]
+  }
+}

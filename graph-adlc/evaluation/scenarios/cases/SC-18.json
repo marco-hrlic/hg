@@ -1,0 +1,24 @@
+{
+  "id": "SC-18",
+  "dataset_version": "1.0",
+  "family": "structure",
+  "tags": [
+    "edge_remove",
+    "old_union_new"
+  ],
+  "description": "CMP-REPORTING stops depending on CMP-PAYMENT (it now reads a ledger replica); edge E13 is removed.",
+  "seed_ref": "fixtures/payment_seed.json",
+  "setup": [],
+  "proposal": {
+    "base_graph_revision": 1,
+    "actor": "change-author",
+    "rationale": "Reporting reads the ledger replica instead of calling the payment service.",
+    "operations": [
+      {
+        "op": "remove_edge",
+        "id": "E13",
+        "expected_rev": 1
+      }
+    ]
+  }
+}

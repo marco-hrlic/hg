@@ -1,0 +1,70 @@
+{
+  "scenario_id": "SC-14",
+  "oracle_version": "1.0",
+  "ground_facts": [
+    "format() now returns '1,234.50'; CON-MONEY-FORMAT is silent on separators.",
+    "CMP-ORDERS stores the formatted total and re-parses it with Decimal(), which raises for amounts >= 1000.",
+    "CMP-NOTIFIER only displays the string; a separator in an email is acceptable.",
+    "TEST-MONEY's table has no amount >= 1000, which is why the preservation record passed.",
+    "TEST-ORDER-FLOW and TEST-EMAIL execute the formatter (sample totals < 1000)."
+  ],
+  "necessary_checks": [
+    {
+      "target_id": "CMP-ORDERS",
+      "obligation": "check_contract",
+      "severity": "critical",
+      "reason": "consumer re-parses formatted strings"
+    },
+    {
+      "target_id": "TEST-MONEY",
+      "obligation": "rerun_test",
+      "severity": "major",
+      "reason": "verifies the contract; needs a >=1000 case"
+    },
+    {
+      "target_id": "TEST-ORDER-FLOW",
+      "obligation": "rerun_test",
+      "severity": "major",
+      "reason": "executes changed formatter through ordering"
+    },
+    {
+      "target_id": "TEST-EMAIL",
+      "obligation": "rerun_test",
+      "severity": "minor",
+      "reason": "executes changed formatter"
+    },
+    {
+      "target_id": "CON-MONEY-FORMAT",
+      "obligation": "check_contract",
+      "severity": "minor",
+      "reason": "contract text is ambiguous about separators"
+    }
+  ],
+  "unknown_checks": [
+    {
+      "target_id": "REQ-PLACE-ORDER",
+      "obligation": "check_contract",
+      "reason": "covered by TEST-ORDER-FLOW per labeling guide; discretionary"
+    }
+  ],
+  "material_impacts": [
+    {
+      "target_id": "CMP-ORDERS",
+      "reason": "fails for totals >= 1000"
+    }
+  ],
+  "explicitly_not_required": [
+    {
+      "target_id": "CMP-NOTIFIER",
+      "reason": "display only"
+    },
+    {
+      "target_id": "REQ-ORDER-EMAIL",
+      "reason": "display acceptable"
+    }
+  ],
+  "reviewers": [
+    "reviewer-1 (Claude coding agent, acting as architect+engineer; single reviewer)"
+  ],
+  "adjudication_notes": "Blind first draft written from the scenario description, the readable seed specification and the stipulated ground facts, before any method prediction for this scenario was generated. Single reviewer; no second-reviewer adjudication. Reviewer had read the v0.1 rule table beforehand (see LABELING_GUIDE.md, 'Known threats'). Adversarial: the preservation record is valid under the v0.1 admissibility rules but incomplete."
+}

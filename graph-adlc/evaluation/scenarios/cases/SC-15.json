@@ -1,0 +1,43 @@
+{
+  "id": "SC-15",
+  "dataset_version": "1.0",
+  "family": "implementation",
+  "tags": [
+    "shared_component",
+    "contract_preserved",
+    "evidence_valid",
+    "pruning"
+  ],
+  "description": "Performance refactor of CMP-MONEY (cached formatters) with a passing, current preservation record.",
+  "seed_ref": "evaluation/scenarios/seeds/orders_seed.json",
+  "setup": [
+    {
+      "type": "evidence",
+      "node_id": "CMP-MONEY",
+      "kind": "contract_preservation",
+      "result": "passed",
+      "code_rev": "git:proposed",
+      "details": {
+        "note": "TEST-MONEY table and property tests green on the refactored code"
+      }
+    }
+  ],
+  "proposal": {
+    "base_graph_revision": 1,
+    "actor": "change-author",
+    "rationale": "Cache formatter instances; no behaviour change.",
+    "operations": [
+      {
+        "op": "update_node",
+        "id": "CMP-MONEY",
+        "expected_rev": 1,
+        "aspect": "implementation",
+        "patch": {
+          "data": {
+            "implementation_note": "formatter instances cached"
+          }
+        }
+      }
+    ]
+  }
+}

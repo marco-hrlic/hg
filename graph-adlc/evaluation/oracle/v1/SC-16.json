@@ -1,0 +1,62 @@
+{
+  "scenario_id": "SC-16",
+  "oracle_version": "1.0",
+  "ground_facts": [
+    "Reservation API unchanged.",
+    "Previously events were also emitted for rolled-back reservations; now only committed ones, after commit (later).",
+    "CMP-NOTIFIER consumes these events (unregistered dependency); alert counts/timing change.",
+    "TEST-RESERVE exercises the locking path; TEST-ORDER-FLOW uses a stub inventory; TEST-LOW-STOCK feeds synthetic events."
+  ],
+  "necessary_checks": [
+    {
+      "target_id": "TEST-RESERVE",
+      "obligation": "rerun_test",
+      "severity": "major",
+      "reason": "exercises the changed locking"
+    },
+    {
+      "target_id": "CMP-NOTIFIER",
+      "obligation": "check_contract",
+      "severity": "major",
+      "reason": "event semantics/timing changed; dependency not registered"
+    },
+    {
+      "target_id": "REQ-LOW-STOCK-ALERT",
+      "obligation": "check_contract",
+      "severity": "major",
+      "reason": "alert behaviour changes; its test cannot detect it"
+    }
+  ],
+  "unknown_checks": [
+    {
+      "target_id": "REQ-RESERVE-STOCK",
+      "obligation": "check_contract",
+      "reason": "covered by TEST-RESERVE; discretionary"
+    },
+    {
+      "target_id": "TEST-LOW-STOCK",
+      "obligation": "rerun_test",
+      "reason": "synthetic events: whether the fixture must reflect the new semantics is a judgement call"
+    }
+  ],
+  "material_impacts": [
+    {
+      "target_id": "CMP-NOTIFIER",
+      "reason": "observes different event stream"
+    }
+  ],
+  "explicitly_not_required": [
+    {
+      "target_id": "CMP-ORDERS",
+      "reason": "API unchanged"
+    },
+    {
+      "target_id": "TEST-ORDER-FLOW",
+      "reason": "uses a stub inventory"
+    }
+  ],
+  "reviewers": [
+    "reviewer-1 (Claude coding agent, acting as architect+engineer; single reviewer)"
+  ],
+  "adjudication_notes": "Blind first draft written from the scenario description, the readable seed specification and the stipulated ground facts, before any method prediction for this scenario was generated. Single reviewer; no second-reviewer adjudication. Reviewer had read the v0.1 rule table beforehand (see LABELING_GUIDE.md, 'Known threats')."
+}

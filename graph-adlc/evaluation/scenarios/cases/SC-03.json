@@ -1,0 +1,28 @@
+{
+  "id": "SC-03",
+  "dataset_version": "1.0",
+  "family": "semantic",
+  "tags": [
+    "parent",
+    "scope_narrowing"
+  ],
+  "description": "CAP-PAYMENTS is narrowed to card payments; wallets are explicitly out of scope.",
+  "seed_ref": "fixtures/payment_seed.json",
+  "setup": [],
+  "proposal": {
+    "base_graph_revision": 1,
+    "actor": "change-author",
+    "rationale": "Product decision: wallets are out of scope for this release.",
+    "operations": [
+      {
+        "op": "update_node",
+        "id": "CAP-PAYMENTS",
+        "expected_rev": 1,
+        "aspect": "semantic",
+        "patch": {
+          "body": "Accept and process card payments. Digital wallets are out of scope."
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "id": "SC-02",
+  "dataset_version": "1.0",
+  "family": "semantic",
+  "tags": [
+    "true_negative",
+    "harmless_wording"
+  ],
+  "description": "Editorial rewording of REQ-REPORT; meaning unchanged.",
+  "seed_ref": "fixtures/payment_seed.json",
+  "setup": [],
+  "proposal": {
+    "base_graph_revision": 1,
+    "actor": "change-author",
+    "rationale": "Editorial wording fix.",
+    "operations": [
+      {
+        "op": "update_node",
+        "id": "REQ-REPORT",
+        "expected_rev": 1,
+        "aspect": "semantic",
+        "patch": {
+          "body": "Completed transactions are listed by the summary endpoint."
+        }
+      }
+    ]
+  }
+}

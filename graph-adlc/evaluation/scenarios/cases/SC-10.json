@@ -1,0 +1,43 @@
+{
+  "id": "SC-10",
+  "dataset_version": "1.0",
+  "family": "contract",
+  "tags": [
+    "contract_preserved_claim",
+    "evidence_failed",
+    "pruning"
+  ],
+  "description": "Refactor of CMP-PAYMENT's idempotency-key generation; the preservation check failed.",
+  "seed_ref": "fixtures/payment_seed.json",
+  "setup": [
+    {
+      "type": "evidence",
+      "node_id": "CMP-PAYMENT",
+      "kind": "contract_preservation",
+      "result": "failed",
+      "code_rev": "git:proposed",
+      "details": {
+        "note": "duplicate-submission case failed on the refactored code"
+      }
+    }
+  ],
+  "proposal": {
+    "base_graph_revision": 1,
+    "actor": "change-author",
+    "rationale": "Move idempotency-key generation into a shared helper.",
+    "operations": [
+      {
+        "op": "update_node",
+        "id": "CMP-PAYMENT",
+        "expected_rev": 1,
+        "aspect": "implementation",
+        "patch": {
+          "data": {
+            "implementation_note": "idempotency key generation moved to a helper"
+          }
+        },
+        "contract_preserved": true
+      }
+    ]
+  }
+}

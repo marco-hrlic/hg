@@ -1,0 +1,29 @@
+{
+  "dataset_version": "1.0",
+  "scenarios": [
+    "cases/SC-01.json",
+    "cases/SC-02.json",
+    "cases/SC-03.json",
+    "cases/SC-04.json",
+    "cases/SC-05.json",
+    "cases/SC-06.json",
+    "cases/SC-07.json",
+    "cases/SC-08.json",
+    "cases/SC-09.json",
+    "cases/SC-10.json",
+    "cases/SC-11.json",
+    "cases/SC-12.json",
+    "cases/SC-13.json",
+    "cases/SC-14.json",
+    "cases/SC-15.json",
+    "cases/SC-16.json",
+    "cases/SC-17.json",
+    "cases/SC-18.json",
+    "cases/SC-19.json",
+    "cases/SC-20.json",
+    "cases/SC-21.json",
+    "cases/SC-22.json",
+    "cases/SC-23.json",
+    "cases/SC-24.json"
+  ]
+}

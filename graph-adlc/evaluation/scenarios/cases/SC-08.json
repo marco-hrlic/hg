@@ -1,0 +1,29 @@
+{
+  "id": "SC-08",
+  "dataset_version": "1.0",
+  "family": "contract",
+  "tags": [
+    "consumer_break",
+    "multihop",
+    "informal_contract"
+  ],
+  "description": "CMP-PAYMENT changes observable behaviour: transaction records store amounts as integer minor units instead of decimals.",
+  "seed_ref": "fixtures/payment_seed.json",
+  "setup": [],
+  "proposal": {
+    "base_graph_revision": 1,
+    "actor": "change-author",
+    "rationale": "Avoid float rounding by storing integer cents.",
+    "operations": [
+      {
+        "op": "update_node",
+        "id": "CMP-PAYMENT",
+        "expected_rev": 1,
+        "aspect": "semantic",
+        "patch": {
+          "body": "Business logic for charging and retrying payment requests. Transaction records store amounts as integer minor units (cents)."
+        }
+      }
+    ]
+  }
+}

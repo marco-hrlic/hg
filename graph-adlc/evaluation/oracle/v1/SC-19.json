@@ -1,0 +1,30 @@
+{
+  "scenario_id": "SC-19",
+  "oracle_version": "1.0",
+  "ground_facts": [
+    "The dependency already exists in code and is exercised; registering it changes nothing."
+  ],
+  "necessary_checks": [],
+  "unknown_checks": [
+    {
+      "target_id": "CMP-NOTIFIER",
+      "obligation": "check_contract",
+      "reason": "confirming the registration is accurate is good hygiene, not required"
+    }
+  ],
+  "material_impacts": [],
+  "explicitly_not_required": [
+    {
+      "target_id": "CMP-INVENTORY",
+      "reason": "no change"
+    },
+    {
+      "target_id": "REQ-LOW-STOCK-ALERT",
+      "reason": "no change"
+    }
+  ],
+  "reviewers": [
+    "reviewer-1 (Claude coding agent, acting as architect+engineer; single reviewer)"
+  ],
+  "adjudication_notes": "Blind first draft written from the scenario description, the readable seed specification and the stipulated ground facts, before any method prediction for this scenario was generated. Single reviewer; no second-reviewer adjudication. Reviewer had read the v0.1 rule table beforehand (see LABELING_GUIDE.md, 'Known threats')."
+}

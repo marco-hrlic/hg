@@ -1,0 +1,63 @@
+{
+  "scenario_id": "SC-04",
+  "oracle_version": "1.0",
+  "ground_facts": [
+    "CMP-PAYMENT hard-codes MAX_ATTEMPTS = 3.",
+    "TEST-RETRY asserts exactly three attempts for a persistent transient failure.",
+    "Q-RETRY-BOUNDS (resolved) records 'no more than three times' and now contradicts the requirement.",
+    "Backoff is capped at 30s; five attempts finish far inside any key-retention window; key reuse is unchanged."
+  ],
+  "necessary_checks": [
+    {
+      "target_id": "CMP-PAYMENT",
+      "obligation": "review_implementation",
+      "severity": "major",
+      "reason": "attempt bound constant must change"
+    },
+    {
+      "target_id": "TEST-RETRY",
+      "obligation": "rerun_test",
+      "severity": "major",
+      "reason": "test asserts the old bound and must be updated/re-run"
+    },
+    {
+      "target_id": "Q-RETRY-BOUNDS",
+      "obligation": "review_spec",
+      "severity": "minor",
+      "reason": "resolved answer now contradicts the requirement"
+    }
+  ],
+  "unknown_checks": [],
+  "material_impacts": [
+    {
+      "target_id": "CMP-PAYMENT",
+      "reason": "constant changes"
+    },
+    {
+      "target_id": "TEST-RETRY",
+      "reason": "assertion changes"
+    }
+  ],
+  "explicitly_not_required": [
+    {
+      "target_id": "CON-IDEMPOTENCY",
+      "reason": "key semantics unchanged"
+    },
+    {
+      "target_id": "REQ-CHARGE",
+      "reason": "charge path has no retries"
+    },
+    {
+      "target_id": "CMP-REPORTING",
+      "reason": "retries create no extra transactions"
+    },
+    {
+      "target_id": "CAP-PAYMENTS",
+      "reason": "scope unchanged"
+    }
+  ],
+  "reviewers": [
+    "reviewer-1 (Claude coding agent, acting as architect+engineer; single reviewer)"
+  ],
+  "adjudication_notes": "Blind first draft written from the scenario description, the readable seed specification and the stipulated ground facts, before any method prediction for this scenario was generated. Single reviewer; no second-reviewer adjudication. Reviewer had read the v0.1 rule table beforehand (see LABELING_GUIDE.md, 'Known threats')."
+}

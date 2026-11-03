@@ -1,0 +1,30 @@
+{
+  "id": "SC-19",
+  "dataset_version": "1.0",
+  "family": "structure",
+  "tags": [
+    "edge_add",
+    "true_negative",
+    "missing_edge_registration"
+  ],
+  "description": "Registers the already-existing dependency CMP-NOTIFIER -> CMP-INVENTORY; no code or behaviour changes.",
+  "seed_ref": "evaluation/scenarios/seeds/orders_seed.json",
+  "setup": [],
+  "proposal": {
+    "base_graph_revision": 1,
+    "actor": "change-author",
+    "rationale": "Graph hygiene: record an existing dependency found in code review.",
+    "operations": [
+      {
+        "op": "add_edge",
+        "edge": {
+          "id": "O34",
+          "src": "CMP-NOTIFIER",
+          "dst": "CMP-INVENTORY",
+          "relation": "depends_on",
+          "status": "confirmed"
+        }
+      }
+    ]
+  }
+}

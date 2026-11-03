@@ -1,0 +1,31 @@
+{
+  "id": "SC-23",
+  "dataset_version": "1.0",
+  "family": "adversarial",
+  "tags": [
+    "multihop",
+    "contract_change"
+  ],
+  "description": "CON-ORDER-EVENT renames field total -> amount.",
+  "seed_ref": "evaluation/scenarios/seeds/orders_seed.json",
+  "setup": [],
+  "proposal": {
+    "base_graph_revision": 1,
+    "actor": "change-author",
+    "rationale": "Align event naming with the finance schema.",
+    "operations": [
+      {
+        "op": "update_node",
+        "id": "CON-ORDER-EVENT",
+        "expected_rev": 1,
+        "aspect": "contract",
+        "patch": {
+          "body": "OrderPlaced {order_id, customer_email, amount, currency} is published once per accepted order.",
+          "data": {
+            "version": "2.0"
+          }
+        }
+      }
+    ]
+  }
+}

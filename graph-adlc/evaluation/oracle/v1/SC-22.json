@@ -1,0 +1,63 @@
+{
+  "scenario_id": "SC-22",
+  "oracle_version": "1.0",
+  "ground_facts": [
+    "CMP-PAYMENT generates the IDs (code change).",
+    "CMP-REPORTING stores transaction IDs in an integer column (unregistered reliance on the ID format).",
+    "REQ-REPORT displays transaction IDs; no test covers it.",
+    "Retries return the original ID regardless of format; TEST-RETRY compares IDs for equality."
+  ],
+  "necessary_checks": [
+    {
+      "target_id": "CMP-PAYMENT",
+      "obligation": "review_implementation",
+      "severity": "critical",
+      "reason": "generates IDs"
+    },
+    {
+      "target_id": "CMP-REPORTING",
+      "obligation": "check_contract",
+      "severity": "critical",
+      "reason": "integer ID column"
+    },
+    {
+      "target_id": "REQ-REPORT",
+      "obligation": "check_contract",
+      "severity": "major",
+      "reason": "displays IDs; no direct edge to REQ-CHARGE"
+    }
+  ],
+  "unknown_checks": [],
+  "material_impacts": [
+    {
+      "target_id": "CMP-PAYMENT",
+      "reason": "code"
+    },
+    {
+      "target_id": "CMP-REPORTING",
+      "reason": "schema"
+    }
+  ],
+  "explicitly_not_required": [
+    {
+      "target_id": "REQ-RETRY",
+      "reason": "format-agnostic"
+    },
+    {
+      "target_id": "TEST-RETRY",
+      "reason": "format-agnostic"
+    },
+    {
+      "target_id": "CAP-PAYMENTS",
+      "reason": "scope unchanged"
+    },
+    {
+      "target_id": "CON-IDEMPOTENCY",
+      "reason": "unchanged"
+    }
+  ],
+  "reviewers": [
+    "reviewer-1 (Claude coding agent, acting as architect+engineer; single reviewer)"
+  ],
+  "adjudication_notes": "Blind first draft written from the scenario description, the readable seed specification and the stipulated ground facts, before any method prediction for this scenario was generated. Single reviewer; no second-reviewer adjudication. Reviewer had read the v0.1 rule table beforehand (see LABELING_GUIDE.md, 'Known threats')."
+}
