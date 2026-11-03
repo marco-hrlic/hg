@@ -1,0 +1,24 @@
+{
+  "base_graph_revision": 3,
+  "actor": "reconciliation-agent",
+  "rationale": "Align retry behaviour with the 24h provider idempotency window.",
+  "operations": [
+    {
+      "op": "update_node",
+      "id": "REQ-RETRY",
+      "expected_rev": 2,
+      "aspect": "semantic",
+      "patch": {
+        "data": {
+          "acceptance_criteria": [
+            "At most three attempts are made",
+            "Backoff increases between retries with a configured upper limit",
+            "Every attempt uses the original idempotency key",
+            "Permanent failures are not retried",
+            "No retry is attempted after the provider's 24h idempotency window has elapsed"
+          ]
+        }
+      }
+    }
+  ]
+}

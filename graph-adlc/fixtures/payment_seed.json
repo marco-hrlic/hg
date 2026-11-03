@@ -1,0 +1,35 @@
+{
+  "graph_revision": 1,
+  "nodes": [
+    {"id":"GOAL-CHECKOUT","kind":"goal","title":"Reliable checkout","body":"Customers can pay and review their purchases reliably.","data":{"success_criteria":["No duplicate charges"]},"rev":1},
+    {"id":"CAP-PAYMENTS","kind":"capability","title":"Payments","body":"Accept and process payments.","data":{},"rev":1},
+    {"id":"CAP-REPORTING","kind":"capability","title":"Reporting","body":"Expose payment summaries.","data":{},"rev":1},
+    {"id":"REQ-CHARGE","kind":"requirement","title":"Charge payment once","body":"Process an authorized payment and return a stable transaction identifier.","data":{"acceptance_criteria":["An authorized request creates one transaction","A successful request returns a transaction ID"],"assumptions":[]},"rev":1},
+    {"id":"REQ-RETRY","kind":"requirement","title":"Retry transient payment failures","body":"Retry temporary gateway failures without duplicating charges.","data":{"acceptance_criteria":[],"assumptions":[]},"rev":1},
+    {"id":"REQ-REPORT","kind":"requirement","title":"View payment summary","body":"A completed transaction appears in a summary endpoint.","data":{"acceptance_criteria":["A successful transaction is displayed in the summary"]},"rev":1},
+    {"id":"CON-IDEMPOTENCY","kind":"contract","title":"Idempotent payment submission","body":"Re-submitting the same request key must not create a second charge within the supported guarantee window.","data":{"status":"accepted","guarantee_window":"provider-documented; verification pending"},"rev":1},
+    {"id":"CMP-PAYMENT","kind":"component","title":"Payment service","body":"Business logic for charging and retrying payment requests.","data":{},"rev":1},
+    {"id":"CMP-REPORTING","kind":"component","title":"Reporting service","body":"Provides transaction summaries.","data":{},"rev":1},
+    {"id":"ART-PAYMENT","kind":"artifact","title":"Payment implementation","body":"Implementation file in the example repository.","data":{"path":"src/payment_service.py"},"rev":1},
+    {"id":"TEST-RETRY","kind":"test","title":"No double-charge on retries","body":"End-to-end retry scenario.","data":{"command":"pytest -q tests/test_payment_retry.py"},"rev":1},
+    {"id":"Q-RETRY-BOUNDS","kind":"question","title":"When must retries stop?","body":"Determine maximum attempts and retryable failure classes.","data":{"blocking":true,"state":"open"},"rev":1}
+  ],
+  "edges": [
+    {"id":"E01","src":"GOAL-CHECKOUT","dst":"CAP-PAYMENTS","relation":"refines","status":"confirmed","rev":1},
+    {"id":"E02","src":"GOAL-CHECKOUT","dst":"CAP-REPORTING","relation":"refines","status":"confirmed","rev":1},
+    {"id":"E03","src":"CAP-PAYMENTS","dst":"REQ-CHARGE","relation":"refines","status":"confirmed","rev":1},
+    {"id":"E04","src":"CAP-PAYMENTS","dst":"REQ-RETRY","relation":"refines","status":"confirmed","rev":1},
+    {"id":"E05","src":"CAP-REPORTING","dst":"REQ-REPORT","relation":"refines","status":"confirmed","rev":1},
+    {"id":"E06","src":"REQ-CHARGE","dst":"CON-IDEMPOTENCY","relation":"constrained_by","status":"confirmed","rev":1},
+    {"id":"E07","src":"REQ-RETRY","dst":"CON-IDEMPOTENCY","relation":"constrained_by","status":"confirmed","rev":1},
+    {"id":"E08","src":"CMP-PAYMENT","dst":"REQ-CHARGE","relation":"implements","status":"confirmed","rev":1},
+    {"id":"E09","src":"CMP-PAYMENT","dst":"REQ-RETRY","relation":"implements","status":"confirmed","rev":1},
+    {"id":"E10","src":"TEST-RETRY","dst":"REQ-RETRY","relation":"verifies","status":"confirmed","rev":1},
+    {"id":"E11","src":"TEST-RETRY","dst":"CON-IDEMPOTENCY","relation":"verifies","status":"confirmed","rev":1},
+    {"id":"E12","src":"CMP-PAYMENT","dst":"ART-PAYMENT","relation":"realized_by","status":"confirmed","rev":1},
+    {"id":"E13","src":"CMP-REPORTING","dst":"CMP-PAYMENT","relation":"depends_on","status":"confirmed","rev":1},
+    {"id":"E14","src":"CMP-REPORTING","dst":"REQ-REPORT","relation":"implements","status":"confirmed","rev":1},
+    {"id":"E15","src":"Q-RETRY-BOUNDS","dst":"REQ-RETRY","relation":"blocks","status":"confirmed","rev":1},
+    {"id":"E16","src":"CMP-PAYMENT","dst":"CON-IDEMPOTENCY","relation":"constrained_by","status":"confirmed","rev":1}
+  ]
+}

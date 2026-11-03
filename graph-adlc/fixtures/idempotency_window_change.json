@@ -1,0 +1,17 @@
+{
+  "base_graph_revision": 2,
+  "actor": "implementation-agent",
+  "rationale": "Provider documentation: idempotency keys are only honoured within a 24h retention window; retries beyond it can double charge.",
+  "operations": [
+    {
+      "op": "update_node",
+      "id": "CON-IDEMPOTENCY",
+      "expected_rev": 1,
+      "aspect": "contract",
+      "patch": {
+        "body": "Re-submitting the same request key must not create a second charge. The provider honours keys only for 24h; the service must not retry with an expired key.",
+        "data": {"status": "accepted", "guarantee_window": "24h provider retention", "source": "provider docs, verified"}
+      }
+    }
+  ]
+}

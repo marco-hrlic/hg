@@ -1,0 +1,21 @@
+{
+  "base_graph_revision": 1,
+  "actor": "discovery-agent",
+  "rationale": "Resolve the retry bound question and refine acceptance criteria.",
+  "operations": [
+    {
+      "op": "update_node",
+      "id": "Q-RETRY-BOUNDS",
+      "expected_rev": 1,
+      "aspect": "semantic",
+      "patch": {"body": "Retry transient gateway errors no more than three times.", "data": {"blocking": true, "state": "resolved"}}
+    },
+    {
+      "op": "update_node",
+      "id": "REQ-RETRY",
+      "expected_rev": 1,
+      "aspect": "semantic",
+      "patch": {"body": "Retry only transient gateway errors up to three attempts, using bounded exponential backoff and a stable idempotency key.", "data": {"acceptance_criteria": ["At most three attempts are made", "Backoff increases between retries with a configured upper limit", "Every attempt uses the original idempotency key", "Permanent failures are not retried"], "assumptions": []}}
+    }
+  ]
+}
