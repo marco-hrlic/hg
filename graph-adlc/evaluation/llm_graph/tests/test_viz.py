@@ -51,7 +51,7 @@ def test_missing_reference_is_a_note_not_a_crash(tmp_path):
 def test_layout_is_deterministic_rows_follow_kind_order_and_union_of_arms(tmp_path):
     entries, _ = viz.load_inputs([str(_run_dir(tmp_path))])
     lay = viz.layout(entries)["p"]
-    assert lay["rows"] == ["requirement", "component", "test"]
+    assert [k for k, _ in lay["rows"]] == ["requirement", "component", "test"]
     assert set(lay["coords"]) == {"REQ-A", "CMP-A", "TEST-A", "CMP-OLD"}  # deleted nodes get a slot too
     ys = {k: lay["coords"][n][1] for n, k in [("REQ-A", "requirement"), ("CMP-A", "component"), ("TEST-A", "test")]}
     assert ys["requirement"] < ys["component"] < ys["test"]
@@ -82,3 +82,13 @@ def test_oracle_overlay_and_cli(tmp_path, capsys):
     empty = tmp_path / "empty" / "x" / "D" / "trace.json"
     _write(empty, {"project": "x", "arm": "D"})
     assert viz.main([str(empty), "-o", str(tmp_path / "n.html")]) == 1
+
+
+def test_wide_rows_wrap_instead_of_widening_the_page():
+    nodes = [{"id": f"Q-{i:02d}", "kind": "question", "title": "q"} for i in range(14)]
+    nodes.append({"id": "REQ-A", "kind": "requirement", "title": "r"})
+    lay = viz.layout([{"project": "p", "nodes": nodes, "edges": []}])["p"]
+    xs = {lay["coords"][n["id"]][0] for n in nodes if n["kind"] == "question"}
+    ys = {lay["coords"][n["id"]][1] for n in nodes if n["kind"] == "question"}
+    assert len(xs) == viz.PER_LINE and len(ys) == 3  # 14 nodes -> 6 + 6 + 2
+    assert lay["width"] <= 2 * viz.PAD + viz.LABEL_W + (viz.PER_LINE - 1) * viz.COL_W + viz.NODE_W

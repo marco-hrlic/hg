@@ -25,6 +25,7 @@ from typing import Any
 KIND_ORDER = ("goal", "capability", "requirement", "question", "contract", "component", "test", "artifact")
 ARM_ORDER = {"D": 0, "G0": 1, "G1": 2, "G2": 3, "H": 4}
 COL_W, ROW_H, NODE_W, NODE_H, PAD, LABEL_W = 206, 92, 180, 38, 28, 104
+PER_LINE, LINE_H = 6, 60  # a kind with more nodes than PER_LINE wraps onto extra lines, LINE_H apart
 
 
 # -- loading -------------------------------------------------------------------------------------------
@@ -131,15 +132,19 @@ def layout(entries: list[dict]) -> dict[str, dict[str, list[float]]]:
                 cols[k].sort(key=key)
                 for i, n in enumerate(cols[k]):
                     pos[n] = float(i)
-        widest = max(len(c) for c in cols.values()) if cols else 0
-        coords = {}
-        for ri, k in enumerate(order):
-            off = (widest - len(cols[k])) * COL_W / 2
-            for i, n in enumerate(cols[k]):
-                coords[n] = [PAD + LABEL_W + off + i * COL_W, PAD + 20 + ri * ROW_H]
-        result[project] = {"coords": coords, "rows": order,
+        widest = min(max((len(c) for c in cols.values()), default=0), PER_LINE)
+        coords, rows, y = {}, [], PAD + 20
+        for k in order:
+            rows.append([k, y])
+            lines = [cols[k][i:i + PER_LINE] for i in range(0, len(cols[k]), PER_LINE)]
+            for li, line in enumerate(lines):
+                off = (widest - len(line)) * COL_W / 2
+                for i, n in enumerate(line):
+                    coords[n] = [PAD + LABEL_W + off + i * COL_W, y + li * LINE_H]
+            y += (len(lines) - 1) * LINE_H + ROW_H
+        result[project] = {"coords": coords, "rows": rows,
                            "width": PAD * 2 + LABEL_W + max(widest - 1, 0) * COL_W + NODE_W,
-                           "height": PAD * 2 + 20 + max(len(order) - 1, 0) * ROW_H + NODE_H}
+                           "height": y - ROW_H + NODE_H + PAD}
     return result
 
 
@@ -246,7 +251,7 @@ function draw(){
  const defs=mk('defs',{},s);
  Object.entries(REL).concat([['ghost','--edge']]).forEach(([r,v])=>{const m=mk('marker',{id:'a-'+r,viewBox:'0 0 10 10',refX:9,refY:5,
   markerWidth:7,markerHeight:7,orient:'auto-start-reverse'},defs);mk('path',{d:'M0,0L10,5L0,10z',fill:`var(${v})`},m)});
- L.rows.forEach((k,i)=>{const t=mk('text',{x:G.pad,y:G.pad+20+i*G.rowH+G.nodeH/2+4,class:'colh'},s);t.textContent=k});
+ L.rows.forEach(([k,y])=>{const t=mk('text',{x:G.pad,y:y+G.nodeH/2+4,class:'colh'},s);t.textContent=k});
  const mine=live(g,showDel),ids=new Set(mine.nodes.map(n=>n.id)),eids=new Set(mine.edges.map(e=>e.src+'|'+e.relation+'|'+e.dst));
  let nodes=mine.nodes.map(n=>({...n,_g:false})),edges=mine.edges.map(e=>({...e,_g:false}));
  if(o){const t=live(o,showDel);t.nodes.forEach(n=>{if(!ids.has(n.id))nodes.push({...n,_g:true})});
