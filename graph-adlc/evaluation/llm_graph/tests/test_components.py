@@ -157,3 +157,51 @@ def test_committed_outputs_are_current(scripted_run):
     for f in sorted(scripted_run.rglob("*")):
         if f.is_file() and f.name != "metrics.json":
             assert (committed / f.relative_to(scripted_run)).read_bytes() == f.read_bytes(), f"stale: {f.name}"
+
+
+def test_openai_client_shape_and_no_key_in_records(monkeypatch):
+    from graph_adlc.llm_graph import LLMProposer, OpenAIChatClient, client_from_env
+    from graph_adlc.models import Graph
+    with pytest.raises(LLMNotConfigured):
+        OpenAIChatClient(model="")
+    seen = {"calls": 0}
+
+    class H(http.server.BaseHTTPRequestHandler):
+        def do_POST(self):  # noqa: N802
+            seen["calls"] += 1
+            seen["auth"], seen["path"] = self.headers.get("authorization"), self.path
+            body = json.loads(self.rfile.read(int(self.headers["content-length"])))
+            seen["body"] = body
+            if "temperature" in body:  # emulate a model that only accepts its default temperature
+                out, code = b'{"error": {"message": "Unsupported value: temperature"}}', 400
+            else:
+                out, code = json.dumps({"model": "m", "choices": [{"message": {"content": '{"operations": []}'},
+                                                                   "finish_reason": "stop"}],
+                                        "usage": {"prompt_tokens": 9, "completion_tokens": 2}}).encode(), 200
+            self.send_response(code)
+            self.send_header("content-type", "application/json")
+            self.end_headers()
+            self.wfile.write(out)
+
+        def log_message(self, *a):
+            pass
+
+    srv = http.server.HTTPServer(("127.0.0.1", 0), H)
+    threading.Thread(target=srv.serve_forever, daemon=True).start()
+    for k in ("NO_PROXY", "no_proxy"):
+        monkeypatch.setenv(k, "127.0.0.1")
+    monkeypatch.setenv("OPENAI_API_KEY", "sk-openai-secret")
+    monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
+    monkeypatch.delenv("GADLC_LLM_PROVIDER", raising=False)
+    monkeypatch.setenv("GADLC_LLM_MODEL", "m")
+    monkeypatch.setenv("GADLC_LLM_BASE_URL", f"http://127.0.0.1:{srv.server_port}")
+    c = client_from_env()
+    assert isinstance(c, OpenAIChatClient) and c.available()
+    prop, record = LLMProposer(c).propose_update(Graph(revision=1), bundle(REQS_V1), {"kind": "t"},
+                                                 proposal_id="P-1", call_key="k")
+    srv.shutdown()
+    assert seen["path"] == "/v1/chat/completions" and seen["auth"] == "Bearer sk-openai-secret"
+    assert seen["body"]["response_format"] == {"type": "json_object"} and seen["calls"] == 2
+    assert prop is not None and record["usage"] == {"input_tokens": 9, "output_tokens": 2}
+    assert record["client"]["temperature"] is None  # the fallback is recorded
+    assert "sk-openai-secret" not in json.dumps(record)

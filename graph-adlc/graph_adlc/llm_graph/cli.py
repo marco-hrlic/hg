@@ -28,7 +28,7 @@ from ..core import GraphADLC
 from ..validation import RevisionConflict, ValidationError
 from .ledger import Ledger
 from .maintenance import MaintenanceLoop
-from .model_adapter import AnthropicMessagesClient, LLMNotConfigured, LLMProposer, ScriptedClient
+from .model_adapter import AnthropicMessagesClient, LLMNotConfigured, LLMProposer, OpenAIChatClient, ScriptedClient
 from .projection import export_spec_markdown
 from .proposal import parse_proposal
 from .review import Decision, NeedsRegeneration, ReviewError, apply_review, decisions_from_json, render_review
@@ -57,7 +57,10 @@ def _client(a: argparse.Namespace) -> Any:
         data = json.loads(Path(a.scripted).read_text())
         return ScriptedClient(data.get("responses", data), label=Path(a.scripted).name)
     import os
-    return AnthropicMessagesClient(model=a.model or os.environ.get("GADLC_LLM_MODEL", ""), api_key_env=a.api_key_env)
+    model = a.model or os.environ.get("GADLC_LLM_MODEL", "")
+    if a.provider == "openai":
+        return OpenAIChatClient(model=model, api_key_env=a.api_key_env or "OPENAI_API_KEY")
+    return AnthropicMessagesClient(model=model, api_key_env=a.api_key_env or "ANTHROPIC_API_KEY")
 
 
 def _reload(app: GraphADLC, ledger: Ledger, pid: str, bundle: SourceBundle) -> tuple[Any, dict[str, Any]]:
@@ -76,9 +79,9 @@ def main(argv: list[str] | None = None) -> int:
     p = sub.add_parser("propose", help="ask the model for a proposal; validate and store it (no commit)")
     p.add_argument("--bundle", required=True)
     p.add_argument("--event", required=True, help="short description of what changed")
-    p.add_argument("--provider", choices=("anthropic", "scripted"), required=True)
+    p.add_argument("--provider", choices=("anthropic", "openai", "scripted"), required=True)
     p.add_argument("--model", help="model id (required for --provider anthropic)")
-    p.add_argument("--api-key-env", default="ANTHROPIC_API_KEY")
+    p.add_argument("--api-key-env", default=None, help="env var holding the key (default per provider)")
     p.add_argument("--scripted", help="JSON file of scripted responses (fake; for tests/demos)")
     p.add_argument("--call-key", default="cli/propose")
     s = sub.add_parser("show", help="re-validate a stored proposal and print the review view")

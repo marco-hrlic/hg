@@ -3,7 +3,8 @@
     # deterministic (scripted fake model; no network; byte-reproducible outputs)
     python evaluation/llm_graph/run_replay.py --mode scripted
 
-    # live model trial (explicit opt-in; needs a key in $ANTHROPIC_API_KEY or $GADLC_LLM_API_KEY_ENV)
+    # live model trial (explicit opt-in). Anthropic: $ANTHROPIC_API_KEY; OpenAI: $OPENAI_API_KEY
+    # (+ GADLC_LLM_PROVIDER=openai if both keys are set)
     GADLC_LLM_MODEL=<model id> python evaluation/llm_graph/run_replay.py --mode live
 
 Scripted and live outputs go to separate directories and are never merged.
@@ -26,7 +27,7 @@ for p in (str(ROOT), str(HERE)):
 os.environ.setdefault("GADLC_FIXED_TIME", "2026-11-03T00:00:00Z")
 
 import replay_lib as rl  # noqa: E402
-from graph_adlc.llm_graph import AnthropicMessagesClient, LLMNotConfigured  # noqa: E402
+from graph_adlc.llm_graph import LLMNotConfigured, client_from_env  # noqa: E402
 
 PROJECTS = ("toolshare", "ledgerlite")
 
@@ -46,7 +47,7 @@ def main(argv: list[str] | None = None) -> int:
     live = a.mode == "live"
     if live:
         try:
-            client = AnthropicMessagesClient.from_env()
+            client = client_from_env()
         except LLMNotConfigured as e:
             print(f"live mode not configured: {e}", file=sys.stderr)
             return 2

@@ -4,6 +4,8 @@
   (stdlib ``urllib``). The model id must be configured explicitly; the API key
   is read from an environment variable at call time and never stored, logged
   or returned.
+* ``OpenAIChatClient`` — the same contract over OpenAI Chat Completions
+  (``OPENAI_API_KEY``); pick with ``GADLC_LLM_PROVIDER``.
 * ``ScriptedClient`` — deterministic fake that returns pre-recorded responses.
   Every record it produces is marked ``is_fake: true``; results produced with it
   are pipeline checks, never model-quality measurements.
@@ -127,6 +129,76 @@ class AnthropicMessagesClient:
         return ModelResponse(text=text, model=data.get("model", self.model), provider=self.provider, is_fake=False,
                              usage=data.get("usage", {}), latency_ms=round(latency, 1),
                              stop_reason=data.get("stop_reason"))
+
+
+class OpenAIChatClient:
+    """Minimal OpenAI Chat Completions client (stdlib). Configure explicitly; no default model."""
+
+    provider = "openai"
+    is_fake = False
+
+    def __init__(self, model: str, *, api_key_env: str = "OPENAI_API_KEY",
+                 base_url: str = "https://api.openai.com", temperature: float | None = 0.0,
+                 timeout_s: float = 300.0, json_mode: bool = True):
+        if not model:
+            raise LLMNotConfigured("a model id must be configured explicitly (--model or GADLC_LLM_MODEL)")
+        self.model, self.api_key_env, self.base_url = model, api_key_env, base_url.rstrip("/")
+        self.temperature, self.timeout_s, self.json_mode = temperature, timeout_s, json_mode
+
+    def available(self) -> bool:
+        return bool(os.environ.get(self.api_key_env))
+
+    def describe(self) -> dict[str, Any]:
+        return {"provider": self.provider, "model": self.model, "temperature": self.temperature,
+                "api_key_env": self.api_key_env, "base_url": self.base_url, "json_mode": self.json_mode,
+                "is_fake": False}
+
+    def complete(self, system: str, user: str, *, call_key: str, max_tokens: int = 8000) -> ModelResponse:
+        key = os.environ.get(self.api_key_env)
+        if not key:
+            raise LLMNotConfigured(f"environment variable {self.api_key_env} is not set")
+        payload: dict[str, Any] = {"model": self.model, "max_completion_tokens": max_tokens,
+                                   "messages": [{"role": "system", "content": system},
+                                                {"role": "user", "content": user}]}
+        if self.temperature is not None:
+            payload["temperature"] = self.temperature
+        if self.json_mode:
+            payload["response_format"] = {"type": "json_object"}
+        req = urllib.request.Request(f"{self.base_url}/v1/chat/completions", data=json.dumps(payload).encode(),
+                                     method="POST", headers={"content-type": "application/json",
+                                                             "authorization": f"Bearer {key}"})
+        t0 = time.monotonic()
+        try:
+            with urllib.request.urlopen(req, timeout=self.timeout_s) as resp:
+                data = json.loads(resp.read())
+        except urllib.error.HTTPError as e:  # do not echo request headers
+            body = e.read()[:500]
+            if e.code == 400 and b"temperature" in body and self.temperature is not None:
+                # Some models only accept their default temperature; retry once without it and record that.
+                self.temperature = None
+                return self.complete(system, user, call_key=call_key, max_tokens=max_tokens)
+            raise RuntimeError(f"model call failed: HTTP {e.code} {body!r}") from None
+        latency = (time.monotonic() - t0) * 1000
+        choice = (data.get("choices") or [{}])[0]
+        u = data.get("usage") or {}
+        usage = {"input_tokens": u.get("prompt_tokens"), "output_tokens": u.get("completion_tokens")} if u else {}
+        return ModelResponse(text=(choice.get("message") or {}).get("content") or "", model=data.get("model", self.model),
+                             provider=self.provider, is_fake=False, usage=usage, latency_ms=round(latency, 1),
+                             stop_reason=choice.get("finish_reason"))
+
+
+def client_from_env() -> Any:
+    """Live client chosen by GADLC_LLM_PROVIDER (anthropic | openai); model from GADLC_LLM_MODEL."""
+    provider = os.environ.get("GADLC_LLM_PROVIDER", "").lower()
+    if not provider:
+        provider = "openai" if os.environ.get("OPENAI_API_KEY") and not os.environ.get("ANTHROPIC_API_KEY") else "anthropic"
+    model = os.environ.get("GADLC_LLM_MODEL", "")
+    if provider == "openai":
+        return OpenAIChatClient(model=model, api_key_env=os.environ.get("GADLC_LLM_API_KEY_ENV", "OPENAI_API_KEY"),
+                                base_url=os.environ.get("GADLC_LLM_BASE_URL", "https://api.openai.com"))
+    if provider == "anthropic":
+        return AnthropicMessagesClient.from_env()
+    raise LLMNotConfigured(f"unknown GADLC_LLM_PROVIDER {provider!r} (anthropic | openai)")
 
 
 class ScriptedClient:

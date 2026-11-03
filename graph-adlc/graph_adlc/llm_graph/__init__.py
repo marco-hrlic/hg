@@ -8,6 +8,7 @@ from .challenge import challenge_impact, influence_domain, scan_code_dependencie
 from .ledger import Ledger
 from .maintenance import MaintenanceLoop, StepResult, assess_preservation_evidence
 from .model_adapter import (AnthropicMessagesClient, DirectImpactAnalyst, LLMNotConfigured, LLMProposer,
+                            OpenAIChatClient, client_from_env,
                             ScriptedClient, load_prompt)
 from .projection import export_spec_markdown
 from .proposal import Citation, Proposal, ProposalFormatError, ProposedOp, parse_proposal
@@ -17,7 +18,7 @@ from .source import (SourceBundle, SourceCatalog, SourceDocument, git_diff, load
 from .validation import validate_proposal
 
 __all__ = [
-    "AnthropicMessagesClient", "Citation", "Decision", "DirectImpactAnalyst", "LLMNotConfigured", "LLMProposer",
+    "AnthropicMessagesClient", "OpenAIChatClient", "client_from_env", "Citation", "Decision", "DirectImpactAnalyst", "LLMNotConfigured", "LLMProposer",
     "Ledger", "MaintenanceLoop", "NeedsRegeneration", "Proposal", "ProposalFormatError", "ProposedOp",
     "ReviewError", "ScriptedClient", "SourceBundle", "SourceCatalog", "SourceDocument", "StepResult",
     "apply_review", "assess_preservation_evidence", "challenge_impact", "export_spec_markdown", "git_diff",

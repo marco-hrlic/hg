@@ -97,6 +97,10 @@ Both produce ordinary proposals that go through the same validation and review. 
 * `AnthropicMessagesClient` uses the Messages API over stdlib HTTP. The model id must be configured explicitly
   (`--model` / `GADLC_LLM_MODEL`; there is no default). The key is read at call time from the environment variable
   `api_key_env` and is never stored in records. Temperature is 0.
+* `OpenAIChatClient` has the same contract over OpenAI Chat Completions. It uses JSON mode, reads the key from
+  `OPENAI_API_KEY`, and if a model rejects `temperature`, retries once at the default and records that.
+  `client_from_env()` picks the provider with `GADLC_LLM_PROVIDER` (`anthropic` | `openai`); when it is unset,
+  OpenAI is used if only `OPENAI_API_KEY` is present.
 * `ScriptedClient` is the deterministic fake. Every record it produces has `is_fake: true`, and reports label any
   result built on it as a pipeline self-check.
 * Call records store the prompt id, version and sha256; the input sha256 and size; the source manifest with hashes;
