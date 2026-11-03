@@ -1,0 +1,53 @@
+{
+  "method": "A",
+  "predictions_raw": [
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section CMP-PAYMENT and section CMP-REPORTING (changed in the change request)",
+      "hop": 1,
+      "method": "A",
+      "obligation": "check_contract",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CMP-PAYMENT"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section REQ-REPORT and section CMP-REPORTING (changed in the change request)",
+      "hop": 1,
+      "method": "A",
+      "obligation": "check_contract",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "REQ-REPORT"
+    }
+  ],
+  "scenario_id": "SC-21",
+  "setup": [
+    {
+      "change_id": "CHG-2",
+      "graph_revision": 2,
+      "type": "commit"
+    }
+  ],
+  "trace": {
+    "change_request_chars": 221,
+    "context_chars": 852,
+    "context_sections": [
+      "CMP-PAYMENT",
+      "CMP-REPORTING",
+      "REQ-REPORT"
+    ],
+    "document_chars": 3533,
+    "over_budget": [],
+    "retrieved": [
+      "CMP-PAYMENT",
+      "REQ-REPORT"
+    ],
+    "seeds": [
+      "CMP-REPORTING"
+    ]
+  }
+}

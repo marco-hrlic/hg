@@ -1,0 +1,78 @@
+{
+  "aspect_overrides": [],
+  "evidence_refs_passed": [],
+  "impact": {
+    "notes": [
+      "Influence is complete only relative to registered edges and rules; absence of an edge is not evidence of independence."
+    ],
+    "obligations": [
+      {
+        "change_ref": "op[0]",
+        "confidence": "high",
+        "obligation": "check_contract",
+        "origin_id": "CMP-REPORTING",
+        "path": [
+          "E17"
+        ],
+        "provisional": false,
+        "reason": "provider CMP-REPORTING changed observable behaviour; consumer must check its reliance",
+        "target_id": "CMP-PAYMENT"
+      },
+      {
+        "change_ref": "op[0]",
+        "confidence": "high",
+        "obligation": "check_contract",
+        "origin_id": "CMP-REPORTING",
+        "path": [
+          "E14"
+        ],
+        "provisional": false,
+        "reason": "component CMP-REPORTING changed; implemented requirement must still be satisfied",
+        "target_id": "REQ-REPORT"
+      }
+    ],
+    "pruned": []
+  },
+  "method": "C",
+  "predictions_raw": [
+    {
+      "confidence": "high",
+      "explanation": "provider CMP-REPORTING changed observable behaviour; consumer must check its reliance",
+      "method": "C",
+      "obligation": "check_contract",
+      "origin_id": "CMP-REPORTING",
+      "path_edge_ids": [
+        "E17"
+      ],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CMP-PAYMENT"
+    },
+    {
+      "confidence": "high",
+      "explanation": "component CMP-REPORTING changed; implemented requirement must still be satisfied",
+      "method": "C",
+      "obligation": "check_contract",
+      "origin_id": "CMP-REPORTING",
+      "path_edge_ids": [
+        "E14"
+      ],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "REQ-REPORT"
+    }
+  ],
+  "readiness_changes": [],
+  "scenario_id": "SC-21",
+  "setup": [
+    {
+      "change_id": "CHG-2",
+      "graph_revision": 2,
+      "type": "commit"
+    }
+  ],
+  "would_invalidate": {
+    "evidence": [],
+    "work_units": []
+  }
+}

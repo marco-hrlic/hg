@@ -1,0 +1,191 @@
+{
+  "method": "A2",
+  "predictions_raw": [
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section ART-MONEY and section CMP-MONEY (changed in the change request)",
+      "hop": 1,
+      "method": "A2",
+      "obligation": "review_implementation",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "ART-MONEY"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section CMP-NOTIFIER and section CMP-MONEY (changed in the change request)",
+      "hop": 1,
+      "method": "A2",
+      "obligation": "check_contract",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CMP-NOTIFIER"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section CMP-ORDERS and section CMP-MONEY (changed in the change request)",
+      "hop": 1,
+      "method": "A2",
+      "obligation": "check_contract",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CMP-ORDERS"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section CON-MONEY-FORMAT and section CMP-MONEY (changed in the change request)",
+      "hop": 1,
+      "method": "A2",
+      "obligation": "check_contract",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CON-MONEY-FORMAT"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section ART-NOTIFIER and section CMP-NOTIFIER (hop 2 from changed CMP-MONEY)",
+      "hop": 2,
+      "method": "A2",
+      "obligation": "review_implementation",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "ART-NOTIFIER"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section ART-ORDERS and section CMP-ORDERS (hop 2 from changed CMP-MONEY)",
+      "hop": 2,
+      "method": "A2",
+      "obligation": "review_implementation",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "ART-ORDERS"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section CMP-INVENTORY and section CMP-ORDERS (hop 2 from changed CMP-MONEY)",
+      "hop": 2,
+      "method": "A2",
+      "obligation": "check_contract",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CMP-INVENTORY"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section CON-EMAIL-TEMPLATE and section CMP-NOTIFIER (hop 2 from changed CMP-MONEY)",
+      "hop": 2,
+      "method": "A2",
+      "obligation": "check_contract",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CON-EMAIL-TEMPLATE"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section CON-ORDER-EVENT and section CMP-ORDERS (hop 2 from changed CMP-MONEY)",
+      "hop": 2,
+      "method": "A2",
+      "obligation": "check_contract",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CON-ORDER-EVENT"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section REQ-LOW-STOCK-ALERT and section CMP-NOTIFIER (hop 2 from changed CMP-MONEY)",
+      "hop": 2,
+      "method": "A2",
+      "obligation": "check_contract",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "REQ-LOW-STOCK-ALERT"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section REQ-ORDER-EMAIL and section CMP-NOTIFIER (hop 2 from changed CMP-MONEY)",
+      "hop": 2,
+      "method": "A2",
+      "obligation": "check_contract",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "REQ-ORDER-EMAIL"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section REQ-PLACE-ORDER and section CMP-ORDERS (hop 2 from changed CMP-MONEY)",
+      "hop": 2,
+      "method": "A2",
+      "obligation": "check_contract",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "REQ-PLACE-ORDER"
+    }
+  ],
+  "scenario_id": "SC-15",
+  "setup": [
+    {
+      "evidence_id": "EV-1",
+      "kind": "contract_preservation",
+      "node_id": "CMP-MONEY",
+      "result": "passed",
+      "spec_revs": {
+        "CMP-MONEY": 1,
+        "CON-MONEY-FORMAT": 1
+      },
+      "type": "evidence"
+    }
+  ],
+  "trace": {
+    "change_request_chars": 202,
+    "context_chars": 4069,
+    "context_sections": [
+      "ART-MONEY",
+      "ART-NOTIFIER",
+      "ART-ORDERS",
+      "CMP-INVENTORY",
+      "CMP-MONEY",
+      "CMP-NOTIFIER",
+      "CMP-ORDERS",
+      "CON-EMAIL-TEMPLATE",
+      "CON-MONEY-FORMAT",
+      "CON-ORDER-EVENT",
+      "REQ-LOW-STOCK-ALERT",
+      "REQ-ORDER-EMAIL",
+      "REQ-PLACE-ORDER"
+    ],
+    "document_chars": 7751,
+    "over_budget": [
+      "TEST-MONEY"
+    ],
+    "retrieved": [
+      "ART-MONEY",
+      "CMP-NOTIFIER",
+      "CMP-ORDERS",
+      "CON-MONEY-FORMAT",
+      "ART-NOTIFIER",
+      "ART-ORDERS",
+      "CMP-INVENTORY",
+      "CON-EMAIL-TEMPLATE",
+      "CON-ORDER-EVENT",
+      "REQ-LOW-STOCK-ALERT",
+      "REQ-ORDER-EMAIL",
+      "REQ-PLACE-ORDER"
+    ],
+    "seeds": [
+      "CMP-MONEY"
+    ]
+  }
+}

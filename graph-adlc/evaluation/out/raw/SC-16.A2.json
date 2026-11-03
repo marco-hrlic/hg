@@ -1,0 +1,182 @@
+{
+  "method": "A2",
+  "predictions_raw": [
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section ART-INVENTORY and section CMP-INVENTORY (changed in the change request)",
+      "hop": 1,
+      "method": "A2",
+      "obligation": "review_implementation",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "ART-INVENTORY"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section CMP-ORDERS and section CMP-INVENTORY (changed in the change request)",
+      "hop": 1,
+      "method": "A2",
+      "obligation": "check_contract",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CMP-ORDERS"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section CON-INVENTORY-API and section CMP-INVENTORY (changed in the change request)",
+      "hop": 1,
+      "method": "A2",
+      "obligation": "check_contract",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CON-INVENTORY-API"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section REQ-LOW-STOCK-ALERT and section CMP-INVENTORY (changed in the change request)",
+      "hop": 1,
+      "method": "A2",
+      "obligation": "check_contract",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "REQ-LOW-STOCK-ALERT"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section REQ-RESERVE-STOCK and section CMP-INVENTORY (changed in the change request)",
+      "hop": 1,
+      "method": "A2",
+      "obligation": "check_contract",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "REQ-RESERVE-STOCK"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section ART-ORDERS and section CMP-ORDERS (hop 2 from changed CMP-INVENTORY)",
+      "hop": 2,
+      "method": "A2",
+      "obligation": "review_implementation",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "ART-ORDERS"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section CAP-NOTIFY and section REQ-LOW-STOCK-ALERT (hop 2 from changed CMP-INVENTORY)",
+      "hop": 2,
+      "method": "A2",
+      "obligation": "review_spec",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CAP-NOTIFY"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section CAP-ORDERING and section REQ-RESERVE-STOCK (hop 2 from changed CMP-INVENTORY)",
+      "hop": 2,
+      "method": "A2",
+      "obligation": "review_spec",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CAP-ORDERING"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section CMP-MONEY and section CMP-ORDERS (hop 2 from changed CMP-INVENTORY)",
+      "hop": 2,
+      "method": "A2",
+      "obligation": "check_contract",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CMP-MONEY"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section CMP-NOTIFIER and section CMP-ORDERS (hop 2 from changed CMP-INVENTORY)",
+      "hop": 2,
+      "method": "A2",
+      "obligation": "check_contract",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CMP-NOTIFIER"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section CON-ORDER-EVENT and section CMP-ORDERS (hop 2 from changed CMP-INVENTORY)",
+      "hop": 2,
+      "method": "A2",
+      "obligation": "check_contract",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CON-ORDER-EVENT"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section Q-ALERT-THRESHOLD and section REQ-LOW-STOCK-ALERT (hop 2 from changed CMP-INVENTORY)",
+      "hop": 2,
+      "method": "A2",
+      "obligation": "review_spec",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "Q-ALERT-THRESHOLD"
+    }
+  ],
+  "scenario_id": "SC-16",
+  "setup": [],
+  "trace": {
+    "change_request_chars": 255,
+    "context_chars": 3965,
+    "context_sections": [
+      "ART-INVENTORY",
+      "ART-ORDERS",
+      "CAP-NOTIFY",
+      "CAP-ORDERING",
+      "CMP-INVENTORY",
+      "CMP-MONEY",
+      "CMP-NOTIFIER",
+      "CMP-ORDERS",
+      "CON-INVENTORY-API",
+      "CON-ORDER-EVENT",
+      "Q-ALERT-THRESHOLD",
+      "REQ-LOW-STOCK-ALERT",
+      "REQ-RESERVE-STOCK"
+    ],
+    "document_chars": 7668,
+    "over_budget": [
+      "REQ-PLACE-ORDER",
+      "TEST-LOW-STOCK",
+      "TEST-ORDER-FLOW",
+      "TEST-RESERVE"
+    ],
+    "retrieved": [
+      "ART-INVENTORY",
+      "CMP-ORDERS",
+      "CON-INVENTORY-API",
+      "REQ-LOW-STOCK-ALERT",
+      "REQ-RESERVE-STOCK",
+      "ART-ORDERS",
+      "CAP-NOTIFY",
+      "CAP-ORDERING",
+      "CMP-MONEY",
+      "CMP-NOTIFIER",
+      "CON-ORDER-EVENT",
+      "Q-ALERT-THRESHOLD"
+    ],
+    "seeds": [
+      "CMP-INVENTORY"
+    ]
+  }
+}

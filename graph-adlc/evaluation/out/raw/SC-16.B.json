@@ -1,0 +1,72 @@
+{
+  "aspect_overrides": [],
+  "evidence_refs_passed": [],
+  "impact": {
+    "notes": [
+      "Influence is complete only relative to registered edges and rules; absence of an edge is not evidence of independence."
+    ],
+    "obligations": [
+      {
+        "change_ref": "op[0]",
+        "confidence": "provisional",
+        "obligation": "check_contract",
+        "origin_id": "CMP-INVENTORY",
+        "path": [
+          "O18"
+        ],
+        "provisional": true,
+        "reason": "implementation of provider CMP-INVENTORY changed and no validated contract-preservation evidence; consumer provisionally flagged",
+        "target_id": "CMP-ORDERS"
+      },
+      {
+        "change_ref": "op[0]",
+        "confidence": "high",
+        "obligation": "check_contract",
+        "origin_id": "CMP-INVENTORY",
+        "path": [
+          "O15"
+        ],
+        "provisional": false,
+        "reason": "implementation of CMP-INVENTORY changed; requirement must still hold (terminal until a violation is established)",
+        "target_id": "REQ-RESERVE-STOCK"
+      }
+    ],
+    "pruned": []
+  },
+  "method": "B",
+  "predictions_raw": [
+    {
+      "confidence": "provisional",
+      "explanation": "implementation of provider CMP-INVENTORY changed and no validated contract-preservation evidence; consumer provisionally flagged",
+      "method": "B",
+      "obligation": "check_contract",
+      "origin_id": "CMP-INVENTORY",
+      "path_edge_ids": [
+        "O18"
+      ],
+      "provisional": true,
+      "pruned": false,
+      "target_id": "CMP-ORDERS"
+    },
+    {
+      "confidence": "high",
+      "explanation": "implementation of CMP-INVENTORY changed; requirement must still hold (terminal until a violation is established)",
+      "method": "B",
+      "obligation": "check_contract",
+      "origin_id": "CMP-INVENTORY",
+      "path_edge_ids": [
+        "O15"
+      ],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "REQ-RESERVE-STOCK"
+    }
+  ],
+  "readiness_changes": [],
+  "scenario_id": "SC-16",
+  "setup": [],
+  "would_invalidate": {
+    "evidence": [],
+    "work_units": []
+  }
+}

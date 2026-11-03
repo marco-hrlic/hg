@@ -1,0 +1,34 @@
+{
+  "method": "A",
+  "predictions_raw": [
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section CMP-PAYMENT and section ART-PAYMENT (changed in the change request)",
+      "hop": 1,
+      "method": "A",
+      "obligation": "check_contract",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CMP-PAYMENT"
+    }
+  ],
+  "scenario_id": "SC-13",
+  "setup": [],
+  "trace": {
+    "change_request_chars": 279,
+    "context_chars": 503,
+    "context_sections": [
+      "ART-PAYMENT",
+      "CMP-PAYMENT"
+    ],
+    "document_chars": 3465,
+    "over_budget": [],
+    "retrieved": [
+      "CMP-PAYMENT"
+    ],
+    "seeds": [
+      "ART-PAYMENT"
+    ]
+  }
+}

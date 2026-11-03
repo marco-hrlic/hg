@@ -1,0 +1,73 @@
+{
+  "method": "A",
+  "predictions_raw": [
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section CMP-INVENTORY and section CON-INVENTORY-API (changed in the change request)",
+      "hop": 1,
+      "method": "A",
+      "obligation": "check_contract",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CMP-INVENTORY"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section REQ-PLACE-ORDER and section CON-INVENTORY-API (changed in the change request)",
+      "hop": 1,
+      "method": "A",
+      "obligation": "check_contract",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "REQ-PLACE-ORDER"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section REQ-RESERVE-STOCK and section CON-INVENTORY-API (changed in the change request)",
+      "hop": 1,
+      "method": "A",
+      "obligation": "check_contract",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "REQ-RESERVE-STOCK"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section TEST-ORDER-FLOW and section CON-INVENTORY-API (changed in the change request)",
+      "hop": 1,
+      "method": "A",
+      "obligation": "rerun_test",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "TEST-ORDER-FLOW"
+    }
+  ],
+  "scenario_id": "SC-12",
+  "setup": [],
+  "trace": {
+    "change_request_chars": 322,
+    "context_chars": 2042,
+    "context_sections": [
+      "CMP-INVENTORY",
+      "CON-INVENTORY-API",
+      "REQ-PLACE-ORDER",
+      "REQ-RESERVE-STOCK",
+      "TEST-ORDER-FLOW"
+    ],
+    "document_chars": 7668,
+    "over_budget": [],
+    "retrieved": [
+      "CMP-INVENTORY",
+      "REQ-PLACE-ORDER",
+      "REQ-RESERVE-STOCK",
+      "TEST-ORDER-FLOW"
+    ],
+    "seeds": [
+      "CON-INVENTORY-API"
+    ]
+  }
+}

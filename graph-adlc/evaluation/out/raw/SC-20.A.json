@@ -1,0 +1,34 @@
+{
+  "method": "A",
+  "predictions_raw": [
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section REQ-LOW-STOCK-ALERT and section Q-ALERT-THRESHOLD (changed in the change request)",
+      "hop": 1,
+      "method": "A",
+      "obligation": "review_spec",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "REQ-LOW-STOCK-ALERT"
+    }
+  ],
+  "scenario_id": "SC-20",
+  "setup": [],
+  "trace": {
+    "change_request_chars": 248,
+    "context_chars": 758,
+    "context_sections": [
+      "Q-ALERT-THRESHOLD",
+      "REQ-LOW-STOCK-ALERT"
+    ],
+    "document_chars": 7668,
+    "over_budget": [],
+    "retrieved": [
+      "REQ-LOW-STOCK-ALERT"
+    ],
+    "seeds": [
+      "Q-ALERT-THRESHOLD"
+    ]
+  }
+}

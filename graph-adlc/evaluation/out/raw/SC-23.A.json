@@ -1,0 +1,34 @@
+{
+  "method": "A",
+  "predictions_raw": [
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section CMP-ORDERS and section CON-ORDER-EVENT (changed in the change request)",
+      "hop": 1,
+      "method": "A",
+      "obligation": "check_contract",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CMP-ORDERS"
+    }
+  ],
+  "scenario_id": "SC-23",
+  "setup": [],
+  "trace": {
+    "change_request_chars": 264,
+    "context_chars": 620,
+    "context_sections": [
+      "CMP-ORDERS",
+      "CON-ORDER-EVENT"
+    ],
+    "document_chars": 7668,
+    "over_budget": [],
+    "retrieved": [
+      "CMP-ORDERS"
+    ],
+    "seeds": [
+      "CON-ORDER-EVENT"
+    ]
+  }
+}

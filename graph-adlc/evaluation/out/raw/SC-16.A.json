@@ -1,0 +1,86 @@
+{
+  "method": "A",
+  "predictions_raw": [
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section ART-INVENTORY and section CMP-INVENTORY (changed in the change request)",
+      "hop": 1,
+      "method": "A",
+      "obligation": "review_implementation",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "ART-INVENTORY"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section CMP-ORDERS and section CMP-INVENTORY (changed in the change request)",
+      "hop": 1,
+      "method": "A",
+      "obligation": "check_contract",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CMP-ORDERS"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section CON-INVENTORY-API and section CMP-INVENTORY (changed in the change request)",
+      "hop": 1,
+      "method": "A",
+      "obligation": "check_contract",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CON-INVENTORY-API"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section REQ-LOW-STOCK-ALERT and section CMP-INVENTORY (changed in the change request)",
+      "hop": 1,
+      "method": "A",
+      "obligation": "check_contract",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "REQ-LOW-STOCK-ALERT"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section REQ-RESERVE-STOCK and section CMP-INVENTORY (changed in the change request)",
+      "hop": 1,
+      "method": "A",
+      "obligation": "check_contract",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "REQ-RESERVE-STOCK"
+    }
+  ],
+  "scenario_id": "SC-16",
+  "setup": [],
+  "trace": {
+    "change_request_chars": 255,
+    "context_chars": 2248,
+    "context_sections": [
+      "ART-INVENTORY",
+      "CMP-INVENTORY",
+      "CMP-ORDERS",
+      "CON-INVENTORY-API",
+      "REQ-LOW-STOCK-ALERT",
+      "REQ-RESERVE-STOCK"
+    ],
+    "document_chars": 7668,
+    "over_budget": [],
+    "retrieved": [
+      "ART-INVENTORY",
+      "CMP-ORDERS",
+      "CON-INVENTORY-API",
+      "REQ-LOW-STOCK-ALERT",
+      "REQ-RESERVE-STOCK"
+    ],
+    "seeds": [
+      "CMP-INVENTORY"
+    ]
+  }
+}

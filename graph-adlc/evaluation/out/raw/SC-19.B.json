@@ -1,0 +1,72 @@
+{
+  "aspect_overrides": [],
+  "evidence_refs_passed": [],
+  "impact": {
+    "notes": [
+      "Influence is complete only relative to registered edges and rules; absence of an edge is not evidence of independence."
+    ],
+    "obligations": [
+      {
+        "change_ref": "op[0]",
+        "confidence": "high",
+        "obligation": "review_spec",
+        "origin_id": "O34",
+        "path": [
+          "O34"
+        ],
+        "provisional": false,
+        "reason": "depends_on edge O34 (CMP-NOTIFIER -> CMP-INVENTORY) added; target endpoint must be re-evaluated",
+        "target_id": "CMP-INVENTORY"
+      },
+      {
+        "change_ref": "op[0]",
+        "confidence": "high",
+        "obligation": "check_contract",
+        "origin_id": "O34",
+        "path": [
+          "O34"
+        ],
+        "provisional": false,
+        "reason": "depends_on edge O34 (CMP-NOTIFIER -> CMP-INVENTORY) added; source endpoint must be re-evaluated",
+        "target_id": "CMP-NOTIFIER"
+      }
+    ],
+    "pruned": []
+  },
+  "method": "B",
+  "predictions_raw": [
+    {
+      "confidence": "high",
+      "explanation": "depends_on edge O34 (CMP-NOTIFIER -> CMP-INVENTORY) added; target endpoint must be re-evaluated",
+      "method": "B",
+      "obligation": "review_spec",
+      "origin_id": "O34",
+      "path_edge_ids": [
+        "O34"
+      ],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CMP-INVENTORY"
+    },
+    {
+      "confidence": "high",
+      "explanation": "depends_on edge O34 (CMP-NOTIFIER -> CMP-INVENTORY) added; source endpoint must be re-evaluated",
+      "method": "B",
+      "obligation": "check_contract",
+      "origin_id": "O34",
+      "path_edge_ids": [
+        "O34"
+      ],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CMP-NOTIFIER"
+    }
+  ],
+  "readiness_changes": [],
+  "scenario_id": "SC-19",
+  "setup": [],
+  "would_invalidate": {
+    "evidence": [],
+    "work_units": []
+  }
+}

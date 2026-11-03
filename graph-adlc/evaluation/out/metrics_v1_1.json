@@ -1,0 +1,4263 @@
+{
+  "oracle_version": "v1.1",
+  "per_scenario": [
+    {
+      "critical_missed": [],
+      "f1": 0.5,
+      "false_positives": [
+        "CAP-PAYMENTS:review_spec",
+        "CON-IDEMPOTENCY:check_contract"
+      ],
+      "family": "semantic",
+      "fn": 0,
+      "fp": 2,
+      "gold": 1,
+      "method": "A",
+      "missed": [],
+      "precision": 0.3333,
+      "predicted": 3,
+      "recall": 1.0,
+      "scenario_id": "SC-01",
+      "t_fn": 0,
+      "t_fp": 2,
+      "t_precision": 0.3333,
+      "t_recall": 1.0,
+      "t_tp": 1,
+      "tags": [
+        "leaf",
+        "acceptance_criteria",
+        "shared_component_fanout"
+      ],
+      "tp": 1,
+      "unknown_not_predicted": 1,
+      "unknown_predicted": 0
+    },
+    {
+      "critical_missed": [],
+      "f1": null,
+      "false_positives": [
+        "CAP-REPORTING:review_spec",
+        "CMP-REPORTING:review_implementation"
+      ],
+      "family": "semantic",
+      "fn": 0,
+      "fp": 2,
+      "gold": 0,
+      "method": "A",
+      "missed": [],
+      "precision": 0.0,
+      "predicted": 2,
+      "recall": null,
+      "scenario_id": "SC-02",
+      "t_fn": 0,
+      "t_fp": 2,
+      "t_precision": 0.0,
+      "t_recall": null,
+      "t_tp": 0,
+      "tags": [
+        "true_negative",
+        "harmless_wording"
+      ],
+      "tp": 0,
+      "unknown_not_predicted": 0,
+      "unknown_predicted": 0
+    },
+    {
+      "critical_missed": [],
+      "f1": 1.0,
+      "false_positives": [],
+      "family": "semantic",
+      "fn": 0,
+      "fp": 0,
+      "gold": 2,
+      "method": "A",
+      "missed": [],
+      "precision": 1.0,
+      "predicted": 2,
+      "recall": 1.0,
+      "scenario_id": "SC-03",
+      "t_fn": 0,
+      "t_fp": 0,
+      "t_precision": 1.0,
+      "t_recall": 1.0,
+      "t_tp": 2,
+      "tags": [
+        "parent",
+        "scope_narrowing"
+      ],
+      "tp": 2,
+      "unknown_not_predicted": 0,
+      "unknown_predicted": 1
+    },
+    {
+      "critical_missed": [],
+      "f1": 0.75,
+      "false_positives": [
+        "CAP-PAYMENTS:review_spec",
+        "CON-IDEMPOTENCY:check_contract"
+      ],
+      "family": "semantic",
+      "fn": 0,
+      "fp": 2,
+      "gold": 3,
+      "method": "A",
+      "missed": [],
+      "precision": 0.6,
+      "predicted": 5,
+      "recall": 1.0,
+      "scenario_id": "SC-04",
+      "t_fn": 0,
+      "t_fp": 2,
+      "t_precision": 0.6,
+      "t_recall": 1.0,
+      "t_tp": 3,
+      "tags": [
+        "leaf",
+        "acceptance_criteria",
+        "reverse_question_link"
+      ],
+      "tp": 3,
+      "unknown_not_predicted": 0,
+      "unknown_predicted": 0
+    },
+    {
+      "critical_missed": [],
+      "f1": 0.8889,
+      "false_positives": [
+        "CAP-NOTIFY:review_spec"
+      ],
+      "family": "semantic",
+      "fn": 0,
+      "fp": 1,
+      "gold": 4,
+      "method": "A",
+      "missed": [],
+      "precision": 0.8,
+      "predicted": 5,
+      "recall": 1.0,
+      "scenario_id": "SC-05",
+      "t_fn": 0,
+      "t_fp": 1,
+      "t_precision": 0.8,
+      "t_recall": 1.0,
+      "t_tp": 4,
+      "tags": [
+        "missing_edge",
+        "acceptance_criteria",
+        "prose_reference"
+      ],
+      "tp": 4,
+      "unknown_not_predicted": 0,
+      "unknown_predicted": 0
+    },
+    {
+      "critical_missed": [],
+      "f1": null,
+      "false_positives": [
+        "CAP-NOTIFY:review_spec",
+        "CMP-NOTIFIER:review_implementation",
+        "CON-EMAIL-TEMPLATE:check_contract",
+        "TEST-EMAIL:rerun_test"
+      ],
+      "family": "semantic",
+      "fn": 0,
+      "fp": 4,
+      "gold": 0,
+      "method": "A",
+      "missed": [],
+      "precision": 0.0,
+      "predicted": 4,
+      "recall": null,
+      "scenario_id": "SC-06",
+      "t_fn": 0,
+      "t_fp": 4,
+      "t_precision": 0.0,
+      "t_recall": null,
+      "t_tp": 0,
+      "tags": [
+        "true_negative",
+        "harmless_wording"
+      ],
+      "tp": 0,
+      "unknown_not_predicted": 0,
+      "unknown_predicted": 0
+    },
+    {
+      "critical_missed": [],
+      "f1": 1.0,
+      "false_positives": [],
+      "family": "contract",
+      "fn": 0,
+      "fp": 0,
+      "gold": 4,
+      "method": "A",
+      "missed": [],
+      "precision": 1.0,
+      "predicted": 4,
+      "recall": 1.0,
+      "scenario_id": "SC-07",
+      "t_fn": 0,
+      "t_fp": 0,
+      "t_precision": 1.0,
+      "t_recall": 1.0,
+      "t_tp": 4,
+      "tags": [
+        "contract_change",
+        "demo_step_D"
+      ],
+      "tp": 4,
+      "unknown_not_predicted": 1,
+      "unknown_predicted": 0
+    },
+    {
+      "critical_missed": [],
+      "f1": 0.3333,
+      "false_positives": [
+        "CON-IDEMPOTENCY:check_contract",
+        "REQ-CHARGE:check_contract",
+        "REQ-RETRY:check_contract"
+      ],
+      "family": "contract",
+      "fn": 1,
+      "fp": 3,
+      "gold": 2,
+      "method": "A",
+      "missed": [
+        "REQ-REPORT:check_contract[major]"
+      ],
+      "precision": 0.25,
+      "predicted": 4,
+      "recall": 0.5,
+      "scenario_id": "SC-08",
+      "t_fn": 1,
+      "t_fp": 3,
+      "t_precision": 0.25,
+      "t_recall": 0.5,
+      "t_tp": 1,
+      "tags": [
+        "consumer_break",
+        "multihop",
+        "informal_contract"
+      ],
+      "tp": 1,
+      "unknown_not_predicted": 0,
+      "unknown_predicted": 0
+    },
+    {
+      "critical_missed": [],
+      "f1": 0.0,
+      "false_positives": [
+        "CMP-REPORTING:check_contract",
+        "CON-IDEMPOTENCY:check_contract",
+        "REQ-CHARGE:check_contract"
+      ],
+      "family": "contract",
+      "fn": 1,
+      "fp": 3,
+      "gold": 1,
+      "method": "A",
+      "missed": [
+        "TEST-RETRY:rerun_test[major]"
+      ],
+      "precision": 0.0,
+      "predicted": 3,
+      "recall": 0.0,
+      "scenario_id": "SC-09",
+      "t_fn": 1,
+      "t_fp": 3,
+      "t_precision": 0.0,
+      "t_recall": 0.0,
+      "t_tp": 0,
+      "tags": [
+        "contract_preserved",
+        "evidence_valid",
+        "pruning"
+      ],
+      "tp": 0,
+      "unknown_not_predicted": 0,
+      "unknown_predicted": 1
+    },
+    {
+      "critical_missed": [
+        "TEST-RETRY:rerun_test"
+      ],
+      "f1": 0.5714,
+      "false_positives": [
+        "CMP-REPORTING:check_contract",
+        "CON-IDEMPOTENCY:check_contract"
+      ],
+      "family": "contract",
+      "fn": 1,
+      "fp": 2,
+      "gold": 3,
+      "method": "A",
+      "missed": [
+        "TEST-RETRY:rerun_test[critical]"
+      ],
+      "precision": 0.5,
+      "predicted": 4,
+      "recall": 0.6667,
+      "scenario_id": "SC-10",
+      "t_fn": 1,
+      "t_fp": 2,
+      "t_precision": 0.5,
+      "t_recall": 0.6667,
+      "t_tp": 2,
+      "tags": [
+        "contract_preserved_claim",
+        "evidence_failed",
+        "pruning"
+      ],
+      "tp": 2,
+      "unknown_not_predicted": 0,
+      "unknown_predicted": 0
+    },
+    {
+      "critical_missed": [],
+      "f1": 0.0,
+      "false_positives": [
+        "CMP-REPORTING:check_contract",
+        "CON-IDEMPOTENCY:check_contract",
+        "REQ-CHARGE:check_contract"
+      ],
+      "family": "contract",
+      "fn": 1,
+      "fp": 3,
+      "gold": 1,
+      "method": "A",
+      "missed": [
+        "TEST-RETRY:rerun_test[major]"
+      ],
+      "precision": 0.0,
+      "predicted": 3,
+      "recall": 0.0,
+      "scenario_id": "SC-11",
+      "t_fn": 1,
+      "t_fp": 3,
+      "t_precision": 0.0,
+      "t_recall": 0.0,
+      "t_tp": 0,
+      "tags": [
+        "evidence_stale",
+        "pruning"
+      ],
+      "tp": 0,
+      "unknown_not_predicted": 0,
+      "unknown_predicted": 1
+    },
+    {
+      "critical_missed": [
+        "CMP-ORDERS:check_contract"
+      ],
+      "f1": 0.8,
+      "false_positives": [],
+      "family": "contract",
+      "fn": 2,
+      "fp": 0,
+      "gold": 6,
+      "method": "A",
+      "missed": [
+        "CMP-ORDERS:check_contract[critical]",
+        "TEST-RESERVE:rerun_test[major]"
+      ],
+      "precision": 1.0,
+      "predicted": 4,
+      "recall": 0.6667,
+      "scenario_id": "SC-12",
+      "t_fn": 2,
+      "t_fp": 0,
+      "t_precision": 1.0,
+      "t_recall": 0.6667,
+      "t_tp": 4,
+      "tags": [
+        "consumer_break",
+        "contract_change"
+      ],
+      "tp": 4,
+      "unknown_not_predicted": 2,
+      "unknown_predicted": 0
+    },
+    {
+      "critical_missed": [],
+      "f1": null,
+      "false_positives": [],
+      "family": "implementation",
+      "fn": 1,
+      "fp": 0,
+      "gold": 1,
+      "method": "A",
+      "missed": [
+        "TEST-RETRY:rerun_test[minor]"
+      ],
+      "precision": null,
+      "predicted": 0,
+      "recall": 0.0,
+      "scenario_id": "SC-13",
+      "t_fn": 1,
+      "t_fp": 0,
+      "t_precision": null,
+      "t_recall": 0.0,
+      "t_tp": 0,
+      "tags": [
+        "internal_refactor",
+        "artifact_origin",
+        "code_only"
+      ],
+      "tp": 0,
+      "unknown_not_predicted": 0,
+      "unknown_predicted": 0
+    },
+    {
+      "critical_missed": [],
+      "f1": 0.5,
+      "false_positives": [
+        "CMP-NOTIFIER:check_contract"
+      ],
+      "family": "implementation",
+      "fn": 3,
+      "fp": 1,
+      "gold": 5,
+      "method": "A",
+      "missed": [
+        "TEST-EMAIL:rerun_test[minor]",
+        "TEST-MONEY:rerun_test[major]",
+        "TEST-ORDER-FLOW:rerun_test[major]"
+      ],
+      "precision": 0.6667,
+      "predicted": 3,
+      "recall": 0.4,
+      "scenario_id": "SC-14",
+      "t_fn": 3,
+      "t_fp": 1,
+      "t_precision": 0.6667,
+      "t_recall": 0.4,
+      "t_tp": 2,
+      "tags": [
+        "shared_component",
+        "evidence_valid_incomplete",
+        "pruning",
+        "unsafe_prune_candidate"
+      ],
+      "tp": 2,
+      "unknown_not_predicted": 1,
+      "unknown_predicted": 0
+    },
+    {
+      "critical_missed": [],
+      "f1": 0.0,
+      "false_positives": [
+        "CMP-NOTIFIER:check_contract",
+        "CMP-ORDERS:check_contract",
+        "CON-MONEY-FORMAT:check_contract"
+      ],
+      "family": "implementation",
+      "fn": 3,
+      "fp": 3,
+      "gold": 3,
+      "method": "A",
+      "missed": [
+        "TEST-EMAIL:rerun_test[minor]",
+        "TEST-MONEY:rerun_test[major]",
+        "TEST-ORDER-FLOW:rerun_test[minor]"
+      ],
+      "precision": 0.0,
+      "predicted": 3,
+      "recall": 0.0,
+      "scenario_id": "SC-15",
+      "t_fn": 3,
+      "t_fp": 3,
+      "t_precision": 0.0,
+      "t_recall": 0.0,
+      "t_tp": 0,
+      "tags": [
+        "shared_component",
+        "contract_preserved",
+        "evidence_valid",
+        "pruning"
+      ],
+      "tp": 0,
+      "unknown_not_predicted": 0,
+      "unknown_predicted": 0
+    },
+    {
+      "critical_missed": [],
+      "f1": 0.4,
+      "false_positives": [
+        "CON-INVENTORY-API:check_contract"
+      ],
+      "family": "implementation",
+      "fn": 2,
+      "fp": 1,
+      "gold": 3,
+      "method": "A",
+      "missed": [
+        "CMP-NOTIFIER:check_contract[major]",
+        "TEST-RESERVE:rerun_test[major]"
+      ],
+      "precision": 0.5,
+      "predicted": 2,
+      "recall": 0.3333,
+      "scenario_id": "SC-16",
+      "t_fn": 2,
+      "t_fp": 1,
+      "t_precision": 0.5,
+      "t_recall": 0.3333,
+      "t_tp": 1,
+      "tags": [
+        "missing_edge",
+        "observable_behavior",
+        "code_only"
+      ],
+      "tp": 1,
+      "unknown_not_predicted": 1,
+      "unknown_predicted": 2
+    },
+    {
+      "critical_missed": [],
+      "f1": 0.6667,
+      "false_positives": [
+        "CMP-PAYMENT:check_contract"
+      ],
+      "family": "implementation",
+      "fn": 0,
+      "fp": 1,
+      "gold": 1,
+      "method": "A",
+      "missed": [],
+      "precision": 0.5,
+      "predicted": 2,
+      "recall": 1.0,
+      "scenario_id": "SC-17",
+      "t_fn": 0,
+      "t_fp": 1,
+      "t_precision": 0.5,
+      "t_recall": 1.0,
+      "t_tp": 1,
+      "tags": [
+        "internal_refactor",
+        "consumer_side"
+      ],
+      "tp": 1,
+      "unknown_not_predicted": 0,
+      "unknown_predicted": 0
+    },
+    {
+      "critical_missed": [],
+      "f1": 0.5,
+      "false_positives": [
+        "CMP-PAYMENT:check_contract"
+      ],
+      "family": "structure",
+      "fn": 1,
+      "fp": 1,
+      "gold": 2,
+      "method": "A",
+      "missed": [
+        "REQ-REPORT:check_contract[major]"
+      ],
+      "precision": 0.5,
+      "predicted": 2,
+      "recall": 0.5,
+      "scenario_id": "SC-18",
+      "t_fn": 1,
+      "t_fp": 1,
+      "t_precision": 0.5,
+      "t_recall": 0.5,
+      "t_tp": 1,
+      "tags": [
+        "edge_remove",
+        "old_union_new"
+      ],
+      "tp": 1,
+      "unknown_not_predicted": 0,
+      "unknown_predicted": 0
+    },
+    {
+      "critical_missed": [],
+      "f1": null,
+      "false_positives": [
+        "CMP-INVENTORY:check_contract"
+      ],
+      "family": "structure",
+      "fn": 0,
+      "fp": 1,
+      "gold": 0,
+      "method": "A",
+      "missed": [],
+      "precision": 0.0,
+      "predicted": 1,
+      "recall": null,
+      "scenario_id": "SC-19",
+      "t_fn": 0,
+      "t_fp": 1,
+      "t_precision": 0.0,
+      "t_recall": null,
+      "t_tp": 0,
+      "tags": [
+        "edge_add",
+        "true_negative",
+        "missing_edge_registration"
+      ],
+      "tp": 0,
+      "unknown_not_predicted": 0,
+      "unknown_predicted": 1
+    },
+    {
+      "critical_missed": [],
+      "f1": 1.0,
+      "false_positives": [],
+      "family": "structure",
+      "fn": 0,
+      "fp": 0,
+      "gold": 1,
+      "method": "A",
+      "missed": [],
+      "precision": 1.0,
+      "predicted": 1,
+      "recall": 1.0,
+      "scenario_id": "SC-20",
+      "t_fn": 0,
+      "t_fp": 0,
+      "t_precision": 1.0,
+      "t_recall": 1.0,
+      "t_tp": 1,
+      "tags": [
+        "readiness_only",
+        "no_code"
+      ],
+      "tp": 1,
+      "unknown_not_predicted": 0,
+      "unknown_predicted": 0
+    },
+    {
+      "critical_missed": [],
+      "f1": 0.8,
+      "false_positives": [],
+      "family": "structure",
+      "fn": 1,
+      "fp": 0,
+      "gold": 3,
+      "method": "A",
+      "missed": [
+        "REQ-CHARGE:check_contract[major]"
+      ],
+      "precision": 1.0,
+      "predicted": 2,
+      "recall": 0.6667,
+      "scenario_id": "SC-21",
+      "t_fn": 1,
+      "t_fp": 0,
+      "t_precision": 1.0,
+      "t_recall": 0.6667,
+      "t_tp": 2,
+      "tags": [
+        "cycle",
+        "multihop"
+      ],
+      "tp": 2,
+      "unknown_not_predicted": 0,
+      "unknown_predicted": 0
+    },
+    {
+      "critical_missed": [
+        "CMP-REPORTING:check_contract"
+      ],
+      "f1": 0.3333,
+      "false_positives": [
+        "CAP-PAYMENTS:review_spec",
+        "CON-IDEMPOTENCY:check_contract"
+      ],
+      "family": "adversarial",
+      "fn": 2,
+      "fp": 2,
+      "gold": 3,
+      "method": "A",
+      "missed": [
+        "CMP-REPORTING:check_contract[critical]",
+        "REQ-REPORT:check_contract[major]"
+      ],
+      "precision": 0.3333,
+      "predicted": 3,
+      "recall": 0.3333,
+      "scenario_id": "SC-22",
+      "t_fn": 2,
+      "t_fp": 2,
+      "t_precision": 0.3333,
+      "t_recall": 0.3333,
+      "t_tp": 1,
+      "tags": [
+        "missing_edge",
+        "multihop",
+        "shared_component_fanout"
+      ],
+      "tp": 1,
+      "unknown_not_predicted": 0,
+      "unknown_predicted": 0
+    },
+    {
+      "critical_missed": [
+        "CMP-NOTIFIER:check_contract",
+        "TEST-EMAIL:rerun_test"
+      ],
+      "f1": 0.5,
+      "false_positives": [],
+      "family": "adversarial",
+      "fn": 2,
+      "fp": 0,
+      "gold": 3,
+      "method": "A",
+      "missed": [
+        "CMP-NOTIFIER:check_contract[critical]",
+        "TEST-EMAIL:rerun_test[critical]"
+      ],
+      "precision": 1.0,
+      "predicted": 1,
+      "recall": 0.3333,
+      "scenario_id": "SC-23",
+      "t_fn": 2,
+      "t_fp": 0,
+      "t_precision": 1.0,
+      "t_recall": 0.3333,
+      "t_tp": 1,
+      "tags": [
+        "multihop",
+        "contract_change"
+      ],
+      "tp": 1,
+      "unknown_not_predicted": 2,
+      "unknown_predicted": 0
+    },
+    {
+      "critical_missed": [],
+      "f1": 0.25,
+      "false_positives": [
+        "CMP-NOTIFIER:check_contract",
+        "CMP-ORDERS:check_contract",
+        "CON-INVENTORY-API:check_contract",
+        "REQ-LOW-STOCK-ALERT:check_contract",
+        "REQ-RESERVE-STOCK:check_contract"
+      ],
+      "family": "adversarial",
+      "fn": 1,
+      "fp": 5,
+      "gold": 2,
+      "method": "A",
+      "missed": [
+        "TEST-RESERVE:rerun_test[minor]"
+      ],
+      "precision": 0.1667,
+      "predicted": 6,
+      "recall": 0.5,
+      "scenario_id": "SC-24",
+      "t_fn": 1,
+      "t_fp": 4,
+      "t_precision": 0.2,
+      "t_recall": 0.5,
+      "t_tp": 1,
+      "tags": [
+        "hypothesized_edge",
+        "unknown_boundary",
+        "evidence_valid",
+        "pruning"
+      ],
+      "tp": 1,
+      "unknown_not_predicted": 0,
+      "unknown_predicted": 0
+    },
+    {
+      "critical_missed": [],
+      "f1": 0.2501,
+      "false_positives": [
+        "CAP-PAYMENTS:review_spec",
+        "CMP-REPORTING:review_implementation",
+        "CON-IDEMPOTENCY:check_contract",
+        "GOAL-CHECKOUT:review_spec",
+        "REQ-RETRY:review_spec",
+        "TEST-RETRY:rerun_test"
+      ],
+      "family": "semantic",
+      "fn": 0,
+      "fp": 6,
+      "gold": 1,
+      "method": "A2",
+      "missed": [],
+      "precision": 0.1429,
+      "predicted": 7,
+      "recall": 1.0,
+      "scenario_id": "SC-01",
+      "t_fn": 0,
+      "t_fp": 5,
+      "t_precision": 0.1667,
+      "t_recall": 1.0,
+      "t_tp": 1,
+      "tags": [
+        "leaf",
+        "acceptance_criteria",
+        "shared_component_fanout"
+      ],
+      "tp": 1,
+      "unknown_not_predicted": 1,
+      "unknown_predicted": 0
+    },
+    {
+      "critical_missed": [],
+      "f1": null,
+      "false_positives": [
+        "CAP-REPORTING:review_spec",
+        "CMP-PAYMENT:review_implementation",
+        "CMP-REPORTING:review_implementation",
+        "GOAL-CHECKOUT:review_spec"
+      ],
+      "family": "semantic",
+      "fn": 0,
+      "fp": 4,
+      "gold": 0,
+      "method": "A2",
+      "missed": [],
+      "precision": 0.0,
+      "predicted": 4,
+      "recall": null,
+      "scenario_id": "SC-02",
+      "t_fn": 0,
+      "t_fp": 4,
+      "t_precision": 0.0,
+      "t_recall": null,
+      "t_tp": 0,
+      "tags": [
+        "true_negative",
+        "harmless_wording"
+      ],
+      "tp": 0,
+      "unknown_not_predicted": 0,
+      "unknown_predicted": 0
+    },
+    {
+      "critical_missed": [],
+      "f1": 0.4444,
+      "false_positives": [
+        "CAP-REPORTING:review_spec",
+        "CMP-PAYMENT:review_implementation",
+        "CON-IDEMPOTENCY:check_contract",
+        "Q-RETRY-BOUNDS:review_spec",
+        "TEST-RETRY:rerun_test"
+      ],
+      "family": "semantic",
+      "fn": 0,
+      "fp": 5,
+      "gold": 2,
+      "method": "A2",
+      "missed": [],
+      "precision": 0.2857,
+      "predicted": 7,
+      "recall": 1.0,
+      "scenario_id": "SC-03",
+      "t_fn": 0,
+      "t_fp": 5,
+      "t_precision": 0.2857,
+      "t_recall": 1.0,
+      "t_tp": 2,
+      "tags": [
+        "parent",
+        "scope_narrowing"
+      ],
+      "tp": 2,
+      "unknown_not_predicted": 0,
+      "unknown_predicted": 1
+    },
+    {
+      "critical_missed": [],
+      "f1": 0.5455,
+      "false_positives": [
+        "CAP-PAYMENTS:review_spec",
+        "CMP-REPORTING:review_implementation",
+        "CON-IDEMPOTENCY:check_contract",
+        "GOAL-CHECKOUT:review_spec",
+        "REQ-CHARGE:review_spec"
+      ],
+      "family": "semantic",
+      "fn": 0,
+      "fp": 5,
+      "gold": 3,
+      "method": "A2",
+      "missed": [],
+      "precision": 0.375,
+      "predicted": 8,
+      "recall": 1.0,
+      "scenario_id": "SC-04",
+      "t_fn": 0,
+      "t_fp": 5,
+      "t_precision": 0.375,
+      "t_recall": 1.0,
+      "t_tp": 3,
+      "tags": [
+        "leaf",
+        "acceptance_criteria",
+        "reverse_question_link"
+      ],
+      "tp": 3,
+      "unknown_not_predicted": 0,
+      "unknown_predicted": 0
+    },
+    {
+      "critical_missed": [],
+      "f1": 0.5714,
+      "false_positives": [
+        "CAP-NOTIFY:review_spec",
+        "CMP-MONEY:review_implementation",
+        "CMP-ORDERS:review_implementation",
+        "CON-EMAIL-TEMPLATE:check_contract",
+        "CON-INVENTORY-API:check_contract",
+        "GOAL-ORDERS:review_spec"
+      ],
+      "family": "semantic",
+      "fn": 0,
+      "fp": 6,
+      "gold": 4,
+      "method": "A2",
+      "missed": [],
+      "precision": 0.4,
+      "predicted": 10,
+      "recall": 1.0,
+      "scenario_id": "SC-05",
+      "t_fn": 0,
+      "t_fp": 6,
+      "t_precision": 0.4,
+      "t_recall": 1.0,
+      "t_tp": 4,
+      "tags": [
+        "missing_edge",
+        "acceptance_criteria",
+        "prose_reference"
+      ],
+      "tp": 4,
+      "unknown_not_predicted": 0,
+      "unknown_predicted": 0
+    },
+    {
+      "critical_missed": [],
+      "f1": null,
+      "false_positives": [
+        "CAP-NOTIFY:review_spec",
+        "CMP-MONEY:review_implementation",
+        "CMP-NOTIFIER:review_implementation",
+        "CMP-ORDERS:review_implementation",
+        "CON-EMAIL-TEMPLATE:check_contract",
+        "GOAL-ORDERS:review_spec",
+        "REQ-LOW-STOCK-ALERT:review_spec",
+        "TEST-EMAIL:rerun_test"
+      ],
+      "family": "semantic",
+      "fn": 0,
+      "fp": 8,
+      "gold": 0,
+      "method": "A2",
+      "missed": [],
+      "precision": 0.0,
+      "predicted": 8,
+      "recall": null,
+      "scenario_id": "SC-06",
+      "t_fn": 0,
+      "t_fp": 8,
+      "t_precision": 0.0,
+      "t_recall": null,
+      "t_tp": 0,
+      "tags": [
+        "true_negative",
+        "harmless_wording"
+      ],
+      "tp": 0,
+      "unknown_not_predicted": 0,
+      "unknown_predicted": 0
+    },
+    {
+      "critical_missed": [],
+      "f1": 0.7272,
+      "false_positives": [
+        "CAP-PAYMENTS:review_spec",
+        "CMP-REPORTING:check_contract",
+        "Q-RETRY-BOUNDS:review_spec"
+      ],
+      "family": "contract",
+      "fn": 0,
+      "fp": 3,
+      "gold": 4,
+      "method": "A2",
+      "missed": [],
+      "precision": 0.5714,
+      "predicted": 7,
+      "recall": 1.0,
+      "scenario_id": "SC-07",
+      "t_fn": 0,
+      "t_fp": 3,
+      "t_precision": 0.5714,
+      "t_recall": 1.0,
+      "t_tp": 4,
+      "tags": [
+        "contract_change",
+        "demo_step_D"
+      ],
+      "tp": 4,
+      "unknown_not_predicted": 0,
+      "unknown_predicted": 1
+    },
+    {
+      "critical_missed": [],
+      "f1": 0.4,
+      "false_positives": [
+        "CAP-PAYMENTS:review_spec",
+        "CON-IDEMPOTENCY:check_contract",
+        "Q-RETRY-BOUNDS:review_spec",
+        "REQ-CHARGE:check_contract",
+        "REQ-RETRY:check_contract",
+        "TEST-RETRY:rerun_test"
+      ],
+      "family": "contract",
+      "fn": 0,
+      "fp": 6,
+      "gold": 2,
+      "method": "A2",
+      "missed": [],
+      "precision": 0.25,
+      "predicted": 8,
+      "recall": 1.0,
+      "scenario_id": "SC-08",
+      "t_fn": 0,
+      "t_fp": 6,
+      "t_precision": 0.25,
+      "t_recall": 1.0,
+      "t_tp": 2,
+      "tags": [
+        "consumer_break",
+        "multihop",
+        "informal_contract"
+      ],
+      "tp": 2,
+      "unknown_not_predicted": 0,
+      "unknown_predicted": 0
+    },
+    {
+      "critical_missed": [],
+      "f1": 0.2501,
+      "false_positives": [
+        "CAP-PAYMENTS:review_spec",
+        "CMP-REPORTING:check_contract",
+        "CON-IDEMPOTENCY:check_contract",
+        "Q-RETRY-BOUNDS:review_spec",
+        "REQ-CHARGE:check_contract",
+        "REQ-REPORT:check_contract"
+      ],
+      "family": "contract",
+      "fn": 0,
+      "fp": 6,
+      "gold": 1,
+      "method": "A2",
+      "missed": [],
+      "precision": 0.1429,
+      "predicted": 7,
+      "recall": 1.0,
+      "scenario_id": "SC-09",
+      "t_fn": 0,
+      "t_fp": 6,
+      "t_precision": 0.1429,
+      "t_recall": 1.0,
+      "t_tp": 1,
+      "tags": [
+        "contract_preserved",
+        "evidence_valid",
+        "pruning"
+      ],
+      "tp": 1,
+      "unknown_not_predicted": 0,
+      "unknown_predicted": 1
+    },
+    {
+      "critical_missed": [],
+      "f1": 0.5455,
+      "false_positives": [
+        "CAP-PAYMENTS:review_spec",
+        "CMP-REPORTING:check_contract",
+        "CON-IDEMPOTENCY:check_contract",
+        "Q-RETRY-BOUNDS:review_spec",
+        "REQ-REPORT:check_contract"
+      ],
+      "family": "contract",
+      "fn": 0,
+      "fp": 5,
+      "gold": 3,
+      "method": "A2",
+      "missed": [],
+      "precision": 0.375,
+      "predicted": 8,
+      "recall": 1.0,
+      "scenario_id": "SC-10",
+      "t_fn": 0,
+      "t_fp": 5,
+      "t_precision": 0.375,
+      "t_recall": 1.0,
+      "t_tp": 3,
+      "tags": [
+        "contract_preserved_claim",
+        "evidence_failed",
+        "pruning"
+      ],
+      "tp": 3,
+      "unknown_not_predicted": 0,
+      "unknown_predicted": 0
+    },
+    {
+      "critical_missed": [],
+      "f1": 0.2501,
+      "false_positives": [
+        "CAP-PAYMENTS:review_spec",
+        "CMP-REPORTING:check_contract",
+        "CON-IDEMPOTENCY:check_contract",
+        "Q-RETRY-BOUNDS:review_spec",
+        "REQ-CHARGE:check_contract",
+        "REQ-REPORT:check_contract"
+      ],
+      "family": "contract",
+      "fn": 0,
+      "fp": 6,
+      "gold": 1,
+      "method": "A2",
+      "missed": [],
+      "precision": 0.1429,
+      "predicted": 7,
+      "recall": 1.0,
+      "scenario_id": "SC-11",
+      "t_fn": 0,
+      "t_fp": 6,
+      "t_precision": 0.1429,
+      "t_recall": 1.0,
+      "t_tp": 1,
+      "tags": [
+        "evidence_stale",
+        "pruning"
+      ],
+      "tp": 1,
+      "unknown_not_predicted": 0,
+      "unknown_predicted": 1
+    },
+    {
+      "critical_missed": [],
+      "f1": 0.8571,
+      "false_positives": [
+        "CAP-ORDERING:review_spec",
+        "REQ-LOW-STOCK-ALERT:check_contract"
+      ],
+      "family": "contract",
+      "fn": 0,
+      "fp": 2,
+      "gold": 6,
+      "method": "A2",
+      "missed": [],
+      "precision": 0.75,
+      "predicted": 8,
+      "recall": 1.0,
+      "scenario_id": "SC-12",
+      "t_fn": 0,
+      "t_fp": 2,
+      "t_precision": 0.75,
+      "t_recall": 1.0,
+      "t_tp": 6,
+      "tags": [
+        "consumer_break",
+        "contract_change"
+      ],
+      "tp": 6,
+      "unknown_not_predicted": 1,
+      "unknown_predicted": 1
+    },
+    {
+      "critical_missed": [],
+      "f1": 0.0,
+      "false_positives": [
+        "CMP-REPORTING:check_contract",
+        "CON-IDEMPOTENCY:check_contract",
+        "REQ-CHARGE:check_contract",
+        "REQ-RETRY:check_contract"
+      ],
+      "family": "implementation",
+      "fn": 1,
+      "fp": 4,
+      "gold": 1,
+      "method": "A2",
+      "missed": [
+        "TEST-RETRY:rerun_test[minor]"
+      ],
+      "precision": 0.0,
+      "predicted": 4,
+      "recall": 0.0,
+      "scenario_id": "SC-13",
+      "t_fn": 1,
+      "t_fp": 4,
+      "t_precision": 0.0,
+      "t_recall": 0.0,
+      "t_tp": 0,
+      "tags": [
+        "internal_refactor",
+        "artifact_origin",
+        "code_only"
+      ],
+      "tp": 0,
+      "unknown_not_predicted": 0,
+      "unknown_predicted": 0
+    },
+    {
+      "critical_missed": [],
+      "f1": 0.2667,
+      "false_positives": [
+        "CMP-INVENTORY:check_contract",
+        "CMP-NOTIFIER:check_contract",
+        "CMP-NOTIFIER:review_implementation",
+        "CMP-ORDERS:review_implementation",
+        "CON-EMAIL-TEMPLATE:check_contract",
+        "CON-ORDER-EVENT:check_contract",
+        "REQ-LOW-STOCK-ALERT:check_contract",
+        "REQ-ORDER-EMAIL:check_contract"
+      ],
+      "family": "implementation",
+      "fn": 3,
+      "fp": 8,
+      "gold": 5,
+      "method": "A2",
+      "missed": [
+        "TEST-EMAIL:rerun_test[minor]",
+        "TEST-MONEY:rerun_test[major]",
+        "TEST-ORDER-FLOW:rerun_test[major]"
+      ],
+      "precision": 0.2,
+      "predicted": 10,
+      "recall": 0.4,
+      "scenario_id": "SC-14",
+      "t_fn": 3,
+      "t_fp": 6,
+      "t_precision": 0.25,
+      "t_recall": 0.4,
+      "t_tp": 2,
+      "tags": [
+        "shared_component",
+        "evidence_valid_incomplete",
+        "pruning",
+        "unsafe_prune_candidate"
+      ],
+      "tp": 2,
+      "unknown_not_predicted": 0,
+      "unknown_predicted": 1
+    },
+    {
+      "critical_missed": [],
+      "f1": 0.0,
+      "false_positives": [
+        "CMP-INVENTORY:check_contract",
+        "CMP-NOTIFIER:check_contract",
+        "CMP-NOTIFIER:review_implementation",
+        "CMP-ORDERS:check_contract",
+        "CMP-ORDERS:review_implementation",
+        "CON-EMAIL-TEMPLATE:check_contract",
+        "CON-MONEY-FORMAT:check_contract",
+        "CON-ORDER-EVENT:check_contract",
+        "REQ-LOW-STOCK-ALERT:check_contract",
+        "REQ-ORDER-EMAIL:check_contract",
+        "REQ-PLACE-ORDER:check_contract"
+      ],
+      "family": "implementation",
+      "fn": 3,
+      "fp": 11,
+      "gold": 3,
+      "method": "A2",
+      "missed": [
+        "TEST-EMAIL:rerun_test[minor]",
+        "TEST-MONEY:rerun_test[major]",
+        "TEST-ORDER-FLOW:rerun_test[minor]"
+      ],
+      "precision": 0.0,
+      "predicted": 11,
+      "recall": 0.0,
+      "scenario_id": "SC-15",
+      "t_fn": 3,
+      "t_fp": 9,
+      "t_precision": 0.0,
+      "t_recall": 0.0,
+      "t_tp": 0,
+      "tags": [
+        "shared_component",
+        "contract_preserved",
+        "evidence_valid",
+        "pruning"
+      ],
+      "tp": 0,
+      "unknown_not_predicted": 0,
+      "unknown_predicted": 0
+    },
+    {
+      "critical_missed": [],
+      "f1": 0.3333,
+      "false_positives": [
+        "CAP-NOTIFY:review_spec",
+        "CAP-ORDERING:review_spec",
+        "CMP-MONEY:check_contract",
+        "CMP-ORDERS:review_implementation",
+        "CON-INVENTORY-API:check_contract",
+        "CON-ORDER-EVENT:check_contract",
+        "Q-ALERT-THRESHOLD:review_spec"
+      ],
+      "family": "implementation",
+      "fn": 1,
+      "fp": 7,
+      "gold": 3,
+      "method": "A2",
+      "missed": [
+        "TEST-RESERVE:rerun_test[major]"
+      ],
+      "precision": 0.2222,
+      "predicted": 9,
+      "recall": 0.6667,
+      "scenario_id": "SC-16",
+      "t_fn": 1,
+      "t_fp": 6,
+      "t_precision": 0.25,
+      "t_recall": 0.6667,
+      "t_tp": 2,
+      "tags": [
+        "missing_edge",
+        "observable_behavior",
+        "code_only"
+      ],
+      "tp": 2,
+      "unknown_not_predicted": 1,
+      "unknown_predicted": 2
+    },
+    {
+      "critical_missed": [],
+      "f1": 0.2501,
+      "false_positives": [
+        "CAP-REPORTING:review_spec",
+        "CMP-PAYMENT:check_contract",
+        "CMP-PAYMENT:review_implementation",
+        "CON-IDEMPOTENCY:check_contract",
+        "REQ-CHARGE:check_contract",
+        "REQ-RETRY:check_contract"
+      ],
+      "family": "implementation",
+      "fn": 0,
+      "fp": 6,
+      "gold": 1,
+      "method": "A2",
+      "missed": [],
+      "precision": 0.1429,
+      "predicted": 7,
+      "recall": 1.0,
+      "scenario_id": "SC-17",
+      "t_fn": 0,
+      "t_fp": 5,
+      "t_precision": 0.1667,
+      "t_recall": 1.0,
+      "t_tp": 1,
+      "tags": [
+        "internal_refactor",
+        "consumer_side"
+      ],
+      "tp": 1,
+      "unknown_not_predicted": 0,
+      "unknown_predicted": 0
+    },
+    {
+      "critical_missed": [],
+      "f1": 0.5,
+      "false_positives": [
+        "CMP-PAYMENT:check_contract"
+      ],
+      "family": "structure",
+      "fn": 1,
+      "fp": 1,
+      "gold": 2,
+      "method": "A2",
+      "missed": [
+        "REQ-REPORT:check_contract[major]"
+      ],
+      "precision": 0.5,
+      "predicted": 2,
+      "recall": 0.5,
+      "scenario_id": "SC-18",
+      "t_fn": 1,
+      "t_fp": 1,
+      "t_precision": 0.5,
+      "t_recall": 0.5,
+      "t_tp": 1,
+      "tags": [
+        "edge_remove",
+        "old_union_new"
+      ],
+      "tp": 1,
+      "unknown_not_predicted": 0,
+      "unknown_predicted": 0
+    },
+    {
+      "critical_missed": [],
+      "f1": null,
+      "false_positives": [
+        "CMP-INVENTORY:check_contract"
+      ],
+      "family": "structure",
+      "fn": 0,
+      "fp": 1,
+      "gold": 0,
+      "method": "A2",
+      "missed": [],
+      "precision": 0.0,
+      "predicted": 1,
+      "recall": null,
+      "scenario_id": "SC-19",
+      "t_fn": 0,
+      "t_fp": 1,
+      "t_precision": 0.0,
+      "t_recall": null,
+      "t_tp": 0,
+      "tags": [
+        "edge_add",
+        "true_negative",
+        "missing_edge_registration"
+      ],
+      "tp": 0,
+      "unknown_not_predicted": 0,
+      "unknown_predicted": 1
+    },
+    {
+      "critical_missed": [],
+      "f1": 0.3333,
+      "false_positives": [
+        "CAP-NOTIFY:review_spec",
+        "CMP-INVENTORY:review_implementation",
+        "CMP-NOTIFIER:review_implementation",
+        "TEST-LOW-STOCK:rerun_test"
+      ],
+      "family": "structure",
+      "fn": 0,
+      "fp": 4,
+      "gold": 1,
+      "method": "A2",
+      "missed": [],
+      "precision": 0.2,
+      "predicted": 5,
+      "recall": 1.0,
+      "scenario_id": "SC-20",
+      "t_fn": 0,
+      "t_fp": 4,
+      "t_precision": 0.2,
+      "t_recall": 1.0,
+      "t_tp": 1,
+      "tags": [
+        "readiness_only",
+        "no_code"
+      ],
+      "tp": 1,
+      "unknown_not_predicted": 0,
+      "unknown_predicted": 0
+    },
+    {
+      "critical_missed": [],
+      "f1": 0.6,
+      "false_positives": [
+        "CAP-REPORTING:review_spec",
+        "CMP-PAYMENT:review_implementation",
+        "CON-IDEMPOTENCY:check_contract",
+        "REQ-RETRY:check_contract"
+      ],
+      "family": "structure",
+      "fn": 0,
+      "fp": 4,
+      "gold": 3,
+      "method": "A2",
+      "missed": [],
+      "precision": 0.4286,
+      "predicted": 7,
+      "recall": 1.0,
+      "scenario_id": "SC-21",
+      "t_fn": 0,
+      "t_fp": 3,
+      "t_precision": 0.5,
+      "t_recall": 1.0,
+      "t_tp": 3,
+      "tags": [
+        "cycle",
+        "multihop"
+      ],
+      "tp": 3,
+      "unknown_not_predicted": 0,
+      "unknown_predicted": 0
+    },
+    {
+      "critical_missed": [
+        "CMP-REPORTING:check_contract"
+      ],
+      "f1": 0.2,
+      "false_positives": [
+        "CAP-PAYMENTS:review_spec",
+        "CMP-REPORTING:review_implementation",
+        "CON-IDEMPOTENCY:check_contract",
+        "GOAL-CHECKOUT:review_spec",
+        "REQ-RETRY:review_spec",
+        "TEST-RETRY:rerun_test"
+      ],
+      "family": "adversarial",
+      "fn": 2,
+      "fp": 6,
+      "gold": 3,
+      "method": "A2",
+      "missed": [
+        "CMP-REPORTING:check_contract[critical]",
+        "REQ-REPORT:check_contract[major]"
+      ],
+      "precision": 0.1429,
+      "predicted": 7,
+      "recall": 0.3333,
+      "scenario_id": "SC-22",
+      "t_fn": 1,
+      "t_fp": 5,
+      "t_precision": 0.2857,
+      "t_recall": 0.6667,
+      "t_tp": 2,
+      "tags": [
+        "missing_edge",
+        "multihop",
+        "shared_component_fanout"
+      ],
+      "tp": 1,
+      "unknown_not_predicted": 0,
+      "unknown_predicted": 0
+    },
+    {
+      "critical_missed": [
+        "TEST-EMAIL:rerun_test"
+      ],
+      "f1": 0.5,
+      "false_positives": [
+        "CMP-INVENTORY:check_contract",
+        "CMP-MONEY:check_contract",
+        "REQ-PLACE-ORDER:check_contract"
+      ],
+      "family": "adversarial",
+      "fn": 1,
+      "fp": 3,
+      "gold": 3,
+      "method": "A2",
+      "missed": [
+        "TEST-EMAIL:rerun_test[critical]"
+      ],
+      "precision": 0.4,
+      "predicted": 5,
+      "recall": 0.6667,
+      "scenario_id": "SC-23",
+      "t_fn": 1,
+      "t_fp": 3,
+      "t_precision": 0.4,
+      "t_recall": 0.6667,
+      "t_tp": 2,
+      "tags": [
+        "multihop",
+        "contract_change"
+      ],
+      "tp": 2,
+      "unknown_not_predicted": 1,
+      "unknown_predicted": 1
+    },
+    {
+      "critical_missed": [],
+      "f1": 0.1428,
+      "false_positives": [
+        "CAP-NOTIFY:review_spec",
+        "CAP-ORDERING:review_spec",
+        "CMP-MONEY:check_contract",
+        "CMP-NOTIFIER:check_contract",
+        "CMP-NOTIFIER:review_implementation",
+        "CMP-ORDERS:check_contract",
+        "CMP-ORDERS:review_implementation",
+        "CON-EMAIL-TEMPLATE:check_contract",
+        "CON-INVENTORY-API:check_contract",
+        "REQ-LOW-STOCK-ALERT:check_contract",
+        "REQ-RESERVE-STOCK:check_contract"
+      ],
+      "family": "adversarial",
+      "fn": 1,
+      "fp": 11,
+      "gold": 2,
+      "method": "A2",
+      "missed": [
+        "TEST-RESERVE:rerun_test[minor]"
+      ],
+      "precision": 0.0833,
+      "predicted": 12,
+      "recall": 0.5,
+      "scenario_id": "SC-24",
+      "t_fn": 1,
+      "t_fp": 8,
+      "t_precision": 0.1111,
+      "t_recall": 0.5,
+      "t_tp": 1,
+      "tags": [
+        "hypothesized_edge",
+        "unknown_boundary",
+        "evidence_valid",
+        "pruning"
+      ],
+      "tp": 1,
+      "unknown_not_predicted": 0,
+      "unknown_predicted": 0
+    },
+    {
+      "critical_missed": [],
+      "f1": 0.5,
+      "false_positives": [
+        "CAP-PAYMENTS:review_spec",
+        "CMP-REPORTING:check_contract"
+      ],
+      "family": "semantic",
+      "fn": 0,
+      "fp": 2,
+      "gold": 1,
+      "method": "B",
+      "missed": [],
+      "precision": 0.3333,
+      "predicted": 3,
+      "recall": 1.0,
+      "scenario_id": "SC-01",
+      "t_fn": 0,
+      "t_fp": 2,
+      "t_precision": 0.3333,
+      "t_recall": 1.0,
+      "t_tp": 1,
+      "tags": [
+        "leaf",
+        "acceptance_criteria",
+        "shared_component_fanout"
+      ],
+      "tp": 1,
+      "unknown_not_predicted": 0,
+      "unknown_predicted": 1
+    },
+    {
+      "critical_missed": [],
+      "f1": null,
+      "false_positives": [
+        "CAP-REPORTING:review_spec",
+        "CMP-REPORTING:review_implementation"
+      ],
+      "family": "semantic",
+      "fn": 0,
+      "fp": 2,
+      "gold": 0,
+      "method": "B",
+      "missed": [],
+      "precision": 0.0,
+      "predicted": 2,
+      "recall": null,
+      "scenario_id": "SC-02",
+      "t_fn": 0,
+      "t_fp": 2,
+      "t_precision": 0.0,
+      "t_recall": null,
+      "t_tp": 0,
+      "tags": [
+        "true_negative",
+        "harmless_wording"
+      ],
+      "tp": 0,
+      "unknown_not_predicted": 0,
+      "unknown_predicted": 0
+    },
+    {
+      "critical_missed": [],
+      "f1": 1.0,
+      "false_positives": [],
+      "family": "semantic",
+      "fn": 0,
+      "fp": 0,
+      "gold": 2,
+      "method": "B",
+      "missed": [],
+      "precision": 1.0,
+      "predicted": 2,
+      "recall": 1.0,
+      "scenario_id": "SC-03",
+      "t_fn": 0,
+      "t_fp": 0,
+      "t_precision": 1.0,
+      "t_recall": 1.0,
+      "t_tp": 2,
+      "tags": [
+        "parent",
+        "scope_narrowing"
+      ],
+      "tp": 2,
+      "unknown_not_predicted": 0,
+      "unknown_predicted": 1
+    },
+    {
+      "critical_missed": [],
+      "f1": 0.5,
+      "false_positives": [
+        "CAP-PAYMENTS:review_spec",
+        "CMP-REPORTING:check_contract",
+        "REQ-CHARGE:check_contract"
+      ],
+      "family": "semantic",
+      "fn": 1,
+      "fp": 3,
+      "gold": 3,
+      "method": "B",
+      "missed": [
+        "Q-RETRY-BOUNDS:review_spec[minor]"
+      ],
+      "precision": 0.4,
+      "predicted": 5,
+      "recall": 0.6667,
+      "scenario_id": "SC-04",
+      "t_fn": 1,
+      "t_fp": 3,
+      "t_precision": 0.4,
+      "t_recall": 0.6667,
+      "t_tp": 2,
+      "tags": [
+        "leaf",
+        "acceptance_criteria",
+        "reverse_question_link"
+      ],
+      "tp": 2,
+      "unknown_not_predicted": 0,
+      "unknown_predicted": 0
+    },
+    {
+      "critical_missed": [],
+      "f1": 0.5,
+      "false_positives": [
+        "CAP-NOTIFY:review_spec",
+        "REQ-ORDER-EMAIL:check_contract"
+      ],
+      "family": "semantic",
+      "fn": 2,
+      "fp": 2,
+      "gold": 4,
+      "method": "B",
+      "missed": [
+        "CMP-INVENTORY:review_implementation[major]",
+        "Q-ALERT-THRESHOLD:review_spec[minor]"
+      ],
+      "precision": 0.5,
+      "predicted": 4,
+      "recall": 0.5,
+      "scenario_id": "SC-05",
+      "t_fn": 2,
+      "t_fp": 2,
+      "t_precision": 0.5,
+      "t_recall": 0.5,
+      "t_tp": 2,
+      "tags": [
+        "missing_edge",
+        "acceptance_criteria",
+        "prose_reference"
+      ],
+      "tp": 2,
+      "unknown_not_predicted": 0,
+      "unknown_predicted": 0
+    },
+    {
+      "critical_missed": [],
+      "f1": null,
+      "false_positives": [
+        "CAP-NOTIFY:review_spec",
+        "CMP-NOTIFIER:review_implementation",
+        "REQ-LOW-STOCK-ALERT:check_contract",
+        "TEST-EMAIL:rerun_test"
+      ],
+      "family": "semantic",
+      "fn": 0,
+      "fp": 4,
+      "gold": 0,
+      "method": "B",
+      "missed": [],
+      "precision": 0.0,
+      "predicted": 4,
+      "recall": null,
+      "scenario_id": "SC-06",
+      "t_fn": 0,
+      "t_fp": 4,
+      "t_precision": 0.0,
+      "t_recall": null,
+      "t_tp": 0,
+      "tags": [
+        "true_negative",
+        "harmless_wording"
+      ],
+      "tp": 0,
+      "unknown_not_predicted": 0,
+      "unknown_predicted": 0
+    },
+    {
+      "critical_missed": [],
+      "f1": 0.8889,
+      "false_positives": [
+        "CMP-REPORTING:check_contract"
+      ],
+      "family": "contract",
+      "fn": 0,
+      "fp": 1,
+      "gold": 4,
+      "method": "B",
+      "missed": [],
+      "precision": 0.8,
+      "predicted": 5,
+      "recall": 1.0,
+      "scenario_id": "SC-07",
+      "t_fn": 0,
+      "t_fp": 1,
+      "t_precision": 0.8,
+      "t_recall": 1.0,
+      "t_tp": 4,
+      "tags": [
+        "contract_change",
+        "demo_step_D"
+      ],
+      "tp": 4,
+      "unknown_not_predicted": 0,
+      "unknown_predicted": 1
+    },
+    {
+      "critical_missed": [],
+      "f1": 0.4,
+      "false_positives": [
+        "REQ-CHARGE:check_contract",
+        "REQ-RETRY:check_contract"
+      ],
+      "family": "contract",
+      "fn": 1,
+      "fp": 2,
+      "gold": 2,
+      "method": "B",
+      "missed": [
+        "REQ-REPORT:check_contract[major]"
+      ],
+      "precision": 0.3333,
+      "predicted": 3,
+      "recall": 0.5,
+      "scenario_id": "SC-08",
+      "t_fn": 1,
+      "t_fp": 2,
+      "t_precision": 0.3333,
+      "t_recall": 0.5,
+      "t_tp": 1,
+      "tags": [
+        "consumer_break",
+        "multihop",
+        "informal_contract"
+      ],
+      "tp": 1,
+      "unknown_not_predicted": 0,
+      "unknown_predicted": 0
+    },
+    {
+      "critical_missed": [],
+      "f1": 0.0,
+      "false_positives": [
+        "CMP-REPORTING:check_contract",
+        "REQ-CHARGE:check_contract"
+      ],
+      "family": "contract",
+      "fn": 1,
+      "fp": 2,
+      "gold": 1,
+      "method": "B",
+      "missed": [
+        "TEST-RETRY:rerun_test[major]"
+      ],
+      "precision": 0.0,
+      "predicted": 2,
+      "recall": 0.0,
+      "scenario_id": "SC-09",
+      "t_fn": 1,
+      "t_fp": 2,
+      "t_precision": 0.0,
+      "t_recall": 0.0,
+      "t_tp": 0,
+      "tags": [
+        "contract_preserved",
+        "evidence_valid",
+        "pruning"
+      ],
+      "tp": 0,
+      "unknown_not_predicted": 0,
+      "unknown_predicted": 1
+    },
+    {
+      "critical_missed": [
+        "TEST-RETRY:rerun_test"
+      ],
+      "f1": 0.6667,
+      "false_positives": [
+        "CMP-REPORTING:check_contract"
+      ],
+      "family": "contract",
+      "fn": 1,
+      "fp": 1,
+      "gold": 3,
+      "method": "B",
+      "missed": [
+        "TEST-RETRY:rerun_test[critical]"
+      ],
+      "precision": 0.6667,
+      "predicted": 3,
+      "recall": 0.6667,
+      "scenario_id": "SC-10",
+      "t_fn": 1,
+      "t_fp": 1,
+      "t_precision": 0.6667,
+      "t_recall": 0.6667,
+      "t_tp": 2,
+      "tags": [
+        "contract_preserved_claim",
+        "evidence_failed",
+        "pruning"
+      ],
+      "tp": 2,
+      "unknown_not_predicted": 0,
+      "unknown_predicted": 0
+    },
+    {
+      "critical_missed": [],
+      "f1": 0.0,
+      "false_positives": [
+        "CMP-REPORTING:check_contract",
+        "REQ-CHARGE:check_contract"
+      ],
+      "family": "contract",
+      "fn": 1,
+      "fp": 2,
+      "gold": 1,
+      "method": "B",
+      "missed": [
+        "TEST-RETRY:rerun_test[major]"
+      ],
+      "precision": 0.0,
+      "predicted": 2,
+      "recall": 0.0,
+      "scenario_id": "SC-11",
+      "t_fn": 1,
+      "t_fp": 2,
+      "t_precision": 0.0,
+      "t_recall": 0.0,
+      "t_tp": 0,
+      "tags": [
+        "evidence_stale",
+        "pruning"
+      ],
+      "tp": 0,
+      "unknown_not_predicted": 0,
+      "unknown_predicted": 1
+    },
+    {
+      "critical_missed": [],
+      "f1": 0.9231,
+      "false_positives": [
+        "CMP-NOTIFIER:check_contract"
+      ],
+      "family": "contract",
+      "fn": 0,
+      "fp": 1,
+      "gold": 6,
+      "method": "B",
+      "missed": [],
+      "precision": 0.8571,
+      "predicted": 7,
+      "recall": 1.0,
+      "scenario_id": "SC-12",
+      "t_fn": 0,
+      "t_fp": 1,
+      "t_precision": 0.8571,
+      "t_recall": 1.0,
+      "t_tp": 6,
+      "tags": [
+        "consumer_break",
+        "contract_change"
+      ],
+      "tp": 6,
+      "unknown_not_predicted": 0,
+      "unknown_predicted": 2
+    },
+    {
+      "critical_missed": [],
+      "f1": 0.0,
+      "false_positives": [
+        "CMP-REPORTING:check_contract",
+        "REQ-CHARGE:check_contract",
+        "REQ-RETRY:check_contract"
+      ],
+      "family": "implementation",
+      "fn": 1,
+      "fp": 3,
+      "gold": 1,
+      "method": "B",
+      "missed": [
+        "TEST-RETRY:rerun_test[minor]"
+      ],
+      "precision": 0.0,
+      "predicted": 3,
+      "recall": 0.0,
+      "scenario_id": "SC-13",
+      "t_fn": 1,
+      "t_fp": 3,
+      "t_precision": 0.0,
+      "t_recall": 0.0,
+      "t_tp": 0,
+      "tags": [
+        "internal_refactor",
+        "artifact_origin",
+        "code_only"
+      ],
+      "tp": 0,
+      "unknown_not_predicted": 0,
+      "unknown_predicted": 0
+    },
+    {
+      "critical_missed": [],
+      "f1": 0.2857,
+      "false_positives": [
+        "CMP-NOTIFIER:check_contract"
+      ],
+      "family": "implementation",
+      "fn": 4,
+      "fp": 1,
+      "gold": 5,
+      "method": "B",
+      "missed": [
+        "CON-MONEY-FORMAT:check_contract[minor]",
+        "TEST-EMAIL:rerun_test[minor]",
+        "TEST-MONEY:rerun_test[major]",
+        "TEST-ORDER-FLOW:rerun_test[major]"
+      ],
+      "precision": 0.5,
+      "predicted": 2,
+      "recall": 0.2,
+      "scenario_id": "SC-14",
+      "t_fn": 4,
+      "t_fp": 1,
+      "t_precision": 0.5,
+      "t_recall": 0.2,
+      "t_tp": 1,
+      "tags": [
+        "shared_component",
+        "evidence_valid_incomplete",
+        "pruning",
+        "unsafe_prune_candidate"
+      ],
+      "tp": 1,
+      "unknown_not_predicted": 1,
+      "unknown_predicted": 0
+    },
+    {
+      "critical_missed": [],
+      "f1": 0.0,
+      "false_positives": [
+        "CMP-NOTIFIER:check_contract",
+        "CMP-ORDERS:check_contract"
+      ],
+      "family": "implementation",
+      "fn": 3,
+      "fp": 2,
+      "gold": 3,
+      "method": "B",
+      "missed": [
+        "TEST-EMAIL:rerun_test[minor]",
+        "TEST-MONEY:rerun_test[major]",
+        "TEST-ORDER-FLOW:rerun_test[minor]"
+      ],
+      "precision": 0.0,
+      "predicted": 2,
+      "recall": 0.0,
+      "scenario_id": "SC-15",
+      "t_fn": 3,
+      "t_fp": 2,
+      "t_precision": 0.0,
+      "t_recall": 0.0,
+      "t_tp": 0,
+      "tags": [
+        "shared_component",
+        "contract_preserved",
+        "evidence_valid",
+        "pruning"
+      ],
+      "tp": 0,
+      "unknown_not_predicted": 0,
+      "unknown_predicted": 0
+    },
+    {
+      "critical_missed": [],
+      "f1": null,
+      "false_positives": [],
+      "family": "implementation",
+      "fn": 3,
+      "fp": 0,
+      "gold": 3,
+      "method": "B",
+      "missed": [
+        "CMP-NOTIFIER:check_contract[major]",
+        "REQ-LOW-STOCK-ALERT:check_contract[major]",
+        "TEST-RESERVE:rerun_test[major]"
+      ],
+      "precision": null,
+      "predicted": 0,
+      "recall": 0.0,
+      "scenario_id": "SC-16",
+      "t_fn": 3,
+      "t_fp": 0,
+      "t_precision": null,
+      "t_recall": 0.0,
+      "t_tp": 0,
+      "tags": [
+        "missing_edge",
+        "observable_behavior",
+        "code_only"
+      ],
+      "tp": 0,
+      "unknown_not_predicted": 1,
+      "unknown_predicted": 2
+    },
+    {
+      "critical_missed": [],
+      "f1": 1.0,
+      "false_positives": [],
+      "family": "implementation",
+      "fn": 0,
+      "fp": 0,
+      "gold": 1,
+      "method": "B",
+      "missed": [],
+      "precision": 1.0,
+      "predicted": 1,
+      "recall": 1.0,
+      "scenario_id": "SC-17",
+      "t_fn": 0,
+      "t_fp": 0,
+      "t_precision": 1.0,
+      "t_recall": 1.0,
+      "t_tp": 1,
+      "tags": [
+        "internal_refactor",
+        "consumer_side"
+      ],
+      "tp": 1,
+      "unknown_not_predicted": 0,
+      "unknown_predicted": 0
+    },
+    {
+      "critical_missed": [],
+      "f1": 0.5,
+      "false_positives": [
+        "CMP-PAYMENT:review_spec"
+      ],
+      "family": "structure",
+      "fn": 1,
+      "fp": 1,
+      "gold": 2,
+      "method": "B",
+      "missed": [
+        "REQ-REPORT:check_contract[major]"
+      ],
+      "precision": 0.5,
+      "predicted": 2,
+      "recall": 0.5,
+      "scenario_id": "SC-18",
+      "t_fn": 1,
+      "t_fp": 1,
+      "t_precision": 0.5,
+      "t_recall": 0.5,
+      "t_tp": 1,
+      "tags": [
+        "edge_remove",
+        "old_union_new"
+      ],
+      "tp": 1,
+      "unknown_not_predicted": 0,
+      "unknown_predicted": 0
+    },
+    {
+      "critical_missed": [],
+      "f1": null,
+      "false_positives": [
+        "CMP-INVENTORY:review_spec"
+      ],
+      "family": "structure",
+      "fn": 0,
+      "fp": 1,
+      "gold": 0,
+      "method": "B",
+      "missed": [],
+      "precision": 0.0,
+      "predicted": 1,
+      "recall": null,
+      "scenario_id": "SC-19",
+      "t_fn": 0,
+      "t_fp": 1,
+      "t_precision": 0.0,
+      "t_recall": null,
+      "t_tp": 0,
+      "tags": [
+        "edge_add",
+        "true_negative",
+        "missing_edge_registration"
+      ],
+      "tp": 0,
+      "unknown_not_predicted": 0,
+      "unknown_predicted": 1
+    },
+    {
+      "critical_missed": [],
+      "f1": 1.0,
+      "false_positives": [],
+      "family": "structure",
+      "fn": 0,
+      "fp": 0,
+      "gold": 1,
+      "method": "B",
+      "missed": [],
+      "precision": 1.0,
+      "predicted": 1,
+      "recall": 1.0,
+      "scenario_id": "SC-20",
+      "t_fn": 0,
+      "t_fp": 0,
+      "t_precision": 1.0,
+      "t_recall": 1.0,
+      "t_tp": 1,
+      "tags": [
+        "readiness_only",
+        "no_code"
+      ],
+      "tp": 1,
+      "unknown_not_predicted": 0,
+      "unknown_predicted": 0
+    },
+    {
+      "critical_missed": [],
+      "f1": 0.8,
+      "false_positives": [],
+      "family": "structure",
+      "fn": 1,
+      "fp": 0,
+      "gold": 3,
+      "method": "B",
+      "missed": [
+        "REQ-CHARGE:check_contract[major]"
+      ],
+      "precision": 1.0,
+      "predicted": 2,
+      "recall": 0.6667,
+      "scenario_id": "SC-21",
+      "t_fn": 1,
+      "t_fp": 0,
+      "t_precision": 1.0,
+      "t_recall": 0.6667,
+      "t_tp": 2,
+      "tags": [
+        "cycle",
+        "multihop"
+      ],
+      "tp": 2,
+      "unknown_not_predicted": 0,
+      "unknown_predicted": 0
+    },
+    {
+      "critical_missed": [],
+      "f1": 0.5714,
+      "false_positives": [
+        "CAP-PAYMENTS:review_spec",
+        "REQ-RETRY:check_contract"
+      ],
+      "family": "adversarial",
+      "fn": 1,
+      "fp": 2,
+      "gold": 3,
+      "method": "B",
+      "missed": [
+        "REQ-REPORT:check_contract[major]"
+      ],
+      "precision": 0.5,
+      "predicted": 4,
+      "recall": 0.6667,
+      "scenario_id": "SC-22",
+      "t_fn": 1,
+      "t_fp": 2,
+      "t_precision": 0.5,
+      "t_recall": 0.6667,
+      "t_tp": 2,
+      "tags": [
+        "missing_edge",
+        "multihop",
+        "shared_component_fanout"
+      ],
+      "tp": 2,
+      "unknown_not_predicted": 0,
+      "unknown_predicted": 0
+    },
+    {
+      "critical_missed": [
+        "TEST-EMAIL:rerun_test"
+      ],
+      "f1": 0.6667,
+      "false_positives": [
+        "REQ-PLACE-ORDER:check_contract"
+      ],
+      "family": "adversarial",
+      "fn": 1,
+      "fp": 1,
+      "gold": 3,
+      "method": "B",
+      "missed": [
+        "TEST-EMAIL:rerun_test[critical]"
+      ],
+      "precision": 0.6667,
+      "predicted": 3,
+      "recall": 0.6667,
+      "scenario_id": "SC-23",
+      "t_fn": 1,
+      "t_fp": 1,
+      "t_precision": 0.6667,
+      "t_recall": 0.6667,
+      "t_tp": 2,
+      "tags": [
+        "multihop",
+        "contract_change"
+      ],
+      "tp": 2,
+      "unknown_not_predicted": 2,
+      "unknown_predicted": 0
+    },
+    {
+      "critical_missed": [],
+      "f1": 0.3333,
+      "false_positives": [
+        "CMP-NOTIFIER:check_contract",
+        "CMP-ORDERS:check_contract",
+        "REQ-RESERVE-STOCK:check_contract"
+      ],
+      "family": "adversarial",
+      "fn": 1,
+      "fp": 3,
+      "gold": 2,
+      "method": "B",
+      "missed": [
+        "TEST-RESERVE:rerun_test[minor]"
+      ],
+      "precision": 0.25,
+      "predicted": 4,
+      "recall": 0.5,
+      "scenario_id": "SC-24",
+      "t_fn": 1,
+      "t_fp": 2,
+      "t_precision": 0.3333,
+      "t_recall": 0.5,
+      "t_tp": 1,
+      "tags": [
+        "hypothesized_edge",
+        "unknown_boundary",
+        "evidence_valid",
+        "pruning"
+      ],
+      "tp": 1,
+      "unknown_not_predicted": 0,
+      "unknown_predicted": 0
+    },
+    {
+      "critical_missed": [],
+      "f1": 0.5,
+      "false_positives": [
+        "CAP-PAYMENTS:review_spec",
+        "CMP-REPORTING:check_contract"
+      ],
+      "family": "semantic",
+      "fn": 0,
+      "fp": 2,
+      "gold": 1,
+      "method": "C",
+      "missed": [],
+      "precision": 0.3333,
+      "predicted": 3,
+      "recall": 1.0,
+      "scenario_id": "SC-01",
+      "t_fn": 0,
+      "t_fp": 2,
+      "t_precision": 0.3333,
+      "t_recall": 1.0,
+      "t_tp": 1,
+      "tags": [
+        "leaf",
+        "acceptance_criteria",
+        "shared_component_fanout"
+      ],
+      "tp": 1,
+      "unknown_not_predicted": 0,
+      "unknown_predicted": 1
+    },
+    {
+      "critical_missed": [],
+      "f1": null,
+      "false_positives": [
+        "CAP-REPORTING:review_spec",
+        "CMP-REPORTING:review_implementation"
+      ],
+      "family": "semantic",
+      "fn": 0,
+      "fp": 2,
+      "gold": 0,
+      "method": "C",
+      "missed": [],
+      "precision": 0.0,
+      "predicted": 2,
+      "recall": null,
+      "scenario_id": "SC-02",
+      "t_fn": 0,
+      "t_fp": 2,
+      "t_precision": 0.0,
+      "t_recall": null,
+      "t_tp": 0,
+      "tags": [
+        "true_negative",
+        "harmless_wording"
+      ],
+      "tp": 0,
+      "unknown_not_predicted": 0,
+      "unknown_predicted": 0
+    },
+    {
+      "critical_missed": [],
+      "f1": 1.0,
+      "false_positives": [],
+      "family": "semantic",
+      "fn": 0,
+      "fp": 0,
+      "gold": 2,
+      "method": "C",
+      "missed": [],
+      "precision": 1.0,
+      "predicted": 2,
+      "recall": 1.0,
+      "scenario_id": "SC-03",
+      "t_fn": 0,
+      "t_fp": 0,
+      "t_precision": 1.0,
+      "t_recall": 1.0,
+      "t_tp": 2,
+      "tags": [
+        "parent",
+        "scope_narrowing"
+      ],
+      "tp": 2,
+      "unknown_not_predicted": 0,
+      "unknown_predicted": 1
+    },
+    {
+      "critical_missed": [],
+      "f1": 0.5,
+      "false_positives": [
+        "CAP-PAYMENTS:review_spec",
+        "CMP-REPORTING:check_contract",
+        "REQ-CHARGE:check_contract"
+      ],
+      "family": "semantic",
+      "fn": 1,
+      "fp": 3,
+      "gold": 3,
+      "method": "C",
+      "missed": [
+        "Q-RETRY-BOUNDS:review_spec[minor]"
+      ],
+      "precision": 0.4,
+      "predicted": 5,
+      "recall": 0.6667,
+      "scenario_id": "SC-04",
+      "t_fn": 1,
+      "t_fp": 3,
+      "t_precision": 0.4,
+      "t_recall": 0.6667,
+      "t_tp": 2,
+      "tags": [
+        "leaf",
+        "acceptance_criteria",
+        "reverse_question_link"
+      ],
+      "tp": 2,
+      "unknown_not_predicted": 0,
+      "unknown_predicted": 0
+    },
+    {
+      "critical_missed": [],
+      "f1": 0.5,
+      "false_positives": [
+        "CAP-NOTIFY:review_spec",
+        "REQ-ORDER-EMAIL:check_contract"
+      ],
+      "family": "semantic",
+      "fn": 2,
+      "fp": 2,
+      "gold": 4,
+      "method": "C",
+      "missed": [
+        "CMP-INVENTORY:review_implementation[major]",
+        "Q-ALERT-THRESHOLD:review_spec[minor]"
+      ],
+      "precision": 0.5,
+      "predicted": 4,
+      "recall": 0.5,
+      "scenario_id": "SC-05",
+      "t_fn": 2,
+      "t_fp": 2,
+      "t_precision": 0.5,
+      "t_recall": 0.5,
+      "t_tp": 2,
+      "tags": [
+        "missing_edge",
+        "acceptance_criteria",
+        "prose_reference"
+      ],
+      "tp": 2,
+      "unknown_not_predicted": 0,
+      "unknown_predicted": 0
+    },
+    {
+      "critical_missed": [],
+      "f1": null,
+      "false_positives": [
+        "CAP-NOTIFY:review_spec",
+        "CMP-NOTIFIER:review_implementation",
+        "REQ-LOW-STOCK-ALERT:check_contract",
+        "TEST-EMAIL:rerun_test"
+      ],
+      "family": "semantic",
+      "fn": 0,
+      "fp": 4,
+      "gold": 0,
+      "method": "C",
+      "missed": [],
+      "precision": 0.0,
+      "predicted": 4,
+      "recall": null,
+      "scenario_id": "SC-06",
+      "t_fn": 0,
+      "t_fp": 4,
+      "t_precision": 0.0,
+      "t_recall": null,
+      "t_tp": 0,
+      "tags": [
+        "true_negative",
+        "harmless_wording"
+      ],
+      "tp": 0,
+      "unknown_not_predicted": 0,
+      "unknown_predicted": 0
+    },
+    {
+      "critical_missed": [],
+      "f1": 0.8889,
+      "false_positives": [
+        "CMP-REPORTING:check_contract"
+      ],
+      "family": "contract",
+      "fn": 0,
+      "fp": 1,
+      "gold": 4,
+      "method": "C",
+      "missed": [],
+      "precision": 0.8,
+      "predicted": 5,
+      "recall": 1.0,
+      "scenario_id": "SC-07",
+      "t_fn": 0,
+      "t_fp": 1,
+      "t_precision": 0.8,
+      "t_recall": 1.0,
+      "t_tp": 4,
+      "tags": [
+        "contract_change",
+        "demo_step_D"
+      ],
+      "tp": 4,
+      "unknown_not_predicted": 0,
+      "unknown_predicted": 1
+    },
+    {
+      "critical_missed": [],
+      "f1": 0.4,
+      "false_positives": [
+        "REQ-CHARGE:check_contract",
+        "REQ-RETRY:check_contract"
+      ],
+      "family": "contract",
+      "fn": 1,
+      "fp": 2,
+      "gold": 2,
+      "method": "C",
+      "missed": [
+        "REQ-REPORT:check_contract[major]"
+      ],
+      "precision": 0.3333,
+      "predicted": 3,
+      "recall": 0.5,
+      "scenario_id": "SC-08",
+      "t_fn": 1,
+      "t_fp": 2,
+      "t_precision": 0.3333,
+      "t_recall": 0.5,
+      "t_tp": 1,
+      "tags": [
+        "consumer_break",
+        "multihop",
+        "informal_contract"
+      ],
+      "tp": 1,
+      "unknown_not_predicted": 0,
+      "unknown_predicted": 0
+    },
+    {
+      "critical_missed": [],
+      "f1": 0.0,
+      "false_positives": [
+        "REQ-CHARGE:check_contract"
+      ],
+      "family": "contract",
+      "fn": 1,
+      "fp": 1,
+      "gold": 1,
+      "method": "C",
+      "missed": [
+        "TEST-RETRY:rerun_test[major]"
+      ],
+      "precision": 0.0,
+      "predicted": 1,
+      "recall": 0.0,
+      "scenario_id": "SC-09",
+      "t_fn": 1,
+      "t_fp": 1,
+      "t_precision": 0.0,
+      "t_recall": 0.0,
+      "t_tp": 0,
+      "tags": [
+        "contract_preserved",
+        "evidence_valid",
+        "pruning"
+      ],
+      "tp": 0,
+      "unknown_not_predicted": 0,
+      "unknown_predicted": 1
+    },
+    {
+      "critical_missed": [
+        "TEST-RETRY:rerun_test"
+      ],
+      "f1": 0.6667,
+      "false_positives": [
+        "CMP-REPORTING:check_contract"
+      ],
+      "family": "contract",
+      "fn": 1,
+      "fp": 1,
+      "gold": 3,
+      "method": "C",
+      "missed": [
+        "TEST-RETRY:rerun_test[critical]"
+      ],
+      "precision": 0.6667,
+      "predicted": 3,
+      "recall": 0.6667,
+      "scenario_id": "SC-10",
+      "t_fn": 1,
+      "t_fp": 1,
+      "t_precision": 0.6667,
+      "t_recall": 0.6667,
+      "t_tp": 2,
+      "tags": [
+        "contract_preserved_claim",
+        "evidence_failed",
+        "pruning"
+      ],
+      "tp": 2,
+      "unknown_not_predicted": 0,
+      "unknown_predicted": 0
+    },
+    {
+      "critical_missed": [],
+      "f1": 0.0,
+      "false_positives": [
+        "CMP-REPORTING:check_contract",
+        "REQ-CHARGE:check_contract"
+      ],
+      "family": "contract",
+      "fn": 1,
+      "fp": 2,
+      "gold": 1,
+      "method": "C",
+      "missed": [
+        "TEST-RETRY:rerun_test[major]"
+      ],
+      "precision": 0.0,
+      "predicted": 2,
+      "recall": 0.0,
+      "scenario_id": "SC-11",
+      "t_fn": 1,
+      "t_fp": 2,
+      "t_precision": 0.0,
+      "t_recall": 0.0,
+      "t_tp": 0,
+      "tags": [
+        "evidence_stale",
+        "pruning"
+      ],
+      "tp": 0,
+      "unknown_not_predicted": 0,
+      "unknown_predicted": 1
+    },
+    {
+      "critical_missed": [],
+      "f1": 0.9231,
+      "false_positives": [
+        "CMP-NOTIFIER:check_contract"
+      ],
+      "family": "contract",
+      "fn": 0,
+      "fp": 1,
+      "gold": 6,
+      "method": "C",
+      "missed": [],
+      "precision": 0.8571,
+      "predicted": 7,
+      "recall": 1.0,
+      "scenario_id": "SC-12",
+      "t_fn": 0,
+      "t_fp": 1,
+      "t_precision": 0.8571,
+      "t_recall": 1.0,
+      "t_tp": 6,
+      "tags": [
+        "consumer_break",
+        "contract_change"
+      ],
+      "tp": 6,
+      "unknown_not_predicted": 0,
+      "unknown_predicted": 2
+    },
+    {
+      "critical_missed": [],
+      "f1": 0.0,
+      "false_positives": [
+        "CMP-REPORTING:check_contract",
+        "REQ-CHARGE:check_contract",
+        "REQ-RETRY:check_contract"
+      ],
+      "family": "implementation",
+      "fn": 1,
+      "fp": 3,
+      "gold": 1,
+      "method": "C",
+      "missed": [
+        "TEST-RETRY:rerun_test[minor]"
+      ],
+      "precision": 0.0,
+      "predicted": 3,
+      "recall": 0.0,
+      "scenario_id": "SC-13",
+      "t_fn": 1,
+      "t_fp": 3,
+      "t_precision": 0.0,
+      "t_recall": 0.0,
+      "t_tp": 0,
+      "tags": [
+        "internal_refactor",
+        "artifact_origin",
+        "code_only"
+      ],
+      "tp": 0,
+      "unknown_not_predicted": 0,
+      "unknown_predicted": 0
+    },
+    {
+      "critical_missed": [
+        "CMP-ORDERS:check_contract"
+      ],
+      "f1": null,
+      "false_positives": [],
+      "family": "implementation",
+      "fn": 5,
+      "fp": 0,
+      "gold": 5,
+      "method": "C",
+      "missed": [
+        "CMP-ORDERS:check_contract[critical]",
+        "CON-MONEY-FORMAT:check_contract[minor]",
+        "TEST-EMAIL:rerun_test[minor]",
+        "TEST-MONEY:rerun_test[major]",
+        "TEST-ORDER-FLOW:rerun_test[major]"
+      ],
+      "precision": null,
+      "predicted": 0,
+      "recall": 0.0,
+      "scenario_id": "SC-14",
+      "t_fn": 5,
+      "t_fp": 0,
+      "t_precision": null,
+      "t_recall": 0.0,
+      "t_tp": 0,
+      "tags": [
+        "shared_component",
+        "evidence_valid_incomplete",
+        "pruning",
+        "unsafe_prune_candidate"
+      ],
+      "tp": 0,
+      "unknown_not_predicted": 1,
+      "unknown_predicted": 0
+    },
+    {
+      "critical_missed": [],
+      "f1": null,
+      "false_positives": [],
+      "family": "implementation",
+      "fn": 3,
+      "fp": 0,
+      "gold": 3,
+      "method": "C",
+      "missed": [
+        "TEST-EMAIL:rerun_test[minor]",
+        "TEST-MONEY:rerun_test[major]",
+        "TEST-ORDER-FLOW:rerun_test[minor]"
+      ],
+      "precision": null,
+      "predicted": 0,
+      "recall": 0.0,
+      "scenario_id": "SC-15",
+      "t_fn": 3,
+      "t_fp": 0,
+      "t_precision": null,
+      "t_recall": 0.0,
+      "t_tp": 0,
+      "tags": [
+        "shared_component",
+        "contract_preserved",
+        "evidence_valid",
+        "pruning"
+      ],
+      "tp": 0,
+      "unknown_not_predicted": 0,
+      "unknown_predicted": 0
+    },
+    {
+      "critical_missed": [],
+      "f1": null,
+      "false_positives": [],
+      "family": "implementation",
+      "fn": 3,
+      "fp": 0,
+      "gold": 3,
+      "method": "C",
+      "missed": [
+        "CMP-NOTIFIER:check_contract[major]",
+        "REQ-LOW-STOCK-ALERT:check_contract[major]",
+        "TEST-RESERVE:rerun_test[major]"
+      ],
+      "precision": null,
+      "predicted": 0,
+      "recall": 0.0,
+      "scenario_id": "SC-16",
+      "t_fn": 3,
+      "t_fp": 0,
+      "t_precision": null,
+      "t_recall": 0.0,
+      "t_tp": 0,
+      "tags": [
+        "missing_edge",
+        "observable_behavior",
+        "code_only"
+      ],
+      "tp": 0,
+      "unknown_not_predicted": 1,
+      "unknown_predicted": 2
+    },
+    {
+      "critical_missed": [],
+      "f1": 1.0,
+      "false_positives": [],
+      "family": "implementation",
+      "fn": 0,
+      "fp": 0,
+      "gold": 1,
+      "method": "C",
+      "missed": [],
+      "precision": 1.0,
+      "predicted": 1,
+      "recall": 1.0,
+      "scenario_id": "SC-17",
+      "t_fn": 0,
+      "t_fp": 0,
+      "t_precision": 1.0,
+      "t_recall": 1.0,
+      "t_tp": 1,
+      "tags": [
+        "internal_refactor",
+        "consumer_side"
+      ],
+      "tp": 1,
+      "unknown_not_predicted": 0,
+      "unknown_predicted": 0
+    },
+    {
+      "critical_missed": [],
+      "f1": 0.5,
+      "false_positives": [
+        "CMP-PAYMENT:review_spec"
+      ],
+      "family": "structure",
+      "fn": 1,
+      "fp": 1,
+      "gold": 2,
+      "method": "C",
+      "missed": [
+        "REQ-REPORT:check_contract[major]"
+      ],
+      "precision": 0.5,
+      "predicted": 2,
+      "recall": 0.5,
+      "scenario_id": "SC-18",
+      "t_fn": 1,
+      "t_fp": 1,
+      "t_precision": 0.5,
+      "t_recall": 0.5,
+      "t_tp": 1,
+      "tags": [
+        "edge_remove",
+        "old_union_new"
+      ],
+      "tp": 1,
+      "unknown_not_predicted": 0,
+      "unknown_predicted": 0
+    },
+    {
+      "critical_missed": [],
+      "f1": null,
+      "false_positives": [
+        "CMP-INVENTORY:review_spec"
+      ],
+      "family": "structure",
+      "fn": 0,
+      "fp": 1,
+      "gold": 0,
+      "method": "C",
+      "missed": [],
+      "precision": 0.0,
+      "predicted": 1,
+      "recall": null,
+      "scenario_id": "SC-19",
+      "t_fn": 0,
+      "t_fp": 1,
+      "t_precision": 0.0,
+      "t_recall": null,
+      "t_tp": 0,
+      "tags": [
+        "edge_add",
+        "true_negative",
+        "missing_edge_registration"
+      ],
+      "tp": 0,
+      "unknown_not_predicted": 0,
+      "unknown_predicted": 1
+    },
+    {
+      "critical_missed": [],
+      "f1": 1.0,
+      "false_positives": [],
+      "family": "structure",
+      "fn": 0,
+      "fp": 0,
+      "gold": 1,
+      "method": "C",
+      "missed": [],
+      "precision": 1.0,
+      "predicted": 1,
+      "recall": 1.0,
+      "scenario_id": "SC-20",
+      "t_fn": 0,
+      "t_fp": 0,
+      "t_precision": 1.0,
+      "t_recall": 1.0,
+      "t_tp": 1,
+      "tags": [
+        "readiness_only",
+        "no_code"
+      ],
+      "tp": 1,
+      "unknown_not_predicted": 0,
+      "unknown_predicted": 0
+    },
+    {
+      "critical_missed": [],
+      "f1": 0.8,
+      "false_positives": [],
+      "family": "structure",
+      "fn": 1,
+      "fp": 0,
+      "gold": 3,
+      "method": "C",
+      "missed": [
+        "REQ-CHARGE:check_contract[major]"
+      ],
+      "precision": 1.0,
+      "predicted": 2,
+      "recall": 0.6667,
+      "scenario_id": "SC-21",
+      "t_fn": 1,
+      "t_fp": 0,
+      "t_precision": 1.0,
+      "t_recall": 0.6667,
+      "t_tp": 2,
+      "tags": [
+        "cycle",
+        "multihop"
+      ],
+      "tp": 2,
+      "unknown_not_predicted": 0,
+      "unknown_predicted": 0
+    },
+    {
+      "critical_missed": [],
+      "f1": 0.5714,
+      "false_positives": [
+        "CAP-PAYMENTS:review_spec",
+        "REQ-RETRY:check_contract"
+      ],
+      "family": "adversarial",
+      "fn": 1,
+      "fp": 2,
+      "gold": 3,
+      "method": "C",
+      "missed": [
+        "REQ-REPORT:check_contract[major]"
+      ],
+      "precision": 0.5,
+      "predicted": 4,
+      "recall": 0.6667,
+      "scenario_id": "SC-22",
+      "t_fn": 1,
+      "t_fp": 2,
+      "t_precision": 0.5,
+      "t_recall": 0.6667,
+      "t_tp": 2,
+      "tags": [
+        "missing_edge",
+        "multihop",
+        "shared_component_fanout"
+      ],
+      "tp": 2,
+      "unknown_not_predicted": 0,
+      "unknown_predicted": 0
+    },
+    {
+      "critical_missed": [
+        "TEST-EMAIL:rerun_test"
+      ],
+      "f1": 0.6667,
+      "false_positives": [
+        "REQ-PLACE-ORDER:check_contract"
+      ],
+      "family": "adversarial",
+      "fn": 1,
+      "fp": 1,
+      "gold": 3,
+      "method": "C",
+      "missed": [
+        "TEST-EMAIL:rerun_test[critical]"
+      ],
+      "precision": 0.6667,
+      "predicted": 3,
+      "recall": 0.6667,
+      "scenario_id": "SC-23",
+      "t_fn": 1,
+      "t_fp": 1,
+      "t_precision": 0.6667,
+      "t_recall": 0.6667,
+      "t_tp": 2,
+      "tags": [
+        "multihop",
+        "contract_change"
+      ],
+      "tp": 2,
+      "unknown_not_predicted": 2,
+      "unknown_predicted": 0
+    },
+    {
+      "critical_missed": [],
+      "f1": 0.4,
+      "false_positives": [
+        "CMP-NOTIFIER:check_contract",
+        "REQ-RESERVE-STOCK:check_contract"
+      ],
+      "family": "adversarial",
+      "fn": 1,
+      "fp": 2,
+      "gold": 2,
+      "method": "C",
+      "missed": [
+        "TEST-RESERVE:rerun_test[minor]"
+      ],
+      "precision": 0.3333,
+      "predicted": 3,
+      "recall": 0.5,
+      "scenario_id": "SC-24",
+      "t_fn": 1,
+      "t_fp": 1,
+      "t_precision": 0.5,
+      "t_recall": 0.5,
+      "t_tp": 1,
+      "tags": [
+        "hypothesized_edge",
+        "unknown_boundary",
+        "evidence_valid",
+        "pruning"
+      ],
+      "tp": 1,
+      "unknown_not_predicted": 0,
+      "unknown_predicted": 0
+    }
+  ],
+  "post_hoc_without_rerun_test": {
+    "A": {
+      "best_case": {
+        "precision": 0.4857,
+        "recall": 0.8095
+      },
+      "by_family": {
+        "adversarial": {
+          "fn": 3,
+          "fp": 7,
+          "gold": 6,
+          "precision": 0.3,
+          "predicted": 10,
+          "recall": 0.5,
+          "t_fn": 3,
+          "t_fp": 6,
+          "t_tp": 3,
+          "tp": 3,
+          "unknown_not_predicted": 2,
+          "unknown_predicted": 0
+        },
+        "contract": {
+          "fn": 2,
+          "fp": 11,
+          "gold": 11,
+          "precision": 0.45,
+          "predicted": 20,
+          "recall": 0.8182,
+          "t_fn": 2,
+          "t_fp": 11,
+          "t_tp": 9,
+          "tp": 9,
+          "unknown_not_predicted": 3,
+          "unknown_predicted": 2
+        },
+        "implementation": {
+          "fn": 1,
+          "fp": 6,
+          "gold": 5,
+          "precision": 0.4,
+          "predicted": 10,
+          "recall": 0.8,
+          "t_fn": 1,
+          "t_fp": 6,
+          "t_tp": 4,
+          "tp": 4,
+          "unknown_not_predicted": 1,
+          "unknown_predicted": 2
+        },
+        "semantic": {
+          "fn": 0,
+          "fp": 10,
+          "gold": 8,
+          "precision": 0.4444,
+          "predicted": 18,
+          "recall": 1.0,
+          "t_fn": 0,
+          "t_fp": 10,
+          "t_tp": 8,
+          "tp": 8,
+          "unknown_not_predicted": 1,
+          "unknown_predicted": 1
+        },
+        "structure": {
+          "fn": 2,
+          "fp": 2,
+          "gold": 6,
+          "precision": 0.6667,
+          "predicted": 6,
+          "recall": 0.6667,
+          "t_fn": 2,
+          "t_fp": 2,
+          "t_tp": 4,
+          "tp": 4,
+          "unknown_not_predicted": 0,
+          "unknown_predicted": 1
+        }
+      },
+      "critical_gold": 12,
+      "critical_missed": 3,
+      "critical_missed_list": [
+        "SC-12 CMP-ORDERS:check_contract",
+        "SC-22 CMP-REPORTING:check_contract",
+        "SC-23 CMP-NOTIFIER:check_contract"
+      ],
+      "fn": 8,
+      "fp": 36,
+      "gold": 36,
+      "macro_recall_nonempty_gold": 0.8088,
+      "micro_f1": 0.56,
+      "micro_precision": 0.4375,
+      "micro_recall": 0.7778,
+      "negative_cases": {
+        "cases": 7,
+        "cases_with_false_alarm": 6,
+        "false_alarm_pairs": 15
+      },
+      "predicted": 64,
+      "t_fn": 8,
+      "t_fp": 35,
+      "t_macro_recall_nonempty_gold": 0.8088,
+      "t_micro_f1": 0.5656,
+      "t_micro_precision": 0.4444,
+      "t_micro_recall": 0.7778,
+      "t_tp": 28,
+      "tp": 28,
+      "unknown_not_predicted": 7,
+      "unknown_predicted": 6,
+      "worst_case": {
+        "precision": 0.4,
+        "recall": 0.6512
+      }
+    },
+    "A2": {
+      "best_case": {
+        "precision": 0.2606,
+        "recall": 0.9348
+      },
+      "by_family": {
+        "adversarial": {
+          "fn": 2,
+          "fp": 19,
+          "gold": 6,
+          "precision": 0.1739,
+          "predicted": 23,
+          "recall": 0.6667,
+          "t_fn": 1,
+          "t_fp": 15,
+          "t_tp": 5,
+          "tp": 4,
+          "unknown_not_predicted": 1,
+          "unknown_predicted": 1
+        },
+        "contract": {
+          "fn": 0,
+          "fp": 27,
+          "gold": 11,
+          "precision": 0.2895,
+          "predicted": 38,
+          "recall": 1.0,
+          "t_fn": 0,
+          "t_fp": 27,
+          "t_tp": 11,
+          "tp": 11,
+          "unknown_not_predicted": 1,
+          "unknown_predicted": 4
+        },
+        "implementation": {
+          "fn": 0,
+          "fp": 36,
+          "gold": 5,
+          "precision": 0.122,
+          "predicted": 41,
+          "recall": 1.0,
+          "t_fn": 0,
+          "t_fp": 30,
+          "t_tp": 5,
+          "tp": 5,
+          "unknown_not_predicted": 0,
+          "unknown_predicted": 3
+        },
+        "semantic": {
+          "fn": 0,
+          "fp": 31,
+          "gold": 8,
+          "precision": 0.2051,
+          "predicted": 39,
+          "recall": 1.0,
+          "t_fn": 0,
+          "t_fp": 30,
+          "t_tp": 8,
+          "tp": 8,
+          "unknown_not_predicted": 1,
+          "unknown_predicted": 1
+        },
+        "structure": {
+          "fn": 1,
+          "fp": 9,
+          "gold": 6,
+          "precision": 0.3571,
+          "predicted": 14,
+          "recall": 0.8333,
+          "t_fn": 1,
+          "t_fp": 8,
+          "t_tp": 5,
+          "tp": 5,
+          "unknown_not_predicted": 0,
+          "unknown_predicted": 1
+        }
+      },
+      "critical_gold": 12,
+      "critical_missed": 1,
+      "critical_missed_list": [
+        "SC-22 CMP-REPORTING:check_contract"
+      ],
+      "fn": 3,
+      "fp": 122,
+      "gold": 36,
+      "macro_recall_nonempty_gold": 0.9314,
+      "micro_f1": 0.3455,
+      "micro_precision": 0.2129,
+      "micro_recall": 0.9167,
+      "negative_cases": {
+        "cases": 7,
+        "cases_with_false_alarm": 7,
+        "false_alarm_pairs": 39
+      },
+      "predicted": 155,
+      "t_fn": 2,
+      "t_fp": 110,
+      "t_macro_recall_nonempty_gold": 0.951,
+      "t_micro_f1": 0.3778,
+      "t_micro_precision": 0.2361,
+      "t_micro_recall": 0.9444,
+      "t_tp": 34,
+      "tp": 33,
+      "unknown_not_predicted": 3,
+      "unknown_predicted": 10,
+      "worst_case": {
+        "precision": 0.2,
+        "recall": 0.8462
+      }
+    },
+    "B": {
+      "best_case": {
+        "precision": 0.507,
+        "recall": 0.7826
+      },
+      "by_family": {
+        "adversarial": {
+          "fn": 1,
+          "fp": 6,
+          "gold": 6,
+          "precision": 0.4545,
+          "predicted": 11,
+          "recall": 0.8333,
+          "t_fn": 1,
+          "t_fp": 5,
+          "t_tp": 5,
+          "tp": 5,
+          "unknown_not_predicted": 2,
+          "unknown_predicted": 0
+        },
+        "contract": {
+          "fn": 1,
+          "fp": 9,
+          "gold": 11,
+          "precision": 0.5263,
+          "predicted": 19,
+          "recall": 0.9091,
+          "t_fn": 1,
+          "t_fp": 9,
+          "t_tp": 10,
+          "tp": 10,
+          "unknown_not_predicted": 0,
+          "unknown_predicted": 5
+        },
+        "implementation": {
+          "fn": 3,
+          "fp": 6,
+          "gold": 5,
+          "precision": 0.25,
+          "predicted": 8,
+          "recall": 0.4,
+          "t_fn": 3,
+          "t_fp": 6,
+          "t_tp": 2,
+          "tp": 2,
+          "unknown_not_predicted": 1,
+          "unknown_predicted": 2
+        },
+        "semantic": {
+          "fn": 3,
+          "fp": 12,
+          "gold": 8,
+          "precision": 0.2941,
+          "predicted": 17,
+          "recall": 0.625,
+          "t_fn": 3,
+          "t_fp": 12,
+          "t_tp": 5,
+          "tp": 5,
+          "unknown_not_predicted": 0,
+          "unknown_predicted": 2
+        },
+        "structure": {
+          "fn": 2,
+          "fp": 2,
+          "gold": 6,
+          "precision": 0.6667,
+          "predicted": 6,
+          "recall": 0.6667,
+          "t_fn": 2,
+          "t_fp": 2,
+          "t_tp": 4,
+          "tp": 4,
+          "unknown_not_predicted": 0,
+          "unknown_predicted": 1
+        }
+      },
+      "critical_gold": 12,
+      "critical_missed": 0,
+      "critical_missed_list": [],
+      "fn": 10,
+      "fp": 35,
+      "gold": 36,
+      "macro_recall_nonempty_gold": 0.7451,
+      "micro_f1": 0.5361,
+      "micro_precision": 0.4262,
+      "micro_recall": 0.7222,
+      "negative_cases": {
+        "cases": 7,
+        "cases_with_false_alarm": 7,
+        "false_alarm_pairs": 15
+      },
+      "predicted": 61,
+      "t_fn": 10,
+      "t_fp": 34,
+      "t_macro_recall_nonempty_gold": 0.7451,
+      "t_micro_f1": 0.5416,
+      "t_micro_precision": 0.4333,
+      "t_micro_recall": 0.7222,
+      "t_tp": 26,
+      "tp": 26,
+      "unknown_not_predicted": 3,
+      "unknown_predicted": 10,
+      "worst_case": {
+        "precision": 0.3662,
+        "recall": 0.6667
+      }
+    },
+    "C": {
+      "best_case": {
+        "precision": 0.5385,
+        "recall": 0.7609
+      },
+      "by_family": {
+        "adversarial": {
+          "fn": 1,
+          "fp": 5,
+          "gold": 6,
+          "precision": 0.5,
+          "predicted": 10,
+          "recall": 0.8333,
+          "t_fn": 1,
+          "t_fp": 4,
+          "t_tp": 5,
+          "tp": 5,
+          "unknown_not_predicted": 2,
+          "unknown_predicted": 0
+        },
+        "contract": {
+          "fn": 1,
+          "fp": 8,
+          "gold": 11,
+          "precision": 0.5556,
+          "predicted": 18,
+          "recall": 0.9091,
+          "t_fn": 1,
+          "t_fp": 8,
+          "t_tp": 10,
+          "tp": 10,
+          "unknown_not_predicted": 0,
+          "unknown_predicted": 5
+        },
+        "implementation": {
+          "fn": 4,
+          "fp": 3,
+          "gold": 5,
+          "precision": 0.25,
+          "predicted": 4,
+          "recall": 0.2,
+          "t_fn": 4,
+          "t_fp": 3,
+          "t_tp": 1,
+          "tp": 1,
+          "unknown_not_predicted": 1,
+          "unknown_predicted": 2
+        },
+        "semantic": {
+          "fn": 3,
+          "fp": 12,
+          "gold": 8,
+          "precision": 0.2941,
+          "predicted": 17,
+          "recall": 0.625,
+          "t_fn": 3,
+          "t_fp": 12,
+          "t_tp": 5,
+          "tp": 5,
+          "unknown_not_predicted": 0,
+          "unknown_predicted": 2
+        },
+        "structure": {
+          "fn": 2,
+          "fp": 2,
+          "gold": 6,
+          "precision": 0.6667,
+          "predicted": 6,
+          "recall": 0.6667,
+          "t_fn": 2,
+          "t_fp": 2,
+          "t_tp": 4,
+          "tp": 4,
+          "unknown_not_predicted": 0,
+          "unknown_predicted": 1
+        }
+      },
+      "critical_gold": 12,
+      "critical_missed": 1,
+      "critical_missed_list": [
+        "SC-14 CMP-ORDERS:check_contract"
+      ],
+      "fn": 11,
+      "fp": 30,
+      "gold": 36,
+      "macro_recall_nonempty_gold": 0.7157,
+      "micro_f1": 0.5494,
+      "micro_precision": 0.4545,
+      "micro_recall": 0.6944,
+      "negative_cases": {
+        "cases": 7,
+        "cases_with_false_alarm": 6,
+        "false_alarm_pairs": 12
+      },
+      "predicted": 55,
+      "t_fn": 11,
+      "t_fp": 29,
+      "t_macro_recall_nonempty_gold": 0.7157,
+      "t_micro_f1": 0.5556,
+      "t_micro_precision": 0.463,
+      "t_micro_recall": 0.6944,
+      "t_tp": 25,
+      "tp": 25,
+      "unknown_not_predicted": 3,
+      "unknown_predicted": 10,
+      "worst_case": {
+        "precision": 0.3846,
+        "recall": 0.641
+      }
+    }
+  },
+  "pruning_audit": [
+    {
+      "added_by_C": [],
+      "evidence_refs": [
+        "EV-1"
+      ],
+      "pruned_boundaries": [
+        {
+          "consumer_id": "CMP-REPORTING",
+          "contracts": {
+            "CON-IDEMPOTENCY": 1
+          },
+          "edge_id": "E13",
+          "evidence_id": "EV-1",
+          "provider_id": "CMP-PAYMENT",
+          "reason": "EV-1 records contracts ['CON-IDEMPOTENCY'] of CMP-PAYMENT as preserved at the current revisions; implementation-only change does not cross this boundary"
+        }
+      ],
+      "pruning_misses": [],
+      "removed": [
+        {
+          "obligation": "check_contract",
+          "oracle": "not_required",
+          "target_id": "CMP-REPORTING"
+        }
+      ],
+      "scenario_id": "SC-09",
+      "setup_evidence": [
+        {
+          "evidence_id": "EV-1",
+          "kind": "contract_preservation",
+          "node_id": "CMP-PAYMENT",
+          "result": "passed",
+          "spec_revs": {
+            "CMP-PAYMENT": 1,
+            "CON-IDEMPOTENCY": 1
+          },
+          "type": "evidence"
+        }
+      ]
+    },
+    {
+      "added_by_C": [],
+      "evidence_refs": [
+        "EV-1"
+      ],
+      "pruned_boundaries": [],
+      "pruning_misses": [],
+      "removed": [],
+      "scenario_id": "SC-10",
+      "setup_evidence": [
+        {
+          "evidence_id": "EV-1",
+          "kind": "contract_preservation",
+          "node_id": "CMP-PAYMENT",
+          "result": "failed",
+          "spec_revs": {
+            "CMP-PAYMENT": 1,
+            "CON-IDEMPOTENCY": 1
+          },
+          "type": "evidence"
+        }
+      ]
+    },
+    {
+      "added_by_C": [],
+      "evidence_refs": [
+        "EV-1"
+      ],
+      "pruned_boundaries": [],
+      "pruning_misses": [],
+      "removed": [],
+      "scenario_id": "SC-11",
+      "setup_evidence": [
+        {
+          "evidence_id": "EV-1",
+          "kind": "contract_preservation",
+          "node_id": "CMP-PAYMENT",
+          "result": "passed",
+          "spec_revs": {
+            "CMP-PAYMENT": 1,
+            "CON-IDEMPOTENCY": 1
+          },
+          "type": "evidence"
+        }
+      ]
+    },
+    {
+      "added_by_C": [],
+      "evidence_refs": [
+        "EV-1"
+      ],
+      "pruned_boundaries": [
+        {
+          "consumer_id": "CMP-ORDERS",
+          "contracts": {
+            "CON-MONEY-FORMAT": 1
+          },
+          "edge_id": "O20",
+          "evidence_id": "EV-1",
+          "provider_id": "CMP-MONEY",
+          "reason": "EV-1 records contracts ['CON-MONEY-FORMAT'] of CMP-MONEY as preserved at the current revisions; implementation-only change does not cross this boundary"
+        },
+        {
+          "consumer_id": "CMP-NOTIFIER",
+          "contracts": {
+            "CON-MONEY-FORMAT": 1
+          },
+          "edge_id": "O21",
+          "evidence_id": "EV-1",
+          "provider_id": "CMP-MONEY",
+          "reason": "EV-1 records contracts ['CON-MONEY-FORMAT'] of CMP-MONEY as preserved at the current revisions; implementation-only change does not cross this boundary"
+        }
+      ],
+      "pruning_misses": [
+        {
+          "obligation": "check_contract",
+          "oracle": "required",
+          "target_id": "CMP-ORDERS"
+        }
+      ],
+      "removed": [
+        {
+          "obligation": "check_contract",
+          "oracle": "not_required",
+          "target_id": "CMP-NOTIFIER"
+        },
+        {
+          "obligation": "check_contract",
+          "oracle": "required",
+          "target_id": "CMP-ORDERS"
+        }
+      ],
+      "scenario_id": "SC-14",
+      "setup_evidence": [
+        {
+          "evidence_id": "EV-1",
+          "kind": "contract_preservation",
+          "node_id": "CMP-MONEY",
+          "result": "passed",
+          "spec_revs": {
+            "CMP-MONEY": 1,
+            "CON-MONEY-FORMAT": 1
+          },
+          "type": "evidence"
+        }
+      ]
+    },
+    {
+      "added_by_C": [],
+      "evidence_refs": [
+        "EV-1"
+      ],
+      "pruned_boundaries": [
+        {
+          "consumer_id": "CMP-ORDERS",
+          "contracts": {
+            "CON-MONEY-FORMAT": 1
+          },
+          "edge_id": "O20",
+          "evidence_id": "EV-1",
+          "provider_id": "CMP-MONEY",
+          "reason": "EV-1 records contracts ['CON-MONEY-FORMAT'] of CMP-MONEY as preserved at the current revisions; implementation-only change does not cross this boundary"
+        },
+        {
+          "consumer_id": "CMP-NOTIFIER",
+          "contracts": {
+            "CON-MONEY-FORMAT": 1
+          },
+          "edge_id": "O21",
+          "evidence_id": "EV-1",
+          "provider_id": "CMP-MONEY",
+          "reason": "EV-1 records contracts ['CON-MONEY-FORMAT'] of CMP-MONEY as preserved at the current revisions; implementation-only change does not cross this boundary"
+        }
+      ],
+      "pruning_misses": [],
+      "removed": [
+        {
+          "obligation": "check_contract",
+          "oracle": "not_required",
+          "target_id": "CMP-NOTIFIER"
+        },
+        {
+          "obligation": "check_contract",
+          "oracle": "not_required",
+          "target_id": "CMP-ORDERS"
+        }
+      ],
+      "scenario_id": "SC-15",
+      "setup_evidence": [
+        {
+          "evidence_id": "EV-1",
+          "kind": "contract_preservation",
+          "node_id": "CMP-MONEY",
+          "result": "passed",
+          "spec_revs": {
+            "CMP-MONEY": 1,
+            "CON-MONEY-FORMAT": 1
+          },
+          "type": "evidence"
+        }
+      ]
+    },
+    {
+      "added_by_C": [],
+      "evidence_refs": [
+        "EV-1"
+      ],
+      "pruned_boundaries": [
+        {
+          "consumer_id": "CMP-ORDERS",
+          "contracts": {
+            "CON-INVENTORY-API": 1
+          },
+          "edge_id": "O18",
+          "evidence_id": "EV-1",
+          "provider_id": "CMP-INVENTORY",
+          "reason": "EV-1 records contracts ['CON-INVENTORY-API'] of CMP-INVENTORY as preserved at the current revisions; implementation-only change does not cross this boundary"
+        }
+      ],
+      "pruning_misses": [],
+      "removed": [
+        {
+          "obligation": "check_contract",
+          "oracle": "not_required",
+          "target_id": "CMP-ORDERS"
+        }
+      ],
+      "scenario_id": "SC-24",
+      "setup_evidence": [
+        {
+          "evidence_id": "EV-1",
+          "kind": "contract_preservation",
+          "node_id": "CMP-INVENTORY",
+          "result": "passed",
+          "spec_revs": {
+            "CMP-INVENTORY": 1,
+            "CON-INVENTORY-API": 1
+          },
+          "type": "evidence"
+        }
+      ]
+    }
+  ],
+  "totals": {
+    "A": {
+      "best_case": {
+        "precision": 0.5067,
+        "recall": 0.6333
+      },
+      "by_family": {
+        "adversarial": {
+          "fn": 5,
+          "fp": 7,
+          "gold": 8,
+          "precision": 0.3,
+          "predicted": 10,
+          "recall": 0.375,
+          "t_fn": 5,
+          "t_fp": 6,
+          "t_tp": 3,
+          "tp": 3,
+          "unknown_not_predicted": 2,
+          "unknown_predicted": 0
+        },
+        "contract": {
+          "fn": 6,
+          "fp": 11,
+          "gold": 17,
+          "precision": 0.5,
+          "predicted": 22,
+          "recall": 0.6471,
+          "t_fn": 6,
+          "t_fp": 11,
+          "t_tp": 11,
+          "tp": 11,
+          "unknown_not_predicted": 3,
+          "unknown_predicted": 2
+        },
+        "implementation": {
+          "fn": 9,
+          "fp": 6,
+          "gold": 13,
+          "precision": 0.4,
+          "predicted": 10,
+          "recall": 0.3077,
+          "t_fn": 9,
+          "t_fp": 6,
+          "t_tp": 4,
+          "tp": 4,
+          "unknown_not_predicted": 2,
+          "unknown_predicted": 2
+        },
+        "semantic": {
+          "fn": 0,
+          "fp": 11,
+          "gold": 10,
+          "precision": 0.4762,
+          "predicted": 21,
+          "recall": 1.0,
+          "t_fn": 0,
+          "t_fp": 11,
+          "t_tp": 10,
+          "tp": 10,
+          "unknown_not_predicted": 1,
+          "unknown_predicted": 1
+        },
+        "structure": {
+          "fn": 2,
+          "fp": 2,
+          "gold": 6,
+          "precision": 0.6667,
+          "predicted": 6,
+          "recall": 0.6667,
+          "t_fn": 2,
+          "t_fp": 2,
+          "t_tp": 4,
+          "tp": 4,
+          "unknown_not_predicted": 0,
+          "unknown_predicted": 1
+        }
+      },
+      "critical_gold": 16,
+      "critical_missed": 5,
+      "critical_missed_list": [
+        "SC-10 TEST-RETRY:rerun_test",
+        "SC-12 CMP-ORDERS:check_contract",
+        "SC-22 CMP-REPORTING:check_contract",
+        "SC-23 CMP-NOTIFIER:check_contract",
+        "SC-23 TEST-EMAIL:rerun_test"
+      ],
+      "fn": 22,
+      "fp": 37,
+      "gold": 54,
+      "macro_recall_nonempty_gold": 0.5667,
+      "micro_f1": 0.5203,
+      "micro_precision": 0.4638,
+      "micro_recall": 0.5926,
+      "negative_cases": {
+        "cases": 3,
+        "cases_with_false_alarm": 3,
+        "false_alarm_pairs": 7
+      },
+      "predicted": 69,
+      "t_fn": 22,
+      "t_fp": 36,
+      "t_macro_recall_nonempty_gold": 0.5667,
+      "t_micro_f1": 0.5246,
+      "t_micro_precision": 0.4706,
+      "t_micro_recall": 0.5926,
+      "t_tp": 32,
+      "tp": 32,
+      "unknown_not_predicted": 8,
+      "unknown_predicted": 6,
+      "worst_case": {
+        "precision": 0.4267,
+        "recall": 0.5161
+      }
+    },
+    "A2": {
+      "best_case": {
+        "precision": 0.2849,
+        "recall": 0.7969
+      },
+      "by_family": {
+        "adversarial": {
+          "fn": 4,
+          "fp": 20,
+          "gold": 8,
+          "precision": 0.1667,
+          "predicted": 24,
+          "recall": 0.5,
+          "t_fn": 3,
+          "t_fp": 16,
+          "t_tp": 5,
+          "tp": 4,
+          "unknown_not_predicted": 1,
+          "unknown_predicted": 1
+        },
+        "contract": {
+          "fn": 0,
+          "fp": 28,
+          "gold": 17,
+          "precision": 0.3778,
+          "predicted": 45,
+          "recall": 1.0,
+          "t_fn": 0,
+          "t_fp": 28,
+          "t_tp": 17,
+          "tp": 17,
+          "unknown_not_predicted": 1,
+          "unknown_predicted": 4
+        },
+        "implementation": {
+          "fn": 8,
+          "fp": 36,
+          "gold": 13,
+          "precision": 0.122,
+          "predicted": 41,
+          "recall": 0.3846,
+          "t_fn": 8,
+          "t_fp": 30,
+          "t_tp": 5,
+          "tp": 5,
+          "unknown_not_predicted": 1,
+          "unknown_predicted": 3
+        },
+        "semantic": {
+          "fn": 0,
+          "fp": 34,
+          "gold": 10,
+          "precision": 0.2273,
+          "predicted": 44,
+          "recall": 1.0,
+          "t_fn": 0,
+          "t_fp": 33,
+          "t_tp": 10,
+          "tp": 10,
+          "unknown_not_predicted": 1,
+          "unknown_predicted": 1
+        },
+        "structure": {
+          "fn": 1,
+          "fp": 10,
+          "gold": 6,
+          "precision": 0.3333,
+          "predicted": 15,
+          "recall": 0.8333,
+          "t_fn": 1,
+          "t_fp": 9,
+          "t_tp": 5,
+          "tp": 5,
+          "unknown_not_predicted": 0,
+          "unknown_predicted": 1
+        }
+      },
+      "critical_gold": 16,
+      "critical_missed": 2,
+      "critical_missed_list": [
+        "SC-22 CMP-REPORTING:check_contract",
+        "SC-23 TEST-EMAIL:rerun_test"
+      ],
+      "fn": 13,
+      "fp": 128,
+      "gold": 54,
+      "macro_recall_nonempty_gold": 0.7651,
+      "micro_f1": 0.3677,
+      "micro_precision": 0.2426,
+      "micro_recall": 0.7593,
+      "negative_cases": {
+        "cases": 3,
+        "cases_with_false_alarm": 3,
+        "false_alarm_pairs": 13
+      },
+      "predicted": 169,
+      "t_fn": 12,
+      "t_fp": 116,
+      "t_macro_recall_nonempty_gold": 0.781,
+      "t_micro_f1": 0.3962,
+      "t_micro_precision": 0.2658,
+      "t_micro_recall": 0.7778,
+      "t_tp": 42,
+      "tp": 41,
+      "unknown_not_predicted": 4,
+      "unknown_predicted": 10,
+      "worst_case": {
+        "precision": 0.2291,
+        "recall": 0.7069
+      }
+    },
+    "B": {
+      "best_case": {
+        "precision": 0.5325,
+        "recall": 0.6406
+      },
+      "by_family": {
+        "adversarial": {
+          "fn": 3,
+          "fp": 6,
+          "gold": 8,
+          "precision": 0.4545,
+          "predicted": 11,
+          "recall": 0.625,
+          "t_fn": 3,
+          "t_fp": 5,
+          "t_tp": 5,
+          "tp": 5,
+          "unknown_not_predicted": 2,
+          "unknown_predicted": 0
+        },
+        "contract": {
+          "fn": 4,
+          "fp": 9,
+          "gold": 17,
+          "precision": 0.5909,
+          "predicted": 22,
+          "recall": 0.7647,
+          "t_fn": 4,
+          "t_fp": 9,
+          "t_tp": 13,
+          "tp": 13,
+          "unknown_not_predicted": 0,
+          "unknown_predicted": 5
+        },
+        "implementation": {
+          "fn": 11,
+          "fp": 6,
+          "gold": 13,
+          "precision": 0.25,
+          "predicted": 8,
+          "recall": 0.1538,
+          "t_fn": 11,
+          "t_fp": 6,
+          "t_tp": 2,
+          "tp": 2,
+          "unknown_not_predicted": 2,
+          "unknown_predicted": 2
+        },
+        "semantic": {
+          "fn": 3,
+          "fp": 13,
+          "gold": 10,
+          "precision": 0.35,
+          "predicted": 20,
+          "recall": 0.7,
+          "t_fn": 3,
+          "t_fp": 13,
+          "t_tp": 7,
+          "tp": 7,
+          "unknown_not_predicted": 0,
+          "unknown_predicted": 2
+        },
+        "structure": {
+          "fn": 2,
+          "fp": 2,
+          "gold": 6,
+          "precision": 0.6667,
+          "predicted": 6,
+          "recall": 0.6667,
+          "t_fn": 2,
+          "t_fp": 2,
+          "t_tp": 4,
+          "tp": 4,
+          "unknown_not_predicted": 0,
+          "unknown_predicted": 1
+        }
+      },
+      "critical_gold": 16,
+      "critical_missed": 2,
+      "critical_missed_list": [
+        "SC-10 TEST-RETRY:rerun_test",
+        "SC-23 TEST-EMAIL:rerun_test"
+      ],
+      "fn": 23,
+      "fp": 36,
+      "gold": 54,
+      "macro_recall_nonempty_gold": 0.5492,
+      "micro_f1": 0.5124,
+      "micro_precision": 0.4627,
+      "micro_recall": 0.5741,
+      "negative_cases": {
+        "cases": 3,
+        "cases_with_false_alarm": 3,
+        "false_alarm_pairs": 7
+      },
+      "predicted": 67,
+      "t_fn": 23,
+      "t_fp": 35,
+      "t_macro_recall_nonempty_gold": 0.5492,
+      "t_micro_f1": 0.5167,
+      "t_micro_precision": 0.4697,
+      "t_micro_recall": 0.5741,
+      "t_tp": 31,
+      "tp": 31,
+      "unknown_not_predicted": 4,
+      "unknown_predicted": 10,
+      "worst_case": {
+        "precision": 0.4026,
+        "recall": 0.5345
+      }
+    },
+    "C": {
+      "best_case": {
+        "precision": 0.5634,
+        "recall": 0.625
+      },
+      "by_family": {
+        "adversarial": {
+          "fn": 3,
+          "fp": 5,
+          "gold": 8,
+          "precision": 0.5,
+          "predicted": 10,
+          "recall": 0.625,
+          "t_fn": 3,
+          "t_fp": 4,
+          "t_tp": 5,
+          "tp": 5,
+          "unknown_not_predicted": 2,
+          "unknown_predicted": 0
+        },
+        "contract": {
+          "fn": 4,
+          "fp": 8,
+          "gold": 17,
+          "precision": 0.619,
+          "predicted": 21,
+          "recall": 0.7647,
+          "t_fn": 4,
+          "t_fp": 8,
+          "t_tp": 13,
+          "tp": 13,
+          "unknown_not_predicted": 0,
+          "unknown_predicted": 5
+        },
+        "implementation": {
+          "fn": 12,
+          "fp": 3,
+          "gold": 13,
+          "precision": 0.25,
+          "predicted": 4,
+          "recall": 0.0769,
+          "t_fn": 12,
+          "t_fp": 3,
+          "t_tp": 1,
+          "tp": 1,
+          "unknown_not_predicted": 2,
+          "unknown_predicted": 2
+        },
+        "semantic": {
+          "fn": 3,
+          "fp": 13,
+          "gold": 10,
+          "precision": 0.35,
+          "predicted": 20,
+          "recall": 0.7,
+          "t_fn": 3,
+          "t_fp": 13,
+          "t_tp": 7,
+          "tp": 7,
+          "unknown_not_predicted": 0,
+          "unknown_predicted": 2
+        },
+        "structure": {
+          "fn": 2,
+          "fp": 2,
+          "gold": 6,
+          "precision": 0.6667,
+          "predicted": 6,
+          "recall": 0.6667,
+          "t_fn": 2,
+          "t_fp": 2,
+          "t_tp": 4,
+          "tp": 4,
+          "unknown_not_predicted": 0,
+          "unknown_predicted": 1
+        }
+      },
+      "critical_gold": 16,
+      "critical_missed": 3,
+      "critical_missed_list": [
+        "SC-10 TEST-RETRY:rerun_test",
+        "SC-14 CMP-ORDERS:check_contract",
+        "SC-23 TEST-EMAIL:rerun_test"
+      ],
+      "fn": 24,
+      "fp": 31,
+      "gold": 54,
+      "macro_recall_nonempty_gold": 0.5397,
+      "micro_f1": 0.5218,
+      "micro_precision": 0.4918,
+      "micro_recall": 0.5556,
+      "negative_cases": {
+        "cases": 3,
+        "cases_with_false_alarm": 3,
+        "false_alarm_pairs": 7
+      },
+      "predicted": 61,
+      "t_fn": 24,
+      "t_fp": 30,
+      "t_macro_recall_nonempty_gold": 0.5397,
+      "t_micro_f1": 0.5263,
+      "t_micro_precision": 0.5,
+      "t_micro_recall": 0.5556,
+      "t_tp": 30,
+      "tp": 30,
+      "unknown_not_predicted": 4,
+      "unknown_predicted": 10,
+      "worst_case": {
+        "precision": 0.4225,
+        "recall": 0.5172
+      }
+    }
+  }
+}

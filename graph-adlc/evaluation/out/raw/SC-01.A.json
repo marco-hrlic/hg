@@ -1,0 +1,60 @@
+{
+  "method": "A",
+  "predictions_raw": [
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section CAP-PAYMENTS and section REQ-CHARGE (changed in the change request)",
+      "hop": 1,
+      "method": "A",
+      "obligation": "review_spec",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CAP-PAYMENTS"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section CMP-PAYMENT and section REQ-CHARGE (changed in the change request)",
+      "hop": 1,
+      "method": "A",
+      "obligation": "review_implementation",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CMP-PAYMENT"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section CON-IDEMPOTENCY and section REQ-CHARGE (changed in the change request)",
+      "hop": 1,
+      "method": "A",
+      "obligation": "check_contract",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CON-IDEMPOTENCY"
+    }
+  ],
+  "scenario_id": "SC-01",
+  "setup": [],
+  "trace": {
+    "change_request_chars": 334,
+    "context_chars": 1337,
+    "context_sections": [
+      "CAP-PAYMENTS",
+      "CMP-PAYMENT",
+      "CON-IDEMPOTENCY",
+      "REQ-CHARGE"
+    ],
+    "document_chars": 3465,
+    "over_budget": [],
+    "retrieved": [
+      "CAP-PAYMENTS",
+      "CMP-PAYMENT",
+      "CON-IDEMPOTENCY"
+    ],
+    "seeds": [
+      "REQ-CHARGE"
+    ]
+  }
+}

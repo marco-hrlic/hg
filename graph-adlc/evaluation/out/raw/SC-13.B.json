@@ -1,0 +1,128 @@
+{
+  "aspect_overrides": [],
+  "evidence_refs_passed": [],
+  "impact": {
+    "notes": [
+      "Influence is complete only relative to registered edges and rules; absence of an edge is not evidence of independence."
+    ],
+    "obligations": [
+      {
+        "change_ref": "op[0]",
+        "confidence": "high",
+        "obligation": "review_implementation",
+        "origin_id": "ART-PAYMENT",
+        "path": [
+          "E12"
+        ],
+        "provisional": false,
+        "reason": "artifact ART-PAYMENT changed; component realized by it must be reviewed",
+        "target_id": "CMP-PAYMENT"
+      },
+      {
+        "change_ref": "op[0]",
+        "confidence": "provisional",
+        "obligation": "check_contract",
+        "origin_id": "ART-PAYMENT",
+        "path": [
+          "E12",
+          "E13"
+        ],
+        "provisional": true,
+        "reason": "implementation of provider CMP-PAYMENT changed and no validated contract-preservation evidence; consumer provisionally flagged",
+        "target_id": "CMP-REPORTING"
+      },
+      {
+        "change_ref": "op[0]",
+        "confidence": "high",
+        "obligation": "check_contract",
+        "origin_id": "ART-PAYMENT",
+        "path": [
+          "E12",
+          "E08"
+        ],
+        "provisional": false,
+        "reason": "implementation of CMP-PAYMENT changed; requirement must still hold (terminal until a violation is established)",
+        "target_id": "REQ-CHARGE"
+      },
+      {
+        "change_ref": "op[0]",
+        "confidence": "high",
+        "obligation": "check_contract",
+        "origin_id": "ART-PAYMENT",
+        "path": [
+          "E12",
+          "E09"
+        ],
+        "provisional": false,
+        "reason": "implementation of CMP-PAYMENT changed; requirement must still hold (terminal until a violation is established)",
+        "target_id": "REQ-RETRY"
+      }
+    ],
+    "pruned": []
+  },
+  "method": "B",
+  "predictions_raw": [
+    {
+      "confidence": "high",
+      "explanation": "artifact ART-PAYMENT changed; component realized by it must be reviewed",
+      "method": "B",
+      "obligation": "review_implementation",
+      "origin_id": "ART-PAYMENT",
+      "path_edge_ids": [
+        "E12"
+      ],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CMP-PAYMENT"
+    },
+    {
+      "confidence": "provisional",
+      "explanation": "implementation of provider CMP-PAYMENT changed and no validated contract-preservation evidence; consumer provisionally flagged",
+      "method": "B",
+      "obligation": "check_contract",
+      "origin_id": "ART-PAYMENT",
+      "path_edge_ids": [
+        "E12",
+        "E13"
+      ],
+      "provisional": true,
+      "pruned": false,
+      "target_id": "CMP-REPORTING"
+    },
+    {
+      "confidence": "high",
+      "explanation": "implementation of CMP-PAYMENT changed; requirement must still hold (terminal until a violation is established)",
+      "method": "B",
+      "obligation": "check_contract",
+      "origin_id": "ART-PAYMENT",
+      "path_edge_ids": [
+        "E12",
+        "E08"
+      ],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "REQ-CHARGE"
+    },
+    {
+      "confidence": "high",
+      "explanation": "implementation of CMP-PAYMENT changed; requirement must still hold (terminal until a violation is established)",
+      "method": "B",
+      "obligation": "check_contract",
+      "origin_id": "ART-PAYMENT",
+      "path_edge_ids": [
+        "E12",
+        "E09"
+      ],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "REQ-RETRY"
+    }
+  ],
+  "readiness_changes": [],
+  "scenario_id": "SC-13",
+  "setup": [],
+  "would_invalidate": {
+    "evidence": [],
+    "work_units": []
+  }
+}

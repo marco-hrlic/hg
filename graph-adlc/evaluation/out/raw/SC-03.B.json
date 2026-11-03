@@ -1,0 +1,97 @@
+{
+  "aspect_overrides": [],
+  "evidence_refs_passed": [],
+  "impact": {
+    "notes": [
+      "Influence is complete only relative to registered edges and rules; absence of an edge is not evidence of independence."
+    ],
+    "obligations": [
+      {
+        "change_ref": "op[0]",
+        "confidence": "high",
+        "obligation": "review_spec",
+        "origin_id": "CAP-PAYMENTS",
+        "path": [
+          "E01"
+        ],
+        "provisional": false,
+        "reason": "child CAP-PAYMENTS changed; parent-consistency check (terminal, no sibling fan-out)",
+        "target_id": "GOAL-CHECKOUT"
+      },
+      {
+        "change_ref": "op[0]",
+        "confidence": "high",
+        "obligation": "review_spec",
+        "origin_id": "CAP-PAYMENTS",
+        "path": [
+          "E03"
+        ],
+        "provisional": false,
+        "reason": "refinement parent CAP-PAYMENTS changed semantically; review child for consistency",
+        "target_id": "REQ-CHARGE"
+      },
+      {
+        "change_ref": "op[0]",
+        "confidence": "high",
+        "obligation": "review_spec",
+        "origin_id": "CAP-PAYMENTS",
+        "path": [
+          "E04"
+        ],
+        "provisional": false,
+        "reason": "refinement parent CAP-PAYMENTS changed semantically; review child for consistency",
+        "target_id": "REQ-RETRY"
+      }
+    ],
+    "pruned": []
+  },
+  "method": "B",
+  "predictions_raw": [
+    {
+      "confidence": "high",
+      "explanation": "child CAP-PAYMENTS changed; parent-consistency check (terminal, no sibling fan-out)",
+      "method": "B",
+      "obligation": "review_spec",
+      "origin_id": "CAP-PAYMENTS",
+      "path_edge_ids": [
+        "E01"
+      ],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "GOAL-CHECKOUT"
+    },
+    {
+      "confidence": "high",
+      "explanation": "refinement parent CAP-PAYMENTS changed semantically; review child for consistency",
+      "method": "B",
+      "obligation": "review_spec",
+      "origin_id": "CAP-PAYMENTS",
+      "path_edge_ids": [
+        "E03"
+      ],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "REQ-CHARGE"
+    },
+    {
+      "confidence": "high",
+      "explanation": "refinement parent CAP-PAYMENTS changed semantically; review child for consistency",
+      "method": "B",
+      "obligation": "review_spec",
+      "origin_id": "CAP-PAYMENTS",
+      "path_edge_ids": [
+        "E04"
+      ],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "REQ-RETRY"
+    }
+  ],
+  "readiness_changes": [],
+  "scenario_id": "SC-03",
+  "setup": [],
+  "would_invalidate": {
+    "evidence": [],
+    "work_units": []
+  }
+}

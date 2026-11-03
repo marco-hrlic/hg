@@ -1,0 +1,72 @@
+{
+  "aspect_overrides": [],
+  "evidence_refs_passed": [],
+  "impact": {
+    "notes": [
+      "Influence is complete only relative to registered edges and rules; absence of an edge is not evidence of independence."
+    ],
+    "obligations": [
+      {
+        "change_ref": "op[0]",
+        "confidence": "high",
+        "obligation": "review_spec",
+        "origin_id": "E13",
+        "path": [
+          "E13"
+        ],
+        "provisional": false,
+        "reason": "depends_on edge E13 (CMP-REPORTING -> CMP-PAYMENT) removed; target endpoint must be re-evaluated",
+        "target_id": "CMP-PAYMENT"
+      },
+      {
+        "change_ref": "op[0]",
+        "confidence": "high",
+        "obligation": "check_contract",
+        "origin_id": "E13",
+        "path": [
+          "E13"
+        ],
+        "provisional": false,
+        "reason": "depends_on edge E13 (CMP-REPORTING -> CMP-PAYMENT) removed; source endpoint must be re-evaluated",
+        "target_id": "CMP-REPORTING"
+      }
+    ],
+    "pruned": []
+  },
+  "method": "C",
+  "predictions_raw": [
+    {
+      "confidence": "high",
+      "explanation": "depends_on edge E13 (CMP-REPORTING -> CMP-PAYMENT) removed; target endpoint must be re-evaluated",
+      "method": "C",
+      "obligation": "review_spec",
+      "origin_id": "E13",
+      "path_edge_ids": [
+        "E13"
+      ],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CMP-PAYMENT"
+    },
+    {
+      "confidence": "high",
+      "explanation": "depends_on edge E13 (CMP-REPORTING -> CMP-PAYMENT) removed; source endpoint must be re-evaluated",
+      "method": "C",
+      "obligation": "check_contract",
+      "origin_id": "E13",
+      "path_edge_ids": [
+        "E13"
+      ],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CMP-REPORTING"
+    }
+  ],
+  "readiness_changes": [],
+  "scenario_id": "SC-18",
+  "setup": [],
+  "would_invalidate": {
+    "evidence": [],
+    "work_units": []
+  }
+}

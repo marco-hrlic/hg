@@ -1,0 +1,583 @@
+{
+  "note": "wall-clock, environment dependent; not part of the determinism check",
+  "platform": "Linux-6.18.44-fc-v230-x86_64-with-glibc2.39",
+  "python": "3.13.18",
+  "rows": [
+    {
+      "median_s": 0.00019535600017661636,
+      "method": "A",
+      "runs": 3,
+      "scenario_id": "SC-01"
+    },
+    {
+      "median_s": 0.00020684700007223,
+      "method": "A2",
+      "runs": 3,
+      "scenario_id": "SC-01"
+    },
+    {
+      "median_s": 0.0006730459999744198,
+      "method": "B",
+      "runs": 3,
+      "scenario_id": "SC-01"
+    },
+    {
+      "median_s": 0.0005019149998588546,
+      "method": "C",
+      "runs": 3,
+      "scenario_id": "SC-01"
+    },
+    {
+      "median_s": 0.00019620200009740074,
+      "method": "A",
+      "runs": 3,
+      "scenario_id": "SC-02"
+    },
+    {
+      "median_s": 0.00019879000001310487,
+      "method": "A2",
+      "runs": 3,
+      "scenario_id": "SC-02"
+    },
+    {
+      "median_s": 0.00047132100007729605,
+      "method": "B",
+      "runs": 3,
+      "scenario_id": "SC-02"
+    },
+    {
+      "median_s": 0.0005001389999961248,
+      "method": "C",
+      "runs": 3,
+      "scenario_id": "SC-02"
+    },
+    {
+      "median_s": 0.0002067920001991297,
+      "method": "A",
+      "runs": 3,
+      "scenario_id": "SC-03"
+    },
+    {
+      "median_s": 0.00021655700015799084,
+      "method": "A2",
+      "runs": 3,
+      "scenario_id": "SC-03"
+    },
+    {
+      "median_s": 0.00054846400007591,
+      "method": "B",
+      "runs": 3,
+      "scenario_id": "SC-03"
+    },
+    {
+      "median_s": 0.0005277560001104575,
+      "method": "C",
+      "runs": 3,
+      "scenario_id": "SC-03"
+    },
+    {
+      "median_s": 0.0002608610000152112,
+      "method": "A",
+      "runs": 3,
+      "scenario_id": "SC-04"
+    },
+    {
+      "median_s": 0.00027643999987958523,
+      "method": "A2",
+      "runs": 3,
+      "scenario_id": "SC-04"
+    },
+    {
+      "median_s": 0.0005279710001104831,
+      "method": "B",
+      "runs": 3,
+      "scenario_id": "SC-04"
+    },
+    {
+      "median_s": 0.0005190140000195242,
+      "method": "C",
+      "runs": 3,
+      "scenario_id": "SC-04"
+    },
+    {
+      "median_s": 0.0010324040001705725,
+      "method": "A",
+      "runs": 3,
+      "scenario_id": "SC-05"
+    },
+    {
+      "median_s": 0.0005709179999939806,
+      "method": "A2",
+      "runs": 3,
+      "scenario_id": "SC-05"
+    },
+    {
+      "median_s": 0.000895519999858152,
+      "method": "B",
+      "runs": 3,
+      "scenario_id": "SC-05"
+    },
+    {
+      "median_s": 0.0008092310001757141,
+      "method": "C",
+      "runs": 3,
+      "scenario_id": "SC-05"
+    },
+    {
+      "median_s": 0.0005796259999897302,
+      "method": "A",
+      "runs": 3,
+      "scenario_id": "SC-06"
+    },
+    {
+      "median_s": 0.0005868420000751939,
+      "method": "A2",
+      "runs": 3,
+      "scenario_id": "SC-06"
+    },
+    {
+      "median_s": 0.0008691719999660563,
+      "method": "B",
+      "runs": 3,
+      "scenario_id": "SC-06"
+    },
+    {
+      "median_s": 0.0008483730000534706,
+      "method": "C",
+      "runs": 3,
+      "scenario_id": "SC-06"
+    },
+    {
+      "median_s": 0.00023654300002817763,
+      "method": "A",
+      "runs": 3,
+      "scenario_id": "SC-07"
+    },
+    {
+      "median_s": 0.00021737700012636196,
+      "method": "A2",
+      "runs": 3,
+      "scenario_id": "SC-07"
+    },
+    {
+      "median_s": 0.0005252569999356638,
+      "method": "B",
+      "runs": 3,
+      "scenario_id": "SC-07"
+    },
+    {
+      "median_s": 0.0004960629999004595,
+      "method": "C",
+      "runs": 3,
+      "scenario_id": "SC-07"
+    },
+    {
+      "median_s": 0.0002064779998818267,
+      "method": "A",
+      "runs": 3,
+      "scenario_id": "SC-08"
+    },
+    {
+      "median_s": 0.00021103500012031873,
+      "method": "A2",
+      "runs": 3,
+      "scenario_id": "SC-08"
+    },
+    {
+      "median_s": 0.0005005279999750201,
+      "method": "B",
+      "runs": 3,
+      "scenario_id": "SC-08"
+    },
+    {
+      "median_s": 0.00044973100011702627,
+      "method": "C",
+      "runs": 3,
+      "scenario_id": "SC-08"
+    },
+    {
+      "median_s": 0.00020172600011392205,
+      "method": "A",
+      "runs": 3,
+      "scenario_id": "SC-09"
+    },
+    {
+      "median_s": 0.0002295330000379181,
+      "method": "A2",
+      "runs": 3,
+      "scenario_id": "SC-09"
+    },
+    {
+      "median_s": 0.0005528720000711473,
+      "method": "B",
+      "runs": 3,
+      "scenario_id": "SC-09"
+    },
+    {
+      "median_s": 0.0005516759999864007,
+      "method": "C",
+      "runs": 3,
+      "scenario_id": "SC-09"
+    },
+    {
+      "median_s": 0.00020230399991305603,
+      "method": "A",
+      "runs": 3,
+      "scenario_id": "SC-10"
+    },
+    {
+      "median_s": 0.00021126299998286413,
+      "method": "A2",
+      "runs": 3,
+      "scenario_id": "SC-10"
+    },
+    {
+      "median_s": 0.0005035479998696246,
+      "method": "B",
+      "runs": 3,
+      "scenario_id": "SC-10"
+    },
+    {
+      "median_s": 0.0004938560000482539,
+      "method": "C",
+      "runs": 3,
+      "scenario_id": "SC-10"
+    },
+    {
+      "median_s": 0.00020507399995040032,
+      "method": "A",
+      "runs": 3,
+      "scenario_id": "SC-11"
+    },
+    {
+      "median_s": 0.00021629599996231264,
+      "method": "A2",
+      "runs": 3,
+      "scenario_id": "SC-11"
+    },
+    {
+      "median_s": 0.0004966699998476543,
+      "method": "B",
+      "runs": 3,
+      "scenario_id": "SC-11"
+    },
+    {
+      "median_s": 0.0005259229999410309,
+      "method": "C",
+      "runs": 3,
+      "scenario_id": "SC-11"
+    },
+    {
+      "median_s": 0.00059806700005538,
+      "method": "A",
+      "runs": 3,
+      "scenario_id": "SC-12"
+    },
+    {
+      "median_s": 0.0005870989998584264,
+      "method": "A2",
+      "runs": 3,
+      "scenario_id": "SC-12"
+    },
+    {
+      "median_s": 0.0008641370000077586,
+      "method": "B",
+      "runs": 3,
+      "scenario_id": "SC-12"
+    },
+    {
+      "median_s": 0.0008385199998883763,
+      "method": "C",
+      "runs": 3,
+      "scenario_id": "SC-12"
+    },
+    {
+      "median_s": 0.00019444199983809085,
+      "method": "A",
+      "runs": 3,
+      "scenario_id": "SC-13"
+    },
+    {
+      "median_s": 0.00020315699998718628,
+      "method": "A2",
+      "runs": 3,
+      "scenario_id": "SC-13"
+    },
+    {
+      "median_s": 0.0005526029999600723,
+      "method": "B",
+      "runs": 3,
+      "scenario_id": "SC-13"
+    },
+    {
+      "median_s": 0.0005012530000385595,
+      "method": "C",
+      "runs": 3,
+      "scenario_id": "SC-13"
+    },
+    {
+      "median_s": 0.0005668050000622316,
+      "method": "A",
+      "runs": 3,
+      "scenario_id": "SC-14"
+    },
+    {
+      "median_s": 0.0005908099999487604,
+      "method": "A2",
+      "runs": 3,
+      "scenario_id": "SC-14"
+    },
+    {
+      "median_s": 0.0008036110000375629,
+      "method": "B",
+      "runs": 3,
+      "scenario_id": "SC-14"
+    },
+    {
+      "median_s": 0.0007920699999885983,
+      "method": "C",
+      "runs": 3,
+      "scenario_id": "SC-14"
+    },
+    {
+      "median_s": 0.0005760290000580426,
+      "method": "A",
+      "runs": 3,
+      "scenario_id": "SC-15"
+    },
+    {
+      "median_s": 0.0005978179999601707,
+      "method": "A2",
+      "runs": 3,
+      "scenario_id": "SC-15"
+    },
+    {
+      "median_s": 0.0008231919998706871,
+      "method": "B",
+      "runs": 3,
+      "scenario_id": "SC-15"
+    },
+    {
+      "median_s": 0.0008124539999698754,
+      "method": "C",
+      "runs": 3,
+      "scenario_id": "SC-15"
+    },
+    {
+      "median_s": 0.0005946829999174952,
+      "method": "A",
+      "runs": 3,
+      "scenario_id": "SC-16"
+    },
+    {
+      "median_s": 0.0005972280000605679,
+      "method": "A2",
+      "runs": 3,
+      "scenario_id": "SC-16"
+    },
+    {
+      "median_s": 0.0008055440000589442,
+      "method": "B",
+      "runs": 3,
+      "scenario_id": "SC-16"
+    },
+    {
+      "median_s": 0.0008086010000170063,
+      "method": "C",
+      "runs": 3,
+      "scenario_id": "SC-16"
+    },
+    {
+      "median_s": 0.0002102280000144674,
+      "method": "A",
+      "runs": 3,
+      "scenario_id": "SC-17"
+    },
+    {
+      "median_s": 0.00020799499998247484,
+      "method": "A2",
+      "runs": 3,
+      "scenario_id": "SC-17"
+    },
+    {
+      "median_s": 0.0004960639998898841,
+      "method": "B",
+      "runs": 3,
+      "scenario_id": "SC-17"
+    },
+    {
+      "median_s": 0.0004912209999474726,
+      "method": "C",
+      "runs": 3,
+      "scenario_id": "SC-17"
+    },
+    {
+      "median_s": 0.00022376300012183492,
+      "method": "A",
+      "runs": 3,
+      "scenario_id": "SC-18"
+    },
+    {
+      "median_s": 0.0002345719999539142,
+      "method": "A2",
+      "runs": 3,
+      "scenario_id": "SC-18"
+    },
+    {
+      "median_s": 0.00044438099985200097,
+      "method": "B",
+      "runs": 3,
+      "scenario_id": "SC-18"
+    },
+    {
+      "median_s": 0.0004783740000675607,
+      "method": "C",
+      "runs": 3,
+      "scenario_id": "SC-18"
+    },
+    {
+      "median_s": 0.0005346839998310315,
+      "method": "A",
+      "runs": 3,
+      "scenario_id": "SC-19"
+    },
+    {
+      "median_s": 0.0005569649999870308,
+      "method": "A2",
+      "runs": 3,
+      "scenario_id": "SC-19"
+    },
+    {
+      "median_s": 0.0007658540000647918,
+      "method": "B",
+      "runs": 3,
+      "scenario_id": "SC-19"
+    },
+    {
+      "median_s": 0.0007998739999948157,
+      "method": "C",
+      "runs": 3,
+      "scenario_id": "SC-19"
+    },
+    {
+      "median_s": 0.0005794379999315424,
+      "method": "A",
+      "runs": 3,
+      "scenario_id": "SC-20"
+    },
+    {
+      "median_s": 0.0005805170001167426,
+      "method": "A2",
+      "runs": 3,
+      "scenario_id": "SC-20"
+    },
+    {
+      "median_s": 0.0007820690000244213,
+      "method": "B",
+      "runs": 3,
+      "scenario_id": "SC-20"
+    },
+    {
+      "median_s": 0.0007805459999872255,
+      "method": "C",
+      "runs": 3,
+      "scenario_id": "SC-20"
+    },
+    {
+      "median_s": 0.00020554000002448447,
+      "method": "A",
+      "runs": 3,
+      "scenario_id": "SC-21"
+    },
+    {
+      "median_s": 0.00021685299998353003,
+      "method": "A2",
+      "runs": 3,
+      "scenario_id": "SC-21"
+    },
+    {
+      "median_s": 0.0004391420000047219,
+      "method": "B",
+      "runs": 3,
+      "scenario_id": "SC-21"
+    },
+    {
+      "median_s": 0.00044477100004769454,
+      "method": "C",
+      "runs": 3,
+      "scenario_id": "SC-21"
+    },
+    {
+      "median_s": 0.00024232400005530508,
+      "method": "A",
+      "runs": 3,
+      "scenario_id": "SC-22"
+    },
+    {
+      "median_s": 0.00021015999982409994,
+      "method": "A2",
+      "runs": 3,
+      "scenario_id": "SC-22"
+    },
+    {
+      "median_s": 0.0005457309998746496,
+      "method": "B",
+      "runs": 3,
+      "scenario_id": "SC-22"
+    },
+    {
+      "median_s": 0.000513039999987086,
+      "method": "C",
+      "runs": 3,
+      "scenario_id": "SC-22"
+    },
+    {
+      "median_s": 0.000536770000053366,
+      "method": "A",
+      "runs": 3,
+      "scenario_id": "SC-23"
+    },
+    {
+      "median_s": 0.0005815689999053575,
+      "method": "A2",
+      "runs": 3,
+      "scenario_id": "SC-23"
+    },
+    {
+      "median_s": 0.0007928289999199478,
+      "method": "B",
+      "runs": 3,
+      "scenario_id": "SC-23"
+    },
+    {
+      "median_s": 0.0007614789999479399,
+      "method": "C",
+      "runs": 3,
+      "scenario_id": "SC-23"
+    },
+    {
+      "median_s": 0.0005857010000909213,
+      "method": "A",
+      "runs": 3,
+      "scenario_id": "SC-24"
+    },
+    {
+      "median_s": 0.0005988389998492494,
+      "method": "A2",
+      "runs": 3,
+      "scenario_id": "SC-24"
+    },
+    {
+      "median_s": 0.0007991489999312762,
+      "method": "B",
+      "runs": 3,
+      "scenario_id": "SC-24"
+    },
+    {
+      "median_s": 0.0008874420000211103,
+      "method": "C",
+      "runs": 3,
+      "scenario_id": "SC-24"
+    }
+  ]
+}

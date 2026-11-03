@@ -211,3 +211,10 @@ sorted keys. Timestamps are UTC; set `GADLC_FIXED_TIME` to make them reproducibl
 - Contract-preservation and contract checks are recorded evidence, not formal proofs.
 - There is one writer process at a time (SQLite), no multi-agent concurrency, no GUI, and no automatic
   discovery of edges from code.
+
+## v0.2 evaluation
+
+[`evaluation/`](evaluation/) holds the v0.2 influence evaluation (handoff in [`docs/v0_2/`](docs/v0_2/)). It is a
+24-scenario corpus with a frozen oracle, comparing a document baseline, this engine, and this engine with
+evidence-gated pruning. Reproduce it with `evaluation/run_all.sh`; findings are in
+[`evaluation/RESULTS.md`](evaluation/RESULTS.md).

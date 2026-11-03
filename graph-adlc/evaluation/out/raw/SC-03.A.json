@@ -1,0 +1,60 @@
+{
+  "method": "A",
+  "predictions_raw": [
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section GOAL-CHECKOUT and section CAP-PAYMENTS (changed in the change request)",
+      "hop": 1,
+      "method": "A",
+      "obligation": "review_spec",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "GOAL-CHECKOUT"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section REQ-CHARGE and section CAP-PAYMENTS (changed in the change request)",
+      "hop": 1,
+      "method": "A",
+      "obligation": "review_spec",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "REQ-CHARGE"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section REQ-RETRY and section CAP-PAYMENTS (changed in the change request)",
+      "hop": 1,
+      "method": "A",
+      "obligation": "review_spec",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "REQ-RETRY"
+    }
+  ],
+  "scenario_id": "SC-03",
+  "setup": [],
+  "trace": {
+    "change_request_chars": 233,
+    "context_chars": 1260,
+    "context_sections": [
+      "CAP-PAYMENTS",
+      "GOAL-CHECKOUT",
+      "REQ-CHARGE",
+      "REQ-RETRY"
+    ],
+    "document_chars": 3465,
+    "over_budget": [],
+    "retrieved": [
+      "GOAL-CHECKOUT",
+      "REQ-CHARGE",
+      "REQ-RETRY"
+    ],
+    "seeds": [
+      "CAP-PAYMENTS"
+    ]
+  }
+}

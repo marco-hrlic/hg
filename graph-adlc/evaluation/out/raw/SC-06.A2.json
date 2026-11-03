@@ -1,0 +1,138 @@
+{
+  "method": "A2",
+  "predictions_raw": [
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section CAP-NOTIFY and section REQ-ORDER-EMAIL (changed in the change request)",
+      "hop": 1,
+      "method": "A2",
+      "obligation": "review_spec",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CAP-NOTIFY"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section CMP-NOTIFIER and section REQ-ORDER-EMAIL (changed in the change request)",
+      "hop": 1,
+      "method": "A2",
+      "obligation": "review_implementation",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CMP-NOTIFIER"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section CON-EMAIL-TEMPLATE and section REQ-ORDER-EMAIL (changed in the change request)",
+      "hop": 1,
+      "method": "A2",
+      "obligation": "check_contract",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CON-EMAIL-TEMPLATE"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section TEST-EMAIL and section REQ-ORDER-EMAIL (changed in the change request)",
+      "hop": 1,
+      "method": "A2",
+      "obligation": "rerun_test",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "TEST-EMAIL"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section ART-NOTIFIER and section CMP-NOTIFIER (hop 2 from changed REQ-ORDER-EMAIL)",
+      "hop": 2,
+      "method": "A2",
+      "obligation": "review_implementation",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "ART-NOTIFIER"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section CMP-MONEY and section CMP-NOTIFIER (hop 2 from changed REQ-ORDER-EMAIL)",
+      "hop": 2,
+      "method": "A2",
+      "obligation": "review_implementation",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CMP-MONEY"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section CMP-ORDERS and section CMP-NOTIFIER (hop 2 from changed REQ-ORDER-EMAIL)",
+      "hop": 2,
+      "method": "A2",
+      "obligation": "review_implementation",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CMP-ORDERS"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section GOAL-ORDERS and section CAP-NOTIFY (hop 2 from changed REQ-ORDER-EMAIL)",
+      "hop": 2,
+      "method": "A2",
+      "obligation": "review_spec",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "GOAL-ORDERS"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section REQ-LOW-STOCK-ALERT and section CAP-NOTIFY (hop 2 from changed REQ-ORDER-EMAIL)",
+      "hop": 2,
+      "method": "A2",
+      "obligation": "review_spec",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "REQ-LOW-STOCK-ALERT"
+    }
+  ],
+  "scenario_id": "SC-06",
+  "setup": [],
+  "trace": {
+    "change_request_chars": 162,
+    "context_chars": 3356,
+    "context_sections": [
+      "ART-NOTIFIER",
+      "CAP-NOTIFY",
+      "CMP-MONEY",
+      "CMP-NOTIFIER",
+      "CMP-ORDERS",
+      "CON-EMAIL-TEMPLATE",
+      "GOAL-ORDERS",
+      "REQ-LOW-STOCK-ALERT",
+      "REQ-ORDER-EMAIL",
+      "TEST-EMAIL"
+    ],
+    "document_chars": 7668,
+    "over_budget": [],
+    "retrieved": [
+      "CAP-NOTIFY",
+      "CMP-NOTIFIER",
+      "CON-EMAIL-TEMPLATE",
+      "TEST-EMAIL",
+      "ART-NOTIFIER",
+      "CMP-MONEY",
+      "CMP-ORDERS",
+      "GOAL-ORDERS",
+      "REQ-LOW-STOCK-ALERT"
+    ],
+    "seeds": [
+      "REQ-ORDER-EMAIL"
+    ]
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "aspect_overrides": [],
+  "evidence_refs_passed": [
+    "EV-1"
+  ],
+  "impact": {
+    "notes": [
+      "Influence is complete only relative to registered edges and rules; absence of an edge is not evidence of independence."
+    ],
+    "obligations": [],
+    "pruned": [
+      {
+        "consumer_id": "CMP-ORDERS",
+        "contracts": {
+          "CON-MONEY-FORMAT": 1
+        },
+        "edge_id": "O20",
+        "evidence_id": "EV-1",
+        "provider_id": "CMP-MONEY",
+        "reason": "EV-1 records contracts ['CON-MONEY-FORMAT'] of CMP-MONEY as preserved at the current revisions; implementation-only change does not cross this boundary"
+      },
+      {
+        "consumer_id": "CMP-NOTIFIER",
+        "contracts": {
+          "CON-MONEY-FORMAT": 1
+        },
+        "edge_id": "O21",
+        "evidence_id": "EV-1",
+        "provider_id": "CMP-MONEY",
+        "reason": "EV-1 records contracts ['CON-MONEY-FORMAT'] of CMP-MONEY as preserved at the current revisions; implementation-only change does not cross this boundary"
+      }
+    ]
+  },
+  "method": "C",
+  "predictions_raw": [],
+  "readiness_changes": [],
+  "scenario_id": "SC-14",
+  "setup": [
+    {
+      "evidence_id": "EV-1",
+      "kind": "contract_preservation",
+      "node_id": "CMP-MONEY",
+      "result": "passed",
+      "spec_revs": {
+        "CMP-MONEY": 1,
+        "CON-MONEY-FORMAT": 1
+      },
+      "type": "evidence"
+    }
+  ],
+  "would_invalidate": {
+    "evidence": [
+      {
+        "evidence_id": "EV-1",
+        "node_id": "CMP-MONEY",
+        "reasons": [
+          "CMP-MONEY recorded at r1, now r2"
+        ]
+      }
+    ],
+    "work_units": []
+  }
+}

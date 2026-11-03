@@ -1,0 +1,138 @@
+{
+  "method": "A2",
+  "predictions_raw": [
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section CMP-INVENTORY and section CON-INVENTORY-API (changed in the change request)",
+      "hop": 1,
+      "method": "A2",
+      "obligation": "check_contract",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CMP-INVENTORY"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section REQ-PLACE-ORDER and section CON-INVENTORY-API (changed in the change request)",
+      "hop": 1,
+      "method": "A2",
+      "obligation": "check_contract",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "REQ-PLACE-ORDER"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section REQ-RESERVE-STOCK and section CON-INVENTORY-API (changed in the change request)",
+      "hop": 1,
+      "method": "A2",
+      "obligation": "check_contract",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "REQ-RESERVE-STOCK"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section TEST-ORDER-FLOW and section CON-INVENTORY-API (changed in the change request)",
+      "hop": 1,
+      "method": "A2",
+      "obligation": "rerun_test",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "TEST-ORDER-FLOW"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section ART-INVENTORY and section CMP-INVENTORY (hop 2 from changed CON-INVENTORY-API)",
+      "hop": 2,
+      "method": "A2",
+      "obligation": "review_implementation",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "ART-INVENTORY"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section CAP-ORDERING and section REQ-PLACE-ORDER (hop 2 from changed CON-INVENTORY-API)",
+      "hop": 2,
+      "method": "A2",
+      "obligation": "review_spec",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CAP-ORDERING"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section CMP-ORDERS and section CMP-INVENTORY (hop 2 from changed CON-INVENTORY-API)",
+      "hop": 2,
+      "method": "A2",
+      "obligation": "check_contract",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CMP-ORDERS"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section REQ-LOW-STOCK-ALERT and section CMP-INVENTORY (hop 2 from changed CON-INVENTORY-API)",
+      "hop": 2,
+      "method": "A2",
+      "obligation": "check_contract",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "REQ-LOW-STOCK-ALERT"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section TEST-RESERVE and section REQ-RESERVE-STOCK (hop 2 from changed CON-INVENTORY-API)",
+      "hop": 2,
+      "method": "A2",
+      "obligation": "rerun_test",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "TEST-RESERVE"
+    }
+  ],
+  "scenario_id": "SC-12",
+  "setup": [],
+  "trace": {
+    "change_request_chars": 322,
+    "context_chars": 3550,
+    "context_sections": [
+      "ART-INVENTORY",
+      "CAP-ORDERING",
+      "CMP-INVENTORY",
+      "CMP-ORDERS",
+      "CON-INVENTORY-API",
+      "REQ-LOW-STOCK-ALERT",
+      "REQ-PLACE-ORDER",
+      "REQ-RESERVE-STOCK",
+      "TEST-ORDER-FLOW",
+      "TEST-RESERVE"
+    ],
+    "document_chars": 7668,
+    "over_budget": [],
+    "retrieved": [
+      "CMP-INVENTORY",
+      "REQ-PLACE-ORDER",
+      "REQ-RESERVE-STOCK",
+      "TEST-ORDER-FLOW",
+      "ART-INVENTORY",
+      "CAP-ORDERING",
+      "CMP-ORDERS",
+      "REQ-LOW-STOCK-ALERT",
+      "TEST-RESERVE"
+    ],
+    "seeds": [
+      "CON-INVENTORY-API"
+    ]
+  }
+}

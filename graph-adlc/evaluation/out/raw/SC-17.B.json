@@ -1,0 +1,47 @@
+{
+  "aspect_overrides": [],
+  "evidence_refs_passed": [],
+  "impact": {
+    "notes": [
+      "Influence is complete only relative to registered edges and rules; absence of an edge is not evidence of independence."
+    ],
+    "obligations": [
+      {
+        "change_ref": "op[0]",
+        "confidence": "high",
+        "obligation": "check_contract",
+        "origin_id": "CMP-REPORTING",
+        "path": [
+          "E14"
+        ],
+        "provisional": false,
+        "reason": "implementation of CMP-REPORTING changed; requirement must still hold (terminal until a violation is established)",
+        "target_id": "REQ-REPORT"
+      }
+    ],
+    "pruned": []
+  },
+  "method": "B",
+  "predictions_raw": [
+    {
+      "confidence": "high",
+      "explanation": "implementation of CMP-REPORTING changed; requirement must still hold (terminal until a violation is established)",
+      "method": "B",
+      "obligation": "check_contract",
+      "origin_id": "CMP-REPORTING",
+      "path_edge_ids": [
+        "E14"
+      ],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "REQ-REPORT"
+    }
+  ],
+  "readiness_changes": [],
+  "scenario_id": "SC-17",
+  "setup": [],
+  "would_invalidate": {
+    "evidence": [],
+    "work_units": []
+  }
+}

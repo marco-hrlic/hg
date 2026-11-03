@@ -1,0 +1,101 @@
+{
+  "aspect_overrides": [],
+  "evidence_refs_passed": [],
+  "impact": {
+    "notes": [
+      "Influence is complete only relative to registered edges and rules; absence of an edge is not evidence of independence."
+    ],
+    "obligations": [
+      {
+        "change_ref": "op[0]",
+        "confidence": "high",
+        "obligation": "check_contract",
+        "origin_id": "CON-ORDER-EVENT",
+        "path": [
+          "O11",
+          "O19"
+        ],
+        "provisional": false,
+        "reason": "provider CMP-ORDERS is subject to a changed contract; consumer must re-check",
+        "target_id": "CMP-NOTIFIER"
+      },
+      {
+        "change_ref": "op[0]",
+        "confidence": "high",
+        "obligation": "check_contract",
+        "origin_id": "CON-ORDER-EVENT",
+        "path": [
+          "O11"
+        ],
+        "provisional": false,
+        "reason": "contract CON-ORDER-EVENT changed; constrained subject must re-check compliance",
+        "target_id": "CMP-ORDERS"
+      },
+      {
+        "change_ref": "op[0]",
+        "confidence": "high",
+        "obligation": "check_contract",
+        "origin_id": "CON-ORDER-EVENT",
+        "path": [
+          "O11",
+          "O14"
+        ],
+        "provisional": false,
+        "reason": "component CMP-ORDERS is subject to a changed contract; implemented requirement must re-check",
+        "target_id": "REQ-PLACE-ORDER"
+      }
+    ],
+    "pruned": []
+  },
+  "method": "B",
+  "predictions_raw": [
+    {
+      "confidence": "high",
+      "explanation": "provider CMP-ORDERS is subject to a changed contract; consumer must re-check",
+      "method": "B",
+      "obligation": "check_contract",
+      "origin_id": "CON-ORDER-EVENT",
+      "path_edge_ids": [
+        "O11",
+        "O19"
+      ],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CMP-NOTIFIER"
+    },
+    {
+      "confidence": "high",
+      "explanation": "contract CON-ORDER-EVENT changed; constrained subject must re-check compliance",
+      "method": "B",
+      "obligation": "check_contract",
+      "origin_id": "CON-ORDER-EVENT",
+      "path_edge_ids": [
+        "O11"
+      ],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CMP-ORDERS"
+    },
+    {
+      "confidence": "high",
+      "explanation": "component CMP-ORDERS is subject to a changed contract; implemented requirement must re-check",
+      "method": "B",
+      "obligation": "check_contract",
+      "origin_id": "CON-ORDER-EVENT",
+      "path_edge_ids": [
+        "O11",
+        "O14"
+      ],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "REQ-PLACE-ORDER"
+    }
+  ],
+  "readiness_changes": [],
+  "scenario_id": "SC-23",
+  "setup": [],
+  "would_invalidate": {
+    "evidence": [],
+    "work_units": []
+  }
+}

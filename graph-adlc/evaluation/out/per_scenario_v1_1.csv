@@ -1,0 +1,97 @@
+scenario_id,method,family,gold,predicted,tp,fp,fn,precision,recall,f1,unknown_predicted,unknown_not_predicted,t_tp,t_fp,t_fn,t_precision,t_recall,missed,false_positives
+SC-01,A,semantic,1,3,1,2,0,0.333,1.000,0.500,0,1,1,2,0,0.333,1.000,,CAP-PAYMENTS:review_spec; CON-IDEMPOTENCY:check_contract
+SC-02,A,semantic,0,2,0,2,0,0.000,N/A,N/A,0,0,0,2,0,0.000,N/A,,CAP-REPORTING:review_spec; CMP-REPORTING:review_implementation
+SC-03,A,semantic,2,2,2,0,0,1.000,1.000,1.000,1,0,2,0,0,1.000,1.000,,
+SC-04,A,semantic,3,5,3,2,0,0.600,1.000,0.750,0,0,3,2,0,0.600,1.000,,CAP-PAYMENTS:review_spec; CON-IDEMPOTENCY:check_contract
+SC-05,A,semantic,4,5,4,1,0,0.800,1.000,0.889,0,0,4,1,0,0.800,1.000,,CAP-NOTIFY:review_spec
+SC-06,A,semantic,0,4,0,4,0,0.000,N/A,N/A,0,0,0,4,0,0.000,N/A,,CAP-NOTIFY:review_spec; CMP-NOTIFIER:review_implementation; CON-EMAIL-TEMPLATE:check_contract; TEST-EMAIL:rerun_test
+SC-07,A,contract,4,4,4,0,0,1.000,1.000,1.000,0,1,4,0,0,1.000,1.000,,
+SC-08,A,contract,2,4,1,3,1,0.250,0.500,0.333,0,0,1,3,1,0.250,0.500,REQ-REPORT:check_contract[major],CON-IDEMPOTENCY:check_contract; REQ-CHARGE:check_contract; REQ-RETRY:check_contract
+SC-09,A,contract,1,3,0,3,1,0.000,0.000,0.000,1,0,0,3,1,0.000,0.000,TEST-RETRY:rerun_test[major],CMP-REPORTING:check_contract; CON-IDEMPOTENCY:check_contract; REQ-CHARGE:check_contract
+SC-10,A,contract,3,4,2,2,1,0.500,0.667,0.571,0,0,2,2,1,0.500,0.667,TEST-RETRY:rerun_test[critical],CMP-REPORTING:check_contract; CON-IDEMPOTENCY:check_contract
+SC-11,A,contract,1,3,0,3,1,0.000,0.000,0.000,1,0,0,3,1,0.000,0.000,TEST-RETRY:rerun_test[major],CMP-REPORTING:check_contract; CON-IDEMPOTENCY:check_contract; REQ-CHARGE:check_contract
+SC-12,A,contract,6,4,4,0,2,1.000,0.667,0.800,0,2,4,0,2,1.000,0.667,CMP-ORDERS:check_contract[critical]; TEST-RESERVE:rerun_test[major],
+SC-13,A,implementation,1,0,0,0,1,N/A,0.000,N/A,0,0,0,0,1,N/A,0.000,TEST-RETRY:rerun_test[minor],
+SC-14,A,implementation,5,3,2,1,3,0.667,0.400,0.500,0,1,2,1,3,0.667,0.400,TEST-EMAIL:rerun_test[minor]; TEST-MONEY:rerun_test[major]; TEST-ORDER-FLOW:rerun_test[major],CMP-NOTIFIER:check_contract
+SC-15,A,implementation,3,3,0,3,3,0.000,0.000,0.000,0,0,0,3,3,0.000,0.000,TEST-EMAIL:rerun_test[minor]; TEST-MONEY:rerun_test[major]; TEST-ORDER-FLOW:rerun_test[minor],CMP-NOTIFIER:check_contract; CMP-ORDERS:check_contract; CON-MONEY-FORMAT:check_contract
+SC-16,A,implementation,3,2,1,1,2,0.500,0.333,0.400,2,1,1,1,2,0.500,0.333,CMP-NOTIFIER:check_contract[major]; TEST-RESERVE:rerun_test[major],CON-INVENTORY-API:check_contract
+SC-17,A,implementation,1,2,1,1,0,0.500,1.000,0.667,0,0,1,1,0,0.500,1.000,,CMP-PAYMENT:check_contract
+SC-18,A,structure,2,2,1,1,1,0.500,0.500,0.500,0,0,1,1,1,0.500,0.500,REQ-REPORT:check_contract[major],CMP-PAYMENT:check_contract
+SC-19,A,structure,0,1,0,1,0,0.000,N/A,N/A,1,0,0,1,0,0.000,N/A,,CMP-INVENTORY:check_contract
+SC-20,A,structure,1,1,1,0,0,1.000,1.000,1.000,0,0,1,0,0,1.000,1.000,,
+SC-21,A,structure,3,2,2,0,1,1.000,0.667,0.800,0,0,2,0,1,1.000,0.667,REQ-CHARGE:check_contract[major],
+SC-22,A,adversarial,3,3,1,2,2,0.333,0.333,0.333,0,0,1,2,2,0.333,0.333,CMP-REPORTING:check_contract[critical]; REQ-REPORT:check_contract[major],CAP-PAYMENTS:review_spec; CON-IDEMPOTENCY:check_contract
+SC-23,A,adversarial,3,1,1,0,2,1.000,0.333,0.500,0,2,1,0,2,1.000,0.333,CMP-NOTIFIER:check_contract[critical]; TEST-EMAIL:rerun_test[critical],
+SC-24,A,adversarial,2,6,1,5,1,0.167,0.500,0.250,0,0,1,4,1,0.200,0.500,TEST-RESERVE:rerun_test[minor],CMP-NOTIFIER:check_contract; CMP-ORDERS:check_contract; CON-INVENTORY-API:check_contract; REQ-LOW-STOCK-ALERT:check_contract; REQ-RESERVE-STOCK:check_contract
+SC-01,A2,semantic,1,7,1,6,0,0.143,1.000,0.250,0,1,1,5,0,0.167,1.000,,CAP-PAYMENTS:review_spec; CMP-REPORTING:review_implementation; CON-IDEMPOTENCY:check_contract; GOAL-CHECKOUT:review_spec; REQ-RETRY:review_spec; TEST-RETRY:rerun_test
+SC-02,A2,semantic,0,4,0,4,0,0.000,N/A,N/A,0,0,0,4,0,0.000,N/A,,CAP-REPORTING:review_spec; CMP-PAYMENT:review_implementation; CMP-REPORTING:review_implementation; GOAL-CHECKOUT:review_spec
+SC-03,A2,semantic,2,7,2,5,0,0.286,1.000,0.444,1,0,2,5,0,0.286,1.000,,CAP-REPORTING:review_spec; CMP-PAYMENT:review_implementation; CON-IDEMPOTENCY:check_contract; Q-RETRY-BOUNDS:review_spec; TEST-RETRY:rerun_test
+SC-04,A2,semantic,3,8,3,5,0,0.375,1.000,0.545,0,0,3,5,0,0.375,1.000,,CAP-PAYMENTS:review_spec; CMP-REPORTING:review_implementation; CON-IDEMPOTENCY:check_contract; GOAL-CHECKOUT:review_spec; REQ-CHARGE:review_spec
+SC-05,A2,semantic,4,10,4,6,0,0.400,1.000,0.571,0,0,4,6,0,0.400,1.000,,CAP-NOTIFY:review_spec; CMP-MONEY:review_implementation; CMP-ORDERS:review_implementation; CON-EMAIL-TEMPLATE:check_contract; CON-INVENTORY-API:check_contract; GOAL-ORDERS:review_spec
+SC-06,A2,semantic,0,8,0,8,0,0.000,N/A,N/A,0,0,0,8,0,0.000,N/A,,CAP-NOTIFY:review_spec; CMP-MONEY:review_implementation; CMP-NOTIFIER:review_implementation; CMP-ORDERS:review_implementation; CON-EMAIL-TEMPLATE:check_contract; GOAL-ORDERS:review_spec; REQ-LOW-STOCK-ALERT:review_spec; TEST-EMAIL:rerun_test
+SC-07,A2,contract,4,7,4,3,0,0.571,1.000,0.727,1,0,4,3,0,0.571,1.000,,CAP-PAYMENTS:review_spec; CMP-REPORTING:check_contract; Q-RETRY-BOUNDS:review_spec
+SC-08,A2,contract,2,8,2,6,0,0.250,1.000,0.400,0,0,2,6,0,0.250,1.000,,CAP-PAYMENTS:review_spec; CON-IDEMPOTENCY:check_contract; Q-RETRY-BOUNDS:review_spec; REQ-CHARGE:check_contract; REQ-RETRY:check_contract; TEST-RETRY:rerun_test
+SC-09,A2,contract,1,7,1,6,0,0.143,1.000,0.250,1,0,1,6,0,0.143,1.000,,CAP-PAYMENTS:review_spec; CMP-REPORTING:check_contract; CON-IDEMPOTENCY:check_contract; Q-RETRY-BOUNDS:review_spec; REQ-CHARGE:check_contract; REQ-REPORT:check_contract
+SC-10,A2,contract,3,8,3,5,0,0.375,1.000,0.545,0,0,3,5,0,0.375,1.000,,CAP-PAYMENTS:review_spec; CMP-REPORTING:check_contract; CON-IDEMPOTENCY:check_contract; Q-RETRY-BOUNDS:review_spec; REQ-REPORT:check_contract
+SC-11,A2,contract,1,7,1,6,0,0.143,1.000,0.250,1,0,1,6,0,0.143,1.000,,CAP-PAYMENTS:review_spec; CMP-REPORTING:check_contract; CON-IDEMPOTENCY:check_contract; Q-RETRY-BOUNDS:review_spec; REQ-CHARGE:check_contract; REQ-REPORT:check_contract
+SC-12,A2,contract,6,8,6,2,0,0.750,1.000,0.857,1,1,6,2,0,0.750,1.000,,CAP-ORDERING:review_spec; REQ-LOW-STOCK-ALERT:check_contract
+SC-13,A2,implementation,1,4,0,4,1,0.000,0.000,0.000,0,0,0,4,1,0.000,0.000,TEST-RETRY:rerun_test[minor],CMP-REPORTING:check_contract; CON-IDEMPOTENCY:check_contract; REQ-CHARGE:check_contract; REQ-RETRY:check_contract
+SC-14,A2,implementation,5,10,2,8,3,0.200,0.400,0.267,1,0,2,6,3,0.250,0.400,TEST-EMAIL:rerun_test[minor]; TEST-MONEY:rerun_test[major]; TEST-ORDER-FLOW:rerun_test[major],CMP-INVENTORY:check_contract; CMP-NOTIFIER:check_contract; CMP-NOTIFIER:review_implementation; CMP-ORDERS:review_implementation; CON-EMAIL-TEMPLATE:check_contract; CON-ORDER-EVENT:check_contract; REQ-LOW-STOCK-ALERT:check_contract; REQ-ORDER-EMAIL:check_contract
+SC-15,A2,implementation,3,11,0,11,3,0.000,0.000,0.000,0,0,0,9,3,0.000,0.000,TEST-EMAIL:rerun_test[minor]; TEST-MONEY:rerun_test[major]; TEST-ORDER-FLOW:rerun_test[minor],CMP-INVENTORY:check_contract; CMP-NOTIFIER:check_contract; CMP-NOTIFIER:review_implementation; CMP-ORDERS:check_contract; CMP-ORDERS:review_implementation; CON-EMAIL-TEMPLATE:check_contract; CON-MONEY-FORMAT:check_contract; CON-ORDER-EVENT:check_contract; REQ-LOW-STOCK-ALERT:check_contract; REQ-ORDER-EMAIL:check_contract; REQ-PLACE-ORDER:check_contract
+SC-16,A2,implementation,3,9,2,7,1,0.222,0.667,0.333,2,1,2,6,1,0.250,0.667,TEST-RESERVE:rerun_test[major],CAP-NOTIFY:review_spec; CAP-ORDERING:review_spec; CMP-MONEY:check_contract; CMP-ORDERS:review_implementation; CON-INVENTORY-API:check_contract; CON-ORDER-EVENT:check_contract; Q-ALERT-THRESHOLD:review_spec
+SC-17,A2,implementation,1,7,1,6,0,0.143,1.000,0.250,0,0,1,5,0,0.167,1.000,,CAP-REPORTING:review_spec; CMP-PAYMENT:check_contract; CMP-PAYMENT:review_implementation; CON-IDEMPOTENCY:check_contract; REQ-CHARGE:check_contract; REQ-RETRY:check_contract
+SC-18,A2,structure,2,2,1,1,1,0.500,0.500,0.500,0,0,1,1,1,0.500,0.500,REQ-REPORT:check_contract[major],CMP-PAYMENT:check_contract
+SC-19,A2,structure,0,1,0,1,0,0.000,N/A,N/A,1,0,0,1,0,0.000,N/A,,CMP-INVENTORY:check_contract
+SC-20,A2,structure,1,5,1,4,0,0.200,1.000,0.333,0,0,1,4,0,0.200,1.000,,CAP-NOTIFY:review_spec; CMP-INVENTORY:review_implementation; CMP-NOTIFIER:review_implementation; TEST-LOW-STOCK:rerun_test
+SC-21,A2,structure,3,7,3,4,0,0.429,1.000,0.600,0,0,3,3,0,0.500,1.000,,CAP-REPORTING:review_spec; CMP-PAYMENT:review_implementation; CON-IDEMPOTENCY:check_contract; REQ-RETRY:check_contract
+SC-22,A2,adversarial,3,7,1,6,2,0.143,0.333,0.200,0,0,2,5,1,0.286,0.667,CMP-REPORTING:check_contract[critical]; REQ-REPORT:check_contract[major],CAP-PAYMENTS:review_spec; CMP-REPORTING:review_implementation; CON-IDEMPOTENCY:check_contract; GOAL-CHECKOUT:review_spec; REQ-RETRY:review_spec; TEST-RETRY:rerun_test
+SC-23,A2,adversarial,3,5,2,3,1,0.400,0.667,0.500,1,1,2,3,1,0.400,0.667,TEST-EMAIL:rerun_test[critical],CMP-INVENTORY:check_contract; CMP-MONEY:check_contract; REQ-PLACE-ORDER:check_contract
+SC-24,A2,adversarial,2,12,1,11,1,0.083,0.500,0.143,0,0,1,8,1,0.111,0.500,TEST-RESERVE:rerun_test[minor],CAP-NOTIFY:review_spec; CAP-ORDERING:review_spec; CMP-MONEY:check_contract; CMP-NOTIFIER:check_contract; CMP-NOTIFIER:review_implementation; CMP-ORDERS:check_contract; CMP-ORDERS:review_implementation; CON-EMAIL-TEMPLATE:check_contract; CON-INVENTORY-API:check_contract; REQ-LOW-STOCK-ALERT:check_contract; REQ-RESERVE-STOCK:check_contract
+SC-01,B,semantic,1,3,1,2,0,0.333,1.000,0.500,1,0,1,2,0,0.333,1.000,,CAP-PAYMENTS:review_spec; CMP-REPORTING:check_contract
+SC-02,B,semantic,0,2,0,2,0,0.000,N/A,N/A,0,0,0,2,0,0.000,N/A,,CAP-REPORTING:review_spec; CMP-REPORTING:review_implementation
+SC-03,B,semantic,2,2,2,0,0,1.000,1.000,1.000,1,0,2,0,0,1.000,1.000,,
+SC-04,B,semantic,3,5,2,3,1,0.400,0.667,0.500,0,0,2,3,1,0.400,0.667,Q-RETRY-BOUNDS:review_spec[minor],CAP-PAYMENTS:review_spec; CMP-REPORTING:check_contract; REQ-CHARGE:check_contract
+SC-05,B,semantic,4,4,2,2,2,0.500,0.500,0.500,0,0,2,2,2,0.500,0.500,CMP-INVENTORY:review_implementation[major]; Q-ALERT-THRESHOLD:review_spec[minor],CAP-NOTIFY:review_spec; REQ-ORDER-EMAIL:check_contract
+SC-06,B,semantic,0,4,0,4,0,0.000,N/A,N/A,0,0,0,4,0,0.000,N/A,,CAP-NOTIFY:review_spec; CMP-NOTIFIER:review_implementation; REQ-LOW-STOCK-ALERT:check_contract; TEST-EMAIL:rerun_test
+SC-07,B,contract,4,5,4,1,0,0.800,1.000,0.889,1,0,4,1,0,0.800,1.000,,CMP-REPORTING:check_contract
+SC-08,B,contract,2,3,1,2,1,0.333,0.500,0.400,0,0,1,2,1,0.333,0.500,REQ-REPORT:check_contract[major],REQ-CHARGE:check_contract; REQ-RETRY:check_contract
+SC-09,B,contract,1,2,0,2,1,0.000,0.000,0.000,1,0,0,2,1,0.000,0.000,TEST-RETRY:rerun_test[major],CMP-REPORTING:check_contract; REQ-CHARGE:check_contract
+SC-10,B,contract,3,3,2,1,1,0.667,0.667,0.667,0,0,2,1,1,0.667,0.667,TEST-RETRY:rerun_test[critical],CMP-REPORTING:check_contract
+SC-11,B,contract,1,2,0,2,1,0.000,0.000,0.000,1,0,0,2,1,0.000,0.000,TEST-RETRY:rerun_test[major],CMP-REPORTING:check_contract; REQ-CHARGE:check_contract
+SC-12,B,contract,6,7,6,1,0,0.857,1.000,0.923,2,0,6,1,0,0.857,1.000,,CMP-NOTIFIER:check_contract
+SC-13,B,implementation,1,3,0,3,1,0.000,0.000,0.000,0,0,0,3,1,0.000,0.000,TEST-RETRY:rerun_test[minor],CMP-REPORTING:check_contract; REQ-CHARGE:check_contract; REQ-RETRY:check_contract
+SC-14,B,implementation,5,2,1,1,4,0.500,0.200,0.286,0,1,1,1,4,0.500,0.200,CON-MONEY-FORMAT:check_contract[minor]; TEST-EMAIL:rerun_test[minor]; TEST-MONEY:rerun_test[major]; TEST-ORDER-FLOW:rerun_test[major],CMP-NOTIFIER:check_contract
+SC-15,B,implementation,3,2,0,2,3,0.000,0.000,0.000,0,0,0,2,3,0.000,0.000,TEST-EMAIL:rerun_test[minor]; TEST-MONEY:rerun_test[major]; TEST-ORDER-FLOW:rerun_test[minor],CMP-NOTIFIER:check_contract; CMP-ORDERS:check_contract
+SC-16,B,implementation,3,0,0,0,3,N/A,0.000,N/A,2,1,0,0,3,N/A,0.000,CMP-NOTIFIER:check_contract[major]; REQ-LOW-STOCK-ALERT:check_contract[major]; TEST-RESERVE:rerun_test[major],
+SC-17,B,implementation,1,1,1,0,0,1.000,1.000,1.000,0,0,1,0,0,1.000,1.000,,
+SC-18,B,structure,2,2,1,1,1,0.500,0.500,0.500,0,0,1,1,1,0.500,0.500,REQ-REPORT:check_contract[major],CMP-PAYMENT:review_spec
+SC-19,B,structure,0,1,0,1,0,0.000,N/A,N/A,1,0,0,1,0,0.000,N/A,,CMP-INVENTORY:review_spec
+SC-20,B,structure,1,1,1,0,0,1.000,1.000,1.000,0,0,1,0,0,1.000,1.000,,
+SC-21,B,structure,3,2,2,0,1,1.000,0.667,0.800,0,0,2,0,1,1.000,0.667,REQ-CHARGE:check_contract[major],
+SC-22,B,adversarial,3,4,2,2,1,0.500,0.667,0.571,0,0,2,2,1,0.500,0.667,REQ-REPORT:check_contract[major],CAP-PAYMENTS:review_spec; REQ-RETRY:check_contract
+SC-23,B,adversarial,3,3,2,1,1,0.667,0.667,0.667,0,2,2,1,1,0.667,0.667,TEST-EMAIL:rerun_test[critical],REQ-PLACE-ORDER:check_contract
+SC-24,B,adversarial,2,4,1,3,1,0.250,0.500,0.333,0,0,1,2,1,0.333,0.500,TEST-RESERVE:rerun_test[minor],CMP-NOTIFIER:check_contract; CMP-ORDERS:check_contract; REQ-RESERVE-STOCK:check_contract
+SC-01,C,semantic,1,3,1,2,0,0.333,1.000,0.500,1,0,1,2,0,0.333,1.000,,CAP-PAYMENTS:review_spec; CMP-REPORTING:check_contract
+SC-02,C,semantic,0,2,0,2,0,0.000,N/A,N/A,0,0,0,2,0,0.000,N/A,,CAP-REPORTING:review_spec; CMP-REPORTING:review_implementation
+SC-03,C,semantic,2,2,2,0,0,1.000,1.000,1.000,1,0,2,0,0,1.000,1.000,,
+SC-04,C,semantic,3,5,2,3,1,0.400,0.667,0.500,0,0,2,3,1,0.400,0.667,Q-RETRY-BOUNDS:review_spec[minor],CAP-PAYMENTS:review_spec; CMP-REPORTING:check_contract; REQ-CHARGE:check_contract
+SC-05,C,semantic,4,4,2,2,2,0.500,0.500,0.500,0,0,2,2,2,0.500,0.500,CMP-INVENTORY:review_implementation[major]; Q-ALERT-THRESHOLD:review_spec[minor],CAP-NOTIFY:review_spec; REQ-ORDER-EMAIL:check_contract
+SC-06,C,semantic,0,4,0,4,0,0.000,N/A,N/A,0,0,0,4,0,0.000,N/A,,CAP-NOTIFY:review_spec; CMP-NOTIFIER:review_implementation; REQ-LOW-STOCK-ALERT:check_contract; TEST-EMAIL:rerun_test
+SC-07,C,contract,4,5,4,1,0,0.800,1.000,0.889,1,0,4,1,0,0.800,1.000,,CMP-REPORTING:check_contract
+SC-08,C,contract,2,3,1,2,1,0.333,0.500,0.400,0,0,1,2,1,0.333,0.500,REQ-REPORT:check_contract[major],REQ-CHARGE:check_contract; REQ-RETRY:check_contract
+SC-09,C,contract,1,1,0,1,1,0.000,0.000,0.000,1,0,0,1,1,0.000,0.000,TEST-RETRY:rerun_test[major],REQ-CHARGE:check_contract
+SC-10,C,contract,3,3,2,1,1,0.667,0.667,0.667,0,0,2,1,1,0.667,0.667,TEST-RETRY:rerun_test[critical],CMP-REPORTING:check_contract
+SC-11,C,contract,1,2,0,2,1,0.000,0.000,0.000,1,0,0,2,1,0.000,0.000,TEST-RETRY:rerun_test[major],CMP-REPORTING:check_contract; REQ-CHARGE:check_contract
+SC-12,C,contract,6,7,6,1,0,0.857,1.000,0.923,2,0,6,1,0,0.857,1.000,,CMP-NOTIFIER:check_contract
+SC-13,C,implementation,1,3,0,3,1,0.000,0.000,0.000,0,0,0,3,1,0.000,0.000,TEST-RETRY:rerun_test[minor],CMP-REPORTING:check_contract; REQ-CHARGE:check_contract; REQ-RETRY:check_contract
+SC-14,C,implementation,5,0,0,0,5,N/A,0.000,N/A,0,1,0,0,5,N/A,0.000,CMP-ORDERS:check_contract[critical]; CON-MONEY-FORMAT:check_contract[minor]; TEST-EMAIL:rerun_test[minor]; TEST-MONEY:rerun_test[major]; TEST-ORDER-FLOW:rerun_test[major],
+SC-15,C,implementation,3,0,0,0,3,N/A,0.000,N/A,0,0,0,0,3,N/A,0.000,TEST-EMAIL:rerun_test[minor]; TEST-MONEY:rerun_test[major]; TEST-ORDER-FLOW:rerun_test[minor],
+SC-16,C,implementation,3,0,0,0,3,N/A,0.000,N/A,2,1,0,0,3,N/A,0.000,CMP-NOTIFIER:check_contract[major]; REQ-LOW-STOCK-ALERT:check_contract[major]; TEST-RESERVE:rerun_test[major],
+SC-17,C,implementation,1,1,1,0,0,1.000,1.000,1.000,0,0,1,0,0,1.000,1.000,,
+SC-18,C,structure,2,2,1,1,1,0.500,0.500,0.500,0,0,1,1,1,0.500,0.500,REQ-REPORT:check_contract[major],CMP-PAYMENT:review_spec
+SC-19,C,structure,0,1,0,1,0,0.000,N/A,N/A,1,0,0,1,0,0.000,N/A,,CMP-INVENTORY:review_spec
+SC-20,C,structure,1,1,1,0,0,1.000,1.000,1.000,0,0,1,0,0,1.000,1.000,,
+SC-21,C,structure,3,2,2,0,1,1.000,0.667,0.800,0,0,2,0,1,1.000,0.667,REQ-CHARGE:check_contract[major],
+SC-22,C,adversarial,3,4,2,2,1,0.500,0.667,0.571,0,0,2,2,1,0.500,0.667,REQ-REPORT:check_contract[major],CAP-PAYMENTS:review_spec; REQ-RETRY:check_contract
+SC-23,C,adversarial,3,3,2,1,1,0.667,0.667,0.667,0,2,2,1,1,0.667,0.667,TEST-EMAIL:rerun_test[critical],REQ-PLACE-ORDER:check_contract
+SC-24,C,adversarial,2,3,1,2,1,0.333,0.500,0.400,0,0,1,1,1,0.500,0.500,TEST-RESERVE:rerun_test[minor],CMP-NOTIFIER:check_contract; REQ-RESERVE-STOCK:check_contract

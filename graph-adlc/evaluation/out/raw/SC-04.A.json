@@ -1,0 +1,92 @@
+{
+  "method": "A",
+  "predictions_raw": [
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section CAP-PAYMENTS and section REQ-RETRY (changed in the change request)",
+      "hop": 1,
+      "method": "A",
+      "obligation": "review_spec",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CAP-PAYMENTS"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section CMP-PAYMENT and section REQ-RETRY (changed in the change request)",
+      "hop": 1,
+      "method": "A",
+      "obligation": "review_implementation",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CMP-PAYMENT"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section CON-IDEMPOTENCY and section REQ-RETRY (changed in the change request)",
+      "hop": 1,
+      "method": "A",
+      "obligation": "check_contract",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CON-IDEMPOTENCY"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section Q-RETRY-BOUNDS and section REQ-RETRY (changed in the change request)",
+      "hop": 1,
+      "method": "A",
+      "obligation": "review_spec",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "Q-RETRY-BOUNDS"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section TEST-RETRY and section REQ-RETRY (changed in the change request)",
+      "hop": 1,
+      "method": "A",
+      "obligation": "rerun_test",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "TEST-RETRY"
+    }
+  ],
+  "scenario_id": "SC-04",
+  "setup": [
+    {
+      "change_id": "CHG-2",
+      "graph_revision": 2,
+      "type": "commit"
+    }
+  ],
+  "trace": {
+    "change_request_chars": 490,
+    "context_chars": 1990,
+    "context_sections": [
+      "CAP-PAYMENTS",
+      "CMP-PAYMENT",
+      "CON-IDEMPOTENCY",
+      "Q-RETRY-BOUNDS",
+      "REQ-RETRY",
+      "TEST-RETRY"
+    ],
+    "document_chars": 3716,
+    "over_budget": [],
+    "retrieved": [
+      "CAP-PAYMENTS",
+      "CMP-PAYMENT",
+      "CON-IDEMPOTENCY",
+      "Q-RETRY-BOUNDS",
+      "TEST-RETRY"
+    ],
+    "seeds": [
+      "REQ-RETRY"
+    ]
+  }
+}

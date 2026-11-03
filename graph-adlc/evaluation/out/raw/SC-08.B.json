@@ -1,0 +1,97 @@
+{
+  "aspect_overrides": [],
+  "evidence_refs_passed": [],
+  "impact": {
+    "notes": [
+      "Influence is complete only relative to registered edges and rules; absence of an edge is not evidence of independence."
+    ],
+    "obligations": [
+      {
+        "change_ref": "op[0]",
+        "confidence": "high",
+        "obligation": "check_contract",
+        "origin_id": "CMP-PAYMENT",
+        "path": [
+          "E13"
+        ],
+        "provisional": false,
+        "reason": "provider CMP-PAYMENT changed observable behaviour; consumer must check its reliance",
+        "target_id": "CMP-REPORTING"
+      },
+      {
+        "change_ref": "op[0]",
+        "confidence": "high",
+        "obligation": "check_contract",
+        "origin_id": "CMP-PAYMENT",
+        "path": [
+          "E08"
+        ],
+        "provisional": false,
+        "reason": "component CMP-PAYMENT changed; implemented requirement must still be satisfied",
+        "target_id": "REQ-CHARGE"
+      },
+      {
+        "change_ref": "op[0]",
+        "confidence": "high",
+        "obligation": "check_contract",
+        "origin_id": "CMP-PAYMENT",
+        "path": [
+          "E09"
+        ],
+        "provisional": false,
+        "reason": "component CMP-PAYMENT changed; implemented requirement must still be satisfied",
+        "target_id": "REQ-RETRY"
+      }
+    ],
+    "pruned": []
+  },
+  "method": "B",
+  "predictions_raw": [
+    {
+      "confidence": "high",
+      "explanation": "provider CMP-PAYMENT changed observable behaviour; consumer must check its reliance",
+      "method": "B",
+      "obligation": "check_contract",
+      "origin_id": "CMP-PAYMENT",
+      "path_edge_ids": [
+        "E13"
+      ],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CMP-REPORTING"
+    },
+    {
+      "confidence": "high",
+      "explanation": "component CMP-PAYMENT changed; implemented requirement must still be satisfied",
+      "method": "B",
+      "obligation": "check_contract",
+      "origin_id": "CMP-PAYMENT",
+      "path_edge_ids": [
+        "E08"
+      ],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "REQ-CHARGE"
+    },
+    {
+      "confidence": "high",
+      "explanation": "component CMP-PAYMENT changed; implemented requirement must still be satisfied",
+      "method": "B",
+      "obligation": "check_contract",
+      "origin_id": "CMP-PAYMENT",
+      "path_edge_ids": [
+        "E09"
+      ],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "REQ-RETRY"
+    }
+  ],
+  "readiness_changes": [],
+  "scenario_id": "SC-08",
+  "setup": [],
+  "would_invalidate": {
+    "evidence": [],
+    "work_units": []
+  }
+}

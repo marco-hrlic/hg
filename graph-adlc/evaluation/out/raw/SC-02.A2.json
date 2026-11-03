@@ -1,0 +1,73 @@
+{
+  "method": "A2",
+  "predictions_raw": [
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section CAP-REPORTING and section REQ-REPORT (changed in the change request)",
+      "hop": 1,
+      "method": "A2",
+      "obligation": "review_spec",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CAP-REPORTING"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section CMP-REPORTING and section REQ-REPORT (changed in the change request)",
+      "hop": 1,
+      "method": "A2",
+      "obligation": "review_implementation",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CMP-REPORTING"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section CMP-PAYMENT and section CMP-REPORTING (hop 2 from changed REQ-REPORT)",
+      "hop": 2,
+      "method": "A2",
+      "obligation": "review_implementation",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CMP-PAYMENT"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section GOAL-CHECKOUT and section CAP-REPORTING (hop 2 from changed REQ-REPORT)",
+      "hop": 2,
+      "method": "A2",
+      "obligation": "review_spec",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "GOAL-CHECKOUT"
+    }
+  ],
+  "scenario_id": "SC-02",
+  "setup": [],
+  "trace": {
+    "change_request_chars": 184,
+    "context_chars": 1208,
+    "context_sections": [
+      "CAP-REPORTING",
+      "CMP-PAYMENT",
+      "CMP-REPORTING",
+      "GOAL-CHECKOUT",
+      "REQ-REPORT"
+    ],
+    "document_chars": 3465,
+    "over_budget": [],
+    "retrieved": [
+      "CAP-REPORTING",
+      "CMP-REPORTING",
+      "CMP-PAYMENT",
+      "GOAL-CHECKOUT"
+    ],
+    "seeds": [
+      "REQ-REPORT"
+    ]
+  }
+}

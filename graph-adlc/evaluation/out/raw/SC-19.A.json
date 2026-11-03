@@ -1,0 +1,41 @@
+{
+  "method": "A",
+  "predictions_raw": [
+    {
+      "confidence": null,
+      "explanation": "op[0] changes the relationship between CMP-NOTIFIER and CMP-INVENTORY (document change request)",
+      "hop": 0,
+      "method": "A",
+      "obligation": "check_contract",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CMP-NOTIFIER"
+    },
+    {
+      "confidence": null,
+      "explanation": "op[0] changes the relationship between CMP-INVENTORY and CMP-NOTIFIER (document change request)",
+      "hop": 0,
+      "method": "A",
+      "obligation": "check_contract",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CMP-INVENTORY"
+    }
+  ],
+  "scenario_id": "SC-19",
+  "setup": [],
+  "trace": {
+    "change_request_chars": 172,
+    "context_chars": 638,
+    "context_sections": [
+      "CMP-INVENTORY",
+      "CMP-NOTIFIER"
+    ],
+    "document_chars": 7668,
+    "over_budget": [],
+    "retrieved": [],
+    "seeds": []
+  }
+}

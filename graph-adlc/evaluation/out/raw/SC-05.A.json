@@ -1,0 +1,86 @@
+{
+  "method": "A",
+  "predictions_raw": [
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section CAP-NOTIFY and section REQ-LOW-STOCK-ALERT (changed in the change request)",
+      "hop": 1,
+      "method": "A",
+      "obligation": "review_spec",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CAP-NOTIFY"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section CMP-INVENTORY and section REQ-LOW-STOCK-ALERT (changed in the change request)",
+      "hop": 1,
+      "method": "A",
+      "obligation": "review_implementation",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CMP-INVENTORY"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section CMP-NOTIFIER and section REQ-LOW-STOCK-ALERT (changed in the change request)",
+      "hop": 1,
+      "method": "A",
+      "obligation": "review_implementation",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CMP-NOTIFIER"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section Q-ALERT-THRESHOLD and section REQ-LOW-STOCK-ALERT (changed in the change request)",
+      "hop": 1,
+      "method": "A",
+      "obligation": "review_spec",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "Q-ALERT-THRESHOLD"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section TEST-LOW-STOCK and section REQ-LOW-STOCK-ALERT (changed in the change request)",
+      "hop": 1,
+      "method": "A",
+      "obligation": "rerun_test",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "TEST-LOW-STOCK"
+    }
+  ],
+  "scenario_id": "SC-05",
+  "setup": [],
+  "trace": {
+    "change_request_chars": 484,
+    "context_chars": 1865,
+    "context_sections": [
+      "CAP-NOTIFY",
+      "CMP-INVENTORY",
+      "CMP-NOTIFIER",
+      "Q-ALERT-THRESHOLD",
+      "REQ-LOW-STOCK-ALERT",
+      "TEST-LOW-STOCK"
+    ],
+    "document_chars": 7668,
+    "over_budget": [],
+    "retrieved": [
+      "CAP-NOTIFY",
+      "CMP-INVENTORY",
+      "CMP-NOTIFIER",
+      "Q-ALERT-THRESHOLD",
+      "TEST-LOW-STOCK"
+    ],
+    "seeds": [
+      "REQ-LOW-STOCK-ALERT"
+    ]
+  }
+}

@@ -1,0 +1,182 @@
+{
+  "aspect_overrides": [],
+  "evidence_refs_passed": [],
+  "impact": {
+    "notes": [
+      "Influence is complete only relative to registered edges and rules; absence of an edge is not evidence of independence."
+    ],
+    "obligations": [
+      {
+        "change_ref": "op[0]",
+        "confidence": "high",
+        "obligation": "check_contract",
+        "origin_id": "CON-IDEMPOTENCY",
+        "path": [
+          "E16"
+        ],
+        "provisional": false,
+        "reason": "contract CON-IDEMPOTENCY changed; constrained subject must re-check compliance",
+        "target_id": "CMP-PAYMENT"
+      },
+      {
+        "change_ref": "op[0]",
+        "confidence": "high",
+        "obligation": "review_implementation",
+        "origin_id": "CON-IDEMPOTENCY",
+        "path": [
+          "E06",
+          "E08"
+        ],
+        "provisional": false,
+        "reason": "requirement REQ-CHARGE relies on a changed contract; review its implementation",
+        "target_id": "CMP-PAYMENT"
+      },
+      {
+        "change_ref": "op[0]",
+        "confidence": "high",
+        "obligation": "check_contract",
+        "origin_id": "CON-IDEMPOTENCY",
+        "path": [
+          "E16",
+          "E13"
+        ],
+        "provisional": false,
+        "reason": "provider CMP-PAYMENT is subject to a changed contract; consumer must re-check",
+        "target_id": "CMP-REPORTING"
+      },
+      {
+        "change_ref": "op[0]",
+        "confidence": "high",
+        "obligation": "check_contract",
+        "origin_id": "CON-IDEMPOTENCY",
+        "path": [
+          "E06"
+        ],
+        "provisional": false,
+        "reason": "contract CON-IDEMPOTENCY changed; constrained subject must re-check compliance",
+        "target_id": "REQ-CHARGE"
+      },
+      {
+        "change_ref": "op[0]",
+        "confidence": "high",
+        "obligation": "check_contract",
+        "origin_id": "CON-IDEMPOTENCY",
+        "path": [
+          "E07"
+        ],
+        "provisional": false,
+        "reason": "contract CON-IDEMPOTENCY changed; constrained subject must re-check compliance",
+        "target_id": "REQ-RETRY"
+      },
+      {
+        "change_ref": "op[0]",
+        "confidence": "high",
+        "obligation": "rerun_test",
+        "origin_id": "CON-IDEMPOTENCY",
+        "path": [
+          "E11"
+        ],
+        "provisional": false,
+        "reason": "contract CON-IDEMPOTENCY changed; test verifying it must be re-run",
+        "target_id": "TEST-RETRY"
+      }
+    ],
+    "pruned": []
+  },
+  "method": "B",
+  "predictions_raw": [
+    {
+      "confidence": "high",
+      "explanation": "contract CON-IDEMPOTENCY changed; constrained subject must re-check compliance",
+      "method": "B",
+      "obligation": "check_contract",
+      "origin_id": "CON-IDEMPOTENCY",
+      "path_edge_ids": [
+        "E16"
+      ],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CMP-PAYMENT"
+    },
+    {
+      "confidence": "high",
+      "explanation": "requirement REQ-CHARGE relies on a changed contract; review its implementation",
+      "method": "B",
+      "obligation": "review_implementation",
+      "origin_id": "CON-IDEMPOTENCY",
+      "path_edge_ids": [
+        "E06",
+        "E08"
+      ],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CMP-PAYMENT"
+    },
+    {
+      "confidence": "high",
+      "explanation": "provider CMP-PAYMENT is subject to a changed contract; consumer must re-check",
+      "method": "B",
+      "obligation": "check_contract",
+      "origin_id": "CON-IDEMPOTENCY",
+      "path_edge_ids": [
+        "E16",
+        "E13"
+      ],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CMP-REPORTING"
+    },
+    {
+      "confidence": "high",
+      "explanation": "contract CON-IDEMPOTENCY changed; constrained subject must re-check compliance",
+      "method": "B",
+      "obligation": "check_contract",
+      "origin_id": "CON-IDEMPOTENCY",
+      "path_edge_ids": [
+        "E06"
+      ],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "REQ-CHARGE"
+    },
+    {
+      "confidence": "high",
+      "explanation": "contract CON-IDEMPOTENCY changed; constrained subject must re-check compliance",
+      "method": "B",
+      "obligation": "check_contract",
+      "origin_id": "CON-IDEMPOTENCY",
+      "path_edge_ids": [
+        "E07"
+      ],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "REQ-RETRY"
+    },
+    {
+      "confidence": "high",
+      "explanation": "contract CON-IDEMPOTENCY changed; test verifying it must be re-run",
+      "method": "B",
+      "obligation": "rerun_test",
+      "origin_id": "CON-IDEMPOTENCY",
+      "path_edge_ids": [
+        "E11"
+      ],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "TEST-RETRY"
+    }
+  ],
+  "readiness_changes": [],
+  "scenario_id": "SC-07",
+  "setup": [
+    {
+      "change_id": "CHG-2",
+      "graph_revision": 2,
+      "type": "commit"
+    }
+  ],
+  "would_invalidate": {
+    "evidence": [],
+    "work_units": []
+  }
+}

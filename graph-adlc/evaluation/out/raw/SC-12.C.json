@@ -1,0 +1,259 @@
+{
+  "aspect_overrides": [],
+  "evidence_refs_passed": [],
+  "impact": {
+    "notes": [
+      "Influence is complete only relative to registered edges and rules; absence of an edge is not evidence of independence."
+    ],
+    "obligations": [
+      {
+        "change_ref": "op[0]",
+        "confidence": "high",
+        "obligation": "check_contract",
+        "origin_id": "CON-INVENTORY-API",
+        "path": [
+          "O10"
+        ],
+        "provisional": false,
+        "reason": "contract CON-INVENTORY-API changed; constrained subject must re-check compliance",
+        "target_id": "CMP-INVENTORY"
+      },
+      {
+        "change_ref": "op[0]",
+        "confidence": "high",
+        "obligation": "review_implementation",
+        "origin_id": "CON-INVENTORY-API",
+        "path": [
+          "O08",
+          "O15"
+        ],
+        "provisional": false,
+        "reason": "requirement REQ-RESERVE-STOCK relies on a changed contract; review its implementation",
+        "target_id": "CMP-INVENTORY"
+      },
+      {
+        "change_ref": "op[0]",
+        "confidence": "provisional",
+        "obligation": "check_contract",
+        "origin_id": "CON-INVENTORY-API",
+        "path": [
+          "O07",
+          "O14",
+          "O19"
+        ],
+        "provisional": true,
+        "reason": "implementation of provider CMP-ORDERS changed and no validated contract-preservation evidence; consumer provisionally flagged",
+        "target_id": "CMP-NOTIFIER"
+      },
+      {
+        "change_ref": "op[0]",
+        "confidence": "high",
+        "obligation": "check_contract",
+        "origin_id": "CON-INVENTORY-API",
+        "path": [
+          "O10",
+          "O18"
+        ],
+        "provisional": false,
+        "reason": "provider CMP-INVENTORY is subject to a changed contract; consumer must re-check",
+        "target_id": "CMP-ORDERS"
+      },
+      {
+        "change_ref": "op[0]",
+        "confidence": "high",
+        "obligation": "review_implementation",
+        "origin_id": "CON-INVENTORY-API",
+        "path": [
+          "O07",
+          "O14"
+        ],
+        "provisional": false,
+        "reason": "requirement REQ-PLACE-ORDER relies on a changed contract; review its implementation",
+        "target_id": "CMP-ORDERS"
+      },
+      {
+        "change_ref": "op[0]",
+        "confidence": "high",
+        "obligation": "check_contract",
+        "origin_id": "CON-INVENTORY-API",
+        "path": [
+          "O07"
+        ],
+        "provisional": false,
+        "reason": "contract CON-INVENTORY-API changed; constrained subject must re-check compliance",
+        "target_id": "REQ-PLACE-ORDER"
+      },
+      {
+        "change_ref": "op[0]",
+        "confidence": "high",
+        "obligation": "check_contract",
+        "origin_id": "CON-INVENTORY-API",
+        "path": [
+          "O08"
+        ],
+        "provisional": false,
+        "reason": "contract CON-INVENTORY-API changed; constrained subject must re-check compliance",
+        "target_id": "REQ-RESERVE-STOCK"
+      },
+      {
+        "change_ref": "op[0]",
+        "confidence": "high",
+        "obligation": "rerun_test",
+        "origin_id": "CON-INVENTORY-API",
+        "path": [
+          "O27"
+        ],
+        "provisional": false,
+        "reason": "contract CON-INVENTORY-API changed; test verifying it must be re-run",
+        "target_id": "TEST-ORDER-FLOW"
+      },
+      {
+        "change_ref": "op[0]",
+        "confidence": "high",
+        "obligation": "rerun_test",
+        "origin_id": "CON-INVENTORY-API",
+        "path": [
+          "O08",
+          "O28"
+        ],
+        "provisional": false,
+        "reason": "requirement REQ-RESERVE-STOCK relies on a changed contract; verification needs re-evaluation",
+        "target_id": "TEST-RESERVE"
+      }
+    ],
+    "pruned": []
+  },
+  "method": "C",
+  "predictions_raw": [
+    {
+      "confidence": "high",
+      "explanation": "contract CON-INVENTORY-API changed; constrained subject must re-check compliance",
+      "method": "C",
+      "obligation": "check_contract",
+      "origin_id": "CON-INVENTORY-API",
+      "path_edge_ids": [
+        "O10"
+      ],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CMP-INVENTORY"
+    },
+    {
+      "confidence": "high",
+      "explanation": "requirement REQ-RESERVE-STOCK relies on a changed contract; review its implementation",
+      "method": "C",
+      "obligation": "review_implementation",
+      "origin_id": "CON-INVENTORY-API",
+      "path_edge_ids": [
+        "O08",
+        "O15"
+      ],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CMP-INVENTORY"
+    },
+    {
+      "confidence": "provisional",
+      "explanation": "implementation of provider CMP-ORDERS changed and no validated contract-preservation evidence; consumer provisionally flagged",
+      "method": "C",
+      "obligation": "check_contract",
+      "origin_id": "CON-INVENTORY-API",
+      "path_edge_ids": [
+        "O07",
+        "O14",
+        "O19"
+      ],
+      "provisional": true,
+      "pruned": false,
+      "target_id": "CMP-NOTIFIER"
+    },
+    {
+      "confidence": "high",
+      "explanation": "provider CMP-INVENTORY is subject to a changed contract; consumer must re-check",
+      "method": "C",
+      "obligation": "check_contract",
+      "origin_id": "CON-INVENTORY-API",
+      "path_edge_ids": [
+        "O10",
+        "O18"
+      ],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CMP-ORDERS"
+    },
+    {
+      "confidence": "high",
+      "explanation": "requirement REQ-PLACE-ORDER relies on a changed contract; review its implementation",
+      "method": "C",
+      "obligation": "review_implementation",
+      "origin_id": "CON-INVENTORY-API",
+      "path_edge_ids": [
+        "O07",
+        "O14"
+      ],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CMP-ORDERS"
+    },
+    {
+      "confidence": "high",
+      "explanation": "contract CON-INVENTORY-API changed; constrained subject must re-check compliance",
+      "method": "C",
+      "obligation": "check_contract",
+      "origin_id": "CON-INVENTORY-API",
+      "path_edge_ids": [
+        "O07"
+      ],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "REQ-PLACE-ORDER"
+    },
+    {
+      "confidence": "high",
+      "explanation": "contract CON-INVENTORY-API changed; constrained subject must re-check compliance",
+      "method": "C",
+      "obligation": "check_contract",
+      "origin_id": "CON-INVENTORY-API",
+      "path_edge_ids": [
+        "O08"
+      ],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "REQ-RESERVE-STOCK"
+    },
+    {
+      "confidence": "high",
+      "explanation": "contract CON-INVENTORY-API changed; test verifying it must be re-run",
+      "method": "C",
+      "obligation": "rerun_test",
+      "origin_id": "CON-INVENTORY-API",
+      "path_edge_ids": [
+        "O27"
+      ],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "TEST-ORDER-FLOW"
+    },
+    {
+      "confidence": "high",
+      "explanation": "requirement REQ-RESERVE-STOCK relies on a changed contract; verification needs re-evaluation",
+      "method": "C",
+      "obligation": "rerun_test",
+      "origin_id": "CON-INVENTORY-API",
+      "path_edge_ids": [
+        "O08",
+        "O28"
+      ],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "TEST-RESERVE"
+    }
+  ],
+  "readiness_changes": [],
+  "scenario_id": "SC-12",
+  "setup": [],
+  "would_invalidate": {
+    "evidence": [],
+    "work_units": []
+  }
+}

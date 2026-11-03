@@ -1,0 +1,86 @@
+{
+  "method": "A2",
+  "predictions_raw": [
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section CMP-PAYMENT and section ART-PAYMENT (changed in the change request)",
+      "hop": 1,
+      "method": "A2",
+      "obligation": "check_contract",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CMP-PAYMENT"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section CMP-REPORTING and section CMP-PAYMENT (hop 2 from changed ART-PAYMENT)",
+      "hop": 2,
+      "method": "A2",
+      "obligation": "check_contract",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CMP-REPORTING"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section CON-IDEMPOTENCY and section CMP-PAYMENT (hop 2 from changed ART-PAYMENT)",
+      "hop": 2,
+      "method": "A2",
+      "obligation": "check_contract",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CON-IDEMPOTENCY"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section REQ-CHARGE and section CMP-PAYMENT (hop 2 from changed ART-PAYMENT)",
+      "hop": 2,
+      "method": "A2",
+      "obligation": "check_contract",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "REQ-CHARGE"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section REQ-RETRY and section CMP-PAYMENT (hop 2 from changed ART-PAYMENT)",
+      "hop": 2,
+      "method": "A2",
+      "obligation": "check_contract",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "REQ-RETRY"
+    }
+  ],
+  "scenario_id": "SC-13",
+  "setup": [],
+  "trace": {
+    "change_request_chars": 279,
+    "context_chars": 1893,
+    "context_sections": [
+      "ART-PAYMENT",
+      "CMP-PAYMENT",
+      "CMP-REPORTING",
+      "CON-IDEMPOTENCY",
+      "REQ-CHARGE",
+      "REQ-RETRY"
+    ],
+    "document_chars": 3465,
+    "over_budget": [],
+    "retrieved": [
+      "CMP-PAYMENT",
+      "CMP-REPORTING",
+      "CON-IDEMPOTENCY",
+      "REQ-CHARGE",
+      "REQ-RETRY"
+    ],
+    "seeds": [
+      "ART-PAYMENT"
+    ]
+  }
+}

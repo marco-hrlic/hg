@@ -1,0 +1,124 @@
+{
+  "aspect_overrides": [],
+  "evidence_refs_passed": [],
+  "impact": {
+    "notes": [
+      "Influence is complete only relative to registered edges and rules; absence of an edge is not evidence of independence."
+    ],
+    "obligations": [
+      {
+        "change_ref": "op[0]",
+        "confidence": "high",
+        "obligation": "review_spec",
+        "origin_id": "REQ-ORDER-EMAIL",
+        "path": [
+          "O05"
+        ],
+        "provisional": false,
+        "reason": "child REQ-ORDER-EMAIL changed; parent-consistency check (terminal, no sibling fan-out)",
+        "target_id": "CAP-NOTIFY"
+      },
+      {
+        "change_ref": "op[0]",
+        "confidence": "high",
+        "obligation": "review_implementation",
+        "origin_id": "REQ-ORDER-EMAIL",
+        "path": [
+          "O16"
+        ],
+        "provisional": false,
+        "reason": "requirement REQ-ORDER-EMAIL changed semantically; implementing component must be reviewed",
+        "target_id": "CMP-NOTIFIER"
+      },
+      {
+        "change_ref": "op[0]",
+        "confidence": "high",
+        "obligation": "check_contract",
+        "origin_id": "REQ-ORDER-EMAIL",
+        "path": [
+          "O16",
+          "O17"
+        ],
+        "provisional": false,
+        "reason": "implementation of CMP-NOTIFIER changed; requirement must still hold (terminal until a violation is established)",
+        "target_id": "REQ-LOW-STOCK-ALERT"
+      },
+      {
+        "change_ref": "op[0]",
+        "confidence": "high",
+        "obligation": "rerun_test",
+        "origin_id": "REQ-ORDER-EMAIL",
+        "path": [
+          "O29"
+        ],
+        "provisional": false,
+        "reason": "REQ-ORDER-EMAIL changed; verifying test must be re-run",
+        "target_id": "TEST-EMAIL"
+      }
+    ],
+    "pruned": []
+  },
+  "method": "B",
+  "predictions_raw": [
+    {
+      "confidence": "high",
+      "explanation": "child REQ-ORDER-EMAIL changed; parent-consistency check (terminal, no sibling fan-out)",
+      "method": "B",
+      "obligation": "review_spec",
+      "origin_id": "REQ-ORDER-EMAIL",
+      "path_edge_ids": [
+        "O05"
+      ],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CAP-NOTIFY"
+    },
+    {
+      "confidence": "high",
+      "explanation": "requirement REQ-ORDER-EMAIL changed semantically; implementing component must be reviewed",
+      "method": "B",
+      "obligation": "review_implementation",
+      "origin_id": "REQ-ORDER-EMAIL",
+      "path_edge_ids": [
+        "O16"
+      ],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CMP-NOTIFIER"
+    },
+    {
+      "confidence": "high",
+      "explanation": "implementation of CMP-NOTIFIER changed; requirement must still hold (terminal until a violation is established)",
+      "method": "B",
+      "obligation": "check_contract",
+      "origin_id": "REQ-ORDER-EMAIL",
+      "path_edge_ids": [
+        "O16",
+        "O17"
+      ],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "REQ-LOW-STOCK-ALERT"
+    },
+    {
+      "confidence": "high",
+      "explanation": "REQ-ORDER-EMAIL changed; verifying test must be re-run",
+      "method": "B",
+      "obligation": "rerun_test",
+      "origin_id": "REQ-ORDER-EMAIL",
+      "path_edge_ids": [
+        "O29"
+      ],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "TEST-EMAIL"
+    }
+  ],
+  "readiness_changes": [],
+  "scenario_id": "SC-06",
+  "setup": [],
+  "would_invalidate": {
+    "evidence": [],
+    "work_units": []
+  }
+}

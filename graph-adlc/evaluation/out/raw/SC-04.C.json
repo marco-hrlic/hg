@@ -1,0 +1,157 @@
+{
+  "aspect_overrides": [],
+  "evidence_refs_passed": [],
+  "impact": {
+    "notes": [
+      "Influence is complete only relative to registered edges and rules; absence of an edge is not evidence of independence."
+    ],
+    "obligations": [
+      {
+        "change_ref": "op[0]",
+        "confidence": "high",
+        "obligation": "review_spec",
+        "origin_id": "REQ-RETRY",
+        "path": [
+          "E04"
+        ],
+        "provisional": false,
+        "reason": "child REQ-RETRY changed; parent-consistency check (terminal, no sibling fan-out)",
+        "target_id": "CAP-PAYMENTS"
+      },
+      {
+        "change_ref": "op[0]",
+        "confidence": "high",
+        "obligation": "review_implementation",
+        "origin_id": "REQ-RETRY",
+        "path": [
+          "E09"
+        ],
+        "provisional": false,
+        "reason": "requirement REQ-RETRY changed semantically; implementing component must be reviewed",
+        "target_id": "CMP-PAYMENT"
+      },
+      {
+        "change_ref": "op[0]",
+        "confidence": "provisional",
+        "obligation": "check_contract",
+        "origin_id": "REQ-RETRY",
+        "path": [
+          "E09",
+          "E13"
+        ],
+        "provisional": true,
+        "reason": "implementation of provider CMP-PAYMENT changed and no validated contract-preservation evidence; consumer provisionally flagged",
+        "target_id": "CMP-REPORTING"
+      },
+      {
+        "change_ref": "op[0]",
+        "confidence": "high",
+        "obligation": "check_contract",
+        "origin_id": "REQ-RETRY",
+        "path": [
+          "E09",
+          "E08"
+        ],
+        "provisional": false,
+        "reason": "implementation of CMP-PAYMENT changed; requirement must still hold (terminal until a violation is established)",
+        "target_id": "REQ-CHARGE"
+      },
+      {
+        "change_ref": "op[0]",
+        "confidence": "high",
+        "obligation": "rerun_test",
+        "origin_id": "REQ-RETRY",
+        "path": [
+          "E10"
+        ],
+        "provisional": false,
+        "reason": "REQ-RETRY changed; verifying test must be re-run",
+        "target_id": "TEST-RETRY"
+      }
+    ],
+    "pruned": []
+  },
+  "method": "C",
+  "predictions_raw": [
+    {
+      "confidence": "high",
+      "explanation": "child REQ-RETRY changed; parent-consistency check (terminal, no sibling fan-out)",
+      "method": "C",
+      "obligation": "review_spec",
+      "origin_id": "REQ-RETRY",
+      "path_edge_ids": [
+        "E04"
+      ],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CAP-PAYMENTS"
+    },
+    {
+      "confidence": "high",
+      "explanation": "requirement REQ-RETRY changed semantically; implementing component must be reviewed",
+      "method": "C",
+      "obligation": "review_implementation",
+      "origin_id": "REQ-RETRY",
+      "path_edge_ids": [
+        "E09"
+      ],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CMP-PAYMENT"
+    },
+    {
+      "confidence": "provisional",
+      "explanation": "implementation of provider CMP-PAYMENT changed and no validated contract-preservation evidence; consumer provisionally flagged",
+      "method": "C",
+      "obligation": "check_contract",
+      "origin_id": "REQ-RETRY",
+      "path_edge_ids": [
+        "E09",
+        "E13"
+      ],
+      "provisional": true,
+      "pruned": false,
+      "target_id": "CMP-REPORTING"
+    },
+    {
+      "confidence": "high",
+      "explanation": "implementation of CMP-PAYMENT changed; requirement must still hold (terminal until a violation is established)",
+      "method": "C",
+      "obligation": "check_contract",
+      "origin_id": "REQ-RETRY",
+      "path_edge_ids": [
+        "E09",
+        "E08"
+      ],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "REQ-CHARGE"
+    },
+    {
+      "confidence": "high",
+      "explanation": "REQ-RETRY changed; verifying test must be re-run",
+      "method": "C",
+      "obligation": "rerun_test",
+      "origin_id": "REQ-RETRY",
+      "path_edge_ids": [
+        "E10"
+      ],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "TEST-RETRY"
+    }
+  ],
+  "readiness_changes": [],
+  "scenario_id": "SC-04",
+  "setup": [
+    {
+      "change_id": "CHG-2",
+      "graph_revision": 2,
+      "type": "commit"
+    }
+  ],
+  "would_invalidate": {
+    "evidence": [],
+    "work_units": []
+  }
+}

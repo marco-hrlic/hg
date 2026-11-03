@@ -1,0 +1,124 @@
+{
+  "aspect_overrides": [],
+  "evidence_refs_passed": [],
+  "impact": {
+    "notes": [
+      "Influence is complete only relative to registered edges and rules; absence of an edge is not evidence of independence."
+    ],
+    "obligations": [
+      {
+        "change_ref": "op[0]",
+        "confidence": "high",
+        "obligation": "review_spec",
+        "origin_id": "REQ-LOW-STOCK-ALERT",
+        "path": [
+          "O06"
+        ],
+        "provisional": false,
+        "reason": "child REQ-LOW-STOCK-ALERT changed; parent-consistency check (terminal, no sibling fan-out)",
+        "target_id": "CAP-NOTIFY"
+      },
+      {
+        "change_ref": "op[0]",
+        "confidence": "high",
+        "obligation": "review_implementation",
+        "origin_id": "REQ-LOW-STOCK-ALERT",
+        "path": [
+          "O17"
+        ],
+        "provisional": false,
+        "reason": "requirement REQ-LOW-STOCK-ALERT changed semantically; implementing component must be reviewed",
+        "target_id": "CMP-NOTIFIER"
+      },
+      {
+        "change_ref": "op[0]",
+        "confidence": "high",
+        "obligation": "check_contract",
+        "origin_id": "REQ-LOW-STOCK-ALERT",
+        "path": [
+          "O17",
+          "O16"
+        ],
+        "provisional": false,
+        "reason": "implementation of CMP-NOTIFIER changed; requirement must still hold (terminal until a violation is established)",
+        "target_id": "REQ-ORDER-EMAIL"
+      },
+      {
+        "change_ref": "op[0]",
+        "confidence": "high",
+        "obligation": "rerun_test",
+        "origin_id": "REQ-LOW-STOCK-ALERT",
+        "path": [
+          "O31"
+        ],
+        "provisional": false,
+        "reason": "REQ-LOW-STOCK-ALERT changed; verifying test must be re-run",
+        "target_id": "TEST-LOW-STOCK"
+      }
+    ],
+    "pruned": []
+  },
+  "method": "B",
+  "predictions_raw": [
+    {
+      "confidence": "high",
+      "explanation": "child REQ-LOW-STOCK-ALERT changed; parent-consistency check (terminal, no sibling fan-out)",
+      "method": "B",
+      "obligation": "review_spec",
+      "origin_id": "REQ-LOW-STOCK-ALERT",
+      "path_edge_ids": [
+        "O06"
+      ],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CAP-NOTIFY"
+    },
+    {
+      "confidence": "high",
+      "explanation": "requirement REQ-LOW-STOCK-ALERT changed semantically; implementing component must be reviewed",
+      "method": "B",
+      "obligation": "review_implementation",
+      "origin_id": "REQ-LOW-STOCK-ALERT",
+      "path_edge_ids": [
+        "O17"
+      ],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CMP-NOTIFIER"
+    },
+    {
+      "confidence": "high",
+      "explanation": "implementation of CMP-NOTIFIER changed; requirement must still hold (terminal until a violation is established)",
+      "method": "B",
+      "obligation": "check_contract",
+      "origin_id": "REQ-LOW-STOCK-ALERT",
+      "path_edge_ids": [
+        "O17",
+        "O16"
+      ],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "REQ-ORDER-EMAIL"
+    },
+    {
+      "confidence": "high",
+      "explanation": "REQ-LOW-STOCK-ALERT changed; verifying test must be re-run",
+      "method": "B",
+      "obligation": "rerun_test",
+      "origin_id": "REQ-LOW-STOCK-ALERT",
+      "path_edge_ids": [
+        "O31"
+      ],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "TEST-LOW-STOCK"
+    }
+  ],
+  "readiness_changes": [],
+  "scenario_id": "SC-05",
+  "setup": [],
+  "would_invalidate": {
+    "evidence": [],
+    "work_units": []
+  }
+}

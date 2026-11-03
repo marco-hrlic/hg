@@ -1,0 +1,125 @@
+{
+  "method": "A2",
+  "predictions_raw": [
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section CAP-PAYMENTS and section REQ-CHARGE (changed in the change request)",
+      "hop": 1,
+      "method": "A2",
+      "obligation": "review_spec",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CAP-PAYMENTS"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section CMP-PAYMENT and section REQ-CHARGE (changed in the change request)",
+      "hop": 1,
+      "method": "A2",
+      "obligation": "review_implementation",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CMP-PAYMENT"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section CON-IDEMPOTENCY and section REQ-CHARGE (changed in the change request)",
+      "hop": 1,
+      "method": "A2",
+      "obligation": "check_contract",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CON-IDEMPOTENCY"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section ART-PAYMENT and section CMP-PAYMENT (hop 2 from changed REQ-CHARGE)",
+      "hop": 2,
+      "method": "A2",
+      "obligation": "review_implementation",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "ART-PAYMENT"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section CMP-REPORTING and section CMP-PAYMENT (hop 2 from changed REQ-CHARGE)",
+      "hop": 2,
+      "method": "A2",
+      "obligation": "review_implementation",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CMP-REPORTING"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section GOAL-CHECKOUT and section CAP-PAYMENTS (hop 2 from changed REQ-CHARGE)",
+      "hop": 2,
+      "method": "A2",
+      "obligation": "review_spec",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "GOAL-CHECKOUT"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section REQ-RETRY and section CAP-PAYMENTS (hop 2 from changed REQ-CHARGE)",
+      "hop": 2,
+      "method": "A2",
+      "obligation": "review_spec",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "REQ-RETRY"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section TEST-RETRY and section CON-IDEMPOTENCY (hop 2 from changed REQ-CHARGE)",
+      "hop": 2,
+      "method": "A2",
+      "obligation": "rerun_test",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "TEST-RETRY"
+    }
+  ],
+  "scenario_id": "SC-01",
+  "setup": [],
+  "trace": {
+    "change_request_chars": 334,
+    "context_chars": 2573,
+    "context_sections": [
+      "ART-PAYMENT",
+      "CAP-PAYMENTS",
+      "CMP-PAYMENT",
+      "CMP-REPORTING",
+      "CON-IDEMPOTENCY",
+      "GOAL-CHECKOUT",
+      "REQ-CHARGE",
+      "REQ-RETRY",
+      "TEST-RETRY"
+    ],
+    "document_chars": 3465,
+    "over_budget": [],
+    "retrieved": [
+      "CAP-PAYMENTS",
+      "CMP-PAYMENT",
+      "CON-IDEMPOTENCY",
+      "ART-PAYMENT",
+      "CMP-REPORTING",
+      "GOAL-CHECKOUT",
+      "REQ-RETRY",
+      "TEST-RETRY"
+    ],
+    "seeds": [
+      "REQ-CHARGE"
+    ]
+  }
+}

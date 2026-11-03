@@ -1,0 +1,147 @@
+{
+  "aspect_overrides": [],
+  "evidence_refs_passed": [],
+  "impact": {
+    "notes": [
+      "Influence is complete only relative to registered edges and rules; absence of an edge is not evidence of independence."
+    ],
+    "obligations": [
+      {
+        "change_ref": "op[0]",
+        "confidence": "low",
+        "obligation": "check_contract",
+        "origin_id": "CMP-INVENTORY",
+        "path": [
+          "O34"
+        ],
+        "provisional": true,
+        "reason": "implementation of provider CMP-INVENTORY changed and no validated contract-preservation evidence; consumer provisionally flagged",
+        "target_id": "CMP-NOTIFIER"
+      },
+      {
+        "change_ref": "op[0]",
+        "confidence": "low",
+        "obligation": "investigate_unknown",
+        "origin_id": "CMP-INVENTORY",
+        "path": [
+          "O34"
+        ],
+        "provisional": false,
+        "reason": "path crosses hypothesized edge O34; confirm or refute the dependency",
+        "target_id": "CMP-NOTIFIER"
+      },
+      {
+        "change_ref": "op[0]",
+        "confidence": "provisional",
+        "obligation": "check_contract",
+        "origin_id": "CMP-INVENTORY",
+        "path": [
+          "O18"
+        ],
+        "provisional": true,
+        "reason": "implementation of provider CMP-INVENTORY changed and no validated contract-preservation evidence; consumer provisionally flagged",
+        "target_id": "CMP-ORDERS"
+      },
+      {
+        "change_ref": "op[0]",
+        "confidence": "high",
+        "obligation": "check_contract",
+        "origin_id": "CMP-INVENTORY",
+        "path": [
+          "O15"
+        ],
+        "provisional": false,
+        "reason": "implementation of CMP-INVENTORY changed; requirement must still hold (terminal until a violation is established)",
+        "target_id": "REQ-RESERVE-STOCK"
+      }
+    ],
+    "pruned": []
+  },
+  "method": "B",
+  "predictions_raw": [
+    {
+      "confidence": "low",
+      "explanation": "implementation of provider CMP-INVENTORY changed and no validated contract-preservation evidence; consumer provisionally flagged",
+      "method": "B",
+      "obligation": "check_contract",
+      "origin_id": "CMP-INVENTORY",
+      "path_edge_ids": [
+        "O34"
+      ],
+      "provisional": true,
+      "pruned": false,
+      "target_id": "CMP-NOTIFIER"
+    },
+    {
+      "confidence": "low",
+      "explanation": "path crosses hypothesized edge O34; confirm or refute the dependency",
+      "method": "B",
+      "obligation": "investigate_unknown",
+      "origin_id": "CMP-INVENTORY",
+      "path_edge_ids": [
+        "O34"
+      ],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CMP-NOTIFIER"
+    },
+    {
+      "confidence": "provisional",
+      "explanation": "implementation of provider CMP-INVENTORY changed and no validated contract-preservation evidence; consumer provisionally flagged",
+      "method": "B",
+      "obligation": "check_contract",
+      "origin_id": "CMP-INVENTORY",
+      "path_edge_ids": [
+        "O18"
+      ],
+      "provisional": true,
+      "pruned": false,
+      "target_id": "CMP-ORDERS"
+    },
+    {
+      "confidence": "high",
+      "explanation": "implementation of CMP-INVENTORY changed; requirement must still hold (terminal until a violation is established)",
+      "method": "B",
+      "obligation": "check_contract",
+      "origin_id": "CMP-INVENTORY",
+      "path_edge_ids": [
+        "O15"
+      ],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "REQ-RESERVE-STOCK"
+    }
+  ],
+  "readiness_changes": [],
+  "scenario_id": "SC-24",
+  "setup": [
+    {
+      "change_id": "CHG-2",
+      "graph_revision": 2,
+      "type": "commit"
+    },
+    {
+      "evidence_id": "EV-1",
+      "kind": "contract_preservation",
+      "node_id": "CMP-INVENTORY",
+      "result": "passed",
+      "spec_revs": {
+        "CMP-INVENTORY": 1,
+        "CON-INVENTORY-API": 1
+      },
+      "type": "evidence"
+    }
+  ],
+  "would_invalidate": {
+    "evidence": [
+      {
+        "evidence_id": "EV-1",
+        "node_id": "CMP-INVENTORY",
+        "reasons": [
+          "CMP-INVENTORY recorded at r1, now r2"
+        ]
+      }
+    ],
+    "work_units": []
+  }
+}

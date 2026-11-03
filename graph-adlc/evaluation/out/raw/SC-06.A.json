@@ -1,0 +1,73 @@
+{
+  "method": "A",
+  "predictions_raw": [
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section CAP-NOTIFY and section REQ-ORDER-EMAIL (changed in the change request)",
+      "hop": 1,
+      "method": "A",
+      "obligation": "review_spec",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CAP-NOTIFY"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section CMP-NOTIFIER and section REQ-ORDER-EMAIL (changed in the change request)",
+      "hop": 1,
+      "method": "A",
+      "obligation": "review_implementation",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CMP-NOTIFIER"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section CON-EMAIL-TEMPLATE and section REQ-ORDER-EMAIL (changed in the change request)",
+      "hop": 1,
+      "method": "A",
+      "obligation": "check_contract",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CON-EMAIL-TEMPLATE"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section TEST-EMAIL and section REQ-ORDER-EMAIL (changed in the change request)",
+      "hop": 1,
+      "method": "A",
+      "obligation": "rerun_test",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "TEST-EMAIL"
+    }
+  ],
+  "scenario_id": "SC-06",
+  "setup": [],
+  "trace": {
+    "change_request_chars": 162,
+    "context_chars": 1611,
+    "context_sections": [
+      "CAP-NOTIFY",
+      "CMP-NOTIFIER",
+      "CON-EMAIL-TEMPLATE",
+      "REQ-ORDER-EMAIL",
+      "TEST-EMAIL"
+    ],
+    "document_chars": 7668,
+    "over_budget": [],
+    "retrieved": [
+      "CAP-NOTIFY",
+      "CMP-NOTIFIER",
+      "CON-EMAIL-TEMPLATE",
+      "TEST-EMAIL"
+    ],
+    "seeds": [
+      "REQ-ORDER-EMAIL"
+    ]
+  }
+}

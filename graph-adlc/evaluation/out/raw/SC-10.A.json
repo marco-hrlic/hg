@@ -1,0 +1,98 @@
+{
+  "method": "A",
+  "predictions_raw": [
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section ART-PAYMENT and section CMP-PAYMENT (changed in the change request)",
+      "hop": 1,
+      "method": "A",
+      "obligation": "review_implementation",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "ART-PAYMENT"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section CMP-REPORTING and section CMP-PAYMENT (changed in the change request)",
+      "hop": 1,
+      "method": "A",
+      "obligation": "check_contract",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CMP-REPORTING"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section CON-IDEMPOTENCY and section CMP-PAYMENT (changed in the change request)",
+      "hop": 1,
+      "method": "A",
+      "obligation": "check_contract",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CON-IDEMPOTENCY"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section REQ-CHARGE and section CMP-PAYMENT (changed in the change request)",
+      "hop": 1,
+      "method": "A",
+      "obligation": "check_contract",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "REQ-CHARGE"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section REQ-RETRY and section CMP-PAYMENT (changed in the change request)",
+      "hop": 1,
+      "method": "A",
+      "obligation": "check_contract",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "REQ-RETRY"
+    }
+  ],
+  "scenario_id": "SC-10",
+  "setup": [
+    {
+      "evidence_id": "EV-1",
+      "kind": "contract_preservation",
+      "node_id": "CMP-PAYMENT",
+      "result": "failed",
+      "spec_revs": {
+        "CMP-PAYMENT": 1,
+        "CON-IDEMPOTENCY": 1
+      },
+      "type": "evidence"
+    }
+  ],
+  "trace": {
+    "change_request_chars": 228,
+    "context_chars": 1893,
+    "context_sections": [
+      "ART-PAYMENT",
+      "CMP-PAYMENT",
+      "CMP-REPORTING",
+      "CON-IDEMPOTENCY",
+      "REQ-CHARGE",
+      "REQ-RETRY"
+    ],
+    "document_chars": 3551,
+    "over_budget": [],
+    "retrieved": [
+      "ART-PAYMENT",
+      "CMP-REPORTING",
+      "CON-IDEMPOTENCY",
+      "REQ-CHARGE",
+      "REQ-RETRY"
+    ],
+    "seeds": [
+      "CMP-PAYMENT"
+    ]
+  }
+}

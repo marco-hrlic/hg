@@ -1,0 +1,131 @@
+{
+  "method": "A2",
+  "predictions_raw": [
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section CMP-PAYMENT and section CON-IDEMPOTENCY (changed in the change request)",
+      "hop": 1,
+      "method": "A2",
+      "obligation": "check_contract",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CMP-PAYMENT"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section REQ-CHARGE and section CON-IDEMPOTENCY (changed in the change request)",
+      "hop": 1,
+      "method": "A2",
+      "obligation": "check_contract",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "REQ-CHARGE"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section REQ-RETRY and section CON-IDEMPOTENCY (changed in the change request)",
+      "hop": 1,
+      "method": "A2",
+      "obligation": "check_contract",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "REQ-RETRY"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section TEST-RETRY and section CON-IDEMPOTENCY (changed in the change request)",
+      "hop": 1,
+      "method": "A2",
+      "obligation": "rerun_test",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "TEST-RETRY"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section ART-PAYMENT and section CMP-PAYMENT (hop 2 from changed CON-IDEMPOTENCY)",
+      "hop": 2,
+      "method": "A2",
+      "obligation": "review_implementation",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "ART-PAYMENT"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section CAP-PAYMENTS and section REQ-CHARGE (hop 2 from changed CON-IDEMPOTENCY)",
+      "hop": 2,
+      "method": "A2",
+      "obligation": "review_spec",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CAP-PAYMENTS"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section CMP-REPORTING and section CMP-PAYMENT (hop 2 from changed CON-IDEMPOTENCY)",
+      "hop": 2,
+      "method": "A2",
+      "obligation": "check_contract",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CMP-REPORTING"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section Q-RETRY-BOUNDS and section REQ-RETRY (hop 2 from changed CON-IDEMPOTENCY)",
+      "hop": 2,
+      "method": "A2",
+      "obligation": "review_spec",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "Q-RETRY-BOUNDS"
+    }
+  ],
+  "scenario_id": "SC-07",
+  "setup": [
+    {
+      "change_id": "CHG-2",
+      "graph_revision": 2,
+      "type": "commit"
+    }
+  ],
+  "trace": {
+    "change_request_chars": 485,
+    "context_chars": 2780,
+    "context_sections": [
+      "ART-PAYMENT",
+      "CAP-PAYMENTS",
+      "CMP-PAYMENT",
+      "CMP-REPORTING",
+      "CON-IDEMPOTENCY",
+      "Q-RETRY-BOUNDS",
+      "REQ-CHARGE",
+      "REQ-RETRY",
+      "TEST-RETRY"
+    ],
+    "document_chars": 3716,
+    "over_budget": [],
+    "retrieved": [
+      "CMP-PAYMENT",
+      "REQ-CHARGE",
+      "REQ-RETRY",
+      "TEST-RETRY",
+      "ART-PAYMENT",
+      "CAP-PAYMENTS",
+      "CMP-REPORTING",
+      "Q-RETRY-BOUNDS"
+    ],
+    "seeds": [
+      "CON-IDEMPOTENCY"
+    ]
+  }
+}

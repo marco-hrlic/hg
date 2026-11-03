@@ -1,0 +1,72 @@
+{
+  "aspect_overrides": [],
+  "evidence_refs_passed": [],
+  "impact": {
+    "notes": [
+      "Influence is complete only relative to registered edges and rules; absence of an edge is not evidence of independence."
+    ],
+    "obligations": [
+      {
+        "change_ref": "op[0]",
+        "confidence": "high",
+        "obligation": "review_spec",
+        "origin_id": "REQ-REPORT",
+        "path": [
+          "E05"
+        ],
+        "provisional": false,
+        "reason": "child REQ-REPORT changed; parent-consistency check (terminal, no sibling fan-out)",
+        "target_id": "CAP-REPORTING"
+      },
+      {
+        "change_ref": "op[0]",
+        "confidence": "high",
+        "obligation": "review_implementation",
+        "origin_id": "REQ-REPORT",
+        "path": [
+          "E14"
+        ],
+        "provisional": false,
+        "reason": "requirement REQ-REPORT changed semantically; implementing component must be reviewed",
+        "target_id": "CMP-REPORTING"
+      }
+    ],
+    "pruned": []
+  },
+  "method": "B",
+  "predictions_raw": [
+    {
+      "confidence": "high",
+      "explanation": "child REQ-REPORT changed; parent-consistency check (terminal, no sibling fan-out)",
+      "method": "B",
+      "obligation": "review_spec",
+      "origin_id": "REQ-REPORT",
+      "path_edge_ids": [
+        "E05"
+      ],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CAP-REPORTING"
+    },
+    {
+      "confidence": "high",
+      "explanation": "requirement REQ-REPORT changed semantically; implementing component must be reviewed",
+      "method": "B",
+      "obligation": "review_implementation",
+      "origin_id": "REQ-REPORT",
+      "path_edge_ids": [
+        "E14"
+      ],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CMP-REPORTING"
+    }
+  ],
+  "readiness_changes": [],
+  "scenario_id": "SC-02",
+  "setup": [],
+  "would_invalidate": {
+    "evidence": [],
+    "work_units": []
+  }
+}

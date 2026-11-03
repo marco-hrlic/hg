@@ -1,0 +1,47 @@
+{
+  "method": "A",
+  "predictions_raw": [
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section CAP-REPORTING and section REQ-REPORT (changed in the change request)",
+      "hop": 1,
+      "method": "A",
+      "obligation": "review_spec",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CAP-REPORTING"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section CMP-REPORTING and section REQ-REPORT (changed in the change request)",
+      "hop": 1,
+      "method": "A",
+      "obligation": "review_implementation",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CMP-REPORTING"
+    }
+  ],
+  "scenario_id": "SC-02",
+  "setup": [],
+  "trace": {
+    "change_request_chars": 184,
+    "context_chars": 650,
+    "context_sections": [
+      "CAP-REPORTING",
+      "CMP-REPORTING",
+      "REQ-REPORT"
+    ],
+    "document_chars": 3465,
+    "over_budget": [],
+    "retrieved": [
+      "CAP-REPORTING",
+      "CMP-REPORTING"
+    ],
+    "seeds": [
+      "REQ-REPORT"
+    ]
+  }
+}

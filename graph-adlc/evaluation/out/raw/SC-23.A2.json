@@ -1,0 +1,99 @@
+{
+  "method": "A2",
+  "predictions_raw": [
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section CMP-ORDERS and section CON-ORDER-EVENT (changed in the change request)",
+      "hop": 1,
+      "method": "A2",
+      "obligation": "check_contract",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CMP-ORDERS"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section ART-ORDERS and section CMP-ORDERS (hop 2 from changed CON-ORDER-EVENT)",
+      "hop": 2,
+      "method": "A2",
+      "obligation": "review_implementation",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "ART-ORDERS"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section CMP-INVENTORY and section CMP-ORDERS (hop 2 from changed CON-ORDER-EVENT)",
+      "hop": 2,
+      "method": "A2",
+      "obligation": "check_contract",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CMP-INVENTORY"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section CMP-MONEY and section CMP-ORDERS (hop 2 from changed CON-ORDER-EVENT)",
+      "hop": 2,
+      "method": "A2",
+      "obligation": "check_contract",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CMP-MONEY"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section CMP-NOTIFIER and section CMP-ORDERS (hop 2 from changed CON-ORDER-EVENT)",
+      "hop": 2,
+      "method": "A2",
+      "obligation": "check_contract",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "CMP-NOTIFIER"
+    },
+    {
+      "confidence": null,
+      "explanation": "cross-reference between section REQ-PLACE-ORDER and section CMP-ORDERS (hop 2 from changed CON-ORDER-EVENT)",
+      "hop": 2,
+      "method": "A2",
+      "obligation": "check_contract",
+      "path_edge_ids": [],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "REQ-PLACE-ORDER"
+    }
+  ],
+  "scenario_id": "SC-23",
+  "setup": [],
+  "trace": {
+    "change_request_chars": 264,
+    "context_chars": 2243,
+    "context_sections": [
+      "ART-ORDERS",
+      "CMP-INVENTORY",
+      "CMP-MONEY",
+      "CMP-NOTIFIER",
+      "CMP-ORDERS",
+      "CON-ORDER-EVENT",
+      "REQ-PLACE-ORDER"
+    ],
+    "document_chars": 7668,
+    "over_budget": [],
+    "retrieved": [
+      "CMP-ORDERS",
+      "ART-ORDERS",
+      "CMP-INVENTORY",
+      "CMP-MONEY",
+      "CMP-NOTIFIER",
+      "REQ-PLACE-ORDER"
+    ],
+    "seeds": [
+      "CON-ORDER-EVENT"
+    ]
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "aspect_overrides": [],
+  "evidence_refs_passed": [],
+  "impact": {
+    "notes": [
+      "Influence is complete only relative to registered edges and rules; absence of an edge is not evidence of independence."
+    ],
+    "obligations": [
+      {
+        "change_ref": "op[0]",
+        "confidence": "high",
+        "obligation": "review_spec",
+        "origin_id": "Q-ALERT-THRESHOLD",
+        "path": [
+          "O33"
+        ],
+        "provisional": false,
+        "reason": "question Q-ALERT-THRESHOLD changed; re-evaluate the target it blocks/qualifies",
+        "target_id": "REQ-LOW-STOCK-ALERT"
+      }
+    ],
+    "pruned": []
+  },
+  "method": "B",
+  "predictions_raw": [
+    {
+      "confidence": "high",
+      "explanation": "question Q-ALERT-THRESHOLD changed; re-evaluate the target it blocks/qualifies",
+      "method": "B",
+      "obligation": "review_spec",
+      "origin_id": "Q-ALERT-THRESHOLD",
+      "path_edge_ids": [
+        "O33"
+      ],
+      "provisional": false,
+      "pruned": false,
+      "target_id": "REQ-LOW-STOCK-ALERT"
+    }
+  ],
+  "readiness_changes": [
+    {
+      "from": "ready",
+      "requirement_id": "REQ-LOW-STOCK-ALERT",
+      "to": "blocked"
+    }
+  ],
+  "scenario_id": "SC-20",
+  "setup": [],
+  "would_invalidate": {
+    "evidence": [],
+    "work_units": []
+  }
+}
