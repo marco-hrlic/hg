@@ -70,6 +70,25 @@ def test_stale_base_is_reported_and_rebased_only_when_safe(tmp_path):
     assert "(rebased)" in app.log()[-1]["actor"]
 
 
+def test_rebase_drops_ops_a_sibling_proposal_already_committed(tmp_path):
+    # Live attempt 3 crashed here (toolshare/G2): import scan and LLM challenger both proposed the same edge from
+    # the same base; the second commit rebased and then tried to add an edge that already existed.
+    app, b = _seed(tmp_path)
+    ev = [cite(REQS_V1, "Holds on the same tool are served first come, first served.")]
+    resp = {"intent": "x", "operations": [op_edge("op-1", "CAP-HOLDS", "refines", "REQ-NEW2", ev)]}
+    two = {"intent": "x", "operations": [
+        op_node("op-1", "REQ-NEW2", "requirement", "New", {"acceptance_criteria": ["a"]}, ev)]}
+    l = loop_with(app, {"seed-node": two})
+    from graph_adlc.llm_graph import Decision
+    l.review(l.propose(b, {}, call_key="seed-node"), [Decision("op-1", "accept", "alice")], b)
+    l = loop_with(app, {"a": resp, "b": resp})
+    first, second = l.propose(b, {}, call_key="a"), l.propose(b, {}, call_key="b")
+    l.review(first, [Decision("op-1", "accept", "alice")], b)
+    res = l.review(second, [Decision("op-1", "accept", "alice")], b)
+    assert res["rebased"] is True and res["rebased_duplicates"] == ["op-1"] and res["change_id"] is None
+    assert len([e for e in app.graph().live_edges() if (e.src, e.dst) == ("CAP-HOLDS", "REQ-NEW2")]) == 1
+
+
 def test_proposal_format_errors():
     with pytest.raises(ProposalFormatError):
         parse_proposal({"operations": [{"kind": "explode"}]}, "P", 1)
@@ -238,3 +257,19 @@ def test_policy_defers_edges_whose_new_endpoint_is_not_accepted():
     ds = policy_reviewer()(proposal, report)
     assert [d.decision for d in ds] == ["defer", "defer", "accept"]
     assert check_decisions(proposal, report, ds) == []
+
+
+def test_resume_reuses_completed_arms_and_reruns_partial_ones(scripted_run, tmp_path):
+    import shutil
+
+    import run_replay
+    out = tmp_path / "run"
+    shutil.copytree(scripted_run, out)
+    (out / "toolshare" / "G2" / "trace.json").unlink()          # G2 "crashed": only partial files remain
+    (out / "toolshare" / "G2" / "stale.md").write_text("partial")
+    assert run_replay.main(["--mode", "scripted", "--out", str(out), "--resume"]) == 0
+    preds = json.loads((out / "predictions.json").read_text())
+    assert "toolshare/G2" not in preds["resumed_arms"] and "toolshare/G1" in preds["resumed_arms"]
+    assert not (out / "toolshare" / "G2" / "stale.md").exists()
+    for f in (scripted_run / "toolshare" / "G2").iterdir():          # rerun arm is byte-identical
+        assert (out / "toolshare" / "G2" / f.name).read_bytes() == f.read_bytes()

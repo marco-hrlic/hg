@@ -15,6 +15,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import shutil
 import sys
 from pathlib import Path
 
@@ -42,6 +43,9 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--mode", choices=("scripted", "live"), default="scripted")
     ap.add_argument("--out", default=None, help="output dir (default evaluation/llm_graph/out/<mode>)")
     ap.add_argument("--projects", nargs="*", default=list(PROJECTS))
+    ap.add_argument("--resume", action="store_true",
+                    help="reuse arms whose trace.json already exists in --out (a trace is written only when its arm "
+                         "completes); refuses if a reused trace's model configuration differs from the current one")
     a = ap.parse_args(argv)
     out = Path(a.out) if a.out else HERE / "out" / a.mode
     live = a.mode == "live"
@@ -63,25 +67,45 @@ def main(argv: list[str] | None = None) -> int:
         "live model run" if live else
         "PIPELINE SELF-CHECK: model outputs are scripted fixtures authored by the implementing agent; "
         "nothing here measures a language model"), "projects": {}}
+    resumed = []
     with rl.tempdir() as tmp:
         for project in a.projects:
             predictions["projects"][project] = {}
             for arm in arms:
                 work = Path(tmp) / project
-                if arm == "D":
-                    trace = rl.run_direct(project, client, work)
+                done = out / project / arm / "trace.json"
+                if a.resume and done.is_file():
+                    trace = json.loads(done.read_text())
+                    if live and trace.get("client") and _config(trace["client"]) != _config(client.describe()):
+                        print(f"{project}/{arm}: stored trace used {_config(trace['client'])}, current client is "
+                              f"{_config(client.describe())}; refusing to mix", file=sys.stderr)
+                        return 2
+                    resumed.append(f"{project}/{arm}")
+                    print(f"{project}/{arm}: reused existing trace")
                 else:
-                    trace = rl.run_arm(project, arm, factory, work, out / project / arm, live)
-                dump(out / project / arm / "trace.json", trace)
+                    if (out / project / arm).exists():
+                        shutil.rmtree(out / project / arm)  # partial output of an arm that did not complete
+                    if arm == "D":
+                        trace = rl.run_direct(project, client, work)
+                    else:
+                        trace = rl.run_arm(project, arm, factory, work, out / project / arm, live)
+                    dump(done, trace)
                 predictions["projects"][project][arm] = {
                     "prediction": trace.get("prediction"), "negative": trace.get("negative"),
                     "final_graph": trace.get("final_graph"), "ledger": trace.get("ledger"),
                     "client": trace.get("client"),
                     "costs": cost_summary(trace)}
                 print(f"{project}/{arm}: done")
+    if resumed:
+        predictions["resumed_arms"] = resumed
     dump(out / "predictions.json", predictions)
     print(f"wrote {out}")
     return 0
+
+
+def _config(client: dict) -> dict:
+    """The parts of a live client description that must match for traces to belong to one run."""
+    return {k: client.get(k) for k in ("provider", "model", "base_url", "max_output_tokens", "is_fake")}
 
 
 def cost_summary(trace: dict) -> dict:

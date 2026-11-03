@@ -141,7 +141,7 @@ def apply_review(app: GraphADLC, ledger: Ledger, proposal: Proposal, report: dic
     graph_ops = [oid for oid in accepted if proposal.op(oid).kind != "no_change"]
     reviewers = sorted({d.reviewer for d in decisions if d.decision == "accept"})
     actor = f"llm-graph:{proposal.proposal_id} reviewed-by:{','.join(reviewers) or 'none'}"
-    commit_result, rebased = None, False
+    commit_result, rebased, rebased_duplicates = None, False, []
     if graph_ops:
         g = app.graph()
         delta = build_delta(proposal, graph_ops, report, report["base_graph_revision"], actor, g)
@@ -158,10 +158,15 @@ def apply_review(app: GraphADLC, ledger: Ledger, proposal: Proposal, report: dic
                 ledger.save_proposal(proposal.to_dict(), report, "stale")
                 raise NeedsRegeneration(f"graph moved to r{fresh['graph_revision']}; ops {bad} are no longer "
                                         "admissible — regenerate the proposal from the current graph")
-            g = app.graph()
-            delta = build_delta(moved, graph_ops, fresh, g.revision, actor + " (rebased)", g)
-            commit_result = app.commit(delta, approvals=approvals)
+            # An op the graph now already contains (e.g. the same edge committed by a sibling proposal from the same
+            # base) is an idempotent no-op on the current graph, exactly as a duplicate at validation time is.
+            rebased_duplicates = [oid for oid in graph_ops if fresh["ops"][oid]["verdict"] == "duplicate"]
+            graph_ops = [oid for oid in graph_ops if oid not in rebased_duplicates]
             rebased = True
+            if graph_ops:
+                g = app.graph()
+                delta = build_delta(moved, graph_ops, fresh, g.revision, actor + " (rebased)", g)
+                commit_result = app.commit(delta, approvals=approvals)
         except ValidationError:
             ledger.save_proposal(proposal.to_dict(), report, "invalid")
             raise
@@ -194,7 +199,7 @@ def apply_review(app: GraphADLC, ledger: Ledger, proposal: Proposal, report: dic
             "accepted": accepted, "rejected": [d.op_id for d in decisions if d.decision == "reject"],
             "deferred": [d.op_id for d in decisions if d.decision == "defer"],
             "no_change_records": [oid for oid in accepted if proposal.op(oid).kind == "no_change"],
-            "commit": commit_result}
+            "commit": commit_result, **({"rebased_duplicates": rebased_duplicates} if rebased_duplicates else {})}
 
 
 # ---------------------------------------------------------------------------
