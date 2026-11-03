@@ -43,6 +43,14 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--mode", choices=("scripted", "live"), default="scripted")
     ap.add_argument("--out", default=None, help="output dir (default evaluation/llm_graph/out/<mode>)")
     ap.add_argument("--projects", nargs="*", default=list(PROJECTS))
+    ap.add_argument("--arms", nargs="*", default=None, help="subset of arms to run (default: all for the mode)")
+    ap.add_argument("--influence-rules", choices=("v1", "v1.1"), default="v1",
+                    help="engine influence rule set (default v1, the frozen engine); see graph_adlc/influence.py")
+    ap.add_argument("--replay-from", default=None,
+                    help="live only: a previous live run dir. Its recorded model outputs are reused whenever the prompt "
+                         "is byte-identical; any other call goes to the live model. Isolates engine changes.")
+    ap.add_argument("--replay-strict", action="store_true",
+                    help="with --replay-from: fail instead of calling the live model when a prompt does not match")
     ap.add_argument("--resume", action="store_true",
                     help="reuse arms whose trace.json already exists in --out (a trace is written only when its arm "
                          "completes); refuses if a reused trace's model configuration differs from the current one")
@@ -63,10 +71,22 @@ def main(argv: list[str] | None = None) -> int:
     else:
         factory = rl.scripted_client_factory
         arms = ("G0", "G1", "G2", "H")
+    if a.replay_from and not live:
+        print("--replay-from needs --mode live (calls that cannot be replayed go to the live model)", file=sys.stderr)
+        return 2
+    if a.arms:
+        unknown = set(a.arms) - set(arms)
+        if unknown:
+            print(f"unknown arms for --mode {a.mode}: {sorted(unknown)}", file=sys.stderr)
+            return 2
+        arms = tuple(x for x in arms if x in a.arms)
     predictions = {"mode": a.mode, "evidential_status": (
         "live model run" if live else
         "PIPELINE SELF-CHECK: model outputs are scripted fixtures authored by the implementing agent; "
         "nothing here measures a language model"), "projects": {}}
+    if a.influence_rules != "v1":
+        predictions["influence_rules"] = a.influence_rules
+    replay_log: dict[str, list[dict]] = {}
     resumed = []
     with rl.tempdir() as tmp:
         for project in a.projects:
@@ -85,10 +105,20 @@ def main(argv: list[str] | None = None) -> int:
                 else:
                     if (out / project / arm).exists():
                         shutil.rmtree(out / project / arm)  # partial output of an arm that did not complete
+                    arm_client, arm_factory = client if live else None, factory
+                    if a.replay_from:
+                        src = Path(a.replay_from) / project / arm / "trace.json"
+                        recs = rl.recorded_calls(json.loads(src.read_text())) if src.is_file() else {}
+                        arm_client = rl.ReplayClient(recs, client, str(Path(a.replay_from)), strict=a.replay_strict)
+                        arm_factory = lambda project, bundle_fn, c=arm_client: c  # noqa: E731
                     if arm == "D":
-                        trace = rl.run_direct(project, client, work)
+                        trace = rl.run_direct(project, arm_client, work)
                     else:
-                        trace = rl.run_arm(project, arm, factory, work, out / project / arm, live)
+                        trace = rl.run_arm(project, arm, arm_factory, work, out / project / arm, live,
+                                           influence_rules=a.influence_rules)
+                    if a.replay_from:
+                        trace["replay"] = {"from": str(Path(a.replay_from)), "calls": arm_client.served}
+                        replay_log[f"{project}/{arm}"] = arm_client.served
                     dump(done, trace)
                 predictions["projects"][project][arm] = {
                     "prediction": trace.get("prediction"), "negative": trace.get("negative"),
@@ -98,6 +128,10 @@ def main(argv: list[str] | None = None) -> int:
                 print(f"{project}/{arm}: done")
     if resumed:
         predictions["resumed_arms"] = resumed
+    if a.replay_from:
+        predictions["replay"] = {"from": str(Path(a.replay_from)), "live_calls": {
+            k: [c["call_key"] for c in v if c["served"] == "live"] for k, v in replay_log.items()},
+            "replayed_calls": sum(c["served"] == "replayed" for v in replay_log.values() for c in v)}
     dump(out / "predictions.json", predictions)
     print(f"wrote {out}")
     return 0

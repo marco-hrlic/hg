@@ -249,13 +249,15 @@ def _lifecycle(app: GraphADLC, actions: list[dict[str, Any]], labels: dict[str, 
 
 
 def run_arm(project: str, arm: str, client_factory: Callable[[str, Callable[[], SourceBundle]], Any] | None,
-            workdir: Path, outdir: Path, live: bool) -> dict[str, Any]:
+            workdir: Path, outdir: Path, live: bool, influence_rules: str = "v1") -> dict[str, Any]:
     pdir = HERE / "sources" / project
     hist = json.loads((HERE / "histories" / f"{project}.json").read_text())
     repo, shas = build_repo(pdir, hist, workdir / arm)
-    app = GraphADLC(str(workdir / arm / "graph.sqlite"))
+    app = GraphADLC(str(workdir / arm / "graph.sqlite"), influence_rules=influence_rules)
     pr = hist["probe"]
     trace: dict[str, Any] = {"project": project, "arm": arm, "commits": shas, "probe": pr, "events": []}
+    if influence_rules != "v1":  # absent for v1, so v1 outputs stay byte-identical
+        trace["influence_rules"] = influence_rules
     if arm == "H":
         app.seed_graph(json.loads((HERE / "reference" / f"{project}.json").read_text()))
         trace["prediction"] = {"E5": probe(app, pr["node_id"], pr["aspect"])}
@@ -369,3 +371,67 @@ def scripted_client_factory(project: str, bundle_fn: Callable[[], SourceBundle])
 
 def tempdir() -> tempfile.TemporaryDirectory:
     return tempfile.TemporaryDirectory(prefix="gadlc-v03-")
+
+
+# ---------------------------------------------------------------------------
+# Replaying recorded live model outputs (for before/after comparisons of engine rules)
+# ---------------------------------------------------------------------------
+
+def recorded_calls(trace: dict[str, Any]) -> dict[str, list[dict[str, Any]]]:
+    """call_key -> call records (in trace order) found anywhere in a live trace."""
+    out: dict[str, list[dict[str, Any]]] = {}
+
+    def walk(x: Any) -> None:
+        if isinstance(x, dict):
+            c = x.get("call")
+            if isinstance(c, dict) and "call_key" in c and "output" in c:
+                out.setdefault(c["call_key"], []).append(c)
+            for v in x.values():
+                walk(v)
+        elif isinstance(x, list):
+            for v in x:
+                walk(v)
+
+    walk(trace)
+    return out
+
+
+class ReplayClient:
+    """Serves a recorded live response when the prompt is byte-identical (same call key, same input sha256);
+    otherwise it calls the live ``fallback`` client. ``describe()`` reports how the latest call was served."""
+
+    is_fake = False
+
+    def __init__(self, records: dict[str, list[dict[str, Any]]], fallback: Any, source: str, strict: bool = False):
+        self.records, self.fallback, self.source, self.strict = records, fallback, source, strict
+        self.provider = getattr(fallback, "provider", "replay")
+        self.api_key_env = getattr(fallback, "api_key_env", None)
+        self.used: set[int] = set()
+        self.served: list[dict[str, Any]] = []
+        self._last: str | None = None
+
+    def available(self) -> bool:
+        return self.fallback.available()
+
+    def describe(self) -> dict[str, Any]:
+        return {**self.fallback.describe(), "replay_from": self.source, "served": self._last}
+
+    def complete(self, system: str, user: str, *, call_key: str, max_tokens: int = 8000):
+        from graph_adlc.llm_graph.model_adapter import ModelResponse
+        from graph_adlc.llm_graph.source import sha256_text
+        sha = sha256_text(system + "\n" + user)
+        for rec in self.records.get(call_key, []):
+            if id(rec) not in self.used and rec["input"]["sha256"] == sha:
+                self.used.add(id(rec))
+                self._last = "replayed"
+                self.served.append({"call_key": call_key, "served": "replayed"})
+                return ModelResponse(text=rec["output"]["text"], model=rec.get("model_reported") or "",
+                                     provider=self.provider, is_fake=False, usage=rec.get("usage") or {},
+                                     latency_ms=rec.get("latency_ms"), stop_reason=rec.get("stop_reason"))
+        if self.strict:
+            raise RuntimeError(f"replay-strict: no recorded call matches {call_key!r} (prompt changed or not recorded)")
+        self._last = "live"
+        self.served.append({"call_key": call_key, "served": "live",
+                            "reason": "prompt differs from the recorded call" if call_key in self.records
+                            else "no recorded call with this key"})
+        return self.fallback.complete(system, user, call_key=call_key, max_tokens=max_tokens)

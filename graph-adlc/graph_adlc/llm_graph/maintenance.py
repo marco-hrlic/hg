@@ -98,6 +98,7 @@ class MaintenanceLoop:
             if res["llm"] is not None:
                 res["llm"].origin["call_id"] = call_id
                 steps["llm"] = self.submit_external(res["llm"], bundle)
+                steps["llm"].call_id, steps["llm"].call = call_id, res["llm_call"]  # keep the model call in traces
             else:
                 steps["llm"] = StepResult(None, None, call_id, res["llm_call"],
                                           errors=[f"unparseable output: {res['llm_call']['parse']['error']}"])

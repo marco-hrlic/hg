@@ -31,6 +31,18 @@ implementation         depends_on consumer -> N         check_contract, provisio
                                                         evidence (SPEC §3.2 pruning policy)
 structure (edge op)    both endpoints of added/removed edge, per relation (see STRUCTURE_RULES)  yes
 =====================  ===============================  ===================================  =========
+
+Rule sets. ``v1`` (the default) is exactly the table above. ``v1.1`` adds one rule:
+
+=====================  ===============================  ===================================  =========
+any, terminal          implements C(component) -> req   check_contract (contract aspect)     yes
+check_contract on C,   (C reached as the consumer of a
+via depends_on         changed provider)
+=====================  ===============================  ===================================  =========
+
+Under v1 a consumer's ``check_contract`` is terminal, so a broken consumer never reaches the requirement it
+implements (v0.2 "premature terminal propagation"; v0.3 ledgerlite REQ-CSV-EXPORT). v1.1 takes exactly one more
+hop and stops. It inherits the consumer's provisional and hypothesized flags.
 """
 
 from __future__ import annotations
@@ -53,6 +65,14 @@ from .models import (
 )
 
 R, O, A = Relation, Obligation, Aspect
+RULESETS = ("v1", "v1.1")
+DEFAULT_RULES = "v1"
+
+
+def check_rules(rules: str) -> str:
+    if rules not in RULESETS:
+        raise ValueError(f"unknown influence rule set {rules!r} (one of {', '.join(RULESETS)})")
+    return rules
 
 # relation -> (obligation for src endpoint, obligation for dst endpoint)
 STRUCTURE_RULES: dict[str, tuple[str, str]] = {
@@ -152,7 +172,9 @@ class InfluenceEngine:
         evidence_refs: list[str] | None = None,
         evidence_lookup: EvidenceLookup | None = None,
         unverified_claims: list[dict[str, Any]] | None = None,
+        rules: str = DEFAULT_RULES,
     ):
+        self.rules = check_rules(rules)
         self.g = UnionGraph(before, after)
         self.changed = set(changed_node_ids or ())
         self.evidence = (evidence_lookup(evidence_refs) if evidence_lookup and evidence_refs else [])
@@ -183,6 +205,8 @@ class InfluenceEngine:
             if not ev.is_origin:
                 self._record(ev)
             if ev.terminal:
+                if self.rules == "v1.1":
+                    queue.extend(self._consumer_requirement_reach(ev))
                 continue
             for nxt in self._propagate(ev):
                 queue.append(nxt)
@@ -200,7 +224,24 @@ class InfluenceEngine:
             "Influence is complete only relative to registered edges and rules; "
             "absence of an edge is not evidence of independence."
         )
+        if self.rules != DEFAULT_RULES:
+            self.report.notes.append(f"influence rule set {self.rules}")
         return self.report
+
+    def _consumer_requirement_reach(self, ev: Event) -> list[Event]:
+        """v1.1: a consumer flagged by a changed provider -> the requirements it implements (one hop, terminal)."""
+        if ev.obligation != O.CHECK_CONTRACT or self.g.kind(ev.node) != NodeKind.COMPONENT or not ev.path:
+            return []
+        arrived = self.g.edges.get(ev.path[-1])
+        if arrived is None or arrived[0].relation != R.DEPENDS_ON or arrived[0].src != ev.node:
+            return []  # only a consumer reached across depends_on, not e.g. a component checking its own requirement
+        out: list[Event] = []
+        for edge, state in self.g.incident(ev.node):
+            if edge.relation == R.IMPLEMENTS and edge.src == ev.node:
+                out += self._emit(ev, edge, state, edge.dst, A.CONTRACT, O.CHECK_CONTRACT, True,
+                                  f"consumer {ev.node} must re-check its reliance on a changed provider; the "
+                                  "requirement it implements may no longer hold (rules v1.1)")
+        return out
 
     # ------------------------------------------------------------------
     def _record(self, ev: Event) -> None:
@@ -374,6 +415,7 @@ def analyze_delta(
     *,
     evidence_refs: list[str] | None = None,
     evidence_lookup: EvidenceLookup | None = None,
+    rules: str = DEFAULT_RULES,
 ) -> ImpactReport:
     engine = InfluenceEngine(
         applied.before,
@@ -382,6 +424,7 @@ def analyze_delta(
         evidence_refs=evidence_refs,
         evidence_lookup=evidence_lookup,
         unverified_claims=applied.unverified_claims,
+        rules=rules,
     )
     return engine.run(applied.seeds)
 
@@ -393,6 +436,7 @@ def analyze_node(
     *,
     evidence_refs: list[str] | None = None,
     evidence_lookup: EvidenceLookup | None = None,
+    rules: str = DEFAULT_RULES,
 ) -> ImpactReport:
     """Hypothetical impact of changing ``node_id`` under ``aspect`` (no mutation)."""
     if graph.node(node_id) is None:
@@ -411,7 +455,7 @@ def analyze_node(
             aspects.add(A.CONTRACT.value)
         seeds.append(ChangeSeed(0, node_id, aspects))
     engine = InfluenceEngine(graph, graph, changed_node_ids={node_id}, evidence_refs=evidence_refs,
-                             evidence_lookup=evidence_lookup)
+                             evidence_lookup=evidence_lookup, rules=rules)
     report = engine.run(seeds)
     for r in report.records:
         r.change_ref = f"hypothetical:{node_id}:{aspect}"

@@ -8,7 +8,7 @@ from typing import Any
 from . import lifecycle
 from .context import context_packet
 from .delta import apply_delta
-from .influence import ImpactReport, analyze_delta, analyze_node
+from .influence import DEFAULT_RULES, ImpactReport, analyze_delta, analyze_node, check_rules
 from .models import Edge, Graph, Node, ReadinessResult, Relation, canonical_json
 from .readiness import frontier, readiness, readiness_diff
 from .scheduler import suggest_actions
@@ -17,8 +17,9 @@ from .validation import RevisionConflict, ValidationError, validate_graph
 
 
 class GraphADLC:
-    def __init__(self, db_path: str, store: Store | None = None):
+    def __init__(self, db_path: str, store: Store | None = None, *, influence_rules: str = DEFAULT_RULES):
         self.store = store or Store(db_path)
+        self.influence_rules = check_rules(influence_rules)  # "v1" (default) or "v1.1"; see influence.py
 
     def close(self) -> None:
         self.store.close()
@@ -94,7 +95,7 @@ class GraphADLC:
 
     def impact(self, node_id: str, aspect: str, evidence_refs: list[str] | None = None) -> ImpactReport:
         return analyze_node(self.graph(), node_id, aspect, evidence_refs=evidence_refs,
-                            evidence_lookup=self.store.list_evidence)
+                            evidence_lookup=self.store.list_evidence, rules=self.influence_rules)
 
     # -- transactions -----------------------------------------------------------
     def _analyze(self, delta: dict[str, Any]) -> tuple[Any, ImpactReport | None]:
@@ -103,7 +104,7 @@ class GraphADLC:
         if not applied.ok:
             return applied, None
         report = analyze_delta(applied, evidence_refs=delta.get("evidence_refs"),
-                               evidence_lookup=self.store.list_evidence)
+                               evidence_lookup=self.store.list_evidence, rules=self.influence_rules)
         return applied, report
 
     def propose(self, delta: dict[str, Any]) -> dict[str, Any]:

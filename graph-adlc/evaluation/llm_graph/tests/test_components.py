@@ -273,3 +273,31 @@ def test_resume_reuses_completed_arms_and_reruns_partial_ones(scripted_run, tmp_
     assert not (out / "toolshare" / "G2" / "stale.md").exists()
     for f in (scripted_run / "toolshare" / "G2").iterdir():          # rerun arm is byte-identical
         assert (out / "toolshare" / "G2" / f.name).read_bytes() == f.read_bytes()
+
+
+def test_llm_challenge_step_keeps_its_model_call_record(tmp_path):
+    # The parsed challenger proposal used to lose its call record, so live G2 traces had no challenge calls and
+    # cost_summary undercounted G2.
+    app, b = _seed(tmp_path)
+    l = loop_with(app, {"c": {"intent": "challenge", "operations": [], "unresolved_questions": []}})
+    res = l.challenge({"node_id": "REQ-PLACE-HOLD", "aspect": "semantic"}, b, use_llm=True, call_key="c")
+    step = res["steps"]["llm"]
+    assert step is not None and step.proposal is not None
+    assert step.call is not None and step.call["call_key"] == "c" and step.call_id
+
+
+def test_live_mode_arm_selection_is_not_overridden(monkeypatch, tmp_path):
+    # A misplaced check once made live mode fall through to the scripted arm list and client factory.
+    import replay_lib as rl
+    import run_replay
+    seen = []
+    monkeypatch.setenv("GADLC_LLM_PROVIDER", "openai")
+    monkeypatch.setenv("GADLC_LLM_MODEL", "m")
+    monkeypatch.setenv("OPENAI_API_KEY", "k")
+    monkeypatch.setattr(rl, "run_direct", lambda project, client, work: seen.append((project, "D", client)) or {})
+    monkeypatch.setattr(rl, "run_arm", lambda project, arm, factory, *a, **k: seen.append((project, arm, factory)) or {})
+    assert run_replay.main(["--mode", "live", "--projects", "toolshare", "--arms", "D", "G1",
+                            "--out", str(tmp_path)]) == 0
+    assert [(p, arm) for p, arm, _ in seen] == [("toolshare", "D"), ("toolshare", "G1")]
+    assert seen[1][2] is not rl.scripted_client_factory
+    assert run_replay.main(["--mode", "scripted", "--replay-from", str(tmp_path), "--out", str(tmp_path / "x")]) == 2
