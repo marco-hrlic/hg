@@ -178,8 +178,9 @@ def live_section(live: dict[str, Any]) -> list[str]:
             A(f"| {proj} | {arm} | {k['model_calls']} | {f(k['input_tokens'])} | {f(k['output_tokens'])} | {f(lat)} | "
               f"{k['graph_ops_committed']} |")
     A("")
-    A("Tokens out include hidden reasoning tokens, which the provider bills but does not return. G2's challenge "
-      "calls are included. Human review time was not measured.")
+    A("Tokens out include hidden reasoning tokens, which the provider bills but does not return. **G2 is "
+      "undercounted.** Its missing-edge challenge calls were made, but a harness gap (since fixed) dropped their call "
+      "records from the traces, so the G2 rows show only the proposal calls. Human review time was not measured.")
     A("")
     A("### 11.7 Reading")
     A("")
@@ -205,6 +206,71 @@ def live_section(live: dict[str, Any]) -> list[str]:
       "committed.")
     A("* **Caveats.** One sample per arm, one author for oracle, fixtures and H, and a policy reviewer. Treat these as "
       "hypotheses to test with independent labels and repeated runs, not as results.")
+    return L
+
+
+def rules_v11_section(v1: dict[str, Any], v11: dict[str, Any]) -> list[str]:
+    preds_p = HERE / "out" / "live_rules_v1.1" / "predictions.json"
+    preds = json.loads(preds_p.read_text()) if preds_p.exists() else {}
+    rp = preds.get("replay", {})
+    L: list[str] = []
+    A = L.append
+    A("## 12. Engine rule set v1.1: consumer → implemented requirement")
+    A("")
+    A("**Change.** Under rule set v1, `check_contract` on a consumer of a changed provider is terminal. v1.1 adds "
+      "exactly one more hop: the requirements that consumer implements also get `check_contract`, and propagation "
+      "stops there (`graph_adlc/influence.py`). v1 stays the engine default, and the v0.1/v0.2 suites and scripted "
+      "outputs are unchanged.")
+    A("")
+    A("**Method.** The live run was replayed with `--influence-rules v1.1 --replay-from out/live`. A recorded model "
+      "output is reused only when the prompt is byte-identical, so the graphs differ from section 11 only where the rule "
+      "changed something the model saw. A strict replay under v1 reproduced every prediction, final graph and E4 "
+      "result of D/G0/G1/H with zero live calls, which validates the method. Calls that could not be replayed went to "
+      "the live model:")
+    A("")
+    A("| Project/arm | Replayed calls | Live calls |")
+    A("|---|---:|---|")
+    for proj in sorted(v11["projects"]):
+        for arm in ARMS:
+            if arm == "H":
+                continue
+            t = HERE / "out" / "live_rules_v1.1" / proj / arm / "trace.json"
+            calls = (json.loads(t.read_text()).get("replay") or {}).get("calls", []) if t.exists() else []
+            live_c = [c["call_key"] for c in calls if c["served"] == "live"]
+            A(f"| {proj}/{arm} | {sum(c['served'] == 'replayed' for c in calls)} | {f(live_c)} |")
+    A("")
+    A("G2's challenge calls were not recorded in the v1 run (section 11.6), so they are always live here: G2's "
+      "before/after mixes the rule change with a fresh model sample of the challenge step.")
+    A("")
+    A("### 12.1 E5 impact, v1 → v1.1")
+    A("")
+    A("| Project | Arm | Recall | Precision | Critical missed | Added targets (label) |")
+    A("|---|---|---|---|---|---|")
+    for proj in sorted(v11["projects"]):
+        orc = json.loads((HERE / "oracle" / f"{proj}.json").read_text())["impact"]["E5"]
+        nec = {x["target"] for x in orc["necessary"]}
+        unk, nn = set(orc.get("unknown", [])), set(orc.get("not_necessary", []))
+
+        def label(t: str) -> str:
+            return "necessary" if t in nec else "unknown" if t in unk else "not necessary" if t in nn else "unlabelled"
+        for arm in ARMS:
+            a, b = v1["projects"][proj]["arms"][arm]["impact_E5"], v11["projects"][proj]["arms"][arm]["impact_E5"]
+            added = sorted(set(b.get("predicted") or []) - set(a.get("predicted") or []))
+            A(f"| {proj} | {arm} | {f(a.get('recall'))} → {f(b.get('recall'))} | {f(a.get('precision'))} → "
+              f"{f(b.get('precision'))} | {f(a.get('critical_missed'))} → {f(b.get('critical_missed'))} | "
+              f"{f([f'{t} ({label(t)})' for t in added])} |")
+    A("")
+    A("### 12.2 Wording-only edit (E4), v1 → v1.1")
+    A("")
+    A("| Project | Arm | False-alarm obligations |")
+    A("|---|---|---|")
+    for proj in sorted(v11["projects"]):
+        for arm in ("G1", "G2", "H"):
+            a = v1["projects"][proj]["arms"][arm].get("negative_E4") or {}
+            b = v11["projects"][proj]["arms"][arm].get("negative_E4") or {}
+            if a.get("measured") and b.get("measured"):
+                A(f"| {proj} | {arm} | {a['false_alarms']} → {b['false_alarms']} |")
+    A("")
     return L
 
 
@@ -432,6 +498,10 @@ def main() -> int:
     if live is not None:
         A("")
         L += live_section(live)
+        v11_p = HERE / "out" / "live_rules_v1.1" / "metrics.json"
+        if v11_p.exists():
+            A("")
+            L += rules_v11_section(live, json.loads(v11_p.read_text()))
     A("")
     (HERE / "RESULTS.md").write_text("\n".join(L))
     print(f"wrote {HERE / 'RESULTS.md'}")

@@ -203,7 +203,7 @@ Arm D's predictions are free text matched to ids, and some name documents (`proj
 | toolshare | G1 | 5 | 32576 | 22325 | 257 | 53 |
 | toolshare | G2 | 5 | 34121 | 22041 | 254 | 62 |
 
-Tokens out include hidden reasoning tokens, which the provider bills but does not return. G2's challenge calls are included. Human review time was not measured.
+Tokens out include hidden reasoning tokens, which the provider bills but does not return. **G2 is undercounted.** Its missing-edge challenge calls were made, but a harness gap (since fixed) dropped their call records from the traces, so the G2 rows show only the proposal calls. Human review time was not measured.
 
 ### 11.7 Reading
 
