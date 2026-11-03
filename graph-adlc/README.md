@@ -242,4 +242,20 @@ persistent graph per arm.
 * `run_replay.py --mode live` is the separate, explicit live trial. Set `GADLC_LLM_MODEL` and either
   `ANTHROPIC_API_KEY` or `OPENAI_API_KEY`; `GADLC_LLM_PROVIDER` picks one if both are set.
 
+### Visualising graphs
+
+`gadlc-viz` (or `python -m graph_adlc.viz`) writes one self-contained, offline HTML page:
+
+```bash
+gadlc-viz evaluation/llm_graph/out/live --oracle evaluation/llm_graph/oracle -o graphs.html   # all projects/arms
+gadlc-viz out/live/toolshare/G1/trace.json                                                     # one arm
+gadlc --db g.sqlite export --out snap.json && gadlc-viz snap.json -o snap.html                 # any engine graph
+```
+
+One row per node kind; a node keeps its position when you switch arms, because the layout is computed on the union
+of a project's graphs. Hypothesized edges are dashed. With a replay trace the probe's origin and predicted targets
+are ringed; with `--oracle` each ring shows hit, false positive, missed, or critical miss. "Compare with" draws what
+only another arm has (for example the reference graph H) as faint ghosts. Arm D has no graph and is skipped; arm H's
+graph is read from `evaluation/llm_graph/reference/`. `run_all.sh` writes `out/scripted/graphs.html`.
+
 **No live model has been evaluated yet.** See [`evaluation/llm_graph/RESULTS.md`](evaluation/llm_graph/RESULTS.md).

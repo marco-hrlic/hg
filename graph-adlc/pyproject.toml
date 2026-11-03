@@ -15,6 +15,7 @@ test = ["pytest>=8"]
 [project.scripts]
 gadlc = "graph_adlc.cli:main"
 gadlc-llm = "graph_adlc.llm_graph.cli:main"
+gadlc-viz = "graph_adlc.viz:main"
 
 [tool.setuptools]
 packages = ["graph_adlc", "graph_adlc.llm_graph"]

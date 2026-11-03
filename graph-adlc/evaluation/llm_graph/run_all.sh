@@ -6,4 +6,5 @@ export GADLC_FIXED_TIME="2026-11-03T00:00:00Z"
 python evaluation/llm_graph/run_replay.py --mode scripted --out evaluation/llm_graph/out/scripted
 python evaluation/llm_graph/score.py      --run evaluation/llm_graph/out/scripted
 python evaluation/llm_graph/report.py
+python -m graph_adlc.viz evaluation/llm_graph/out/scripted --oracle evaluation/llm_graph/oracle -o evaluation/llm_graph/out/scripted/graphs.html
 python -m pytest -q -p no:cacheprovider evaluation/llm_graph/tests   # includes L14: v0.1 (44) + v0.2 (18) suites
