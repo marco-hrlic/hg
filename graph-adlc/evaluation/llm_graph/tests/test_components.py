@@ -193,6 +193,8 @@ def test_openai_client_shape_and_no_key_in_records(monkeypatch):
     monkeypatch.setenv("OPENAI_API_KEY", "sk-openai-secret")
     monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
     monkeypatch.delenv("GADLC_LLM_PROVIDER", raising=False)
+    monkeypatch.delenv("GADLC_LLM_API_KEY_ENV", raising=False)
+    monkeypatch.delenv("GADLC_LLM_MAX_TOKENS", raising=False)
     monkeypatch.setenv("GADLC_LLM_MODEL", "m")
     monkeypatch.setenv("GADLC_LLM_BASE_URL", f"http://127.0.0.1:{srv.server_port}")
     c = client_from_env()
@@ -205,3 +207,17 @@ def test_openai_client_shape_and_no_key_in_records(monkeypatch):
     assert prop is not None and record["usage"] == {"input_tokens": 9, "output_tokens": 2}
     assert record["client"]["temperature"] is None  # the fallback is recorded
     assert "sk-openai-secret" not in json.dumps(record)
+    assert seen["body"]["max_completion_tokens"] == 8000 and record["client"]["max_output_tokens"] is None
+
+
+def test_max_tokens_override_is_explicit_sent_and_recorded(monkeypatch):
+    from graph_adlc.llm_graph import AnthropicMessagesClient, OpenAIChatClient, client_from_env
+    monkeypatch.setenv("GADLC_LLM_MODEL", "m")
+    for provider, cls in (("openai", OpenAIChatClient), ("anthropic", AnthropicMessagesClient)):
+        monkeypatch.setenv("GADLC_LLM_PROVIDER", provider)
+        monkeypatch.setenv("GADLC_LLM_MAX_TOKENS", "32000")
+        c = client_from_env()
+        assert isinstance(c, cls) and c.describe()["max_output_tokens"] == 32000
+        monkeypatch.setenv("GADLC_LLM_MAX_TOKENS", "lots")
+        with pytest.raises(LLMNotConfigured):
+            client_from_env()

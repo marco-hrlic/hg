@@ -237,7 +237,7 @@ gadlc-llm --db g.sqlite export-spec --out spec.md
 
 The longitudinal evaluation is in [`evaluation/llm_graph/`](evaluation/llm_graph/): two projects, 5 events each, one
 persistent graph per arm.
-* `evaluation/llm_graph/run_all.sh` runs the deterministic scripted replay, scoring, the report and 26 tests.
+* `evaluation/llm_graph/run_all.sh` runs the deterministic scripted replay, scoring, the report and 33 tests.
   These include the v0.1 and v0.2 suites.
 * `run_replay.py --mode live` is the separate, explicit live trial. Set `GADLC_LLM_MODEL` and either
   `ANTHROPIC_API_KEY` or `OPENAI_API_KEY`; `GADLC_LLM_PROVIDER` picks one if both are set.

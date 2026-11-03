@@ -89,17 +89,19 @@ class AnthropicMessagesClient:
 
     def __init__(self, model: str, *, api_key_env: str = "ANTHROPIC_API_KEY",
                  base_url: str = "https://api.anthropic.com", temperature: float = 0.0, timeout_s: float = 180.0,
-                 api_version: str = "2023-06-01"):
+                 api_version: str = "2023-06-01", max_output_tokens: int | None = None):
         if not model:
             raise LLMNotConfigured("a model id must be configured explicitly (--model or GADLC_LLM_MODEL)")
         self.model, self.api_key_env, self.base_url = model, api_key_env, base_url.rstrip("/")
         self.temperature, self.timeout_s, self.api_version = temperature, timeout_s, api_version
+        self.max_output_tokens = max_output_tokens  # overrides the per-call budget when set (recorded)
 
     @classmethod
     def from_env(cls) -> "AnthropicMessagesClient":
         return cls(model=os.environ.get("GADLC_LLM_MODEL", ""),
                    api_key_env=os.environ.get("GADLC_LLM_API_KEY_ENV", "ANTHROPIC_API_KEY"),
-                   base_url=os.environ.get("GADLC_LLM_BASE_URL", "https://api.anthropic.com"))
+                   base_url=os.environ.get("GADLC_LLM_BASE_URL", "https://api.anthropic.com"),
+                   max_output_tokens=_max_tokens_from_env())
 
     def available(self) -> bool:
         return bool(os.environ.get(self.api_key_env))
@@ -108,13 +110,13 @@ class AnthropicMessagesClient:
         # Redacted: never includes the key, only which variable it is read from.
         return {"provider": self.provider, "model": self.model, "temperature": self.temperature,
                 "api_key_env": self.api_key_env, "base_url": self.base_url, "api_version": self.api_version,
-                "is_fake": False}
+                "max_output_tokens": self.max_output_tokens, "is_fake": False}
 
     def complete(self, system: str, user: str, *, call_key: str, max_tokens: int = 8000) -> ModelResponse:
         key = os.environ.get(self.api_key_env)
         if not key:
             raise LLMNotConfigured(f"environment variable {self.api_key_env} is not set")
-        body = json.dumps({"model": self.model, "max_tokens": max_tokens, "temperature": self.temperature,
+        body = json.dumps({"model": self.model, "max_tokens": self.max_output_tokens or max_tokens, "temperature": self.temperature,
                            "system": system, "messages": [{"role": "user", "content": user}]}).encode()
         req = urllib.request.Request(f"{self.base_url}/v1/messages", data=body, method="POST", headers={
             "content-type": "application/json", "x-api-key": key, "anthropic-version": self.api_version})
@@ -139,11 +141,12 @@ class OpenAIChatClient:
 
     def __init__(self, model: str, *, api_key_env: str = "OPENAI_API_KEY",
                  base_url: str = "https://api.openai.com", temperature: float | None = 0.0,
-                 timeout_s: float = 300.0, json_mode: bool = True):
+                 timeout_s: float = 300.0, json_mode: bool = True, max_output_tokens: int | None = None):
         if not model:
             raise LLMNotConfigured("a model id must be configured explicitly (--model or GADLC_LLM_MODEL)")
         self.model, self.api_key_env, self.base_url = model, api_key_env, base_url.rstrip("/")
         self.temperature, self.timeout_s, self.json_mode = temperature, timeout_s, json_mode
+        self.max_output_tokens = max_output_tokens  # overrides the per-call budget when set (recorded)
 
     def available(self) -> bool:
         return bool(os.environ.get(self.api_key_env))
@@ -151,13 +154,13 @@ class OpenAIChatClient:
     def describe(self) -> dict[str, Any]:
         return {"provider": self.provider, "model": self.model, "temperature": self.temperature,
                 "api_key_env": self.api_key_env, "base_url": self.base_url, "json_mode": self.json_mode,
-                "is_fake": False}
+                "max_output_tokens": self.max_output_tokens, "is_fake": False}
 
     def complete(self, system: str, user: str, *, call_key: str, max_tokens: int = 8000) -> ModelResponse:
         key = os.environ.get(self.api_key_env)
         if not key:
             raise LLMNotConfigured(f"environment variable {self.api_key_env} is not set")
-        payload: dict[str, Any] = {"model": self.model, "max_completion_tokens": max_tokens,
+        payload: dict[str, Any] = {"model": self.model, "max_completion_tokens": self.max_output_tokens or max_tokens,
                                    "messages": [{"role": "system", "content": system},
                                                 {"role": "user", "content": user}]}
         if self.temperature is not None:
@@ -195,10 +198,20 @@ def client_from_env() -> Any:
     model = os.environ.get("GADLC_LLM_MODEL", "")
     if provider == "openai":
         return OpenAIChatClient(model=model, api_key_env=os.environ.get("GADLC_LLM_API_KEY_ENV", "OPENAI_API_KEY"),
-                                base_url=os.environ.get("GADLC_LLM_BASE_URL", "https://api.openai.com"))
+                                base_url=os.environ.get("GADLC_LLM_BASE_URL", "https://api.openai.com"),
+                                max_output_tokens=_max_tokens_from_env())
     if provider == "anthropic":
         return AnthropicMessagesClient.from_env()
     raise LLMNotConfigured(f"unknown GADLC_LLM_PROVIDER {provider!r} (anthropic | openai)")
+
+
+def _max_tokens_from_env() -> int | None:
+    raw = os.environ.get("GADLC_LLM_MAX_TOKENS", "").strip()
+    if not raw:
+        return None
+    if not raw.isdigit() or int(raw) <= 0:
+        raise LLMNotConfigured(f"GADLC_LLM_MAX_TOKENS must be a positive integer, got {raw!r}")
+    return int(raw)
 
 
 class ScriptedClient:
