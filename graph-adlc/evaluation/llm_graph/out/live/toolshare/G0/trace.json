@@ -1,0 +1,3095 @@
+{
+ "arm": "G0",
+ "change_log": [
+  {
+   "actor": "llm-graph:P-0001 reviewed-by:policy:conservative-v1",
+   "graph_rev": 2,
+   "id": "CHG-2",
+   "rationale": "P-0001: Propose an initial Toolshare specification graph and flag unresolved intent and implementation gaps. [ops op-1, op-2, op-3, op-4, op-5, op-6, op-7, op-8, op-9, op-10, op-11, op-12, op-13, op-14, op-15, op-16, op-17, op-18, op-19, op-20, op-21, op-22, op-23, op-24, op-25, op-26, op-27, op-28, op-29, op-30, op-31, op-32, op-33]"
+  }
+ ],
+ "client": {
+  "api_key_env": "OPENAI_API_KEY",
+  "base_url": "https://api.openai.com",
+  "is_fake": false,
+  "json_mode": true,
+  "max_output_tokens": 32000,
+  "model": "gpt-6.1-terra",
+  "provider": "openai",
+  "temperature": null
+ },
+ "commits": {
+  "c1": "d1ca69603f4828bb812eba1e72f15c756ade52a4",
+  "c2": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+ },
+ "events": [
+  {
+   "diffs": [],
+   "event": "E1",
+   "graph_revision_after": 2,
+   "graph_revision_before": 1,
+   "kind": "discovery",
+   "lifecycle_after": [],
+   "lifecycle_before": [],
+   "probe_after": {
+    "aspect": "contract",
+    "graph_revision": 2,
+    "node_id": "CON-NOTICE-FORMAT",
+    "pairs": [
+     [
+      "CMP-NOTIFY",
+      "check_contract"
+     ],
+     [
+      "REQ-READY-NOTICE",
+      "check_contract"
+     ],
+     [
+      "TEST-NOTICE-FORMAT",
+      "rerun_test"
+     ]
+    ],
+    "present": true,
+    "provisional": [],
+    "pruned": [],
+    "targets": [
+     "CMP-NOTIFY",
+     "REQ-READY-NOTICE",
+     "TEST-NOTICE-FORMAT"
+    ]
+   },
+   "probe_before": {
+    "aspect": "contract",
+    "node_id": "CON-NOTICE-FORMAT",
+    "pairs": [],
+    "present": false,
+    "pruned": [],
+    "targets": []
+   },
+   "proposal_step": {
+    "call": {
+     "call_key": "toolshare/E1/propose",
+     "client": {
+      "api_key_env": "OPENAI_API_KEY",
+      "base_url": "https://api.openai.com",
+      "is_fake": false,
+      "json_mode": true,
+      "max_output_tokens": 32000,
+      "model": "gpt-6.1-terra",
+      "provider": "openai",
+      "temperature": null
+     },
+     "input": {
+      "chars": 12959,
+      "diffs": [],
+      "limits": {
+       "max_chars_per_doc": 12000,
+       "max_total_chars": 60000
+      },
+      "packed_sources_sha256": "fce3d34b680fc0be00fd6f81ac1529da4ece05b69a64d7c1f989dc707279a446",
+      "sha256": "e4aeb601fd977841e556ff9dc8aa673fbde53d94698c9343a9ca7c7ecff0b05d",
+      "sources": [
+       {
+        "line_count": 14,
+        "origin": "file",
+        "path": "discovery/stakeholder_notes.md",
+        "project": "toolshare",
+        "sha256": "e9a2bdd034c3f226aeaf5dcb1cadea9d6ce03f0f2a9acf9a88ac051469ef64b8",
+        "source_id": "toolshare:discovery/stakeholder_notes.md",
+        "source_type": "stakeholder_notes",
+        "version": "2026-08-28"
+       },
+       {
+        "line_count": 12,
+        "origin": "file",
+        "path": "spec/architecture.md",
+        "project": "toolshare",
+        "sha256": "1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300",
+        "source_id": "toolshare:spec/architecture.md",
+        "source_type": "architecture",
+        "version": "2026-09-02"
+       },
+       {
+        "line_count": 33,
+        "origin": "file",
+        "path": "spec/requirements.md",
+        "project": "toolshare",
+        "sha256": "aba608a7cba6d2494754607772e19d10e5e6823d409dae7c96d9e1917b6d3af0",
+        "source_id": "toolshare:spec/requirements.md",
+        "source_type": "requirements",
+        "version": "draft-1"
+       },
+       {
+        "commit": "d1ca69603f4828bb812eba1e72f15c756ade52a4",
+        "line_count": 9,
+        "origin": "git",
+        "path": "tests/test_holds.py",
+        "project": "toolshare",
+        "repo": "toolshare",
+        "sha256": "bf13124788ea0c7f04563932b8f21ed079e2a9d099ed49ee70fb2f7b4a8a89ed",
+        "source_id": "git:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4:tests/test_holds.py",
+        "source_type": "test",
+        "version": "d1ca69603f4828bb812eba1e72f15c756ade52a4"
+       },
+       {
+        "commit": "d1ca69603f4828bb812eba1e72f15c756ade52a4",
+        "line_count": 14,
+        "origin": "git",
+        "path": "tests/test_notifications.py",
+        "project": "toolshare",
+        "repo": "toolshare",
+        "sha256": "5723cb01fb2199145f4388ba8e9c0359c7c874acef4cd626516428337b5cd1e4",
+        "source_id": "git:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4:tests/test_notifications.py",
+        "source_type": "test",
+        "version": "d1ca69603f4828bb812eba1e72f15c756ade52a4"
+       },
+       {
+        "commit": "d1ca69603f4828bb812eba1e72f15c756ade52a4",
+        "line_count": 0,
+        "origin": "git",
+        "path": "toolshare/__init__.py",
+        "project": "toolshare",
+        "repo": "toolshare",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "source_id": "git:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4:toolshare/__init__.py",
+        "source_type": "code",
+        "version": "d1ca69603f4828bb812eba1e72f15c756ade52a4"
+       },
+       {
+        "commit": "d1ca69603f4828bb812eba1e72f15c756ade52a4",
+        "line_count": 25,
+        "origin": "git",
+        "path": "toolshare/holds.py",
+        "project": "toolshare",
+        "repo": "toolshare",
+        "sha256": "db71ce7ce55d98719ff83f228de5e5efdef7de97a09a6d89f02ebc6f0e5e1a8d",
+        "source_id": "git:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4:toolshare/holds.py",
+        "source_type": "code",
+        "version": "d1ca69603f4828bb812eba1e72f15c756ade52a4"
+       },
+       {
+        "commit": "d1ca69603f4828bb812eba1e72f15c756ade52a4",
+        "line_count": 15,
+        "origin": "git",
+        "path": "toolshare/inventory.py",
+        "project": "toolshare",
+        "repo": "toolshare",
+        "sha256": "5d5448a350375901f733929d43320921ed02ef91bd84d306a0fa7f0ade64f557",
+        "source_id": "git:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4:toolshare/inventory.py",
+        "source_type": "code",
+        "version": "d1ca69603f4828bb812eba1e72f15c756ade52a4"
+       },
+       {
+        "commit": "d1ca69603f4828bb812eba1e72f15c756ade52a4",
+        "line_count": 14,
+        "origin": "git",
+        "path": "toolshare/notifications.py",
+        "project": "toolshare",
+        "repo": "toolshare",
+        "sha256": "ae80be0576750da1fc879a76854887e3233dfbcab1c6b301b84ae84d16dd33b7",
+        "source_id": "git:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4:toolshare/notifications.py",
+        "source_type": "code",
+        "version": "d1ca69603f4828bb812eba1e72f15c756ade52a4"
+       }
+      ],
+      "truncation": []
+     },
+     "is_fake": false,
+     "latency_ms": 111851.5,
+     "model_reported": "gpt-6.1-terra",
+     "output": {
+      "chars": 30733,
+      "sha256": "2b0d2460698d6069a07c134c4556bd7e072380c44e43fc4bdd9d373a7dcba435",
+      "text": "{\n  \"intent\": \"Propose an initial Toolshare specification graph and flag unresolved intent and implementation gaps.\",\n  \"operations\": [\n    {\n      \"op_id\": \"op-1\",\n      \"kind\": \"add_node\",\n      \"node\": {\"id\": \"GOAL-FAIR-ACCESS\", \"kind\": \"goal\", \"title\": \"Fair access to shared tools\", \"body\": \"Members can borrow shared tools fairly and predictably.\", \"data\": {}},\n      \"reason\": \"The requirements state this goal.\",\n      \"support\": \"supported\",\n      \"confidence\": 1.0,\n      \"change_class\": \"semantic\",\n      \"source_evidence\": [{\"source_id\": \"toolshare:spec/requirements.md\", \"sha256\": \"aba608a7cba6d2494754607772e19d10e5e6823d409dae7c96d9e1917b6d3af0\", \"lines\": [5, 7], \"excerpt\": \"GOAL-FAIR-ACCESS — Members can borrow shared tools fairly and predictably.\"}]\n    },\n    {\n      \"op_id\": \"op-2\",\n      \"kind\": \"add_node\",\n      \"node\": {\"id\": \"CAP-HOLDS\", \"kind\": \"capability\", \"title\": \"Holds\", \"body\": \"Members can queue for tools that are not currently on the shelf.\", \"data\": {}},\n      \"reason\": \"The requirements define the holds capability.\",\n      \"support\": \"supported\",\n      \"confidence\": 1.0,\n      \"change_class\": \"semantic\",\n      \"source_evidence\": [{\"source_id\": \"toolshare:spec/requirements.md\", \"sha256\": \"aba608a7cba6d2494754607772e19d10e5e6823d409dae7c96d9e1917b6d3af0\", \"lines\": [9, 11], \"excerpt\": \"CAP-HOLDS — Members can queue for tools that are not currently on the shelf.\"}]\n    },\n    {\n      \"op_id\": \"op-3\",\n      \"kind\": \"add_node\",\n      \"node\": {\"id\": \"CAP-NOTIFY\", \"kind\": \"capability\", \"title\": \"Member notifications\", \"body\": \"Members are told when something they are waiting for changes.\", \"data\": {}},\n      \"reason\": \"The requirements define the notification capability.\",\n      \"support\": \"supported\",\n      \"confidence\": 1.0,\n      \"change_class\": \"semantic\",\n      \"source_evidence\": [{\"source_id\": \"toolshare:spec/requirements.md\", \"sha256\": \"aba608a7cba6d2494754607772e19d10e5e6823d409dae7c96d9e1917b6d3af0\", \"lines\": [24, 26], \"excerpt\": \"CAP-NOTIFY — Members are told when something they are waiting for changes.\"}]\n    },\n    {\n      \"op_id\": \"op-4\",\n      \"kind\": \"add_node\",\n      \"node\": {\"id\": \"REQ-PLACE-HOLD\", \"kind\": \"requirement\", \"title\": \"Place a hold\", \"body\": \"A member can place a hold on a catalogued tool that is on loan.\", \"data\": {\"acceptance_criteria\": [\"A member without overdue items can place a hold on any catalogued tool.\", \"Holds on the same tool are served first come, first served.\"]}},\n      \"reason\": \"The draft states the requirement and its acceptance criteria.\",\n      \"support\": \"supported\",\n      \"confidence\": 1.0,\n      \"change_class\": \"semantic\",\n      \"source_evidence\": [{\"source_id\": \"toolshare:spec/requirements.md\", \"sha256\": \"aba608a7cba6d2494754607772e19d10e5e6823d409dae7c96d9e1917b6d3af0\", \"lines\": [13, 16], \"excerpt\": \"REQ-PLACE-HOLD — A member can place a hold on a catalogued tool that is on loan.\\nAcceptance criteria:\\n- A member without overdue items can place a hold on any catalogued tool.\\n- Holds on the same tool are served first come, first served.\"}]\n    },\n    {\n      \"op_id\": \"op-5\",\n      \"kind\": \"add_node\",\n      \"node\": {\"id\": \"REQ-HOLD-EXPIRY\", \"kind\": \"requirement\", \"title\": \"Hold expiry\", \"body\": \"When a held tool becomes available, the member has a pickup window to collect it. If they do not collect it in time, the hold lapses and the tool passes to the next member in the queue. The window length is undecided.\", \"data\": {\"acceptance_criteria\": []}},\n      \"reason\": \"The draft states the expiry requirement but no separate acceptance criteria.\",\n      \"support\": \"supported\",\n      \"confidence\": 1.0,\n      \"change_class\": \"semantic\",\n      \"source_evidence\": [{\"source_id\": \"toolshare:spec/requirements.md\", \"sha256\": \"aba608a7cba6d2494754607772e19d10e5e6823d409dae7c96d9e1917b6d3af0\", \"lines\": [18, 20], \"excerpt\": \"REQ-HOLD-EXPIRY — When a held tool becomes available, the member has a pickup window to collect it. If they do not\\ncollect it in time, the hold lapses and the tool passes to the next member in the queue.\\nThe length of the pickup window is not decided yet (see Q-PICKUP-WINDOW).\"}]\n    },\n    {\n      \"op_id\": \"op-6\",\n      \"kind\": \"add_node\",\n      \"node\": {\"id\": \"REQ-READY-NOTICE\", \"kind\": \"requirement\", \"title\": \"Ready-for-pickup notice\", \"body\": \"When a held tool is ready for pickup, the member is notified by email.\", \"data\": {\"acceptance_criteria\": [\"The email names the tool and the pickup deadline.\"]}},\n      \"reason\": \"The draft states the requirement and its acceptance criterion.\",\n      \"support\": \"supported\",\n      \"confidence\": 1.0,\n      \"change_class\": \"semantic\",\n      \"source_evidence\": [{\"source_id\": \"toolshare:spec/requirements.md\", \"sha256\": \"aba608a7cba6d2494754607772e19d10e5e6823d409dae7c96d9e1917b6d3af0\", \"lines\": [28, 30], \"excerpt\": \"REQ-READY-NOTICE — When a held tool is ready for pickup, the member is notified by email.\\nAcceptance criteria:\\n- The email names the tool and the pickup deadline.\"}]\n    },\n    {\n      \"op_id\": \"op-7\",\n      \"kind\": \"add_node\",\n      \"node\": {\"id\": \"CON-NOTICE-FORMAT\", \"kind\": \"contract\", \"title\": \"Notification format\", \"body\": \"Notification messages are plain-text emails with a subject line and at most 500 characters of body text.\", \"data\": {\"status\": \"accepted\"}},\n      \"reason\": \"The draft records an accepted notification format.\",\n      \"support\": \"supported\",\n      \"confidence\": 1.0,\n      \"change_class\": \"contract\",\n      \"source_evidence\": [{\"source_id\": \"toolshare:spec/requirements.md\", \"sha256\": \"aba608a7cba6d2494754607772e19d10e5e6823d409dae7c96d9e1917b6d3af0\", \"lines\": [32, 33], \"excerpt\": \"CON-NOTICE-FORMAT — Notification messages are plain-text emails with a subject line and at most 500 characters of\\nbody text. Agreed with the desk volunteer coordinator. Status: accepted.\"}]\n    },\n    {\n      \"op_id\": \"op-8\",\n      \"kind\": \"add_node\",\n      \"node\": {\"id\": \"Q-PICKUP-WINDOW\", \"kind\": \"question\", \"title\": \"Pickup window length\", \"body\": \"How long is the pickup window? The desk is staffed three days a week.\", \"data\": {\"blocking\": true, \"state\": \"open\"}},\n      \"reason\": \"The draft identifies an undecided blocking question.\",\n      \"support\": \"supported\",\n      \"confidence\": 1.0,\n      \"change_class\": \"semantic\",\n      \"source_evidence\": [{\"source_id\": \"toolshare:spec/requirements.md\", \"sha256\": \"aba608a7cba6d2494754607772e19d10e5e6823d409dae7c96d9e1917b6d3af0\", \"lines\": [20, 22], \"excerpt\": \"The length of the pickup window is not decided yet (see Q-PICKUP-WINDOW).\\n\\nQ-PICKUP-WINDOW — How long is the pickup window? The desk is staffed three days a week. This blocks REQ-HOLD-EXPIRY.\"}]\n    },\n    {\n      \"op_id\": \"op-9\",\n      \"kind\": \"add_node\",\n      \"node\": {\"id\": \"CMP-HOLDS\", \"kind\": \"component\", \"title\": \"Holds service\", \"body\": \"Owns the hold queue and hold expiry.\", \"data\": {}},\n      \"reason\": \"The architecture identifies the holds service.\",\n      \"support\": \"supported\",\n      \"confidence\": 1.0,\n      \"change_class\": \"implementation\",\n      \"source_evidence\": [{\"source_id\": \"toolshare:spec/architecture.md\", \"sha256\": \"1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300\", \"lines\": [5, 6], \"excerpt\": \"- CMP-HOLDS, the holds service (`toolshare/holds.py`), owns the hold queue and hold expiry. It implements\\n  REQ-PLACE-HOLD and REQ-HOLD-EXPIRY.\"}]\n    },\n    {\n      \"op_id\": \"op-10\",\n      \"kind\": \"add_node\",\n      \"node\": {\"id\": \"CMP-INVENTORY\", \"kind\": \"component\", \"title\": \"Inventory module\", \"body\": \"Tracks whether a tool is on the shelf.\", \"data\": {}},\n      \"reason\": \"The architecture identifies the inventory module.\",\n      \"support\": \"supported\",\n      \"confidence\": 1.0,\n      \"change_class\": \"implementation\",\n      \"source_evidence\": [{\"source_id\": \"toolshare:spec/architecture.md\", \"sha256\": \"1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300\", \"lines\": [7, 8], \"excerpt\": \"- CMP-INVENTORY, the inventory module (`toolshare/inventory.py`), tracks whether a tool is on the shelf. The holds\\n  service reads availability from inventory.\"}]\n    },\n    {\n      \"op_id\": \"op-11\",\n      \"kind\": \"add_node\",\n      \"node\": {\"id\": \"CMP-NOTIFY\", \"kind\": \"component\", \"title\": \"Notification service\", \"body\": \"Sends member emails.\", \"data\": {}},\n      \"reason\": \"The architecture identifies the notification service.\",\n      \"support\": \"supported\",\n      \"confidence\": 1.0,\n      \"change_class\": \"implementation\",\n      \"source_evidence\": [{\"source_id\": \"toolshare:spec/architecture.md\", \"sha256\": \"1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300\", \"lines\": [9, 10], \"excerpt\": \"- CMP-NOTIFY, the notification service (`toolshare/notifications.py`), sends member emails and implements\\n  REQ-READY-NOTICE. Every message it sends must follow CON-NOTICE-FORMAT.\"}]\n    },\n    {\n      \"op_id\": \"op-12\",\n      \"kind\": \"add_node\",\n      \"node\": {\"id\": \"TEST-HOLD-QUEUE\", \"kind\": \"test\", \"title\": \"Hold queue and expiry test\", \"body\": \"Checks queue order and expiry in tests/test_holds.py.\", \"data\": {}},\n      \"reason\": \"The architecture identifies this test.\",\n      \"support\": \"supported\",\n      \"confidence\": 1.0,\n      \"change_class\": \"implementation\",\n      \"source_evidence\": [{\"source_id\": \"toolshare:spec/architecture.md\", \"sha256\": \"1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300\", \"lines\": [11, 12], \"excerpt\": \"- Tests: TEST-HOLD-QUEUE (`tests/test_holds.py`) checks queue order and expiry. TEST-NOTICE-FORMAT\\n  (`tests/test_notifications.py`) checks messages against CON-NOTICE-FORMAT.\"}]\n    },\n    {\n      \"op_id\": \"op-13\",\n      \"kind\": \"add_node\",\n      \"node\": {\"id\": \"TEST-NOTICE-FORMAT\", \"kind\": \"test\", \"title\": \"Notice format tests\", \"body\": \"Checks messages against the notification format in tests/test_notifications.py.\", \"data\": {}},\n      \"reason\": \"The architecture identifies these tests.\",\n      \"support\": \"supported\",\n      \"confidence\": 1.0,\n      \"change_class\": \"implementation\",\n      \"source_evidence\": [{\"source_id\": \"toolshare:spec/architecture.md\", \"sha256\": \"1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300\", \"lines\": [11, 12], \"excerpt\": \"- Tests: TEST-HOLD-QUEUE (`tests/test_holds.py`) checks queue order and expiry. TEST-NOTICE-FORMAT\\n  (`tests/test_notifications.py`) checks messages against CON-NOTICE-FORMAT.\"}]\n    },\n    {\n      \"op_id\": \"op-14\",\n      \"kind\": \"add_node\",\n      \"node\": {\"id\": \"ART-HOLDS-PY\", \"kind\": \"artifact\", \"title\": \"Holds implementation\", \"body\": \"Repository file for the holds service.\", \"data\": {\"path\": \"toolshare/holds.py\"}},\n      \"reason\": \"The architecture gives the component's repository path.\",\n      \"support\": \"supported\",\n      \"confidence\": 1.0,\n      \"change_class\": \"implementation\",\n      \"source_evidence\": [{\"source_id\": \"toolshare:spec/architecture.md\", \"sha256\": \"1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300\", \"lines\": [5, 6], \"excerpt\": \"- CMP-HOLDS, the holds service (`toolshare/holds.py`), owns the hold queue and hold expiry. It implements\\n  REQ-PLACE-HOLD and REQ-HOLD-EXPIRY.\"}]\n    },\n    {\n      \"op_id\": \"op-15\",\n      \"kind\": \"add_node\",\n      \"node\": {\"id\": \"ART-INVENTORY-PY\", \"kind\": \"artifact\", \"title\": \"Inventory implementation\", \"body\": \"Repository file for the inventory module.\", \"data\": {\"path\": \"toolshare/inventory.py\"}},\n      \"reason\": \"The architecture gives the component's repository path.\",\n      \"support\": \"supported\",\n      \"confidence\": 1.0,\n      \"change_class\": \"implementation\",\n      \"source_evidence\": [{\"source_id\": \"toolshare:spec/architecture.md\", \"sha256\": \"1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300\", \"lines\": [7, 8], \"excerpt\": \"- CMP-INVENTORY, the inventory module (`toolshare/inventory.py`), tracks whether a tool is on the shelf. The holds\\n  service reads availability from inventory.\"}]\n    },\n    {\n      \"op_id\": \"op-16\",\n      \"kind\": \"add_node\",\n      \"node\": {\"id\": \"ART-NOTIFICATIONS-PY\", \"kind\": \"artifact\", \"title\": \"Notifications implementation\", \"body\": \"Repository file for the notification service.\", \"data\": {\"path\": \"toolshare/notifications.py\"}},\n      \"reason\": \"The architecture gives the component's repository path.\",\n      \"support\": \"supported\",\n      \"confidence\": 1.0,\n      \"change_class\": \"implementation\",\n      \"source_evidence\": [{\"source_id\": \"toolshare:spec/architecture.md\", \"sha256\": \"1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300\", \"lines\": [9, 10], \"excerpt\": \"- CMP-NOTIFY, the notification service (`toolshare/notifications.py`), sends member emails and implements\\n  REQ-READY-NOTICE. Every message it sends must follow CON-NOTICE-FORMAT.\"}]\n    },\n    {\n      \"op_id\": \"op-17\",\n      \"kind\": \"add_edge\",\n      \"edge\": {\"src\": \"GOAL-FAIR-ACCESS\", \"dst\": \"CAP-HOLDS\", \"relation\": \"refines\"},\n      \"reason\": \"The queue capability is inferred to refine the fair-access goal.\",\n      \"support\": \"hypothesized\",\n      \"confidence\": 0.95,\n      \"change_class\": \"structure\",\n      \"source_evidence\": [{\"source_id\": \"toolshare:discovery/stakeholder_notes.md\", \"sha256\": \"e9a2bdd034c3f226aeaf5dcb1cadea9d6ce03f0f2a9acf9a88ac051469ef64b8\", \"lines\": [5, 6], \"excerpt\": \"- Priya: the whole point is that members can borrow the shared tools fairly. Right now people grab the drill and\\n  nobody knows who is next. We want a proper queue.\"}]\n    },\n    {\n      \"op_id\": \"op-18\",\n      \"kind\": \"add_edge\",\n      \"edge\": {\"src\": \"GOAL-FAIR-ACCESS\", \"dst\": \"CAP-NOTIFY\", \"relation\": \"refines\"},\n      \"reason\": \"Notifications are inferred to support predictable access.\",\n      \"support\": \"hypothesized\",\n      \"confidence\": 0.75,\n      \"change_class\": \"structure\",\n      \"source_evidence\": [{\"source_id\": \"toolshare:spec/requirements.md\", \"sha256\": \"aba608a7cba6d2494754607772e19d10e5e6823d409dae7c96d9e1917b6d3af0\", \"lines\": [24, 28], \"excerpt\": \"## Capability: Member notifications\\n\\nCAP-NOTIFY — Members are told when something they are waiting for changes.\\n\\nREQ-READY-NOTICE — When a held tool is ready for pickup, the member is notified by email.\"}]\n    },\n    {\n      \"op_id\": \"op-19\",\n      \"kind\": \"add_edge\",\n      \"edge\": {\"src\": \"CAP-HOLDS\", \"dst\": \"REQ-PLACE-HOLD\", \"relation\": \"refines\"},\n      \"reason\": \"The requirement is listed under the holds capability.\",\n      \"support\": \"supported\",\n      \"confidence\": 0.99,\n      \"change_class\": \"structure\",\n      \"source_evidence\": [{\"source_id\": \"toolshare:spec/requirements.md\", \"sha256\": \"aba608a7cba6d2494754607772e19d10e5e6823d409dae7c96d9e1917b6d3af0\", \"lines\": [9, 13], \"excerpt\": \"## Capability: Holds\\n\\nCAP-HOLDS — Members can queue for tools that are not currently on the shelf.\\n\\nREQ-PLACE-HOLD — A member can place a hold on a catalogued tool that is on loan.\"}]\n    },\n    {\n      \"op_id\": \"op-20\",\n      \"kind\": \"add_edge\",\n      \"edge\": {\"src\": \"CAP-HOLDS\", \"dst\": \"REQ-HOLD-EXPIRY\", \"relation\": \"refines\"},\n      \"reason\": \"The expiry requirement is listed under the holds capability.\",\n      \"support\": \"supported\",\n      \"confidence\": 0.99,\n      \"change_class\": \"structure\",\n      \"source_evidence\": [{\"source_id\": \"toolshare:spec/requirements.md\", \"sha256\": \"aba608a7cba6d2494754607772e19d10e5e6823d409dae7c96d9e1917b6d3af0\", \"lines\": [18, 20], \"excerpt\": \"REQ-HOLD-EXPIRY — When a held tool becomes available, the member has a pickup window to collect it. If they do not\\ncollect it in time, the hold lapses and the tool passes to the next member in the queue.\\nThe length of the pickup window is not decided yet (see Q-PICKUP-WINDOW).\"}]\n    },\n    {\n      \"op_id\": \"op-21\",\n      \"kind\": \"add_edge\",\n      \"edge\": {\"src\": \"CAP-NOTIFY\", \"dst\": \"REQ-READY-NOTICE\", \"relation\": \"refines\"},\n      \"reason\": \"The ready-notice requirement is listed under the notification capability.\",\n      \"support\": \"supported\",\n      \"confidence\": 0.99,\n      \"change_class\": \"structure\",\n      \"source_evidence\": [{\"source_id\": \"toolshare:spec/requirements.md\", \"sha256\": \"aba608a7cba6d2494754607772e19d10e5e6823d409dae7c96d9e1917b6d3af0\", \"lines\": [24, 28], \"excerpt\": \"## Capability: Member notifications\\n\\nCAP-NOTIFY — Members are told when something they are waiting for changes.\\n\\nREQ-READY-NOTICE — When a held tool is ready for pickup, the member is notified by email.\"}]\n    },\n    {\n      \"op_id\": \"op-22\",\n      \"kind\": \"add_edge\",\n      \"edge\": {\"src\": \"Q-PICKUP-WINDOW\", \"dst\": \"REQ-HOLD-EXPIRY\", \"relation\": \"blocks\"},\n      \"reason\": \"The question explicitly blocks the expiry requirement.\",\n      \"support\": \"supported\",\n      \"confidence\": 1.0,\n      \"change_class\": \"structure\",\n      \"source_evidence\": [{\"source_id\": \"toolshare:spec/requirements.md\", \"sha256\": \"aba608a7cba6d2494754607772e19d10e5e6823d409dae7c96d9e1917b6d3af0\", \"lines\": [22, 22], \"excerpt\": \"Q-PICKUP-WINDOW — How long is the pickup window? The desk is staffed three days a week. This blocks REQ-HOLD-EXPIRY.\"}]\n    },\n    {\n      \"op_id\": \"op-23\",\n      \"kind\": \"add_edge\",\n      \"edge\": {\"src\": \"CMP-HOLDS\", \"dst\": \"REQ-PLACE-HOLD\", \"relation\": \"implements\"},\n      \"reason\": \"The architecture assigns the requirement to the service.\",\n      \"support\": \"supported\",\n      \"confidence\": 1.0,\n      \"change_class\": \"structure\",\n      \"source_evidence\": [{\"source_id\": \"toolshare:spec/architecture.md\", \"sha256\": \"1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300\", \"lines\": [5, 6], \"excerpt\": \"- CMP-HOLDS, the holds service (`toolshare/holds.py`), owns the hold queue and hold expiry. It implements\\n  REQ-PLACE-HOLD and REQ-HOLD-EXPIRY.\"}]\n    },\n    {\n      \"op_id\": \"op-24\",\n      \"kind\": \"add_edge\",\n      \"edge\": {\"src\": \"CMP-HOLDS\", \"dst\": \"REQ-HOLD-EXPIRY\", \"relation\": \"implements\"},\n      \"reason\": \"The architecture assigns the requirement to the service; this does not assert complete compliance.\",\n      \"support\": \"supported\",\n      \"confidence\": 1.0,\n      \"change_class\": \"structure\",\n      \"source_evidence\": [{\"source_id\": \"toolshare:spec/architecture.md\", \"sha256\": \"1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300\", \"lines\": [5, 6], \"excerpt\": \"- CMP-HOLDS, the holds service (`toolshare/holds.py`), owns the hold queue and hold expiry. It implements\\n  REQ-PLACE-HOLD and REQ-HOLD-EXPIRY.\"}]\n    },\n    {\n      \"op_id\": \"op-25\",\n      \"kind\": \"add_edge\",\n      \"edge\": {\"src\": \"CMP-NOTIFY\", \"dst\": \"REQ-READY-NOTICE\", \"relation\": \"implements\"},\n      \"reason\": \"The architecture assigns the requirement to the service; this does not assert complete compliance.\",\n      \"support\": \"supported\",\n      \"confidence\": 1.0,\n      \"change_class\": \"structure\",\n      \"source_evidence\": [{\"source_id\": \"toolshare:spec/architecture.md\", \"sha256\": \"1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300\", \"lines\": [9, 10], \"excerpt\": \"- CMP-NOTIFY, the notification service (`toolshare/notifications.py`), sends member emails and implements\\n  REQ-READY-NOTICE. Every message it sends must follow CON-NOTICE-FORMAT.\"}]\n    },\n    {\n      \"op_id\": \"op-26\",\n      \"kind\": \"add_edge\",\n      \"edge\": {\"src\": \"CMP-HOLDS\", \"dst\": \"CMP-INVENTORY\", \"relation\": \"depends_on\"},\n      \"reason\": \"The holds service reads availability from inventory.\",\n      \"support\": \"supported\",\n      \"confidence\": 1.0,\n      \"change_class\": \"structure\",\n      \"source_evidence\": [{\"source_id\": \"toolshare:spec/architecture.md\", \"sha256\": \"1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300\", \"lines\": [7, 8], \"excerpt\": \"- CMP-INVENTORY, the inventory module (`toolshare/inventory.py`), tracks whether a tool is on the shelf. The holds\\n  service reads availability from inventory.\"}]\n    },\n    {\n      \"op_id\": \"op-27\",\n      \"kind\": \"add_edge\",\n      \"edge\": {\"src\": \"CMP-NOTIFY\", \"dst\": \"CON-NOTICE-FORMAT\", \"relation\": \"constrained_by\"},\n      \"reason\": \"Every notification service message must follow the contract.\",\n      \"support\": \"supported\",\n      \"confidence\": 1.0,\n      \"change_class\": \"contract\",\n      \"source_evidence\": [{\"source_id\": \"toolshare:spec/architecture.md\", \"sha256\": \"1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300\", \"lines\": [9, 10], \"excerpt\": \"- CMP-NOTIFY, the notification service (`toolshare/notifications.py`), sends member emails and implements\\n  REQ-READY-NOTICE. Every message it sends must follow CON-NOTICE-FORMAT.\"}]\n    },\n    {\n      \"op_id\": \"op-28\",\n      \"kind\": \"add_edge\",\n      \"edge\": {\"src\": \"TEST-HOLD-QUEUE\", \"dst\": \"REQ-PLACE-HOLD\", \"relation\": \"verifies\"},\n      \"reason\": \"The test checks the queue-order criterion; it does not cover the entire requirement.\",\n      \"support\": \"supported\",\n      \"confidence\": 0.99,\n      \"change_class\": \"structure\",\n      \"source_evidence\": [{\"source_id\": \"git:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4:tests/test_holds.py\", \"sha256\": \"bf13124788ea0c7f04563932b8f21ed079e2a9d099ed49ee70fb2f7b4a8a89ed\", \"lines\": [4, 8], \"excerpt\": \"def test_queue_order_and_expiry():\\n    inventory.mark_returned(\\\"drill\\\")\\n    holds.place_hold(\\\"ana\\\", \\\"drill\\\")\\n    holds.place_hold(\\\"ben\\\", \\\"drill\\\")\\n    assert holds.next_in_queue(\\\"drill\\\") == \\\"ana\\\"\"}]\n    },\n    {\n      \"op_id\": \"op-29\",\n      \"kind\": \"add_edge\",\n      \"edge\": {\"src\": \"TEST-HOLD-QUEUE\", \"dst\": \"REQ-HOLD-EXPIRY\", \"relation\": \"verifies\"},\n      \"reason\": \"The test checks advancement after explicit expiry; it does not test the pickup window.\",\n      \"support\": \"supported\",\n      \"confidence\": 0.99,\n      \"change_class\": \"structure\",\n      \"source_evidence\": [{\"source_id\": \"git:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4:tests/test_holds.py\", \"sha256\": \"bf13124788ea0c7f04563932b8f21ed079e2a9d099ed49ee70fb2f7b4a8a89ed\", \"lines\": [4, 9], \"excerpt\": \"def test_queue_order_and_expiry():\\n    inventory.mark_returned(\\\"drill\\\")\\n    holds.place_hold(\\\"ana\\\", \\\"drill\\\")\\n    holds.place_hold(\\\"ben\\\", \\\"drill\\\")\\n    assert holds.next_in_queue(\\\"drill\\\") == \\\"ana\\\"\\n    assert holds.expire_hold(\\\"drill\\\") == \\\"ben\\\"\"}]\n    },\n    {\n      \"op_id\": \"op-30\",\n      \"kind\": \"add_edge\",\n      \"edge\": {\"src\": \"TEST-NOTICE-FORMAT\", \"dst\": \"CON-NOTICE-FORMAT\", \"relation\": \"verifies\"},\n      \"reason\": \"The architecture states that the tests check the contract; the test code checks subject presence and body length, not all contract properties.\",\n      \"support\": \"supported\",\n      \"confidence\": 1.0,\n      \"change_class\": \"structure\",\n      \"source_evidence\": [{\"source_id\": \"toolshare:spec/architecture.md\", \"sha256\": \"1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300\", \"lines\": [11, 12], \"excerpt\": \"- Tests: TEST-HOLD-QUEUE (`tests/test_holds.py`) checks queue order and expiry. TEST-NOTICE-FORMAT\\n  (`tests/test_notifications.py`) checks messages against CON-NOTICE-FORMAT.\"}]\n    },\n    {\n      \"op_id\": \"op-31\",\n      \"kind\": \"add_edge\",\n      \"edge\": {\"src\": \"CMP-HOLDS\", \"dst\": \"ART-HOLDS-PY\", \"relation\": \"realized_by\"},\n      \"reason\": \"The architecture identifies the holds service file.\",\n      \"support\": \"supported\",\n      \"confidence\": 1.0,\n      \"change_class\": \"implementation\",\n      \"source_evidence\": [{\"source_id\": \"toolshare:spec/architecture.md\", \"sha256\": \"1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300\", \"lines\": [5, 6], \"excerpt\": \"- CMP-HOLDS, the holds service (`toolshare/holds.py`), owns the hold queue and hold expiry. It implements\\n  REQ-PLACE-HOLD and REQ-HOLD-EXPIRY.\"}]\n    },\n    {\n      \"op_id\": \"op-32\",\n      \"kind\": \"add_edge\",\n      \"edge\": {\"src\": \"CMP-INVENTORY\", \"dst\": \"ART-INVENTORY-PY\", \"relation\": \"realized_by\"},\n      \"reason\": \"The architecture identifies the inventory module file.\",\n      \"support\": \"supported\",\n      \"confidence\": 1.0,\n      \"change_class\": \"implementation\",\n      \"source_evidence\": [{\"source_id\": \"toolshare:spec/architecture.md\", \"sha256\": \"1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300\", \"lines\": [7, 8], \"excerpt\": \"- CMP-INVENTORY, the inventory module (`toolshare/inventory.py`), tracks whether a tool is on the shelf. The holds\\n  service reads availability from inventory.\"}]\n    },\n    {\n      \"op_id\": \"op-33\",\n      \"kind\": \"add_edge\",\n      \"edge\": {\"src\": \"CMP-NOTIFY\", \"dst\": \"ART-NOTIFICATIONS-PY\", \"relation\": \"realized_by\"},\n      \"reason\": \"The architecture identifies the notification service file.\",\n      \"support\": \"supported\",\n      \"confidence\": 1.0,\n      \"change_class\": \"implementation\",\n      \"source_evidence\": [{\"source_id\": \"toolshare:spec/architecture.md\", \"sha256\": \"1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300\", \"lines\": [9, 10], \"excerpt\": \"- CMP-NOTIFY, the notification service (`toolshare/notifications.py`), sends member emails and implements\\n  REQ-READY-NOTICE. Every message it sends must follow CON-NOTICE-FORMAT.\"}]\n    }\n  ],\n  \"unresolved_questions\": [\n    {\n      \"question\": \"How long is the pickup window, and how should the desk's staffing schedule affect it?\",\n      \"about\": [\"Q-PICKUP-WINDOW\", \"REQ-HOLD-EXPIRY\"],\n      \"blocking\": true,\n      \"source_evidence\": [{\"source_id\": \"toolshare:spec/requirements.md\", \"sha256\": \"aba608a7cba6d2494754607772e19d10e5e6823d409dae7c96d9e1917b6d3af0\", \"lines\": [20, 22], \"excerpt\": \"The length of the pickup window is not decided yet (see Q-PICKUP-WINDOW).\\n\\nQ-PICKUP-WINDOW — How long is the pickup window? The desk is staffed three days a week. This blocks REQ-HOLD-EXPIRY.\"}]\n    },\n    {\n      \"question\": \"Are holds restricted to tools on loan, or may eligible members place holds on any catalogued tool, including one on the shelf?\",\n      \"about\": [\"CAP-HOLDS\", \"REQ-PLACE-HOLD\"],\n      \"blocking\": true,\n      \"source_evidence\": [{\"source_id\": \"toolshare:spec/requirements.md\", \"sha256\": \"aba608a7cba6d2494754607772e19d10e5e6823d409dae7c96d9e1917b6d3af0\", \"lines\": [11, 16], \"excerpt\": \"CAP-HOLDS — Members can queue for tools that are not currently on the shelf.\\n\\nREQ-PLACE-HOLD — A member can place a hold on a catalogued tool that is on loan.\\nAcceptance criteria:\\n- A member without overdue items can place a hold on any catalogued tool.\\n- Holds on the same tool are served first come, first served.\"}]\n    },\n    {\n      \"question\": \"Should members with overdue items be prohibited from placing holds?\",\n      \"about\": [\"REQ-PLACE-HOLD\"],\n      \"blocking\": true,\n      \"source_evidence\": [{\"source_id\": \"toolshare:spec/requirements.md\", \"sha256\": \"aba608a7cba6d2494754607772e19d10e5e6823d409dae7c96d9e1917b6d3af0\", \"lines\": [13, 16], \"excerpt\": \"REQ-PLACE-HOLD — A member can place a hold on a catalogued tool that is on loan.\\nAcceptance criteria:\\n- A member without overdue items can place a hold on any catalogued tool.\\n- Holds on the same tool are served first come, first served.\"}]\n    }\n  ],\n  \"possible_contradictions\": [\n    {\n      \"description\": \"The hold-placement function appends any supplied tool without checking that it is catalogued or on loan; the intended availability scope also needs clarification.\",\n      \"between\": [\"REQ-PLACE-HOLD\", \"CAP-HOLDS\", \"CMP-HOLDS\", \"ART-HOLDS-PY\"],\n      \"source_evidence\": [\n        {\"source_id\": \"toolshare:spec/requirements.md\", \"sha256\": \"aba608a7cba6d2494754607772e19d10e5e6823d409dae7c96d9e1917b6d3af0\", \"lines\": [11, 15], \"excerpt\": \"CAP-HOLDS — Members can queue for tools that are not currently on the shelf.\\n\\nREQ-PLACE-HOLD — A member can place a hold on a catalogued tool that is on loan.\\nAcceptance criteria:\\n- A member without overdue items can place a hold on any catalogued tool.\"},\n        {\"source_id\": \"git:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4:toolshare/holds.py\", \"sha256\": \"db71ce7ce55d98719ff83f228de5e5efdef7de97a09a6d89f02ebc6f0e5e1a8d\", \"lines\": [10, 12], \"excerpt\": \"def place_hold(member: str, tool: str) -> int:\\n    _QUEUES[tool].append(member)\\n    return len(_QUEUES[tool])\"}\n      ]\n    },\n    {\n      \"description\": \"The expiry function removes the first queued member whenever called and does not itself track availability or a pickup deadline; the required pickup-window behavior is not evident in the supplied holds implementation.\",\n      \"between\": [\"REQ-HOLD-EXPIRY\", \"CMP-HOLDS\", \"ART-HOLDS-PY\"],\n      \"source_evidence\": [\n        {\"source_id\": \"toolshare:spec/requirements.md\", \"sha256\": \"aba608a7cba6d2494754607772e19d10e5e6823d409dae7c96d9e1917b6d3af0\", \"lines\": [18, 20], \"excerpt\": \"REQ-HOLD-EXPIRY — When a held tool becomes available, the member has a pickup window to collect it. If they do not\\ncollect it in time, the hold lapses and the tool passes to the next member in the queue.\\nThe length of the pickup window is not decided yet (see Q-PICKUP-WINDOW).\"},\n        {\"source_id\": \"git:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4:toolshare/holds.py\", \"sha256\": \"db71ce7ce55d98719ff83f228de5e5efdef7de97a09a6d89f02ebc6f0e5e1a8d\", \"lines\": [21, 25], \"excerpt\": \"def expire_hold(tool: str) -> str | None:\\n    \\\"\\\"\\\"The first member did not collect in time: drop them and return the next member, if any.\\\"\\\"\\\"\\n    if _QUEUES[tool]:\\n        _QUEUES[tool].popleft()\\n    return _QUEUES[tool][0] if _QUEUES[tool] else None\"}\n      ]\n    },\n    {\n      \"description\": \"The supplied code can construct a ready notice, but the holds availability path does not invoke it and the email function only appends to an outbox. Automatic notice and actual email delivery are not evident.\",\n      \"between\": [\"REQ-READY-NOTICE\", \"CMP-HOLDS\", \"CMP-NOTIFY\", \"ART-HOLDS-PY\", \"ART-NOTIFICATIONS-PY\"],\n      \"source_evidence\": [\n        {\"source_id\": \"toolshare:spec/requirements.md\", \"sha256\": \"aba608a7cba6d2494754607772e19d10e5e6823d409dae7c96d9e1917b6d3af0\", \"lines\": [28, 30], \"excerpt\": \"REQ-READY-NOTICE — When a held tool is ready for pickup, the member is notified by email.\\nAcceptance criteria:\\n- The email names the tool and the pickup deadline.\"},\n        {\"source_id\": \"git:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4:toolshare/holds.py\", \"sha256\": \"db71ce7ce55d98719ff83f228de5e5efdef7de97a09a6d89f02ebc6f0e5e1a8d\", \"lines\": [15, 18], \"excerpt\": \"def next_in_queue(tool: str) -> str | None:\\n    if not is_on_shelf(tool) or not _QUEUES[tool]:\\n        return None\\n    return _QUEUES[tool][0]\"},\n        {\"source_id\": \"git:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4:toolshare/notifications.py\", \"sha256\": \"ae80be0576750da1fc879a76854887e3233dfbcab1c6b301b84ae84d16dd33b7\", \"lines\": [7, 14], \"excerpt\": \"def send_email(member: str, subject: str, body: str) -> None:\\n    if len(body) > MAX_BODY:\\n        raise ValueError(\\\"notification body too long\\\")\\n    OUTBOX.append({\\\"to\\\": member, \\\"subject\\\": subject, \\\"body\\\": body})\\n\\n\\n\\ndef send_ready_notice(member: str, tool: str, deadline: str) -> None:\\n    send_email(member, f\\\"{tool} is ready for pickup\\\", f\\\"Your hold on {tool} is ready. Collect it by {deadline}.\\\")\"}\n      ]\n    }\n  ]\n}"
+     },
+     "parse": {
+      "ok": true
+     },
+     "prompt": {
+      "prompt_id": "propose_update",
+      "sha256": "cf3981f23ec4eab621bdbb0b07a2878275e2ebb99e4dad3210c2fd8a16a483c8",
+      "version": "v1"
+     },
+     "stop_reason": "stop",
+     "usage": {
+      "input_tokens": 3940,
+      "output_tokens": 9959
+     }
+    },
+    "decisions": [
+     {
+      "decision": "accept",
+      "op_id": "op-1",
+      "rationale": "policy: admissible",
+      "reviewer": "policy:conservative-v1"
+     },
+     {
+      "decision": "accept",
+      "op_id": "op-2",
+      "rationale": "policy: admissible",
+      "reviewer": "policy:conservative-v1"
+     },
+     {
+      "decision": "accept",
+      "op_id": "op-3",
+      "rationale": "policy: admissible",
+      "reviewer": "policy:conservative-v1"
+     },
+     {
+      "decision": "accept",
+      "op_id": "op-4",
+      "rationale": "policy: admissible",
+      "reviewer": "policy:conservative-v1"
+     },
+     {
+      "decision": "accept",
+      "op_id": "op-5",
+      "rationale": "policy: admissible",
+      "reviewer": "policy:conservative-v1"
+     },
+     {
+      "decision": "accept",
+      "op_id": "op-6",
+      "rationale": "policy: admissible",
+      "reviewer": "policy:conservative-v1"
+     },
+     {
+      "decision": "accept",
+      "op_id": "op-7",
+      "rationale": "policy: admissible",
+      "reviewer": "policy:conservative-v1"
+     },
+     {
+      "decision": "accept",
+      "op_id": "op-8",
+      "rationale": "policy: admissible",
+      "reviewer": "policy:conservative-v1"
+     },
+     {
+      "decision": "accept",
+      "op_id": "op-9",
+      "rationale": "policy: admissible",
+      "reviewer": "policy:conservative-v1"
+     },
+     {
+      "decision": "accept",
+      "op_id": "op-10",
+      "rationale": "policy: admissible",
+      "reviewer": "policy:conservative-v1"
+     },
+     {
+      "decision": "accept",
+      "op_id": "op-11",
+      "rationale": "policy: admissible",
+      "reviewer": "policy:conservative-v1"
+     },
+     {
+      "decision": "accept",
+      "op_id": "op-12",
+      "rationale": "policy: admissible",
+      "reviewer": "policy:conservative-v1"
+     },
+     {
+      "decision": "accept",
+      "op_id": "op-13",
+      "rationale": "policy: admissible",
+      "reviewer": "policy:conservative-v1"
+     },
+     {
+      "decision": "accept",
+      "op_id": "op-14",
+      "rationale": "policy: admissible",
+      "reviewer": "policy:conservative-v1"
+     },
+     {
+      "decision": "accept",
+      "op_id": "op-15",
+      "rationale": "policy: admissible",
+      "reviewer": "policy:conservative-v1"
+     },
+     {
+      "decision": "accept",
+      "op_id": "op-16",
+      "rationale": "policy: admissible",
+      "reviewer": "policy:conservative-v1"
+     },
+     {
+      "decision": "accept",
+      "op_id": "op-17",
+      "rationale": "policy: admissible",
+      "reviewer": "policy:conservative-v1"
+     },
+     {
+      "decision": "accept",
+      "op_id": "op-18",
+      "rationale": "policy: admissible",
+      "reviewer": "policy:conservative-v1"
+     },
+     {
+      "decision": "accept",
+      "op_id": "op-19",
+      "rationale": "policy: admissible",
+      "reviewer": "policy:conservative-v1"
+     },
+     {
+      "decision": "accept",
+      "op_id": "op-20",
+      "rationale": "policy: admissible",
+      "reviewer": "policy:conservative-v1"
+     },
+     {
+      "decision": "accept",
+      "op_id": "op-21",
+      "rationale": "policy: admissible",
+      "reviewer": "policy:conservative-v1"
+     },
+     {
+      "decision": "accept",
+      "op_id": "op-22",
+      "rationale": "policy: admissible",
+      "reviewer": "policy:conservative-v1"
+     },
+     {
+      "decision": "accept",
+      "op_id": "op-23",
+      "rationale": "policy: admissible",
+      "reviewer": "policy:conservative-v1"
+     },
+     {
+      "decision": "accept",
+      "op_id": "op-24",
+      "rationale": "policy: admissible",
+      "reviewer": "policy:conservative-v1"
+     },
+     {
+      "decision": "accept",
+      "op_id": "op-25",
+      "rationale": "policy: admissible",
+      "reviewer": "policy:conservative-v1"
+     },
+     {
+      "decision": "accept",
+      "op_id": "op-26",
+      "rationale": "policy: admissible",
+      "reviewer": "policy:conservative-v1"
+     },
+     {
+      "decision": "accept",
+      "op_id": "op-27",
+      "rationale": "policy: admissible",
+      "reviewer": "policy:conservative-v1"
+     },
+     {
+      "decision": "accept",
+      "op_id": "op-28",
+      "rationale": "policy: admissible",
+      "reviewer": "policy:conservative-v1"
+     },
+     {
+      "decision": "accept",
+      "op_id": "op-29",
+      "rationale": "policy: admissible",
+      "reviewer": "policy:conservative-v1"
+     },
+     {
+      "decision": "accept",
+      "op_id": "op-30",
+      "rationale": "policy: admissible",
+      "reviewer": "policy:conservative-v1"
+     },
+     {
+      "decision": "accept",
+      "op_id": "op-31",
+      "rationale": "policy: admissible",
+      "reviewer": "policy:conservative-v1"
+     },
+     {
+      "decision": "accept",
+      "op_id": "op-32",
+      "rationale": "policy: admissible",
+      "reviewer": "policy:conservative-v1"
+     },
+     {
+      "decision": "accept",
+      "op_id": "op-33",
+      "rationale": "policy: admissible",
+      "reviewer": "policy:conservative-v1"
+     }
+    ],
+    "errors": [],
+    "outcome": {
+     "accepted": [
+      "op-1",
+      "op-2",
+      "op-3",
+      "op-4",
+      "op-5",
+      "op-6",
+      "op-7",
+      "op-8",
+      "op-9",
+      "op-10",
+      "op-11",
+      "op-12",
+      "op-13",
+      "op-14",
+      "op-15",
+      "op-16",
+      "op-17",
+      "op-18",
+      "op-19",
+      "op-20",
+      "op-21",
+      "op-22",
+      "op-23",
+      "op-24",
+      "op-25",
+      "op-26",
+      "op-27",
+      "op-28",
+      "op-29",
+      "op-30",
+      "op-31",
+      "op-32",
+      "op-33"
+     ],
+     "change_id": "CHG-2",
+     "deferred": [],
+     "invalidated": {
+      "evidence": [],
+      "work_units": []
+     },
+     "no_change_records": [],
+     "obligations": 25,
+     "readiness_changes": [
+      {
+       "from": null,
+       "requirement_id": "REQ-HOLD-EXPIRY",
+       "to": "blocked"
+      },
+      {
+       "from": null,
+       "requirement_id": "REQ-PLACE-HOLD",
+       "to": "ready"
+      },
+      {
+       "from": null,
+       "requirement_id": "REQ-READY-NOTICE",
+       "to": "ready"
+      }
+     ],
+     "rebased": false,
+     "rejected": [],
+     "required_actions": {
+      "check_contract": [
+       "CMP-HOLDS",
+       "CMP-NOTIFY"
+      ],
+      "investigate_unknown": [
+       "CAP-HOLDS",
+       "CAP-NOTIFY",
+       "GOAL-FAIR-ACCESS"
+      ],
+      "rerun_test": [
+       "TEST-HOLD-QUEUE",
+       "TEST-NOTICE-FORMAT"
+      ],
+      "review_implementation": [
+       "ART-HOLDS-PY",
+       "ART-INVENTORY-PY",
+       "ART-NOTIFICATIONS-PY",
+       "CMP-HOLDS",
+       "CMP-INVENTORY",
+       "CMP-NOTIFY",
+       "REQ-HOLD-EXPIRY",
+       "REQ-PLACE-HOLD",
+       "REQ-READY-NOTICE"
+      ],
+      "review_spec": [
+       "CAP-HOLDS",
+       "CAP-NOTIFY",
+       "CMP-INVENTORY",
+       "CON-NOTICE-FORMAT",
+       "GOAL-FAIR-ACCESS",
+       "Q-PICKUP-WINDOW",
+       "REQ-HOLD-EXPIRY",
+       "REQ-PLACE-HOLD",
+       "REQ-READY-NOTICE"
+      ]
+     }
+    },
+    "proposal": {
+     "base_graph_revision": 1,
+     "intent": "Propose an initial Toolshare specification graph and flag unresolved intent and implementation gaps.",
+     "operations": [
+      {
+       "change_class": "semantic",
+       "confidence": 1.0,
+       "kind": "add_node",
+       "node": {
+        "body": "Members can borrow shared tools fairly and predictably.",
+        "data": {},
+        "id": "GOAL-FAIR-ACCESS",
+        "kind": "goal",
+        "title": "Fair access to shared tools"
+       },
+       "op_id": "op-1",
+       "reason": "The requirements state this goal.",
+       "source_evidence": [
+        {
+         "excerpt": "GOAL-FAIR-ACCESS — Members can borrow shared tools fairly and predictably.",
+         "lines": [
+          5,
+          7
+         ],
+         "sha256": "aba608a7cba6d2494754607772e19d10e5e6823d409dae7c96d9e1917b6d3af0",
+         "source_id": "toolshare:spec/requirements.md"
+        }
+       ],
+       "support": "supported"
+      },
+      {
+       "change_class": "semantic",
+       "confidence": 1.0,
+       "kind": "add_node",
+       "node": {
+        "body": "Members can queue for tools that are not currently on the shelf.",
+        "data": {},
+        "id": "CAP-HOLDS",
+        "kind": "capability",
+        "title": "Holds"
+       },
+       "op_id": "op-2",
+       "reason": "The requirements define the holds capability.",
+       "source_evidence": [
+        {
+         "excerpt": "CAP-HOLDS — Members can queue for tools that are not currently on the shelf.",
+         "lines": [
+          9,
+          11
+         ],
+         "sha256": "aba608a7cba6d2494754607772e19d10e5e6823d409dae7c96d9e1917b6d3af0",
+         "source_id": "toolshare:spec/requirements.md"
+        }
+       ],
+       "support": "supported"
+      },
+      {
+       "change_class": "semantic",
+       "confidence": 1.0,
+       "kind": "add_node",
+       "node": {
+        "body": "Members are told when something they are waiting for changes.",
+        "data": {},
+        "id": "CAP-NOTIFY",
+        "kind": "capability",
+        "title": "Member notifications"
+       },
+       "op_id": "op-3",
+       "reason": "The requirements define the notification capability.",
+       "source_evidence": [
+        {
+         "excerpt": "CAP-NOTIFY — Members are told when something they are waiting for changes.",
+         "lines": [
+          24,
+          26
+         ],
+         "sha256": "aba608a7cba6d2494754607772e19d10e5e6823d409dae7c96d9e1917b6d3af0",
+         "source_id": "toolshare:spec/requirements.md"
+        }
+       ],
+       "support": "supported"
+      },
+      {
+       "change_class": "semantic",
+       "confidence": 1.0,
+       "kind": "add_node",
+       "node": {
+        "body": "A member can place a hold on a catalogued tool that is on loan.",
+        "data": {
+         "acceptance_criteria": [
+          "A member without overdue items can place a hold on any catalogued tool.",
+          "Holds on the same tool are served first come, first served."
+         ]
+        },
+        "id": "REQ-PLACE-HOLD",
+        "kind": "requirement",
+        "title": "Place a hold"
+       },
+       "op_id": "op-4",
+       "reason": "The draft states the requirement and its acceptance criteria.",
+       "source_evidence": [
+        {
+         "excerpt": "REQ-PLACE-HOLD — A member can place a hold on a catalogued tool that is on loan.\nAcceptance criteria:\n- A member without overdue items can place a hold on any catalogued tool.\n- Holds on the same tool are served first come, first served.",
+         "lines": [
+          13,
+          16
+         ],
+         "sha256": "aba608a7cba6d2494754607772e19d10e5e6823d409dae7c96d9e1917b6d3af0",
+         "source_id": "toolshare:spec/requirements.md"
+        }
+       ],
+       "support": "supported"
+      },
+      {
+       "change_class": "semantic",
+       "confidence": 1.0,
+       "kind": "add_node",
+       "node": {
+        "body": "When a held tool becomes available, the member has a pickup window to collect it. If they do not collect it in time, the hold lapses and the tool passes to the next member in the queue. The window length is undecided.",
+        "data": {
+         "acceptance_criteria": []
+        },
+        "id": "REQ-HOLD-EXPIRY",
+        "kind": "requirement",
+        "title": "Hold expiry"
+       },
+       "op_id": "op-5",
+       "reason": "The draft states the expiry requirement but no separate acceptance criteria.",
+       "source_evidence": [
+        {
+         "excerpt": "REQ-HOLD-EXPIRY — When a held tool becomes available, the member has a pickup window to collect it. If they do not\ncollect it in time, the hold lapses and the tool passes to the next member in the queue.\nThe length of the pickup window is not decided yet (see Q-PICKUP-WINDOW).",
+         "lines": [
+          18,
+          20
+         ],
+         "sha256": "aba608a7cba6d2494754607772e19d10e5e6823d409dae7c96d9e1917b6d3af0",
+         "source_id": "toolshare:spec/requirements.md"
+        }
+       ],
+       "support": "supported"
+      },
+      {
+       "change_class": "semantic",
+       "confidence": 1.0,
+       "kind": "add_node",
+       "node": {
+        "body": "When a held tool is ready for pickup, the member is notified by email.",
+        "data": {
+         "acceptance_criteria": [
+          "The email names the tool and the pickup deadline."
+         ]
+        },
+        "id": "REQ-READY-NOTICE",
+        "kind": "requirement",
+        "title": "Ready-for-pickup notice"
+       },
+       "op_id": "op-6",
+       "reason": "The draft states the requirement and its acceptance criterion.",
+       "source_evidence": [
+        {
+         "excerpt": "REQ-READY-NOTICE — When a held tool is ready for pickup, the member is notified by email.\nAcceptance criteria:\n- The email names the tool and the pickup deadline.",
+         "lines": [
+          28,
+          30
+         ],
+         "sha256": "aba608a7cba6d2494754607772e19d10e5e6823d409dae7c96d9e1917b6d3af0",
+         "source_id": "toolshare:spec/requirements.md"
+        }
+       ],
+       "support": "supported"
+      },
+      {
+       "change_class": "contract",
+       "confidence": 1.0,
+       "kind": "add_node",
+       "node": {
+        "body": "Notification messages are plain-text emails with a subject line and at most 500 characters of body text.",
+        "data": {
+         "status": "accepted"
+        },
+        "id": "CON-NOTICE-FORMAT",
+        "kind": "contract",
+        "title": "Notification format"
+       },
+       "op_id": "op-7",
+       "reason": "The draft records an accepted notification format.",
+       "source_evidence": [
+        {
+         "excerpt": "CON-NOTICE-FORMAT — Notification messages are plain-text emails with a subject line and at most 500 characters of\nbody text. Agreed with the desk volunteer coordinator. Status: accepted.",
+         "lines": [
+          32,
+          33
+         ],
+         "sha256": "aba608a7cba6d2494754607772e19d10e5e6823d409dae7c96d9e1917b6d3af0",
+         "source_id": "toolshare:spec/requirements.md"
+        }
+       ],
+       "support": "supported"
+      },
+      {
+       "change_class": "semantic",
+       "confidence": 1.0,
+       "kind": "add_node",
+       "node": {
+        "body": "How long is the pickup window? The desk is staffed three days a week.",
+        "data": {
+         "blocking": true,
+         "state": "open"
+        },
+        "id": "Q-PICKUP-WINDOW",
+        "kind": "question",
+        "title": "Pickup window length"
+       },
+       "op_id": "op-8",
+       "reason": "The draft identifies an undecided blocking question.",
+       "source_evidence": [
+        {
+         "excerpt": "The length of the pickup window is not decided yet (see Q-PICKUP-WINDOW).\n\nQ-PICKUP-WINDOW — How long is the pickup window? The desk is staffed three days a week. This blocks REQ-HOLD-EXPIRY.",
+         "lines": [
+          20,
+          22
+         ],
+         "sha256": "aba608a7cba6d2494754607772e19d10e5e6823d409dae7c96d9e1917b6d3af0",
+         "source_id": "toolshare:spec/requirements.md"
+        }
+       ],
+       "support": "supported"
+      },
+      {
+       "change_class": "implementation",
+       "confidence": 1.0,
+       "kind": "add_node",
+       "node": {
+        "body": "Owns the hold queue and hold expiry.",
+        "data": {},
+        "id": "CMP-HOLDS",
+        "kind": "component",
+        "title": "Holds service"
+       },
+       "op_id": "op-9",
+       "reason": "The architecture identifies the holds service.",
+       "source_evidence": [
+        {
+         "excerpt": "- CMP-HOLDS, the holds service (`toolshare/holds.py`), owns the hold queue and hold expiry. It implements\n  REQ-PLACE-HOLD and REQ-HOLD-EXPIRY.",
+         "lines": [
+          5,
+          6
+         ],
+         "sha256": "1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300",
+         "source_id": "toolshare:spec/architecture.md"
+        }
+       ],
+       "support": "supported"
+      },
+      {
+       "change_class": "implementation",
+       "confidence": 1.0,
+       "kind": "add_node",
+       "node": {
+        "body": "Tracks whether a tool is on the shelf.",
+        "data": {},
+        "id": "CMP-INVENTORY",
+        "kind": "component",
+        "title": "Inventory module"
+       },
+       "op_id": "op-10",
+       "reason": "The architecture identifies the inventory module.",
+       "source_evidence": [
+        {
+         "excerpt": "- CMP-INVENTORY, the inventory module (`toolshare/inventory.py`), tracks whether a tool is on the shelf. The holds\n  service reads availability from inventory.",
+         "lines": [
+          7,
+          8
+         ],
+         "sha256": "1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300",
+         "source_id": "toolshare:spec/architecture.md"
+        }
+       ],
+       "support": "supported"
+      },
+      {
+       "change_class": "implementation",
+       "confidence": 1.0,
+       "kind": "add_node",
+       "node": {
+        "body": "Sends member emails.",
+        "data": {},
+        "id": "CMP-NOTIFY",
+        "kind": "component",
+        "title": "Notification service"
+       },
+       "op_id": "op-11",
+       "reason": "The architecture identifies the notification service.",
+       "source_evidence": [
+        {
+         "excerpt": "- CMP-NOTIFY, the notification service (`toolshare/notifications.py`), sends member emails and implements\n  REQ-READY-NOTICE. Every message it sends must follow CON-NOTICE-FORMAT.",
+         "lines": [
+          9,
+          10
+         ],
+         "sha256": "1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300",
+         "source_id": "toolshare:spec/architecture.md"
+        }
+       ],
+       "support": "supported"
+      },
+      {
+       "change_class": "implementation",
+       "confidence": 1.0,
+       "kind": "add_node",
+       "node": {
+        "body": "Checks queue order and expiry in tests/test_holds.py.",
+        "data": {},
+        "id": "TEST-HOLD-QUEUE",
+        "kind": "test",
+        "title": "Hold queue and expiry test"
+       },
+       "op_id": "op-12",
+       "reason": "The architecture identifies this test.",
+       "source_evidence": [
+        {
+         "excerpt": "- Tests: TEST-HOLD-QUEUE (`tests/test_holds.py`) checks queue order and expiry. TEST-NOTICE-FORMAT\n  (`tests/test_notifications.py`) checks messages against CON-NOTICE-FORMAT.",
+         "lines": [
+          11,
+          12
+         ],
+         "sha256": "1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300",
+         "source_id": "toolshare:spec/architecture.md"
+        }
+       ],
+       "support": "supported"
+      },
+      {
+       "change_class": "implementation",
+       "confidence": 1.0,
+       "kind": "add_node",
+       "node": {
+        "body": "Checks messages against the notification format in tests/test_notifications.py.",
+        "data": {},
+        "id": "TEST-NOTICE-FORMAT",
+        "kind": "test",
+        "title": "Notice format tests"
+       },
+       "op_id": "op-13",
+       "reason": "The architecture identifies these tests.",
+       "source_evidence": [
+        {
+         "excerpt": "- Tests: TEST-HOLD-QUEUE (`tests/test_holds.py`) checks queue order and expiry. TEST-NOTICE-FORMAT\n  (`tests/test_notifications.py`) checks messages against CON-NOTICE-FORMAT.",
+         "lines": [
+          11,
+          12
+         ],
+         "sha256": "1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300",
+         "source_id": "toolshare:spec/architecture.md"
+        }
+       ],
+       "support": "supported"
+      },
+      {
+       "change_class": "implementation",
+       "confidence": 1.0,
+       "kind": "add_node",
+       "node": {
+        "body": "Repository file for the holds service.",
+        "data": {
+         "path": "toolshare/holds.py"
+        },
+        "id": "ART-HOLDS-PY",
+        "kind": "artifact",
+        "title": "Holds implementation"
+       },
+       "op_id": "op-14",
+       "reason": "The architecture gives the component's repository path.",
+       "source_evidence": [
+        {
+         "excerpt": "- CMP-HOLDS, the holds service (`toolshare/holds.py`), owns the hold queue and hold expiry. It implements\n  REQ-PLACE-HOLD and REQ-HOLD-EXPIRY.",
+         "lines": [
+          5,
+          6
+         ],
+         "sha256": "1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300",
+         "source_id": "toolshare:spec/architecture.md"
+        }
+       ],
+       "support": "supported"
+      },
+      {
+       "change_class": "implementation",
+       "confidence": 1.0,
+       "kind": "add_node",
+       "node": {
+        "body": "Repository file for the inventory module.",
+        "data": {
+         "path": "toolshare/inventory.py"
+        },
+        "id": "ART-INVENTORY-PY",
+        "kind": "artifact",
+        "title": "Inventory implementation"
+       },
+       "op_id": "op-15",
+       "reason": "The architecture gives the component's repository path.",
+       "source_evidence": [
+        {
+         "excerpt": "- CMP-INVENTORY, the inventory module (`toolshare/inventory.py`), tracks whether a tool is on the shelf. The holds\n  service reads availability from inventory.",
+         "lines": [
+          7,
+          8
+         ],
+         "sha256": "1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300",
+         "source_id": "toolshare:spec/architecture.md"
+        }
+       ],
+       "support": "supported"
+      },
+      {
+       "change_class": "implementation",
+       "confidence": 1.0,
+       "kind": "add_node",
+       "node": {
+        "body": "Repository file for the notification service.",
+        "data": {
+         "path": "toolshare/notifications.py"
+        },
+        "id": "ART-NOTIFICATIONS-PY",
+        "kind": "artifact",
+        "title": "Notifications implementation"
+       },
+       "op_id": "op-16",
+       "reason": "The architecture gives the component's repository path.",
+       "source_evidence": [
+        {
+         "excerpt": "- CMP-NOTIFY, the notification service (`toolshare/notifications.py`), sends member emails and implements\n  REQ-READY-NOTICE. Every message it sends must follow CON-NOTICE-FORMAT.",
+         "lines": [
+          9,
+          10
+         ],
+         "sha256": "1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300",
+         "source_id": "toolshare:spec/architecture.md"
+        }
+       ],
+       "support": "supported"
+      },
+      {
+       "change_class": "structure",
+       "confidence": 0.95,
+       "edge": {
+        "dst": "CAP-HOLDS",
+        "relation": "refines",
+        "src": "GOAL-FAIR-ACCESS"
+       },
+       "kind": "add_edge",
+       "op_id": "op-17",
+       "reason": "The queue capability is inferred to refine the fair-access goal.",
+       "source_evidence": [
+        {
+         "excerpt": "- Priya: the whole point is that members can borrow the shared tools fairly. Right now people grab the drill and\n  nobody knows who is next. We want a proper queue.",
+         "lines": [
+          5,
+          6
+         ],
+         "sha256": "e9a2bdd034c3f226aeaf5dcb1cadea9d6ce03f0f2a9acf9a88ac051469ef64b8",
+         "source_id": "toolshare:discovery/stakeholder_notes.md"
+        }
+       ],
+       "support": "hypothesized"
+      },
+      {
+       "change_class": "structure",
+       "confidence": 0.75,
+       "edge": {
+        "dst": "CAP-NOTIFY",
+        "relation": "refines",
+        "src": "GOAL-FAIR-ACCESS"
+       },
+       "kind": "add_edge",
+       "op_id": "op-18",
+       "reason": "Notifications are inferred to support predictable access.",
+       "source_evidence": [
+        {
+         "excerpt": "## Capability: Member notifications\n\nCAP-NOTIFY — Members are told when something they are waiting for changes.\n\nREQ-READY-NOTICE — When a held tool is ready for pickup, the member is notified by email.",
+         "lines": [
+          24,
+          28
+         ],
+         "sha256": "aba608a7cba6d2494754607772e19d10e5e6823d409dae7c96d9e1917b6d3af0",
+         "source_id": "toolshare:spec/requirements.md"
+        }
+       ],
+       "support": "hypothesized"
+      },
+      {
+       "change_class": "structure",
+       "confidence": 0.99,
+       "edge": {
+        "dst": "REQ-PLACE-HOLD",
+        "relation": "refines",
+        "src": "CAP-HOLDS"
+       },
+       "kind": "add_edge",
+       "op_id": "op-19",
+       "reason": "The requirement is listed under the holds capability.",
+       "source_evidence": [
+        {
+         "excerpt": "## Capability: Holds\n\nCAP-HOLDS — Members can queue for tools that are not currently on the shelf.\n\nREQ-PLACE-HOLD — A member can place a hold on a catalogued tool that is on loan.",
+         "lines": [
+          9,
+          13
+         ],
+         "sha256": "aba608a7cba6d2494754607772e19d10e5e6823d409dae7c96d9e1917b6d3af0",
+         "source_id": "toolshare:spec/requirements.md"
+        }
+       ],
+       "support": "supported"
+      },
+      {
+       "change_class": "structure",
+       "confidence": 0.99,
+       "edge": {
+        "dst": "REQ-HOLD-EXPIRY",
+        "relation": "refines",
+        "src": "CAP-HOLDS"
+       },
+       "kind": "add_edge",
+       "op_id": "op-20",
+       "reason": "The expiry requirement is listed under the holds capability.",
+       "source_evidence": [
+        {
+         "excerpt": "REQ-HOLD-EXPIRY — When a held tool becomes available, the member has a pickup window to collect it. If they do not\ncollect it in time, the hold lapses and the tool passes to the next member in the queue.\nThe length of the pickup window is not decided yet (see Q-PICKUP-WINDOW).",
+         "lines": [
+          18,
+          20
+         ],
+         "sha256": "aba608a7cba6d2494754607772e19d10e5e6823d409dae7c96d9e1917b6d3af0",
+         "source_id": "toolshare:spec/requirements.md"
+        }
+       ],
+       "support": "supported"
+      },
+      {
+       "change_class": "structure",
+       "confidence": 0.99,
+       "edge": {
+        "dst": "REQ-READY-NOTICE",
+        "relation": "refines",
+        "src": "CAP-NOTIFY"
+       },
+       "kind": "add_edge",
+       "op_id": "op-21",
+       "reason": "The ready-notice requirement is listed under the notification capability.",
+       "source_evidence": [
+        {
+         "excerpt": "## Capability: Member notifications\n\nCAP-NOTIFY — Members are told when something they are waiting for changes.\n\nREQ-READY-NOTICE — When a held tool is ready for pickup, the member is notified by email.",
+         "lines": [
+          24,
+          28
+         ],
+         "sha256": "aba608a7cba6d2494754607772e19d10e5e6823d409dae7c96d9e1917b6d3af0",
+         "source_id": "toolshare:spec/requirements.md"
+        }
+       ],
+       "support": "supported"
+      },
+      {
+       "change_class": "structure",
+       "confidence": 1.0,
+       "edge": {
+        "dst": "REQ-HOLD-EXPIRY",
+        "relation": "blocks",
+        "src": "Q-PICKUP-WINDOW"
+       },
+       "kind": "add_edge",
+       "op_id": "op-22",
+       "reason": "The question explicitly blocks the expiry requirement.",
+       "source_evidence": [
+        {
+         "excerpt": "Q-PICKUP-WINDOW — How long is the pickup window? The desk is staffed three days a week. This blocks REQ-HOLD-EXPIRY.",
+         "lines": [
+          22,
+          22
+         ],
+         "sha256": "aba608a7cba6d2494754607772e19d10e5e6823d409dae7c96d9e1917b6d3af0",
+         "source_id": "toolshare:spec/requirements.md"
+        }
+       ],
+       "support": "supported"
+      },
+      {
+       "change_class": "structure",
+       "confidence": 1.0,
+       "edge": {
+        "dst": "REQ-PLACE-HOLD",
+        "relation": "implements",
+        "src": "CMP-HOLDS"
+       },
+       "kind": "add_edge",
+       "op_id": "op-23",
+       "reason": "The architecture assigns the requirement to the service.",
+       "source_evidence": [
+        {
+         "excerpt": "- CMP-HOLDS, the holds service (`toolshare/holds.py`), owns the hold queue and hold expiry. It implements\n  REQ-PLACE-HOLD and REQ-HOLD-EXPIRY.",
+         "lines": [
+          5,
+          6
+         ],
+         "sha256": "1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300",
+         "source_id": "toolshare:spec/architecture.md"
+        }
+       ],
+       "support": "supported"
+      },
+      {
+       "change_class": "structure",
+       "confidence": 1.0,
+       "edge": {
+        "dst": "REQ-HOLD-EXPIRY",
+        "relation": "implements",
+        "src": "CMP-HOLDS"
+       },
+       "kind": "add_edge",
+       "op_id": "op-24",
+       "reason": "The architecture assigns the requirement to the service; this does not assert complete compliance.",
+       "source_evidence": [
+        {
+         "excerpt": "- CMP-HOLDS, the holds service (`toolshare/holds.py`), owns the hold queue and hold expiry. It implements\n  REQ-PLACE-HOLD and REQ-HOLD-EXPIRY.",
+         "lines": [
+          5,
+          6
+         ],
+         "sha256": "1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300",
+         "source_id": "toolshare:spec/architecture.md"
+        }
+       ],
+       "support": "supported"
+      },
+      {
+       "change_class": "structure",
+       "confidence": 1.0,
+       "edge": {
+        "dst": "REQ-READY-NOTICE",
+        "relation": "implements",
+        "src": "CMP-NOTIFY"
+       },
+       "kind": "add_edge",
+       "op_id": "op-25",
+       "reason": "The architecture assigns the requirement to the service; this does not assert complete compliance.",
+       "source_evidence": [
+        {
+         "excerpt": "- CMP-NOTIFY, the notification service (`toolshare/notifications.py`), sends member emails and implements\n  REQ-READY-NOTICE. Every message it sends must follow CON-NOTICE-FORMAT.",
+         "lines": [
+          9,
+          10
+         ],
+         "sha256": "1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300",
+         "source_id": "toolshare:spec/architecture.md"
+        }
+       ],
+       "support": "supported"
+      },
+      {
+       "change_class": "structure",
+       "confidence": 1.0,
+       "edge": {
+        "dst": "CMP-INVENTORY",
+        "relation": "depends_on",
+        "src": "CMP-HOLDS"
+       },
+       "kind": "add_edge",
+       "op_id": "op-26",
+       "reason": "The holds service reads availability from inventory.",
+       "source_evidence": [
+        {
+         "excerpt": "- CMP-INVENTORY, the inventory module (`toolshare/inventory.py`), tracks whether a tool is on the shelf. The holds\n  service reads availability from inventory.",
+         "lines": [
+          7,
+          8
+         ],
+         "sha256": "1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300",
+         "source_id": "toolshare:spec/architecture.md"
+        }
+       ],
+       "support": "supported"
+      },
+      {
+       "change_class": "contract",
+       "confidence": 1.0,
+       "edge": {
+        "dst": "CON-NOTICE-FORMAT",
+        "relation": "constrained_by",
+        "src": "CMP-NOTIFY"
+       },
+       "kind": "add_edge",
+       "op_id": "op-27",
+       "reason": "Every notification service message must follow the contract.",
+       "source_evidence": [
+        {
+         "excerpt": "- CMP-NOTIFY, the notification service (`toolshare/notifications.py`), sends member emails and implements\n  REQ-READY-NOTICE. Every message it sends must follow CON-NOTICE-FORMAT.",
+         "lines": [
+          9,
+          10
+         ],
+         "sha256": "1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300",
+         "source_id": "toolshare:spec/architecture.md"
+        }
+       ],
+       "support": "supported"
+      },
+      {
+       "change_class": "structure",
+       "confidence": 0.99,
+       "edge": {
+        "dst": "REQ-PLACE-HOLD",
+        "relation": "verifies",
+        "src": "TEST-HOLD-QUEUE"
+       },
+       "kind": "add_edge",
+       "op_id": "op-28",
+       "reason": "The test checks the queue-order criterion; it does not cover the entire requirement.",
+       "source_evidence": [
+        {
+         "excerpt": "def test_queue_order_and_expiry():\n    inventory.mark_returned(\"drill\")\n    holds.place_hold(\"ana\", \"drill\")\n    holds.place_hold(\"ben\", \"drill\")\n    assert holds.next_in_queue(\"drill\") == \"ana\"",
+         "lines": [
+          4,
+          8
+         ],
+         "sha256": "bf13124788ea0c7f04563932b8f21ed079e2a9d099ed49ee70fb2f7b4a8a89ed",
+         "source_id": "git:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4:tests/test_holds.py"
+        }
+       ],
+       "support": "supported"
+      },
+      {
+       "change_class": "structure",
+       "confidence": 0.99,
+       "edge": {
+        "dst": "REQ-HOLD-EXPIRY",
+        "relation": "verifies",
+        "src": "TEST-HOLD-QUEUE"
+       },
+       "kind": "add_edge",
+       "op_id": "op-29",
+       "reason": "The test checks advancement after explicit expiry; it does not test the pickup window.",
+       "source_evidence": [
+        {
+         "excerpt": "def test_queue_order_and_expiry():\n    inventory.mark_returned(\"drill\")\n    holds.place_hold(\"ana\", \"drill\")\n    holds.place_hold(\"ben\", \"drill\")\n    assert holds.next_in_queue(\"drill\") == \"ana\"\n    assert holds.expire_hold(\"drill\") == \"ben\"",
+         "lines": [
+          4,
+          9
+         ],
+         "sha256": "bf13124788ea0c7f04563932b8f21ed079e2a9d099ed49ee70fb2f7b4a8a89ed",
+         "source_id": "git:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4:tests/test_holds.py"
+        }
+       ],
+       "support": "supported"
+      },
+      {
+       "change_class": "structure",
+       "confidence": 1.0,
+       "edge": {
+        "dst": "CON-NOTICE-FORMAT",
+        "relation": "verifies",
+        "src": "TEST-NOTICE-FORMAT"
+       },
+       "kind": "add_edge",
+       "op_id": "op-30",
+       "reason": "The architecture states that the tests check the contract; the test code checks subject presence and body length, not all contract properties.",
+       "source_evidence": [
+        {
+         "excerpt": "- Tests: TEST-HOLD-QUEUE (`tests/test_holds.py`) checks queue order and expiry. TEST-NOTICE-FORMAT\n  (`tests/test_notifications.py`) checks messages against CON-NOTICE-FORMAT.",
+         "lines": [
+          11,
+          12
+         ],
+         "sha256": "1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300",
+         "source_id": "toolshare:spec/architecture.md"
+        }
+       ],
+       "support": "supported"
+      },
+      {
+       "change_class": "implementation",
+       "confidence": 1.0,
+       "edge": {
+        "dst": "ART-HOLDS-PY",
+        "relation": "realized_by",
+        "src": "CMP-HOLDS"
+       },
+       "kind": "add_edge",
+       "op_id": "op-31",
+       "reason": "The architecture identifies the holds service file.",
+       "source_evidence": [
+        {
+         "excerpt": "- CMP-HOLDS, the holds service (`toolshare/holds.py`), owns the hold queue and hold expiry. It implements\n  REQ-PLACE-HOLD and REQ-HOLD-EXPIRY.",
+         "lines": [
+          5,
+          6
+         ],
+         "sha256": "1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300",
+         "source_id": "toolshare:spec/architecture.md"
+        }
+       ],
+       "support": "supported"
+      },
+      {
+       "change_class": "implementation",
+       "confidence": 1.0,
+       "edge": {
+        "dst": "ART-INVENTORY-PY",
+        "relation": "realized_by",
+        "src": "CMP-INVENTORY"
+       },
+       "kind": "add_edge",
+       "op_id": "op-32",
+       "reason": "The architecture identifies the inventory module file.",
+       "source_evidence": [
+        {
+         "excerpt": "- CMP-INVENTORY, the inventory module (`toolshare/inventory.py`), tracks whether a tool is on the shelf. The holds\n  service reads availability from inventory.",
+         "lines": [
+          7,
+          8
+         ],
+         "sha256": "1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300",
+         "source_id": "toolshare:spec/architecture.md"
+        }
+       ],
+       "support": "supported"
+      },
+      {
+       "change_class": "implementation",
+       "confidence": 1.0,
+       "edge": {
+        "dst": "ART-NOTIFICATIONS-PY",
+        "relation": "realized_by",
+        "src": "CMP-NOTIFY"
+       },
+       "kind": "add_edge",
+       "op_id": "op-33",
+       "reason": "The architecture identifies the notification service file.",
+       "source_evidence": [
+        {
+         "excerpt": "- CMP-NOTIFY, the notification service (`toolshare/notifications.py`), sends member emails and implements\n  REQ-READY-NOTICE. Every message it sends must follow CON-NOTICE-FORMAT.",
+         "lines": [
+          9,
+          10
+         ],
+         "sha256": "1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300",
+         "source_id": "toolshare:spec/architecture.md"
+        }
+       ],
+       "support": "supported"
+      }
+     ],
+     "origin": {
+      "call_id": "CALL-0001",
+      "call_key": "toolshare/E1/propose",
+      "client": {
+       "api_key_env": "OPENAI_API_KEY",
+       "base_url": "https://api.openai.com",
+       "is_fake": false,
+       "json_mode": true,
+       "max_output_tokens": 32000,
+       "model": "gpt-6.1-terra",
+       "provider": "openai",
+       "temperature": null
+      },
+      "input_sha256": "e4aeb601fd977841e556ff9dc8aa673fbde53d94698c9343a9ca7c7ecff0b05d",
+      "is_fake": false,
+      "prompt": {
+       "prompt_id": "propose_update",
+       "sha256": "cf3981f23ec4eab621bdbb0b07a2878275e2ebb99e4dad3210c2fd8a16a483c8",
+       "version": "v1"
+      }
+     },
+     "possible_contradictions": [
+      {
+       "between": [
+        "REQ-PLACE-HOLD",
+        "CAP-HOLDS",
+        "CMP-HOLDS",
+        "ART-HOLDS-PY"
+       ],
+       "description": "The hold-placement function appends any supplied tool without checking that it is catalogued or on loan; the intended availability scope also needs clarification.",
+       "source_evidence": [
+        {
+         "excerpt": "CAP-HOLDS — Members can queue for tools that are not currently on the shelf.\n\nREQ-PLACE-HOLD — A member can place a hold on a catalogued tool that is on loan.\nAcceptance criteria:\n- A member without overdue items can place a hold on any catalogued tool.",
+         "lines": [
+          11,
+          15
+         ],
+         "sha256": "aba608a7cba6d2494754607772e19d10e5e6823d409dae7c96d9e1917b6d3af0",
+         "source_id": "toolshare:spec/requirements.md"
+        },
+        {
+         "excerpt": "def place_hold(member: str, tool: str) -> int:\n    _QUEUES[tool].append(member)\n    return len(_QUEUES[tool])",
+         "lines": [
+          10,
+          12
+         ],
+         "sha256": "db71ce7ce55d98719ff83f228de5e5efdef7de97a09a6d89f02ebc6f0e5e1a8d",
+         "source_id": "git:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4:toolshare/holds.py"
+        }
+       ]
+      },
+      {
+       "between": [
+        "REQ-HOLD-EXPIRY",
+        "CMP-HOLDS",
+        "ART-HOLDS-PY"
+       ],
+       "description": "The expiry function removes the first queued member whenever called and does not itself track availability or a pickup deadline; the required pickup-window behavior is not evident in the supplied holds implementation.",
+       "source_evidence": [
+        {
+         "excerpt": "REQ-HOLD-EXPIRY — When a held tool becomes available, the member has a pickup window to collect it. If they do not\ncollect it in time, the hold lapses and the tool passes to the next member in the queue.\nThe length of the pickup window is not decided yet (see Q-PICKUP-WINDOW).",
+         "lines": [
+          18,
+          20
+         ],
+         "sha256": "aba608a7cba6d2494754607772e19d10e5e6823d409dae7c96d9e1917b6d3af0",
+         "source_id": "toolshare:spec/requirements.md"
+        },
+        {
+         "excerpt": "def expire_hold(tool: str) -> str | None:\n    \"\"\"The first member did not collect in time: drop them and return the next member, if any.\"\"\"\n    if _QUEUES[tool]:\n        _QUEUES[tool].popleft()\n    return _QUEUES[tool][0] if _QUEUES[tool] else None",
+         "lines": [
+          21,
+          25
+         ],
+         "sha256": "db71ce7ce55d98719ff83f228de5e5efdef7de97a09a6d89f02ebc6f0e5e1a8d",
+         "source_id": "git:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4:toolshare/holds.py"
+        }
+       ]
+      },
+      {
+       "between": [
+        "REQ-READY-NOTICE",
+        "CMP-HOLDS",
+        "CMP-NOTIFY",
+        "ART-HOLDS-PY",
+        "ART-NOTIFICATIONS-PY"
+       ],
+       "description": "The supplied code can construct a ready notice, but the holds availability path does not invoke it and the email function only appends to an outbox. Automatic notice and actual email delivery are not evident.",
+       "source_evidence": [
+        {
+         "excerpt": "REQ-READY-NOTICE — When a held tool is ready for pickup, the member is notified by email.\nAcceptance criteria:\n- The email names the tool and the pickup deadline.",
+         "lines": [
+          28,
+          30
+         ],
+         "sha256": "aba608a7cba6d2494754607772e19d10e5e6823d409dae7c96d9e1917b6d3af0",
+         "source_id": "toolshare:spec/requirements.md"
+        },
+        {
+         "excerpt": "def next_in_queue(tool: str) -> str | None:\n    if not is_on_shelf(tool) or not _QUEUES[tool]:\n        return None\n    return _QUEUES[tool][0]",
+         "lines": [
+          15,
+          18
+         ],
+         "sha256": "db71ce7ce55d98719ff83f228de5e5efdef7de97a09a6d89f02ebc6f0e5e1a8d",
+         "source_id": "git:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4:toolshare/holds.py"
+        },
+        {
+         "excerpt": "def send_email(member: str, subject: str, body: str) -> None:\n    if len(body) > MAX_BODY:\n        raise ValueError(\"notification body too long\")\n    OUTBOX.append({\"to\": member, \"subject\": subject, \"body\": body})\n\n\n\ndef send_ready_notice(member: str, tool: str, deadline: str) -> None:\n    send_email(member, f\"{tool} is ready for pickup\", f\"Your hold on {tool} is ready. Collect it by {deadline}.\")",
+         "lines": [
+          7,
+          14
+         ],
+         "sha256": "ae80be0576750da1fc879a76854887e3233dfbcab1c6b301b84ae84d16dd33b7",
+         "source_id": "git:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4:toolshare/notifications.py"
+        }
+       ]
+      }
+     ],
+     "proposal_id": "P-0001",
+     "unresolved_questions": [
+      {
+       "about": [
+        "Q-PICKUP-WINDOW",
+        "REQ-HOLD-EXPIRY"
+       ],
+       "blocking": true,
+       "question": "How long is the pickup window, and how should the desk's staffing schedule affect it?",
+       "source_evidence": [
+        {
+         "excerpt": "The length of the pickup window is not decided yet (see Q-PICKUP-WINDOW).\n\nQ-PICKUP-WINDOW — How long is the pickup window? The desk is staffed three days a week. This blocks REQ-HOLD-EXPIRY.",
+         "lines": [
+          20,
+          22
+         ],
+         "sha256": "aba608a7cba6d2494754607772e19d10e5e6823d409dae7c96d9e1917b6d3af0",
+         "source_id": "toolshare:spec/requirements.md"
+        }
+       ]
+      },
+      {
+       "about": [
+        "CAP-HOLDS",
+        "REQ-PLACE-HOLD"
+       ],
+       "blocking": true,
+       "question": "Are holds restricted to tools on loan, or may eligible members place holds on any catalogued tool, including one on the shelf?",
+       "source_evidence": [
+        {
+         "excerpt": "CAP-HOLDS — Members can queue for tools that are not currently on the shelf.\n\nREQ-PLACE-HOLD — A member can place a hold on a catalogued tool that is on loan.\nAcceptance criteria:\n- A member without overdue items can place a hold on any catalogued tool.\n- Holds on the same tool are served first come, first served.",
+         "lines": [
+          11,
+          16
+         ],
+         "sha256": "aba608a7cba6d2494754607772e19d10e5e6823d409dae7c96d9e1917b6d3af0",
+         "source_id": "toolshare:spec/requirements.md"
+        }
+       ]
+      },
+      {
+       "about": [
+        "REQ-PLACE-HOLD"
+       ],
+       "blocking": true,
+       "question": "Should members with overdue items be prohibited from placing holds?",
+       "source_evidence": [
+        {
+         "excerpt": "REQ-PLACE-HOLD — A member can place a hold on a catalogued tool that is on loan.\nAcceptance criteria:\n- A member without overdue items can place a hold on any catalogued tool.\n- Holds on the same tool are served first come, first served.",
+         "lines": [
+          13,
+          16
+         ],
+         "sha256": "aba608a7cba6d2494754607772e19d10e5e6823d409dae7c96d9e1917b6d3af0",
+         "source_id": "toolshare:spec/requirements.md"
+        }
+       ]
+      }
+     ]
+    },
+    "review_text": "Proposal P-0001 against graph r1 (current r1)\nIntent: Propose an initial Toolshare specification graph and flag unresolved intent and implementation gaps.\nOrigin: openai, prompt propose_update.v1\n\n[ADMISSIBLE ] op-1 add_node GOAL-FAIR-ACCESS (goal): 'Fair access to shared tools'\n    support: claimed=supported effective=supported (model confidence 1.0, not used)\n    reason: The requirements state this goal.\n    evidence [verified] toolshare:spec/requirements.md L[5, 7]: \"GOAL-FAIR-ACCESS — Members can borrow shared tools fairly and predictably.\"\n[ADMISSIBLE ] op-2 add_node CAP-HOLDS (capability): 'Holds'\n    support: claimed=supported effective=supported (model confidence 1.0, not used)\n    reason: The requirements define the holds capability.\n    evidence [verified] toolshare:spec/requirements.md L[9, 11]: \"CAP-HOLDS — Members can queue for tools that are not currently on the shelf.\"\n[ADMISSIBLE ] op-3 add_node CAP-NOTIFY (capability): 'Member notifications'\n    support: claimed=supported effective=supported (model confidence 1.0, not used)\n    reason: The requirements define the notification capability.\n    evidence [verified] toolshare:spec/requirements.md L[24, 26]: \"CAP-NOTIFY — Members are told when something they are waiting for changes.\"\n[ADMISSIBLE ] op-4 add_node REQ-PLACE-HOLD (requirement): 'Place a hold'\n    support: claimed=supported effective=supported (model confidence 1.0, not used)\n    reason: The draft states the requirement and its acceptance criteria.\n    evidence [verified] toolshare:spec/requirements.md L[13, 16]: \"REQ-PLACE-HOLD — A member can place a hold on a catalogued tool that is on loan.\nAcceptance criteria:\n- A member without overdue items can place a hold on any c\"\n[ADMISSIBLE ] op-5 add_node REQ-HOLD-EXPIRY (requirement): 'Hold expiry'\n    support: claimed=supported effective=supported (model confidence 1.0, not used)\n    reason: The draft states the expiry requirement but no separate acceptance criteria.\n    evidence [verified] toolshare:spec/requirements.md L[18, 20]: \"REQ-HOLD-EXPIRY — When a held tool becomes available, the member has a pickup window to collect it. If they do not\ncollect it in time, the hold lapses and the t\"\n[ADMISSIBLE ] op-6 add_node REQ-READY-NOTICE (requirement): 'Ready-for-pickup notice'\n    support: claimed=supported effective=supported (model confidence 1.0, not used)\n    reason: The draft states the requirement and its acceptance criterion.\n    evidence [verified] toolshare:spec/requirements.md L[28, 30]: \"REQ-READY-NOTICE — When a held tool is ready for pickup, the member is notified by email.\nAcceptance criteria:\n- The email names the tool and the pickup deadlin\"\n[ADMISSIBLE ] op-7 add_node CON-NOTICE-FORMAT (contract): 'Notification format'\n    support: claimed=supported effective=supported (model confidence 1.0, not used)\n    reason: The draft records an accepted notification format.\n    evidence [verified] toolshare:spec/requirements.md L[32, 33]: \"CON-NOTICE-FORMAT — Notification messages are plain-text emails with a subject line and at most 500 characters of\nbody text. Agreed with the desk volunteer coor\"\n[ADMISSIBLE ] op-8 add_node Q-PICKUP-WINDOW (question): 'Pickup window length'\n    support: claimed=supported effective=supported (model confidence 1.0, not used)\n    reason: The draft identifies an undecided blocking question.\n    evidence [verified] toolshare:spec/requirements.md L[20, 22]: \"The length of the pickup window is not decided yet (see Q-PICKUP-WINDOW).\n\nQ-PICKUP-WINDOW — How long is the pickup window? The desk is staffed three days a wee\"\n[ADMISSIBLE ] op-9 add_node CMP-HOLDS (component): 'Holds service'\n    support: claimed=supported effective=supported (model confidence 1.0, not used)\n    reason: The architecture identifies the holds service.\n    evidence [verified] toolshare:spec/architecture.md L[5, 6]: \"- CMP-HOLDS, the holds service (`toolshare/holds.py`), owns the hold queue and hold expiry. It implements\n  REQ-PLACE-HOLD and REQ-HOLD-EXPIRY.\"\n[ADMISSIBLE ] op-10 add_node CMP-INVENTORY (component): 'Inventory module'\n    support: claimed=supported effective=supported (model confidence 1.0, not used)\n    reason: The architecture identifies the inventory module.\n    evidence [verified] toolshare:spec/architecture.md L[7, 8]: \"- CMP-INVENTORY, the inventory module (`toolshare/inventory.py`), tracks whether a tool is on the shelf. The holds\n  service reads availability from inventory.\"\n[ADMISSIBLE ] op-11 add_node CMP-NOTIFY (component): 'Notification service'\n    support: claimed=supported effective=supported (model confidence 1.0, not used)\n    reason: The architecture identifies the notification service.\n    evidence [verified] toolshare:spec/architecture.md L[9, 10]: \"- CMP-NOTIFY, the notification service (`toolshare/notifications.py`), sends member emails and implements\n  REQ-READY-NOTICE. Every message it sends must follow\"\n[ADMISSIBLE ] op-12 add_node TEST-HOLD-QUEUE (test): 'Hold queue and expiry test'\n    support: claimed=supported effective=supported (model confidence 1.0, not used)\n    reason: The architecture identifies this test.\n    evidence [verified] toolshare:spec/architecture.md L[11, 12]: \"- Tests: TEST-HOLD-QUEUE (`tests/test_holds.py`) checks queue order and expiry. TEST-NOTICE-FORMAT\n  (`tests/test_notifications.py`) checks messages against CON\"\n[ADMISSIBLE ] op-13 add_node TEST-NOTICE-FORMAT (test): 'Notice format tests'\n    support: claimed=supported effective=supported (model confidence 1.0, not used)\n    reason: The architecture identifies these tests.\n    evidence [verified] toolshare:spec/architecture.md L[11, 12]: \"- Tests: TEST-HOLD-QUEUE (`tests/test_holds.py`) checks queue order and expiry. TEST-NOTICE-FORMAT\n  (`tests/test_notifications.py`) checks messages against CON\"\n[ADMISSIBLE ] op-14 add_node ART-HOLDS-PY (artifact): 'Holds implementation'\n    support: claimed=supported effective=supported (model confidence 1.0, not used)\n    reason: The architecture gives the component's repository path.\n    evidence [verified] toolshare:spec/architecture.md L[5, 6]: \"- CMP-HOLDS, the holds service (`toolshare/holds.py`), owns the hold queue and hold expiry. It implements\n  REQ-PLACE-HOLD and REQ-HOLD-EXPIRY.\"\n[ADMISSIBLE ] op-15 add_node ART-INVENTORY-PY (artifact): 'Inventory implementation'\n    support: claimed=supported effective=supported (model confidence 1.0, not used)\n    reason: The architecture gives the component's repository path.\n    evidence [verified] toolshare:spec/architecture.md L[7, 8]: \"- CMP-INVENTORY, the inventory module (`toolshare/inventory.py`), tracks whether a tool is on the shelf. The holds\n  service reads availability from inventory.\"\n[ADMISSIBLE ] op-16 add_node ART-NOTIFICATIONS-PY (artifact): 'Notifications implementation'\n    support: claimed=supported effective=supported (model confidence 1.0, not used)\n    reason: The architecture gives the component's repository path.\n    evidence [verified] toolshare:spec/architecture.md L[9, 10]: \"- CMP-NOTIFY, the notification service (`toolshare/notifications.py`), sends member emails and implements\n  REQ-READY-NOTICE. Every message it sends must follow\"\n[ADMISSIBLE ] op-17 add_edge GOAL-FAIR-ACCESS -refines-> CAP-HOLDS\n    support: claimed=hypothesized effective=hypothesized (model confidence 0.95, not used)\n    reason: The queue capability is inferred to refine the fair-access goal.\n    evidence [verified] toolshare:discovery/stakeholder_notes.md L[5, 6]: \"- Priya: the whole point is that members can borrow the shared tools fairly. Right now people grab the drill and\n  nobody knows who is next. We want a proper qu\"\n    info: stored_as_hypothesized — will be stored with status 'hypothesized' (raises investigate_unknown)\n[ADMISSIBLE ] op-18 add_edge GOAL-FAIR-ACCESS -refines-> CAP-NOTIFY\n    support: claimed=hypothesized effective=hypothesized (model confidence 0.75, not used)\n    reason: Notifications are inferred to support predictable access.\n    evidence [verified] toolshare:spec/requirements.md L[24, 28]: \"## Capability: Member notifications\n\nCAP-NOTIFY — Members are told when something they are waiting for changes.\n\nREQ-READY-NOTICE — When a held tool is ready fo\"\n    info: stored_as_hypothesized — will be stored with status 'hypothesized' (raises investigate_unknown)\n[ADMISSIBLE ] op-19 add_edge CAP-HOLDS -refines-> REQ-PLACE-HOLD\n    support: claimed=supported effective=supported (model confidence 0.99, not used)\n    reason: The requirement is listed under the holds capability.\n    evidence [verified] toolshare:spec/requirements.md L[9, 13]: \"## Capability: Holds\n\nCAP-HOLDS — Members can queue for tools that are not currently on the shelf.\n\nREQ-PLACE-HOLD — A member can place a hold on a catalogued t\"\n[ADMISSIBLE ] op-20 add_edge CAP-HOLDS -refines-> REQ-HOLD-EXPIRY\n    support: claimed=supported effective=supported (model confidence 0.99, not used)\n    reason: The expiry requirement is listed under the holds capability.\n    evidence [verified] toolshare:spec/requirements.md L[18, 20]: \"REQ-HOLD-EXPIRY — When a held tool becomes available, the member has a pickup window to collect it. If they do not\ncollect it in time, the hold lapses and the t\"\n[ADMISSIBLE ] op-21 add_edge CAP-NOTIFY -refines-> REQ-READY-NOTICE\n    support: claimed=supported effective=supported (model confidence 0.99, not used)\n    reason: The ready-notice requirement is listed under the notification capability.\n    evidence [verified] toolshare:spec/requirements.md L[24, 28]: \"## Capability: Member notifications\n\nCAP-NOTIFY — Members are told when something they are waiting for changes.\n\nREQ-READY-NOTICE — When a held tool is ready fo\"\n[ADMISSIBLE ] op-22 add_edge Q-PICKUP-WINDOW -blocks-> REQ-HOLD-EXPIRY\n    support: claimed=supported effective=supported (model confidence 1.0, not used)\n    reason: The question explicitly blocks the expiry requirement.\n    evidence [verified] toolshare:spec/requirements.md L[22, 22]: \"Q-PICKUP-WINDOW — How long is the pickup window? The desk is staffed three days a week. This blocks REQ-HOLD-EXPIRY.\"\n[ADMISSIBLE ] op-23 add_edge CMP-HOLDS -implements-> REQ-PLACE-HOLD\n    support: claimed=supported effective=supported (model confidence 1.0, not used)\n    reason: The architecture assigns the requirement to the service.\n    evidence [verified] toolshare:spec/architecture.md L[5, 6]: \"- CMP-HOLDS, the holds service (`toolshare/holds.py`), owns the hold queue and hold expiry. It implements\n  REQ-PLACE-HOLD and REQ-HOLD-EXPIRY.\"\n[ADMISSIBLE ] op-24 add_edge CMP-HOLDS -implements-> REQ-HOLD-EXPIRY\n    support: claimed=supported effective=supported (model confidence 1.0, not used)\n    reason: The architecture assigns the requirement to the service; this does not assert complete compliance.\n    evidence [verified] toolshare:spec/architecture.md L[5, 6]: \"- CMP-HOLDS, the holds service (`toolshare/holds.py`), owns the hold queue and hold expiry. It implements\n  REQ-PLACE-HOLD and REQ-HOLD-EXPIRY.\"\n[ADMISSIBLE ] op-25 add_edge CMP-NOTIFY -implements-> REQ-READY-NOTICE\n    support: claimed=supported effective=supported (model confidence 1.0, not used)\n    reason: The architecture assigns the requirement to the service; this does not assert complete compliance.\n    evidence [verified] toolshare:spec/architecture.md L[9, 10]: \"- CMP-NOTIFY, the notification service (`toolshare/notifications.py`), sends member emails and implements\n  REQ-READY-NOTICE. Every message it sends must follow\"\n[ADMISSIBLE ] op-26 add_edge CMP-HOLDS -depends_on-> CMP-INVENTORY\n    support: claimed=supported effective=supported (model confidence 1.0, not used)\n    reason: The holds service reads availability from inventory.\n    evidence [verified] toolshare:spec/architecture.md L[7, 8]: \"- CMP-INVENTORY, the inventory module (`toolshare/inventory.py`), tracks whether a tool is on the shelf. The holds\n  service reads availability from inventory.\"\n[ADMISSIBLE ] op-27 add_edge CMP-NOTIFY -constrained_by-> CON-NOTICE-FORMAT\n    support: claimed=supported effective=supported (model confidence 1.0, not used)\n    reason: Every notification service message must follow the contract.\n    evidence [verified] toolshare:spec/architecture.md L[9, 10]: \"- CMP-NOTIFY, the notification service (`toolshare/notifications.py`), sends member emails and implements\n  REQ-READY-NOTICE. Every message it sends must follow\"\n[ADMISSIBLE ] op-28 add_edge TEST-HOLD-QUEUE -verifies-> REQ-PLACE-HOLD\n    support: claimed=supported effective=supported (model confidence 0.99, not used)\n    reason: The test checks the queue-order criterion; it does not cover the entire requirement.\n    evidence [verified] git:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4:tests/test_holds.py L[4, 8]: \"def test_queue_order_and_expiry():\n    inventory.mark_returned(\"drill\")\n    holds.place_hold(\"ana\", \"drill\")\n    holds.place_hold(\"ben\", \"drill\")\n    assert hol\"\n[ADMISSIBLE ] op-29 add_edge TEST-HOLD-QUEUE -verifies-> REQ-HOLD-EXPIRY\n    support: claimed=supported effective=supported (model confidence 0.99, not used)\n    reason: The test checks advancement after explicit expiry; it does not test the pickup window.\n    evidence [verified] git:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4:tests/test_holds.py L[4, 9]: \"def test_queue_order_and_expiry():\n    inventory.mark_returned(\"drill\")\n    holds.place_hold(\"ana\", \"drill\")\n    holds.place_hold(\"ben\", \"drill\")\n    assert hol\"\n[ADMISSIBLE ] op-30 add_edge TEST-NOTICE-FORMAT -verifies-> CON-NOTICE-FORMAT\n    support: claimed=supported effective=supported (model confidence 1.0, not used)\n    reason: The architecture states that the tests check the contract; the test code checks subject presence and body length, not all contract properties.\n    evidence [verified] toolshare:spec/architecture.md L[11, 12]: \"- Tests: TEST-HOLD-QUEUE (`tests/test_holds.py`) checks queue order and expiry. TEST-NOTICE-FORMAT\n  (`tests/test_notifications.py`) checks messages against CON\"\n[ADMISSIBLE ] op-31 add_edge CMP-HOLDS -realized_by-> ART-HOLDS-PY\n    support: claimed=supported effective=supported (model confidence 1.0, not used)\n    reason: The architecture identifies the holds service file.\n    evidence [verified] toolshare:spec/architecture.md L[5, 6]: \"- CMP-HOLDS, the holds service (`toolshare/holds.py`), owns the hold queue and hold expiry. It implements\n  REQ-PLACE-HOLD and REQ-HOLD-EXPIRY.\"\n[ADMISSIBLE ] op-32 add_edge CMP-INVENTORY -realized_by-> ART-INVENTORY-PY\n    support: claimed=supported effective=supported (model confidence 1.0, not used)\n    reason: The architecture identifies the inventory module file.\n    evidence [verified] toolshare:spec/architecture.md L[7, 8]: \"- CMP-INVENTORY, the inventory module (`toolshare/inventory.py`), tracks whether a tool is on the shelf. The holds\n  service reads availability from inventory.\"\n[ADMISSIBLE ] op-33 add_edge CMP-NOTIFY -realized_by-> ART-NOTIFICATIONS-PY\n    support: claimed=supported effective=supported (model confidence 1.0, not used)\n    reason: The architecture identifies the notification service file.\n    evidence [verified] toolshare:spec/architecture.md L[9, 10]: \"- CMP-NOTIFY, the notification service (`toolshare/notifications.py`), sends member emails and implements\n  REQ-READY-NOTICE. Every message it sends must follow\"\n\nUnresolved questions:\n  - How long is the pickup window, and how should the desk's staffing schedule affect it? (about ['Q-PICKUP-WINDOW', 'REQ-HOLD-EXPIRY'])\n  - Are holds restricted to tools on loan, or may eligible members place holds on any catalogued tool, including one on the shelf? (about ['CAP-HOLDS', 'REQ-PLACE-HOLD'])\n  - Should members with overdue items be prohibited from placing holds? (about ['REQ-PLACE-HOLD'])\n\nPossible contradictions:\n  - The hold-placement function appends any supplied tool without checking that it is catalogued or on loan; the intended availability scope also needs clarification. (between ['REQ-PLACE-HOLD', 'CAP-HOLDS', 'CMP-HOLDS', 'ART-HOLDS-PY'])\n  - The expiry function removes the first queued member whenever called and does not itself track availability or a pickup deadline; the required pickup-window behavior is not evident in the supplied holds implementation. (between ['REQ-HOLD-EXPIRY', 'CMP-HOLDS', 'ART-HOLDS-PY'])\n  - The supplied code can construct a ready notice, but the holds availability path does not invoke it and the email function only appends to an outbox. Automatic notice and actual email delivery are not evident. (between ['REQ-READY-NOTICE', 'CMP-HOLDS', 'CMP-NOTIFY', 'ART-HOLDS-PY', 'ART-NOTIFICATIONS-PY'])\n\nInfluence preview if every admissible/quarantined op were accepted:\n  check_contract: CMP-HOLDS, CMP-NOTIFY\n  investigate_unknown: CAP-HOLDS, CAP-NOTIFY, GOAL-FAIR-ACCESS\n  rerun_test: TEST-HOLD-QUEUE, TEST-NOTICE-FORMAT\n  review_implementation: ART-HOLDS-PY, ART-INVENTORY-PY, ART-NOTIFICATIONS-PY, CMP-HOLDS, CMP-INVENTORY, CMP-NOTIFY, REQ-HOLD-EXPIRY, REQ-PLACE-HOLD, REQ-READY-NOTICE\n  review_spec: CAP-HOLDS, CAP-NOTIFY, CMP-INVENTORY, CON-NOTICE-FORMAT, GOAL-FAIR-ACCESS, Q-PICKUP-WINDOW, REQ-HOLD-EXPIRY, REQ-PLACE-HOLD, REQ-READY-NOTICE\n  readiness REQ-HOLD-EXPIRY: None -> blocked\n  readiness REQ-PLACE-HOLD: None -> ready\n  readiness REQ-READY-NOTICE: None -> ready\n\nNote: Schema, citation and engine validity do not imply semantic correctness. A verified excerpt shows the text exists, not that the proposed relationship follows from it. A missing edge is not proof of independence.",
+    "validation": {
+     "base_graph_revision": 1,
+     "engine_preview": {
+      "committable": true,
+      "errors": null,
+      "ran": true,
+      "readiness_changes": [
+       {
+        "from": null,
+        "requirement_id": "REQ-HOLD-EXPIRY",
+        "to": "blocked"
+       },
+       {
+        "from": null,
+        "requirement_id": "REQ-PLACE-HOLD",
+        "to": "ready"
+       },
+       {
+        "from": null,
+        "requirement_id": "REQ-READY-NOTICE",
+        "to": "ready"
+       }
+      ],
+      "required_actions": {
+       "check_contract": [
+        "CMP-HOLDS",
+        "CMP-NOTIFY"
+       ],
+       "investigate_unknown": [
+        "CAP-HOLDS",
+        "CAP-NOTIFY",
+        "GOAL-FAIR-ACCESS"
+       ],
+       "rerun_test": [
+        "TEST-HOLD-QUEUE",
+        "TEST-NOTICE-FORMAT"
+       ],
+       "review_implementation": [
+        "ART-HOLDS-PY",
+        "ART-INVENTORY-PY",
+        "ART-NOTIFICATIONS-PY",
+        "CMP-HOLDS",
+        "CMP-INVENTORY",
+        "CMP-NOTIFY",
+        "REQ-HOLD-EXPIRY",
+        "REQ-PLACE-HOLD",
+        "REQ-READY-NOTICE"
+       ],
+       "review_spec": [
+        "CAP-HOLDS",
+        "CAP-NOTIFY",
+        "CMP-INVENTORY",
+        "CON-NOTICE-FORMAT",
+        "GOAL-FAIR-ACCESS",
+        "Q-PICKUP-WINDOW",
+        "REQ-HOLD-EXPIRY",
+        "REQ-PLACE-HOLD",
+        "REQ-READY-NOTICE"
+       ]
+      }
+     },
+     "graph_revision": 1,
+     "ops": {
+      "op-1": {
+       "citations": [
+        "verified:toolshare:spec/requirements.md:[5, 7]"
+       ],
+       "effective_support": "supported",
+       "findings": [],
+       "verdict": "admissible"
+      },
+      "op-10": {
+       "citations": [
+        "verified:toolshare:spec/architecture.md:[7, 8]"
+       ],
+       "effective_support": "supported",
+       "findings": [],
+       "verdict": "admissible"
+      },
+      "op-11": {
+       "citations": [
+        "verified:toolshare:spec/architecture.md:[9, 10]"
+       ],
+       "effective_support": "supported",
+       "findings": [],
+       "verdict": "admissible"
+      },
+      "op-12": {
+       "citations": [
+        "verified:toolshare:spec/architecture.md:[11, 12]"
+       ],
+       "effective_support": "supported",
+       "findings": [],
+       "verdict": "admissible"
+      },
+      "op-13": {
+       "citations": [
+        "verified:toolshare:spec/architecture.md:[11, 12]"
+       ],
+       "effective_support": "supported",
+       "findings": [],
+       "verdict": "admissible"
+      },
+      "op-14": {
+       "citations": [
+        "verified:toolshare:spec/architecture.md:[5, 6]"
+       ],
+       "effective_support": "supported",
+       "findings": [],
+       "verdict": "admissible"
+      },
+      "op-15": {
+       "citations": [
+        "verified:toolshare:spec/architecture.md:[7, 8]"
+       ],
+       "effective_support": "supported",
+       "findings": [],
+       "verdict": "admissible"
+      },
+      "op-16": {
+       "citations": [
+        "verified:toolshare:spec/architecture.md:[9, 10]"
+       ],
+       "effective_support": "supported",
+       "findings": [],
+       "verdict": "admissible"
+      },
+      "op-17": {
+       "citations": [
+        "verified:toolshare:discovery/stakeholder_notes.md:[5, 6]"
+       ],
+       "effective_support": "hypothesized",
+       "findings": [
+        "info:stored_as_hypothesized"
+       ],
+       "verdict": "admissible"
+      },
+      "op-18": {
+       "citations": [
+        "verified:toolshare:spec/requirements.md:[24, 28]"
+       ],
+       "effective_support": "hypothesized",
+       "findings": [
+        "info:stored_as_hypothesized"
+       ],
+       "verdict": "admissible"
+      },
+      "op-19": {
+       "citations": [
+        "verified:toolshare:spec/requirements.md:[9, 13]"
+       ],
+       "effective_support": "supported",
+       "findings": [],
+       "verdict": "admissible"
+      },
+      "op-2": {
+       "citations": [
+        "verified:toolshare:spec/requirements.md:[9, 11]"
+       ],
+       "effective_support": "supported",
+       "findings": [],
+       "verdict": "admissible"
+      },
+      "op-20": {
+       "citations": [
+        "verified:toolshare:spec/requirements.md:[18, 20]"
+       ],
+       "effective_support": "supported",
+       "findings": [],
+       "verdict": "admissible"
+      },
+      "op-21": {
+       "citations": [
+        "verified:toolshare:spec/requirements.md:[24, 28]"
+       ],
+       "effective_support": "supported",
+       "findings": [],
+       "verdict": "admissible"
+      },
+      "op-22": {
+       "citations": [
+        "verified:toolshare:spec/requirements.md:[22, 22]"
+       ],
+       "effective_support": "supported",
+       "findings": [],
+       "verdict": "admissible"
+      },
+      "op-23": {
+       "citations": [
+        "verified:toolshare:spec/architecture.md:[5, 6]"
+       ],
+       "effective_support": "supported",
+       "findings": [],
+       "verdict": "admissible"
+      },
+      "op-24": {
+       "citations": [
+        "verified:toolshare:spec/architecture.md:[5, 6]"
+       ],
+       "effective_support": "supported",
+       "findings": [],
+       "verdict": "admissible"
+      },
+      "op-25": {
+       "citations": [
+        "verified:toolshare:spec/architecture.md:[9, 10]"
+       ],
+       "effective_support": "supported",
+       "findings": [],
+       "verdict": "admissible"
+      },
+      "op-26": {
+       "citations": [
+        "verified:toolshare:spec/architecture.md:[7, 8]"
+       ],
+       "effective_support": "supported",
+       "findings": [],
+       "verdict": "admissible"
+      },
+      "op-27": {
+       "citations": [
+        "verified:toolshare:spec/architecture.md:[9, 10]"
+       ],
+       "effective_support": "supported",
+       "findings": [],
+       "verdict": "admissible"
+      },
+      "op-28": {
+       "citations": [
+        "verified:git:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4:tests/test_holds.py:[4, 8]"
+       ],
+       "effective_support": "supported",
+       "findings": [],
+       "verdict": "admissible"
+      },
+      "op-29": {
+       "citations": [
+        "verified:git:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4:tests/test_holds.py:[4, 9]"
+       ],
+       "effective_support": "supported",
+       "findings": [],
+       "verdict": "admissible"
+      },
+      "op-3": {
+       "citations": [
+        "verified:toolshare:spec/requirements.md:[24, 26]"
+       ],
+       "effective_support": "supported",
+       "findings": [],
+       "verdict": "admissible"
+      },
+      "op-30": {
+       "citations": [
+        "verified:toolshare:spec/architecture.md:[11, 12]"
+       ],
+       "effective_support": "supported",
+       "findings": [],
+       "verdict": "admissible"
+      },
+      "op-31": {
+       "citations": [
+        "verified:toolshare:spec/architecture.md:[5, 6]"
+       ],
+       "effective_support": "supported",
+       "findings": [],
+       "verdict": "admissible"
+      },
+      "op-32": {
+       "citations": [
+        "verified:toolshare:spec/architecture.md:[7, 8]"
+       ],
+       "effective_support": "supported",
+       "findings": [],
+       "verdict": "admissible"
+      },
+      "op-33": {
+       "citations": [
+        "verified:toolshare:spec/architecture.md:[9, 10]"
+       ],
+       "effective_support": "supported",
+       "findings": [],
+       "verdict": "admissible"
+      },
+      "op-4": {
+       "citations": [
+        "verified:toolshare:spec/requirements.md:[13, 16]"
+       ],
+       "effective_support": "supported",
+       "findings": [],
+       "verdict": "admissible"
+      },
+      "op-5": {
+       "citations": [
+        "verified:toolshare:spec/requirements.md:[18, 20]"
+       ],
+       "effective_support": "supported",
+       "findings": [],
+       "verdict": "admissible"
+      },
+      "op-6": {
+       "citations": [
+        "verified:toolshare:spec/requirements.md:[28, 30]"
+       ],
+       "effective_support": "supported",
+       "findings": [],
+       "verdict": "admissible"
+      },
+      "op-7": {
+       "citations": [
+        "verified:toolshare:spec/requirements.md:[32, 33]"
+       ],
+       "effective_support": "supported",
+       "findings": [],
+       "verdict": "admissible"
+      },
+      "op-8": {
+       "citations": [
+        "verified:toolshare:spec/requirements.md:[20, 22]"
+       ],
+       "effective_support": "supported",
+       "findings": [],
+       "verdict": "admissible"
+      },
+      "op-9": {
+       "citations": [
+        "verified:toolshare:spec/architecture.md:[5, 6]"
+       ],
+       "effective_support": "supported",
+       "findings": [],
+       "verdict": "admissible"
+      }
+     },
+     "stale_base": false,
+     "summary": {
+      "admissible": [
+       "op-1",
+       "op-10",
+       "op-11",
+       "op-12",
+       "op-13",
+       "op-14",
+       "op-15",
+       "op-16",
+       "op-17",
+       "op-18",
+       "op-19",
+       "op-2",
+       "op-20",
+       "op-21",
+       "op-22",
+       "op-23",
+       "op-24",
+       "op-25",
+       "op-26",
+       "op-27",
+       "op-28",
+       "op-29",
+       "op-3",
+       "op-30",
+       "op-31",
+       "op-32",
+       "op-33",
+       "op-4",
+       "op-5",
+       "op-6",
+       "op-7",
+       "op-8",
+       "op-9"
+      ],
+      "duplicate": [],
+      "invalid": [],
+      "quarantined": []
+     }
+    }
+   },
+   "sources": [
+    {
+     "line_count": 14,
+     "origin": "file",
+     "path": "discovery/stakeholder_notes.md",
+     "project": "toolshare",
+     "sha256": "e9a2bdd034c3f226aeaf5dcb1cadea9d6ce03f0f2a9acf9a88ac051469ef64b8",
+     "source_id": "toolshare:discovery/stakeholder_notes.md",
+     "source_type": "stakeholder_notes",
+     "version": "2026-08-28"
+    },
+    {
+     "line_count": 12,
+     "origin": "file",
+     "path": "spec/architecture.md",
+     "project": "toolshare",
+     "sha256": "1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300",
+     "source_id": "toolshare:spec/architecture.md",
+     "source_type": "architecture",
+     "version": "2026-09-02"
+    },
+    {
+     "line_count": 33,
+     "origin": "file",
+     "path": "spec/requirements.md",
+     "project": "toolshare",
+     "sha256": "aba608a7cba6d2494754607772e19d10e5e6823d409dae7c96d9e1917b6d3af0",
+     "source_id": "toolshare:spec/requirements.md",
+     "source_type": "requirements",
+     "version": "draft-1"
+    },
+    {
+     "commit": "d1ca69603f4828bb812eba1e72f15c756ade52a4",
+     "line_count": 9,
+     "origin": "git",
+     "path": "tests/test_holds.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "bf13124788ea0c7f04563932b8f21ed079e2a9d099ed49ee70fb2f7b4a8a89ed",
+     "source_id": "git:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4:tests/test_holds.py",
+     "source_type": "test",
+     "version": "d1ca69603f4828bb812eba1e72f15c756ade52a4"
+    },
+    {
+     "commit": "d1ca69603f4828bb812eba1e72f15c756ade52a4",
+     "line_count": 14,
+     "origin": "git",
+     "path": "tests/test_notifications.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "5723cb01fb2199145f4388ba8e9c0359c7c874acef4cd626516428337b5cd1e4",
+     "source_id": "git:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4:tests/test_notifications.py",
+     "source_type": "test",
+     "version": "d1ca69603f4828bb812eba1e72f15c756ade52a4"
+    },
+    {
+     "commit": "d1ca69603f4828bb812eba1e72f15c756ade52a4",
+     "line_count": 0,
+     "origin": "git",
+     "path": "toolshare/__init__.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "source_id": "git:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4:toolshare/__init__.py",
+     "source_type": "code",
+     "version": "d1ca69603f4828bb812eba1e72f15c756ade52a4"
+    },
+    {
+     "commit": "d1ca69603f4828bb812eba1e72f15c756ade52a4",
+     "line_count": 25,
+     "origin": "git",
+     "path": "toolshare/holds.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "db71ce7ce55d98719ff83f228de5e5efdef7de97a09a6d89f02ebc6f0e5e1a8d",
+     "source_id": "git:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4:toolshare/holds.py",
+     "source_type": "code",
+     "version": "d1ca69603f4828bb812eba1e72f15c756ade52a4"
+    },
+    {
+     "commit": "d1ca69603f4828bb812eba1e72f15c756ade52a4",
+     "line_count": 15,
+     "origin": "git",
+     "path": "toolshare/inventory.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "5d5448a350375901f733929d43320921ed02ef91bd84d306a0fa7f0ade64f557",
+     "source_id": "git:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4:toolshare/inventory.py",
+     "source_type": "code",
+     "version": "d1ca69603f4828bb812eba1e72f15c756ade52a4"
+    },
+    {
+     "commit": "d1ca69603f4828bb812eba1e72f15c756ade52a4",
+     "line_count": 14,
+     "origin": "git",
+     "path": "toolshare/notifications.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "ae80be0576750da1fc879a76854887e3233dfbcab1c6b301b84ae84d16dd33b7",
+     "source_id": "git:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4:toolshare/notifications.py",
+     "source_type": "code",
+     "version": "d1ca69603f4828bb812eba1e72f15c756ade52a4"
+    }
+   ],
+   "spec_projection": "spec_E1.md"
+  },
+  {
+   "diffs": [],
+   "event": "E2",
+   "graph_revision_before": 2,
+   "kind": "refinement",
+   "skipped": "G0: no maintenance after initial construction",
+   "sources": [
+    {
+     "line_count": 14,
+     "origin": "file",
+     "path": "discovery/stakeholder_notes.md",
+     "project": "toolshare",
+     "sha256": "e9a2bdd034c3f226aeaf5dcb1cadea9d6ce03f0f2a9acf9a88ac051469ef64b8",
+     "source_id": "toolshare:discovery/stakeholder_notes.md",
+     "source_type": "stakeholder_notes",
+     "version": "2026-08-28"
+    },
+    {
+     "line_count": 12,
+     "origin": "file",
+     "path": "spec/architecture.md",
+     "project": "toolshare",
+     "sha256": "1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300",
+     "source_id": "toolshare:spec/architecture.md",
+     "source_type": "architecture",
+     "version": "2026-09-02"
+    },
+    {
+     "line_count": 36,
+     "origin": "file",
+     "path": "spec/requirements.md",
+     "project": "toolshare",
+     "sha256": "069e49112dfe418410bd88df5d778f3c6761cb30b9233208e7c692659aa146c4",
+     "source_id": "toolshare:spec/requirements.md",
+     "source_type": "requirements",
+     "version": "draft-2"
+    },
+    {
+     "commit": "d1ca69603f4828bb812eba1e72f15c756ade52a4",
+     "line_count": 9,
+     "origin": "git",
+     "path": "tests/test_holds.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "bf13124788ea0c7f04563932b8f21ed079e2a9d099ed49ee70fb2f7b4a8a89ed",
+     "source_id": "git:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4:tests/test_holds.py",
+     "source_type": "test",
+     "version": "d1ca69603f4828bb812eba1e72f15c756ade52a4"
+    },
+    {
+     "commit": "d1ca69603f4828bb812eba1e72f15c756ade52a4",
+     "line_count": 14,
+     "origin": "git",
+     "path": "tests/test_notifications.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "5723cb01fb2199145f4388ba8e9c0359c7c874acef4cd626516428337b5cd1e4",
+     "source_id": "git:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4:tests/test_notifications.py",
+     "source_type": "test",
+     "version": "d1ca69603f4828bb812eba1e72f15c756ade52a4"
+    },
+    {
+     "commit": "d1ca69603f4828bb812eba1e72f15c756ade52a4",
+     "line_count": 0,
+     "origin": "git",
+     "path": "toolshare/__init__.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "source_id": "git:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4:toolshare/__init__.py",
+     "source_type": "code",
+     "version": "d1ca69603f4828bb812eba1e72f15c756ade52a4"
+    },
+    {
+     "commit": "d1ca69603f4828bb812eba1e72f15c756ade52a4",
+     "line_count": 25,
+     "origin": "git",
+     "path": "toolshare/holds.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "db71ce7ce55d98719ff83f228de5e5efdef7de97a09a6d89f02ebc6f0e5e1a8d",
+     "source_id": "git:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4:toolshare/holds.py",
+     "source_type": "code",
+     "version": "d1ca69603f4828bb812eba1e72f15c756ade52a4"
+    },
+    {
+     "commit": "d1ca69603f4828bb812eba1e72f15c756ade52a4",
+     "line_count": 15,
+     "origin": "git",
+     "path": "toolshare/inventory.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "5d5448a350375901f733929d43320921ed02ef91bd84d306a0fa7f0ade64f557",
+     "source_id": "git:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4:toolshare/inventory.py",
+     "source_type": "code",
+     "version": "d1ca69603f4828bb812eba1e72f15c756ade52a4"
+    },
+    {
+     "commit": "d1ca69603f4828bb812eba1e72f15c756ade52a4",
+     "line_count": 14,
+     "origin": "git",
+     "path": "toolshare/notifications.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "ae80be0576750da1fc879a76854887e3233dfbcab1c6b301b84ae84d16dd33b7",
+     "source_id": "git:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4:toolshare/notifications.py",
+     "source_type": "code",
+     "version": "d1ca69603f4828bb812eba1e72f15c756ade52a4"
+    }
+   ]
+  },
+  {
+   "diffs": [
+    "git-diff:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4..3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+   ],
+   "event": "E3",
+   "graph_revision_before": 2,
+   "kind": "implementation_observation",
+   "skipped": "G0: no maintenance after initial construction",
+   "sources": [
+    {
+     "line_count": 14,
+     "origin": "file",
+     "path": "discovery/stakeholder_notes.md",
+     "project": "toolshare",
+     "sha256": "e9a2bdd034c3f226aeaf5dcb1cadea9d6ce03f0f2a9acf9a88ac051469ef64b8",
+     "source_id": "toolshare:discovery/stakeholder_notes.md",
+     "source_type": "stakeholder_notes",
+     "version": "2026-08-28"
+    },
+    {
+     "line_count": 12,
+     "origin": "file",
+     "path": "spec/architecture.md",
+     "project": "toolshare",
+     "sha256": "1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300",
+     "source_id": "toolshare:spec/architecture.md",
+     "source_type": "architecture",
+     "version": "2026-09-02"
+    },
+    {
+     "line_count": 36,
+     "origin": "file",
+     "path": "spec/requirements.md",
+     "project": "toolshare",
+     "sha256": "069e49112dfe418410bd88df5d778f3c6761cb30b9233208e7c692659aa146c4",
+     "source_id": "toolshare:spec/requirements.md",
+     "source_type": "requirements",
+     "version": "draft-2"
+    },
+    {
+     "commit": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa",
+     "line_count": 10,
+     "origin": "git",
+     "path": "tests/test_holds.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "1d75cbe25e962f50d6f2b7d6dc3f1bfbc0535f1fa588658d75a13e6bdd0a413b",
+     "source_id": "git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:tests/test_holds.py",
+     "source_type": "test",
+     "version": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+    },
+    {
+     "commit": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa",
+     "line_count": 14,
+     "origin": "git",
+     "path": "tests/test_notifications.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "5723cb01fb2199145f4388ba8e9c0359c7c874acef4cd626516428337b5cd1e4",
+     "source_id": "git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:tests/test_notifications.py",
+     "source_type": "test",
+     "version": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+    },
+    {
+     "commit": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa",
+     "line_count": 0,
+     "origin": "git",
+     "path": "toolshare/__init__.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "source_id": "git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:toolshare/__init__.py",
+     "source_type": "code",
+     "version": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+    },
+    {
+     "commit": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa",
+     "line_count": 30,
+     "origin": "git",
+     "path": "toolshare/holds.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "b3024276c517744afea68dfec8b1041dc3e488d6125307cb1a36f40819fe1ecf",
+     "source_id": "git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:toolshare/holds.py",
+     "source_type": "code",
+     "version": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+    },
+    {
+     "commit": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa",
+     "line_count": 15,
+     "origin": "git",
+     "path": "toolshare/inventory.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "5d5448a350375901f733929d43320921ed02ef91bd84d306a0fa7f0ade64f557",
+     "source_id": "git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:toolshare/inventory.py",
+     "source_type": "code",
+     "version": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+    },
+    {
+     "commit": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa",
+     "line_count": 14,
+     "origin": "git",
+     "path": "toolshare/notifications.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "ae80be0576750da1fc879a76854887e3233dfbcab1c6b301b84ae84d16dd33b7",
+     "source_id": "git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:toolshare/notifications.py",
+     "source_type": "code",
+     "version": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+    }
+   ]
+  },
+  {
+   "diffs": [],
+   "event": "E4",
+   "graph_revision_before": 2,
+   "kind": "wording_only",
+   "skipped": "G0: no maintenance after initial construction",
+   "sources": [
+    {
+     "line_count": 14,
+     "origin": "file",
+     "path": "discovery/stakeholder_notes.md",
+     "project": "toolshare",
+     "sha256": "e9a2bdd034c3f226aeaf5dcb1cadea9d6ce03f0f2a9acf9a88ac051469ef64b8",
+     "source_id": "toolshare:discovery/stakeholder_notes.md",
+     "source_type": "stakeholder_notes",
+     "version": "2026-08-28"
+    },
+    {
+     "line_count": 12,
+     "origin": "file",
+     "path": "spec/architecture.md",
+     "project": "toolshare",
+     "sha256": "1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300",
+     "source_id": "toolshare:spec/architecture.md",
+     "source_type": "architecture",
+     "version": "2026-09-02"
+    },
+    {
+     "line_count": 36,
+     "origin": "file",
+     "path": "spec/requirements.md",
+     "project": "toolshare",
+     "sha256": "3d4e44476b367c2663cdc3b08e38da7c885a7eb952e7f4adc615afc629b44428",
+     "source_id": "toolshare:spec/requirements.md",
+     "source_type": "requirements",
+     "version": "draft-3"
+    },
+    {
+     "commit": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa",
+     "line_count": 10,
+     "origin": "git",
+     "path": "tests/test_holds.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "1d75cbe25e962f50d6f2b7d6dc3f1bfbc0535f1fa588658d75a13e6bdd0a413b",
+     "source_id": "git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:tests/test_holds.py",
+     "source_type": "test",
+     "version": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+    },
+    {
+     "commit": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa",
+     "line_count": 14,
+     "origin": "git",
+     "path": "tests/test_notifications.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "5723cb01fb2199145f4388ba8e9c0359c7c874acef4cd626516428337b5cd1e4",
+     "source_id": "git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:tests/test_notifications.py",
+     "source_type": "test",
+     "version": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+    },
+    {
+     "commit": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa",
+     "line_count": 0,
+     "origin": "git",
+     "path": "toolshare/__init__.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "source_id": "git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:toolshare/__init__.py",
+     "source_type": "code",
+     "version": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+    },
+    {
+     "commit": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa",
+     "line_count": 30,
+     "origin": "git",
+     "path": "toolshare/holds.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "b3024276c517744afea68dfec8b1041dc3e488d6125307cb1a36f40819fe1ecf",
+     "source_id": "git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:toolshare/holds.py",
+     "source_type": "code",
+     "version": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+    },
+    {
+     "commit": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa",
+     "line_count": 15,
+     "origin": "git",
+     "path": "toolshare/inventory.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "5d5448a350375901f733929d43320921ed02ef91bd84d306a0fa7f0ade64f557",
+     "source_id": "git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:toolshare/inventory.py",
+     "source_type": "code",
+     "version": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+    },
+    {
+     "commit": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa",
+     "line_count": 14,
+     "origin": "git",
+     "path": "toolshare/notifications.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "ae80be0576750da1fc879a76854887e3233dfbcab1c6b301b84ae84d16dd33b7",
+     "source_id": "git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:toolshare/notifications.py",
+     "source_type": "code",
+     "version": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+    }
+   ]
+  },
+  {
+   "diffs": [],
+   "event": "E5",
+   "graph_revision_before": 2,
+   "kind": "change",
+   "skipped": "G0: no maintenance after initial construction",
+   "sources": [
+    {
+     "line_count": 14,
+     "origin": "file",
+     "path": "discovery/stakeholder_notes.md",
+     "project": "toolshare",
+     "sha256": "e9a2bdd034c3f226aeaf5dcb1cadea9d6ce03f0f2a9acf9a88ac051469ef64b8",
+     "source_id": "toolshare:discovery/stakeholder_notes.md",
+     "source_type": "stakeholder_notes",
+     "version": "2026-08-28"
+    },
+    {
+     "line_count": 12,
+     "origin": "file",
+     "path": "spec/architecture.md",
+     "project": "toolshare",
+     "sha256": "1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300",
+     "source_id": "toolshare:spec/architecture.md",
+     "source_type": "architecture",
+     "version": "2026-09-02"
+    },
+    {
+     "line_count": 38,
+     "origin": "file",
+     "path": "spec/requirements.md",
+     "project": "toolshare",
+     "sha256": "ff5dae59d469eaa8e5ccd104ce6857802879e3b97104182b938c13f84f1fe755",
+     "source_id": "toolshare:spec/requirements.md",
+     "source_type": "requirements",
+     "version": "draft-4"
+    },
+    {
+     "commit": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa",
+     "line_count": 10,
+     "origin": "git",
+     "path": "tests/test_holds.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "1d75cbe25e962f50d6f2b7d6dc3f1bfbc0535f1fa588658d75a13e6bdd0a413b",
+     "source_id": "git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:tests/test_holds.py",
+     "source_type": "test",
+     "version": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+    },
+    {
+     "commit": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa",
+     "line_count": 14,
+     "origin": "git",
+     "path": "tests/test_notifications.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "5723cb01fb2199145f4388ba8e9c0359c7c874acef4cd626516428337b5cd1e4",
+     "source_id": "git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:tests/test_notifications.py",
+     "source_type": "test",
+     "version": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+    },
+    {
+     "commit": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa",
+     "line_count": 0,
+     "origin": "git",
+     "path": "toolshare/__init__.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "source_id": "git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:toolshare/__init__.py",
+     "source_type": "code",
+     "version": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+    },
+    {
+     "commit": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa",
+     "line_count": 30,
+     "origin": "git",
+     "path": "toolshare/holds.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "b3024276c517744afea68dfec8b1041dc3e488d6125307cb1a36f40819fe1ecf",
+     "source_id": "git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:toolshare/holds.py",
+     "source_type": "code",
+     "version": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+    },
+    {
+     "commit": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa",
+     "line_count": 15,
+     "origin": "git",
+     "path": "toolshare/inventory.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "5d5448a350375901f733929d43320921ed02ef91bd84d306a0fa7f0ade64f557",
+     "source_id": "git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:toolshare/inventory.py",
+     "source_type": "code",
+     "version": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+    },
+    {
+     "commit": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa",
+     "line_count": 14,
+     "origin": "git",
+     "path": "toolshare/notifications.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "ae80be0576750da1fc879a76854887e3233dfbcab1c6b301b84ae84d16dd33b7",
+     "source_id": "git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:toolshare/notifications.py",
+     "source_type": "code",
+     "version": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+    }
+   ]
+  }
+ ],
+ "final_graph": {
+  "edges": [
+   {
+    "dst": "REQ-HOLD-EXPIRY",
+    "evidence_ref": "P-0001/op-20",
+    "id": "LE-CAP-HOLDS--refines--REQ-HOLD-EXPIRY",
+    "relation": "refines",
+    "rev": 1,
+    "src": "CAP-HOLDS",
+    "status": "confirmed"
+   },
+   {
+    "dst": "REQ-PLACE-HOLD",
+    "evidence_ref": "P-0001/op-19",
+    "id": "LE-CAP-HOLDS--refines--REQ-PLACE-HOLD",
+    "relation": "refines",
+    "rev": 1,
+    "src": "CAP-HOLDS",
+    "status": "confirmed"
+   },
+   {
+    "dst": "REQ-READY-NOTICE",
+    "evidence_ref": "P-0001/op-21",
+    "id": "LE-CAP-NOTIFY--refines--REQ-READY-NOTICE",
+    "relation": "refines",
+    "rev": 1,
+    "src": "CAP-NOTIFY",
+    "status": "confirmed"
+   },
+   {
+    "dst": "CMP-INVENTORY",
+    "evidence_ref": "P-0001/op-26",
+    "id": "LE-CMP-HOLDS--depends_on--CMP-INVENTORY",
+    "relation": "depends_on",
+    "rev": 1,
+    "src": "CMP-HOLDS",
+    "status": "confirmed"
+   },
+   {
+    "dst": "REQ-HOLD-EXPIRY",
+    "evidence_ref": "P-0001/op-24",
+    "id": "LE-CMP-HOLDS--implements--REQ-HOLD-EXPIRY",
+    "relation": "implements",
+    "rev": 1,
+    "src": "CMP-HOLDS",
+    "status": "confirmed"
+   },
+   {
+    "dst": "REQ-PLACE-HOLD",
+    "evidence_ref": "P-0001/op-23",
+    "id": "LE-CMP-HOLDS--implements--REQ-PLACE-HOLD",
+    "relation": "implements",
+    "rev": 1,
+    "src": "CMP-HOLDS",
+    "status": "confirmed"
+   },
+   {
+    "dst": "ART-HOLDS-PY",
+    "evidence_ref": "P-0001/op-31",
+    "id": "LE-CMP-HOLDS--realized_by--ART-HOLDS-PY",
+    "relation": "realized_by",
+    "rev": 1,
+    "src": "CMP-HOLDS",
+    "status": "confirmed"
+   },
+   {
+    "dst": "ART-INVENTORY-PY",
+    "evidence_ref": "P-0001/op-32",
+    "id": "LE-CMP-INVENTORY--realized_by--ART-INVENTORY-PY",
+    "relation": "realized_by",
+    "rev": 1,
+    "src": "CMP-INVENTORY",
+    "status": "confirmed"
+   },
+   {
+    "dst": "CON-NOTICE-FORMAT",
+    "evidence_ref": "P-0001/op-27",
+    "id": "LE-CMP-NOTIFY--constrained_by--CON-NOTICE-FORMAT",
+    "relation": "constrained_by",
+    "rev": 1,
+    "src": "CMP-NOTIFY",
+    "status": "confirmed"
+   },
+   {
+    "dst": "REQ-READY-NOTICE",
+    "evidence_ref": "P-0001/op-25",
+    "id": "LE-CMP-NOTIFY--implements--REQ-READY-NOTICE",
+    "relation": "implements",
+    "rev": 1,
+    "src": "CMP-NOTIFY",
+    "status": "confirmed"
+   },
+   {
+    "dst": "ART-NOTIFICATIONS-PY",
+    "evidence_ref": "P-0001/op-33",
+    "id": "LE-CMP-NOTIFY--realized_by--ART-NOTIFICATIONS-PY",
+    "relation": "realized_by",
+    "rev": 1,
+    "src": "CMP-NOTIFY",
+    "status": "confirmed"
+   },
+   {
+    "dst": "CAP-HOLDS",
+    "evidence_ref": "P-0001/op-17",
+    "id": "LE-GOAL-FAIR-ACCESS--refines--CAP-HOLDS",
+    "relation": "refines",
+    "rev": 1,
+    "src": "GOAL-FAIR-ACCESS",
+    "status": "hypothesized"
+   },
+   {
+    "dst": "CAP-NOTIFY",
+    "evidence_ref": "P-0001/op-18",
+    "id": "LE-GOAL-FAIR-ACCESS--refines--CAP-NOTIFY",
+    "relation": "refines",
+    "rev": 1,
+    "src": "GOAL-FAIR-ACCESS",
+    "status": "hypothesized"
+   },
+   {
+    "dst": "REQ-HOLD-EXPIRY",
+    "evidence_ref": "P-0001/op-22",
+    "id": "LE-Q-PICKUP-WINDOW--blocks--REQ-HOLD-EXPIRY",
+    "relation": "blocks",
+    "rev": 1,
+    "src": "Q-PICKUP-WINDOW",
+    "status": "confirmed"
+   },
+   {
+    "dst": "REQ-HOLD-EXPIRY",
+    "evidence_ref": "P-0001/op-29",
+    "id": "LE-TEST-HOLD-QUEUE--verifies--REQ-HOLD-EXPIRY",
+    "relation": "verifies",
+    "rev": 1,
+    "src": "TEST-HOLD-QUEUE",
+    "status": "confirmed"
+   },
+   {
+    "dst": "REQ-PLACE-HOLD",
+    "evidence_ref": "P-0001/op-28",
+    "id": "LE-TEST-HOLD-QUEUE--verifies--REQ-PLACE-HOLD",
+    "relation": "verifies",
+    "rev": 1,
+    "src": "TEST-HOLD-QUEUE",
+    "status": "confirmed"
+   },
+   {
+    "dst": "CON-NOTICE-FORMAT",
+    "evidence_ref": "P-0001/op-30",
+    "id": "LE-TEST-NOTICE-FORMAT--verifies--CON-NOTICE-FORMAT",
+    "relation": "verifies",
+    "rev": 1,
+    "src": "TEST-NOTICE-FORMAT",
+    "status": "confirmed"
+   }
+  ],
+  "graph_revision": 2,
+  "nodes": [
+   {
+    "body": "Repository file for the holds service.",
+    "data": {
+     "path": "toolshare/holds.py"
+    },
+    "id": "ART-HOLDS-PY",
+    "kind": "artifact",
+    "rev": 1,
+    "title": "Holds implementation"
+   },
+   {
+    "body": "Repository file for the inventory module.",
+    "data": {
+     "path": "toolshare/inventory.py"
+    },
+    "id": "ART-INVENTORY-PY",
+    "kind": "artifact",
+    "rev": 1,
+    "title": "Inventory implementation"
+   },
+   {
+    "body": "Repository file for the notification service.",
+    "data": {
+     "path": "toolshare/notifications.py"
+    },
+    "id": "ART-NOTIFICATIONS-PY",
+    "kind": "artifact",
+    "rev": 1,
+    "title": "Notifications implementation"
+   },
+   {
+    "body": "Members can queue for tools that are not currently on the shelf.",
+    "data": {},
+    "id": "CAP-HOLDS",
+    "kind": "capability",
+    "rev": 1,
+    "title": "Holds"
+   },
+   {
+    "body": "Members are told when something they are waiting for changes.",
+    "data": {},
+    "id": "CAP-NOTIFY",
+    "kind": "capability",
+    "rev": 1,
+    "title": "Member notifications"
+   },
+   {
+    "body": "Owns the hold queue and hold expiry.",
+    "data": {},
+    "id": "CMP-HOLDS",
+    "kind": "component",
+    "rev": 1,
+    "title": "Holds service"
+   },
+   {
+    "body": "Tracks whether a tool is on the shelf.",
+    "data": {},
+    "id": "CMP-INVENTORY",
+    "kind": "component",
+    "rev": 1,
+    "title": "Inventory module"
+   },
+   {
+    "body": "Sends member emails.",
+    "data": {},
+    "id": "CMP-NOTIFY",
+    "kind": "component",
+    "rev": 1,
+    "title": "Notification service"
+   },
+   {
+    "body": "Notification messages are plain-text emails with a subject line and at most 500 characters of body text.",
+    "data": {
+     "status": "accepted"
+    },
+    "id": "CON-NOTICE-FORMAT",
+    "kind": "contract",
+    "rev": 1,
+    "title": "Notification format"
+   },
+   {
+    "body": "Members can borrow shared tools fairly and predictably.",
+    "data": {},
+    "id": "GOAL-FAIR-ACCESS",
+    "kind": "goal",
+    "rev": 1,
+    "title": "Fair access to shared tools"
+   },
+   {
+    "body": "How long is the pickup window? The desk is staffed three days a week.",
+    "data": {
+     "blocking": true,
+     "state": "open"
+    },
+    "id": "Q-PICKUP-WINDOW",
+    "kind": "question",
+    "rev": 1,
+    "title": "Pickup window length"
+   },
+   {
+    "body": "When a held tool becomes available, the member has a pickup window to collect it. If they do not collect it in time, the hold lapses and the tool passes to the next member in the queue. The window length is undecided.",
+    "data": {
+     "acceptance_criteria": []
+    },
+    "id": "REQ-HOLD-EXPIRY",
+    "kind": "requirement",
+    "rev": 1,
+    "title": "Hold expiry"
+   },
+   {
+    "body": "A member can place a hold on a catalogued tool that is on loan.",
+    "data": {
+     "acceptance_criteria": [
+      "A member without overdue items can place a hold on any catalogued tool.",
+      "Holds on the same tool are served first come, first served."
+     ]
+    },
+    "id": "REQ-PLACE-HOLD",
+    "kind": "requirement",
+    "rev": 1,
+    "title": "Place a hold"
+   },
+   {
+    "body": "When a held tool is ready for pickup, the member is notified by email.",
+    "data": {
+     "acceptance_criteria": [
+      "The email names the tool and the pickup deadline."
+     ]
+    },
+    "id": "REQ-READY-NOTICE",
+    "kind": "requirement",
+    "rev": 1,
+    "title": "Ready-for-pickup notice"
+   },
+   {
+    "body": "Checks queue order and expiry in tests/test_holds.py.",
+    "data": {},
+    "id": "TEST-HOLD-QUEUE",
+    "kind": "test",
+    "rev": 1,
+    "title": "Hold queue and expiry test"
+   },
+   {
+    "body": "Checks messages against the notification format in tests/test_notifications.py.",
+    "data": {},
+    "id": "TEST-NOTICE-FORMAT",
+    "kind": "test",
+    "rev": 1,
+    "title": "Notice format tests"
+   }
+  ]
+ },
+ "ledger": {
+  "calls": 1,
+  "decisions": [
+   {
+    "change_id": "CHG-2",
+    "decision": "accept",
+    "op_id": "op-1",
+    "proposal_id": "P-0001",
+    "reviewer": "policy:conservative-v1"
+   },
+   {
+    "change_id": "CHG-2",
+    "decision": "accept",
+    "op_id": "op-10",
+    "proposal_id": "P-0001",
+    "reviewer": "policy:conservative-v1"
+   },
+   {
+    "change_id": "CHG-2",
+    "decision": "accept",
+    "op_id": "op-11",
+    "proposal_id": "P-0001",
+    "reviewer": "policy:conservative-v1"
+   },
+   {
+    "change_id": "CHG-2",
+    "decision": "accept",
+    "op_id": "op-12",
+    "proposal_id": "P-0001",
+    "reviewer": "policy:conservative-v1"
+   },
+   {
+    "change_id": "CHG-2",
+    "decision": "accept",
+    "op_id": "op-13",
+    "proposal_id": "P-0001",
+    "reviewer": "policy:conservative-v1"
+   },
+   {
+    "change_id": "CHG-2",
+    "decision": "accept",
+    "op_id": "op-14",
+    "proposal_id": "P-0001",
+    "reviewer": "policy:conservative-v1"
+   },
+   {
+    "change_id": "CHG-2",
+    "decision": "accept",
+    "op_id": "op-15",
+    "proposal_id": "P-0001",
+    "reviewer": "policy:conservative-v1"
+   },
+   {
+    "change_id": "CHG-2",
+    "decision": "accept",
+    "op_id": "op-16",
+    "proposal_id": "P-0001",
+    "reviewer": "policy:conservative-v1"
+   },
+   {
+    "change_id": "CHG-2",
+    "decision": "accept",
+    "op_id": "op-17",
+    "proposal_id": "P-0001",
+    "reviewer": "policy:conservative-v1"
+   },
+   {
+    "change_id": "CHG-2",
+    "decision": "accept",
+    "op_id": "op-18",
+    "proposal_id": "P-0001",
+    "reviewer": "policy:conservative-v1"
+   },
+   {
+    "change_id": "CHG-2",
+    "decision": "accept",
+    "op_id": "op-19",
+    "proposal_id": "P-0001",
+    "reviewer": "policy:conservative-v1"
+   },
+   {
+    "change_id": "CHG-2",
+    "decision": "accept",
+    "op_id": "op-2",
+    "proposal_id": "P-0001",
+    "reviewer": "policy:conservative-v1"
+   },
+   {
+    "change_id": "CHG-2",
+    "decision": "accept",
+    "op_id": "op-20",
+    "proposal_id": "P-0001",
+    "reviewer": "policy:conservative-v1"
+   },
+   {
+    "change_id": "CHG-2",
+    "decision": "accept",
+    "op_id": "op-21",
+    "proposal_id": "P-0001",
+    "reviewer": "policy:conservative-v1"
+   },
+   {
+    "change_id": "CHG-2",
+    "decision": "accept",
+    "op_id": "op-22",
+    "proposal_id": "P-0001",
+    "reviewer": "policy:conservative-v1"
+   },
+   {
+    "change_id": "CHG-2",
+    "decision": "accept",
+    "op_id": "op-23",
+    "proposal_id": "P-0001",
+    "reviewer": "policy:conservative-v1"
+   },
+   {
+    "change_id": "CHG-2",
+    "decision": "accept",
+    "op_id": "op-24",
+    "proposal_id": "P-0001",
+    "reviewer": "policy:conservative-v1"
+   },
+   {
+    "change_id": "CHG-2",
+    "decision": "accept",
+    "op_id": "op-25",
+    "proposal_id": "P-0001",
+    "reviewer": "policy:conservative-v1"
+   },
+   {
+    "change_id": "CHG-2",
+    "decision": "accept",
+    "op_id": "op-26",
+    "proposal_id": "P-0001",
+    "reviewer": "policy:conservative-v1"
+   },
+   {
+    "change_id": "CHG-2",
+    "decision": "accept",
+    "op_id": "op-27",
+    "proposal_id": "P-0001",
+    "reviewer": "policy:conservative-v1"
+   },
+   {
+    "change_id": "CHG-2",
+    "decision": "accept",
+    "op_id": "op-28",
+    "proposal_id": "P-0001",
+    "reviewer": "policy:conservative-v1"
+   },
+   {
+    "change_id": "CHG-2",
+    "decision": "accept",
+    "op_id": "op-29",
+    "proposal_id": "P-0001",
+    "reviewer": "policy:conservative-v1"
+   },
+   {
+    "change_id": "CHG-2",
+    "decision": "accept",
+    "op_id": "op-3",
+    "proposal_id": "P-0001",
+    "reviewer": "policy:conservative-v1"
+   },
+   {
+    "change_id": "CHG-2",
+    "decision": "accept",
+    "op_id": "op-30",
+    "proposal_id": "P-0001",
+    "reviewer": "policy:conservative-v1"
+   },
+   {
+    "change_id": "CHG-2",
+    "decision": "accept",
+    "op_id": "op-31",
+    "proposal_id": "P-0001",
+    "reviewer": "policy:conservative-v1"
+   },
+   {
+    "change_id": "CHG-2",
+    "decision": "accept",
+    "op_id": "op-32",
+    "proposal_id": "P-0001",
+    "reviewer": "policy:conservative-v1"
+   },
+   {
+    "change_id": "CHG-2",
+    "decision": "accept",
+    "op_id": "op-33",
+    "proposal_id": "P-0001",
+    "reviewer": "policy:conservative-v1"
+   },
+   {
+    "change_id": "CHG-2",
+    "decision": "accept",
+    "op_id": "op-4",
+    "proposal_id": "P-0001",
+    "reviewer": "policy:conservative-v1"
+   },
+   {
+    "change_id": "CHG-2",
+    "decision": "accept",
+    "op_id": "op-5",
+    "proposal_id": "P-0001",
+    "reviewer": "policy:conservative-v1"
+   },
+   {
+    "change_id": "CHG-2",
+    "decision": "accept",
+    "op_id": "op-6",
+    "proposal_id": "P-0001",
+    "reviewer": "policy:conservative-v1"
+   },
+   {
+    "change_id": "CHG-2",
+    "decision": "accept",
+    "op_id": "op-7",
+    "proposal_id": "P-0001",
+    "reviewer": "policy:conservative-v1"
+   },
+   {
+    "change_id": "CHG-2",
+    "decision": "accept",
+    "op_id": "op-8",
+    "proposal_id": "P-0001",
+    "reviewer": "policy:conservative-v1"
+   },
+   {
+    "change_id": "CHG-2",
+    "decision": "accept",
+    "op_id": "op-9",
+    "proposal_id": "P-0001",
+    "reviewer": "policy:conservative-v1"
+   }
+  ],
+  "proposals": [
+   {
+    "change_id": "CHG-2",
+    "id": "P-0001",
+    "status": "committed"
+   }
+  ]
+ },
+ "negative": {
+  "E4": {
+   "engine_semantic_probe": {
+    "aspect": "semantic",
+    "graph_revision": 2,
+    "node_id": "REQ-READY-NOTICE",
+    "pairs": [
+     [
+      "CAP-NOTIFY",
+      "review_spec"
+     ],
+     [
+      "CMP-NOTIFY",
+      "review_implementation"
+     ]
+    ],
+    "present": true,
+    "provisional": [],
+    "pruned": [],
+    "targets": [
+     "CAP-NOTIFY",
+     "CMP-NOTIFY"
+    ]
+   }
+  }
+ },
+ "prediction": {
+  "E5": {
+   "aspect": "contract",
+   "graph_revision": 2,
+   "node_id": "CON-NOTICE-FORMAT",
+   "pairs": [
+    [
+     "CMP-NOTIFY",
+     "check_contract"
+    ],
+    [
+     "REQ-READY-NOTICE",
+     "check_contract"
+    ],
+    [
+     "TEST-NOTICE-FORMAT",
+     "rerun_test"
+    ]
+   ],
+   "present": true,
+   "provisional": [],
+   "pruned": [],
+   "targets": [
+    "CMP-NOTIFY",
+    "REQ-READY-NOTICE",
+    "TEST-NOTICE-FORMAT"
+   ]
+  }
+ },
+ "probe": {
+  "aspect": "contract",
+  "description": "Notification format contract changes: SMS allowed (160-character bodies) and every message must state the desk opening hours.",
+  "event": "E5",
+  "node_id": "CON-NOTICE-FORMAT"
+ },
+ "project": "toolshare"
+}
