@@ -1,0 +1,384 @@
+{
+ "arm": "D",
+ "call": {
+  "call_key": "ledgerlite/D/direct_impact",
+  "client": {
+   "api_key_env": "OPENAI_API_KEY",
+   "base_url": "https://api.openai.com",
+   "is_fake": false,
+   "json_mode": true,
+   "max_output_tokens": 32000,
+   "model": "gpt-6.1-terra",
+   "provider": "openai",
+   "temperature": null
+  },
+  "input": {
+   "chars": 8832,
+   "diffs": [
+    "git-diff:ledgerlite@17a4a69390b64db2e27dc047a279da5e2bfa1327..548ce68cdbb0f52c76402a5d4b5214722eff4cd7"
+   ],
+   "limits": {
+    "max_chars_per_doc": 12000,
+    "max_total_chars": 60000
+   },
+   "packed_sources_sha256": "595e00f05fe488e10c403079f55e3634779a3e76b1dfdb41e8fb10d2357f1155",
+   "sha256": "f857a86085b2a322169c2f30fcbe7cdd9368a431780501fa7c3b1aebc76c5ce6",
+   "sources": [
+    {
+     "line_count": 13,
+     "origin": "file",
+     "path": "docs/architecture.md",
+     "project": "ledgerlite",
+     "sha256": "db2462995de8df4ea69c6c42913910a700e386bd2ac405218f22105ad4fe761a",
+     "source_id": "ledgerlite:docs/architecture.md",
+     "source_type": "architecture",
+     "version": "v1"
+    },
+    {
+     "line_count": 8,
+     "origin": "file",
+     "path": "docs/decisions/DR-001-csv-layout.md",
+     "project": "ledgerlite",
+     "sha256": "6c62fe8a9cdd2f448819d6c882b6b5c81d92137b29e5a543e676cf371b34ee7e",
+     "source_id": "ledgerlite:docs/decisions/DR-001-csv-layout.md",
+     "source_type": "decision",
+     "version": "2026-09-15"
+    },
+    {
+     "line_count": 24,
+     "origin": "file",
+     "path": "docs/requirements.md",
+     "project": "ledgerlite",
+     "sha256": "d862d62337048b0f779e19a69ab57730f57ba3225c15660d284912b743bd057f",
+     "source_id": "ledgerlite:docs/requirements.md",
+     "source_type": "requirements",
+     "version": "v3"
+    },
+    {
+     "commit": "548ce68cdbb0f52c76402a5d4b5214722eff4cd7",
+     "line_count": 0,
+     "origin": "git",
+     "path": "ledgerlite/__init__.py",
+     "project": "ledgerlite",
+     "repo": "ledgerlite",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "source_id": "git:ledgerlite@548ce68cdbb0f52c76402a5d4b5214722eff4cd7:ledgerlite/__init__.py",
+     "source_type": "code",
+     "version": "548ce68cdbb0f52c76402a5d4b5214722eff4cd7"
+    },
+    {
+     "commit": "548ce68cdbb0f52c76402a5d4b5214722eff4cd7",
+     "line_count": 23,
+     "origin": "git",
+     "path": "ledgerlite/csv_export.py",
+     "project": "ledgerlite",
+     "repo": "ledgerlite",
+     "sha256": "9fe2e185c3ee2bf47ba5ff37fc4350014730ba92fb3118ccdc3cdee403f7a89a",
+     "source_id": "git:ledgerlite@548ce68cdbb0f52c76402a5d4b5214722eff4cd7:ledgerlite/csv_export.py",
+     "source_type": "code",
+     "version": "548ce68cdbb0f52c76402a5d4b5214722eff4cd7"
+    },
+    {
+     "commit": "548ce68cdbb0f52c76402a5d4b5214722eff4cd7",
+     "line_count": 13,
+     "origin": "git",
+     "path": "ledgerlite/money.py",
+     "project": "ledgerlite",
+     "repo": "ledgerlite",
+     "sha256": "b2f2426e37c5498e3d00a87b5fb3ec6f299c194c212cb37ad31a0e899804e6c8",
+     "source_id": "git:ledgerlite@548ce68cdbb0f52c76402a5d4b5214722eff4cd7:ledgerlite/money.py",
+     "source_type": "code",
+     "version": "548ce68cdbb0f52c76402a5d4b5214722eff4cd7"
+    },
+    {
+     "commit": "548ce68cdbb0f52c76402a5d4b5214722eff4cd7",
+     "line_count": 11,
+     "origin": "git",
+     "path": "ledgerlite/pdf_invoice.py",
+     "project": "ledgerlite",
+     "repo": "ledgerlite",
+     "sha256": "ad2fcadbea707f276f358fc52ec5cb025bf5055252169df9f95a881bb8c02a50",
+     "source_id": "git:ledgerlite@548ce68cdbb0f52c76402a5d4b5214722eff4cd7:ledgerlite/pdf_invoice.py",
+     "source_type": "code",
+     "version": "548ce68cdbb0f52c76402a5d4b5214722eff4cd7"
+    },
+    {
+     "commit": "548ce68cdbb0f52c76402a5d4b5214722eff4cd7",
+     "line_count": 17,
+     "origin": "git",
+     "path": "tests/test_money.py",
+     "project": "ledgerlite",
+     "repo": "ledgerlite",
+     "sha256": "5c4b623918e3456745214f4e11012abdf7b92bcd713897bb0f66643dff0e7b60",
+     "source_id": "git:ledgerlite@548ce68cdbb0f52c76402a5d4b5214722eff4cd7:tests/test_money.py",
+     "source_type": "test",
+     "version": "548ce68cdbb0f52c76402a5d4b5214722eff4cd7"
+    }
+   ],
+   "truncation": []
+  },
+  "is_fake": false,
+  "latency_ms": 34627.1,
+  "model_reported": "gpt-6.1-terra",
+  "output": {
+   "chars": 9223,
+   "sha256": "6872fa4ce548fa3b333500cd338c32e38158c44ddefeb96a6dfdcde4421338ac",
+   "text": "{\n  \"impacts\": [\n    {\n      \"target\": \"CMP-MONEY\",\n      \"obligation\": \"review_implementation\",\n      \"reason\": \"The shared formatter now groups thousands, changing its output for all callers.\",\n      \"source_evidence\": [\n        {\n          \"source_id\": \"git:ledgerlite@548ce68cdbb0f52c76402a5d4b5214722eff4cd7:ledgerlite/money.py\",\n          \"sha256\": \"b2f2426e37c5498e3d00a87b5fb3ec6f299c194c212cb37ad31a0e899804e6c8\",\n          \"lines\": [6, 7, 8, 9],\n          \"excerpt\": \"q = amount.quantize(Decimal(\\\"0.01\\\"), rounding=ROUND_HALF_UP)\\n# Group thousands for readability on invoices, e.g. \\\"12,500.00 EUR\\\".\\nreturn f\\\"{q:,} {currency}\\\"\"\n        }\n      ]\n    },\n    {\n      \"target\": \"CON-MONEY-FORMAT\",\n      \"obligation\": \"check_contract\",\n      \"reason\": \"Re-check whether the accepted formatting contract permits thousands separators; it specifies decimal formatting and currency code but does not explicitly address grouping.\",\n      \"source_evidence\": [\n        {\n          \"source_id\": \"ledgerlite:docs/requirements.md\",\n          \"sha256\": \"d862d62337048b0f779e19a69ab57730f57ba3225c15660d284912b743bd057f\",\n          \"lines\": [23, 24],\n          \"excerpt\": \"CON-MONEY-FORMAT — Amounts are rendered with exactly two decimals and \\\".\\\" as the decimal separator, followed by the ISO currency code (for example \\\"250.00 EUR\\\"). Status: accepted.\"\n        },\n        {\n          \"source_id\": \"git:ledgerlite@548ce68cdbb0f52c76402a5d4b5214722eff4cd7:ledgerlite/money.py\",\n          \"sha256\": \"b2f2426e37c5498e3d00a87b5fb3ec6f299c194c212cb37ad31a0e899804e6c8\",\n          \"lines\": [8, 9],\n          \"excerpt\": \"# Group thousands for readability on invoices, e.g. \\\"12,500.00 EUR\\\".\\nreturn f\\\"{q:,} {currency}\\\"\"\n        }\n      ]\n    },\n    {\n      \"target\": \"TEST-MONEY-FORMAT\",\n      \"obligation\": \"rerun_test\",\n      \"reason\": \"Re-test the changed formatter and add cases at and across the grouping threshold; the existing cases do not exercise grouped output.\",\n      \"source_evidence\": [\n        {\n          \"source_id\": \"git:ledgerlite@548ce68cdbb0f52c76402a5d4b5214722eff4cd7:tests/test_money.py\",\n          \"sha256\": \"5c4b623918e3456745214f4e11012abdf7b92bcd713897bb0f66643dff0e7b60\",\n          \"lines\": [7, 8, 9, 10, 11, 12, 15, 16, 17],\n          \"excerpt\": \"CASES = [\\n    (Decimal(\\\"0\\\"), \\\"0.00 EUR\\\"),\\n    (Decimal(\\\"9.5\\\"), \\\"9.50 EUR\\\"),\\n    (Decimal(\\\"250\\\"), \\\"250.00 EUR\\\"),\\n    (Decimal(\\\"999.994\\\"), \\\"999.99 EUR\\\"),\\n]\\n@pytest.mark.parametrize(\\\"amount,expected\\\", CASES)\\ndef test_format_amount(amount, expected):\\n    assert format_amount(amount, \\\"EUR\\\") == expected\"\n        }\n      ]\n    },\n    {\n      \"target\": \"CMP-PDF\",\n      \"obligation\": \"review_implementation\",\n      \"reason\": \"Line items, tax and total all use the changed formatter, so rendered invoice amounts can now contain commas.\",\n      \"source_evidence\": [\n        {\n          \"source_id\": \"git:ledgerlite@548ce68cdbb0f52c76402a5d4b5214722eff4cd7:ledgerlite/pdf_invoice.py\",\n          \"sha256\": \"ad2fcadbea707f276f358fc52ec5cb025bf5055252169df9f95a881bb8c02a50\",\n          \"lines\": [3, 6, 7, 8, 9, 10],\n          \"excerpt\": \"from ledgerlite.money import format_amount\\ncur = invoice[\\\"currency\\\"]\\nlines = [f\\\"{item['label']}: {format_amount(item['amount'], cur)}\\\" for item in invoice[\\\"items\\\"]]\\nlines.append(f\\\"Tax: {format_amount(invoice['tax'], cur)}\\\")\\nlines.append(f\\\"Total: {format_amount(invoice['total'], cur)}\\\")\"\n        }\n      ]\n    },\n    {\n      \"target\": \"REQ-PDF-INVOICE\",\n      \"obligation\": \"review_spec\",\n      \"reason\": \"Re-check that grouped amounts remain readable and meet the currency and two-decimal acceptance criteria.\",\n      \"source_evidence\": [\n        {\n          \"source_id\": \"ledgerlite:docs/requirements.md\",\n          \"sha256\": \"d862d62337048b0f779e19a69ab57730f57ba3225c15660d284912b743bd057f\",\n          \"lines\": [9, 10, 11, 12],\n          \"excerpt\": \"REQ-PDF-INVOICE — Every invoice can be downloaded as a PDF that the client can read and pay from.\\nAcceptance criteria:\\n- The PDF shows every line item, the tax and the total.\\n- Amounts are shown in the studio's currency with two decimals.\"\n        },\n        {\n          \"source_id\": \"ledgerlite:docs/architecture.md\",\n          \"sha256\": \"db2462995de8df4ea69c6c42913910a700e386bd2ac405218f22105ad4fe761a\",\n          \"lines\": [8],\n          \"excerpt\": \"| CMP-PDF | PDF invoice renderer | `ledgerlite/pdf_invoice.py` | Implements REQ-PDF-INVOICE. Uses CMP-MONEY for every amount. |\"\n        }\n      ]\n    },\n    {\n      \"target\": \"CMP-CSV\",\n      \"obligation\": \"review_implementation\",\n      \"reason\": \"The exporter actually calls the shared formatter for net, tax and total, so grouped amounts can enter the CSV despite the architecture's contrary description.\",\n      \"source_evidence\": [\n        {\n          \"source_id\": \"git:ledgerlite@548ce68cdbb0f52c76402a5d4b5214722eff4cd7:ledgerlite/csv_export.py\",\n          \"sha256\": \"9fe2e185c3ee2bf47ba5ff37fc4350014730ba92fb3118ccdc3cdee403f7a89a\",\n          \"lines\": [6, 11, 12, 13, 20, 21, 22],\n          \"excerpt\": \"from ledgerlite.money import format_amount\\ndef _amount(value) -> str:\\n    # Reuse the shared formatter and drop the currency code so every amount has exactly two decimals.\\n    return format_amount(value, \\\"\\\").strip()\\nfor inv in invoices:\\n    w.writerow([inv[\\\"id\\\"], inv[\\\"date\\\"], inv[\\\"client\\\"], _amount(inv[\\\"net\\\"]), _amount(inv[\\\"tax\\\"]),\\n                _amount(inv[\\\"total\\\"])])\"\n        }\n      ]\n    },\n    {\n      \"target\": \"REQ-CSV-EXPORT\",\n      \"obligation\": \"check_contract\",\n      \"reason\": \"Grouped formatter output conflicts with the acceptance criterion requiring amounts without thousands separators.\",\n      \"source_evidence\": [\n        {\n          \"source_id\": \"ledgerlite:docs/requirements.md\",\n          \"sha256\": \"d862d62337048b0f779e19a69ab57730f57ba3225c15660d284912b743bd057f\",\n          \"lines\": [16, 17, 18, 19],\n          \"excerpt\": \"REQ-CSV-EXPORT — Finance can export all invoices of a month as a CSV file for the accountant's bookkeeping tool.\\nAcceptance criteria (see DR-001):\\n- The file has the columns invoice_id, date, client, net, tax, total.\\n- Amounts are plain numbers with \\\".\\\" as decimal separator, no thousands separators and no currency code.\"\n        },\n        {\n          \"source_id\": \"git:ledgerlite@548ce68cdbb0f52c76402a5d4b5214722eff4cd7:ledgerlite/csv_export.py\",\n          \"sha256\": \"9fe2e185c3ee2bf47ba5ff37fc4350014730ba92fb3118ccdc3cdee403f7a89a\",\n          \"lines\": [11, 12, 13, 20, 21, 22],\n          \"excerpt\": \"def _amount(value) -> str:\\n    # Reuse the shared formatter and drop the currency code so every amount has exactly two decimals.\\n    return format_amount(value, \\\"\\\").strip()\\nfor inv in invoices:\\n    w.writerow([inv[\\\"id\\\"], inv[\\\"date\\\"], inv[\\\"client\\\"], _amount(inv[\\\"net\\\"]), _amount(inv[\\\"tax\\\"]),\\n                _amount(inv[\\\"total\\\"])])\"\n        }\n      ]\n    },\n    {\n      \"target\": \"DR-001\",\n      \"obligation\": \"check_contract\",\n      \"reason\": \"Re-check the accountant import contract: grouped amounts are prohibited and unparseable rows can be silently dropped.\",\n      \"source_evidence\": [\n        {\n          \"source_id\": \"ledgerlite:docs/decisions/DR-001-csv-layout.md\",\n          \"sha256\": \"6c62fe8a9cdd2f448819d6c882b6b5c81d92137b29e5a543e676cf371b34ee7e\",\n          \"lines\": [5, 7, 8],\n          \"excerpt\": \"The accountant's bookkeeping tool imports a CSV with the columns `invoice_id,date,client,net,tax,total`.\\nAmounts must be plain numbers with \\\".\\\" as the decimal separator and no thousands separators and no currency code\\n(for example `1234.50`). The import silently drops any row whose amount it cannot parse.\"\n        }\n      ]\n    },\n    {\n      \"target\": \"ledgerlite:docs/architecture.md\",\n      \"obligation\": \"review_spec\",\n      \"reason\": \"The documented claim that CSV does not use the formatter contradicts the supplied implementation and obscures this change's impact.\",\n      \"source_evidence\": [\n        {\n          \"source_id\": \"ledgerlite:docs/architecture.md\",\n          \"sha256\": \"db2462995de8df4ea69c6c42913910a700e386bd2ac405218f22105ad4fe761a\",\n          \"lines\": [9, 11],\n          \"excerpt\": \"| CMP-CSV | CSV exporter | `ledgerlite/csv_export.py` | Implements REQ-CSV-EXPORT. |\\nThe CSV exporter writes raw decimal amounts straight from the database and does not use the money formatter.\"\n        },\n        {\n          \"source_id\": \"git:ledgerlite@548ce68cdbb0f52c76402a5d4b5214722eff4cd7:ledgerlite/csv_export.py\",\n          \"sha256\": \"9fe2e185c3ee2bf47ba5ff37fc4350014730ba92fb3118ccdc3cdee403f7a89a\",\n          \"lines\": [6, 11, 12, 13],\n          \"excerpt\": \"from ledgerlite.money import format_amount\\ndef _amount(value) -> str:\\n    # Reuse the shared formatter and drop the currency code so every amount has exactly two decimals.\\n    return format_amount(value, \\\"\\\").strip()\"\n        }\n      ]\n    }\n  ],\n  \"unresolved_questions\": [\n    \"Does CON-MONEY-FORMAT permit thousands separators, or should the accepted contract be clarified?\",\n    \"Are there PDF or CSV tests not included in the supplied sources that should be rerun or extended for grouped amounts and rounding across the thousands threshold?\"\n  ]\n}"
+  },
+  "parse": {
+   "ok": true
+  },
+  "prompt": {
+   "prompt_id": "direct_impact",
+   "sha256": "97e97646aa03f089c90a41308bccd930cf228c138043640bfac8027a7b88e6f5",
+   "version": "v1"
+  },
+  "stop_reason": "stop",
+  "usage": {
+   "input_tokens": 2860,
+   "output_tokens": 3033
+  }
+ },
+ "client": {
+  "api_key_env": "OPENAI_API_KEY",
+  "base_url": "https://api.openai.com",
+  "is_fake": false,
+  "json_mode": true,
+  "max_output_tokens": 32000,
+  "model": "gpt-6.1-terra",
+  "provider": "openai",
+  "temperature": null
+ },
+ "prediction": {
+  "E5": {
+   "raw": {
+    "impacts": [
+     {
+      "obligation": "review_implementation",
+      "reason": "The shared formatter now groups thousands, changing its output for all callers.",
+      "source_evidence": [
+       {
+        "excerpt": "q = amount.quantize(Decimal(\"0.01\"), rounding=ROUND_HALF_UP)\n# Group thousands for readability on invoices, e.g. \"12,500.00 EUR\".\nreturn f\"{q:,} {currency}\"",
+        "lines": [
+         6,
+         7,
+         8,
+         9
+        ],
+        "sha256": "b2f2426e37c5498e3d00a87b5fb3ec6f299c194c212cb37ad31a0e899804e6c8",
+        "source_id": "git:ledgerlite@548ce68cdbb0f52c76402a5d4b5214722eff4cd7:ledgerlite/money.py"
+       }
+      ],
+      "target": "CMP-MONEY"
+     },
+     {
+      "obligation": "check_contract",
+      "reason": "Re-check whether the accepted formatting contract permits thousands separators; it specifies decimal formatting and currency code but does not explicitly address grouping.",
+      "source_evidence": [
+       {
+        "excerpt": "CON-MONEY-FORMAT — Amounts are rendered with exactly two decimals and \".\" as the decimal separator, followed by the ISO currency code (for example \"250.00 EUR\"). Status: accepted.",
+        "lines": [
+         23,
+         24
+        ],
+        "sha256": "d862d62337048b0f779e19a69ab57730f57ba3225c15660d284912b743bd057f",
+        "source_id": "ledgerlite:docs/requirements.md"
+       },
+       {
+        "excerpt": "# Group thousands for readability on invoices, e.g. \"12,500.00 EUR\".\nreturn f\"{q:,} {currency}\"",
+        "lines": [
+         8,
+         9
+        ],
+        "sha256": "b2f2426e37c5498e3d00a87b5fb3ec6f299c194c212cb37ad31a0e899804e6c8",
+        "source_id": "git:ledgerlite@548ce68cdbb0f52c76402a5d4b5214722eff4cd7:ledgerlite/money.py"
+       }
+      ],
+      "target": "CON-MONEY-FORMAT"
+     },
+     {
+      "obligation": "rerun_test",
+      "reason": "Re-test the changed formatter and add cases at and across the grouping threshold; the existing cases do not exercise grouped output.",
+      "source_evidence": [
+       {
+        "excerpt": "CASES = [\n    (Decimal(\"0\"), \"0.00 EUR\"),\n    (Decimal(\"9.5\"), \"9.50 EUR\"),\n    (Decimal(\"250\"), \"250.00 EUR\"),\n    (Decimal(\"999.994\"), \"999.99 EUR\"),\n]\n@pytest.mark.parametrize(\"amount,expected\", CASES)\ndef test_format_amount(amount, expected):\n    assert format_amount(amount, \"EUR\") == expected",
+        "lines": [
+         7,
+         8,
+         9,
+         10,
+         11,
+         12,
+         15,
+         16,
+         17
+        ],
+        "sha256": "5c4b623918e3456745214f4e11012abdf7b92bcd713897bb0f66643dff0e7b60",
+        "source_id": "git:ledgerlite@548ce68cdbb0f52c76402a5d4b5214722eff4cd7:tests/test_money.py"
+       }
+      ],
+      "target": "TEST-MONEY-FORMAT"
+     },
+     {
+      "obligation": "review_implementation",
+      "reason": "Line items, tax and total all use the changed formatter, so rendered invoice amounts can now contain commas.",
+      "source_evidence": [
+       {
+        "excerpt": "from ledgerlite.money import format_amount\ncur = invoice[\"currency\"]\nlines = [f\"{item['label']}: {format_amount(item['amount'], cur)}\" for item in invoice[\"items\"]]\nlines.append(f\"Tax: {format_amount(invoice['tax'], cur)}\")\nlines.append(f\"Total: {format_amount(invoice['total'], cur)}\")",
+        "lines": [
+         3,
+         6,
+         7,
+         8,
+         9,
+         10
+        ],
+        "sha256": "ad2fcadbea707f276f358fc52ec5cb025bf5055252169df9f95a881bb8c02a50",
+        "source_id": "git:ledgerlite@548ce68cdbb0f52c76402a5d4b5214722eff4cd7:ledgerlite/pdf_invoice.py"
+       }
+      ],
+      "target": "CMP-PDF"
+     },
+     {
+      "obligation": "review_spec",
+      "reason": "Re-check that grouped amounts remain readable and meet the currency and two-decimal acceptance criteria.",
+      "source_evidence": [
+       {
+        "excerpt": "REQ-PDF-INVOICE — Every invoice can be downloaded as a PDF that the client can read and pay from.\nAcceptance criteria:\n- The PDF shows every line item, the tax and the total.\n- Amounts are shown in the studio's currency with two decimals.",
+        "lines": [
+         9,
+         10,
+         11,
+         12
+        ],
+        "sha256": "d862d62337048b0f779e19a69ab57730f57ba3225c15660d284912b743bd057f",
+        "source_id": "ledgerlite:docs/requirements.md"
+       },
+       {
+        "excerpt": "| CMP-PDF | PDF invoice renderer | `ledgerlite/pdf_invoice.py` | Implements REQ-PDF-INVOICE. Uses CMP-MONEY for every amount. |",
+        "lines": [
+         8
+        ],
+        "sha256": "db2462995de8df4ea69c6c42913910a700e386bd2ac405218f22105ad4fe761a",
+        "source_id": "ledgerlite:docs/architecture.md"
+       }
+      ],
+      "target": "REQ-PDF-INVOICE"
+     },
+     {
+      "obligation": "review_implementation",
+      "reason": "The exporter actually calls the shared formatter for net, tax and total, so grouped amounts can enter the CSV despite the architecture's contrary description.",
+      "source_evidence": [
+       {
+        "excerpt": "from ledgerlite.money import format_amount\ndef _amount(value) -> str:\n    # Reuse the shared formatter and drop the currency code so every amount has exactly two decimals.\n    return format_amount(value, \"\").strip()\nfor inv in invoices:\n    w.writerow([inv[\"id\"], inv[\"date\"], inv[\"client\"], _amount(inv[\"net\"]), _amount(inv[\"tax\"]),\n                _amount(inv[\"total\"])])",
+        "lines": [
+         6,
+         11,
+         12,
+         13,
+         20,
+         21,
+         22
+        ],
+        "sha256": "9fe2e185c3ee2bf47ba5ff37fc4350014730ba92fb3118ccdc3cdee403f7a89a",
+        "source_id": "git:ledgerlite@548ce68cdbb0f52c76402a5d4b5214722eff4cd7:ledgerlite/csv_export.py"
+       }
+      ],
+      "target": "CMP-CSV"
+     },
+     {
+      "obligation": "check_contract",
+      "reason": "Grouped formatter output conflicts with the acceptance criterion requiring amounts without thousands separators.",
+      "source_evidence": [
+       {
+        "excerpt": "REQ-CSV-EXPORT — Finance can export all invoices of a month as a CSV file for the accountant's bookkeeping tool.\nAcceptance criteria (see DR-001):\n- The file has the columns invoice_id, date, client, net, tax, total.\n- Amounts are plain numbers with \".\" as decimal separator, no thousands separators and no currency code.",
+        "lines": [
+         16,
+         17,
+         18,
+         19
+        ],
+        "sha256": "d862d62337048b0f779e19a69ab57730f57ba3225c15660d284912b743bd057f",
+        "source_id": "ledgerlite:docs/requirements.md"
+       },
+       {
+        "excerpt": "def _amount(value) -> str:\n    # Reuse the shared formatter and drop the currency code so every amount has exactly two decimals.\n    return format_amount(value, \"\").strip()\nfor inv in invoices:\n    w.writerow([inv[\"id\"], inv[\"date\"], inv[\"client\"], _amount(inv[\"net\"]), _amount(inv[\"tax\"]),\n                _amount(inv[\"total\"])])",
+        "lines": [
+         11,
+         12,
+         13,
+         20,
+         21,
+         22
+        ],
+        "sha256": "9fe2e185c3ee2bf47ba5ff37fc4350014730ba92fb3118ccdc3cdee403f7a89a",
+        "source_id": "git:ledgerlite@548ce68cdbb0f52c76402a5d4b5214722eff4cd7:ledgerlite/csv_export.py"
+       }
+      ],
+      "target": "REQ-CSV-EXPORT"
+     },
+     {
+      "obligation": "check_contract",
+      "reason": "Re-check the accountant import contract: grouped amounts are prohibited and unparseable rows can be silently dropped.",
+      "source_evidence": [
+       {
+        "excerpt": "The accountant's bookkeeping tool imports a CSV with the columns `invoice_id,date,client,net,tax,total`.\nAmounts must be plain numbers with \".\" as the decimal separator and no thousands separators and no currency code\n(for example `1234.50`). The import silently drops any row whose amount it cannot parse.",
+        "lines": [
+         5,
+         7,
+         8
+        ],
+        "sha256": "6c62fe8a9cdd2f448819d6c882b6b5c81d92137b29e5a543e676cf371b34ee7e",
+        "source_id": "ledgerlite:docs/decisions/DR-001-csv-layout.md"
+       }
+      ],
+      "target": "DR-001"
+     },
+     {
+      "obligation": "review_spec",
+      "reason": "The documented claim that CSV does not use the formatter contradicts the supplied implementation and obscures this change's impact.",
+      "source_evidence": [
+       {
+        "excerpt": "| CMP-CSV | CSV exporter | `ledgerlite/csv_export.py` | Implements REQ-CSV-EXPORT. |\nThe CSV exporter writes raw decimal amounts straight from the database and does not use the money formatter.",
+        "lines": [
+         9,
+         11
+        ],
+        "sha256": "db2462995de8df4ea69c6c42913910a700e386bd2ac405218f22105ad4fe761a",
+        "source_id": "ledgerlite:docs/architecture.md"
+       },
+       {
+        "excerpt": "from ledgerlite.money import format_amount\ndef _amount(value) -> str:\n    # Reuse the shared formatter and drop the currency code so every amount has exactly two decimals.\n    return format_amount(value, \"\").strip()",
+        "lines": [
+         6,
+         11,
+         12,
+         13
+        ],
+        "sha256": "9fe2e185c3ee2bf47ba5ff37fc4350014730ba92fb3118ccdc3cdee403f7a89a",
+        "source_id": "git:ledgerlite@548ce68cdbb0f52c76402a5d4b5214722eff4cd7:ledgerlite/csv_export.py"
+       }
+      ],
+      "target": "ledgerlite:docs/architecture.md"
+     }
+    ],
+    "unresolved_questions": [
+     "Does CON-MONEY-FORMAT permit thousands separators, or should the accepted contract be clarified?",
+     "Are there PDF or CSV tests not included in the supplied sources that should be rerun or extended for grouped amounts and rounding across the thousands threshold?"
+    ]
+   },
+   "targets": [
+    "CMP-CSV",
+    "CMP-MONEY",
+    "CMP-PDF",
+    "CON-MONEY-FORMAT",
+    "DR-001",
+    "REQ-CSV-EXPORT",
+    "REQ-PDF-INVOICE",
+    "TEST-MONEY-FORMAT",
+    "ledgerlite:docs/architecture.md"
+   ]
+  }
+ },
+ "project": "ledgerlite"
+}
