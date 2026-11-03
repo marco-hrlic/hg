@@ -24,8 +24,8 @@ from typing import Any
 
 KIND_ORDER = ("goal", "capability", "requirement", "question", "contract", "component", "test", "artifact")
 ARM_ORDER = {"D": 0, "G0": 1, "G1": 2, "G2": 3, "H": 4}
-COL_W, ROW_H, NODE_W, NODE_H, PAD, LABEL_W = 206, 92, 180, 38, 28, 104
-PER_LINE, LINE_H = 6, 60  # a kind with more nodes than PER_LINE wraps onto extra lines, LINE_H apart
+COL_W, ROW_H, NODE_W, NODE_H, PAD, LABEL_W = 236, 112, 208, 60, 28, 104
+PER_LINE, LINE_H = 6, 80  # a kind with more nodes than PER_LINE wraps onto extra lines, LINE_H apart
 
 
 # -- loading -------------------------------------------------------------------------------------------
@@ -198,7 +198,7 @@ main{display:flex;min-height:calc(100vh - 60px)}#wrap{flex:1;overflow:auto;paddi
 aside{width:340px;max-width:40vw;border-left:1px solid var(--line);background:var(--panel);padding:14px 16px;overflow:auto}
 @media (max-width:760px){main{flex-direction:column}aside{width:auto;max-width:none;border-left:0;border-top:1px solid var(--line)}}
 svg{display:block;width:100%;height:auto;min-width:720px}.n rect{fill:var(--panel);stroke-width:1.5}.n text{fill:var(--fg);font-size:12px;pointer-events:none}
-.n{cursor:pointer}.n.dim,.e.dim{opacity:.12}.ghost{opacity:.35}.ghost rect{stroke-dasharray:3 3}
+.n{cursor:pointer}.nid{font:10.5px ui-monospace,SFMono-Regular,Menlo,monospace;fill:var(--muted)}.n.dim,.e.dim{opacity:.12}.ghost{opacity:.35}.ghost rect{stroke-dasharray:3 3}
 .e path{fill:none;stroke-width:1.4}.e.hyp path{stroke-dasharray:6 4}.e.del path{stroke-dasharray:2 3}
 .e text{font-size:10px;fill:var(--muted)}.colh{font-size:11px;fill:var(--muted);text-transform:uppercase;letter-spacing:.06em}
 .ring{fill:none;stroke-width:3}.sel rect{stroke-width:3}
@@ -215,6 +215,7 @@ table{border-collapse:collapse;font-size:12px;width:100%}td{padding:2px 4px;bord
 <label><input type="checkbox" id="impact" checked> impact overlay</label>
 <label><input type="checkbox" id="deleted"> deleted</label>
 <label><input type="checkbox" id="elabels"> edge labels</label>
+<label>Labels <select id="lab"><option value="both">title + id</option><option value="title">title</option><option value="id">id</option></select></label>
 <label>Find <input id="q" size="12" placeholder="id or title"></label>
 </header>
 <script type="application/json" id="data">__DATA__</script>
@@ -274,14 +275,30 @@ function draw(){
   if(cls[n.id]&&!n._g){mk('rect',{class:'ring',x:-4,y:-4,width:G.nodeW+8,height:G.nodeH+8,rx:10,stroke:`var(${RING[cls[n.id]]})`,
    'stroke-dasharray':cls[n.id]==='miss'||cls[n.id]==='critmiss'?'5 3':'none'},gg)}
   if(cls[n.id]==='critmiss'&&!n._g){const t=mk('text',{x:G.nodeW-4,y:-7,'text-anchor':'end',style:'fill:var(--miss);font-weight:600;font-size:11px'},gg);t.textContent='critical miss'}
-  const t1=mk('text',{x:9,y:15,style:'font-weight:600'},gg);t1.textContent=n.id+(n.deleted?' ✕':'');
-  const t2=mk('text',{x:9,y:30,style:'fill:var(--muted);font-size:11px'},gg);
-  t2.textContent=(n.title||'').length>27?n.title.slice(0,26)+'…':n.title;
+  label(gg,n);
   gg.addEventListener('mouseenter',()=>focus(n.id,nb));gg.addEventListener('mouseleave',()=>focus(null));
   gg.addEventListener('click',()=>{sel=sel===n.id?null:n.id;draw();side()})});
  const q=$('q').value.trim().toLowerCase();if(q)ng.querySelectorAll('.n').forEach(el=>{
   const n=nodes.find(x=>x.id===el.dataset.id);if(!(n.id+' '+n.title).toLowerCase().includes(q))el.classList.add('dim')});
  side()}
+// Node label: wrapped title (up to 2 lines) above a small monospace id; mode from the "Labels" control.
+function niceTitle(n){let t=(n.title||'').trim();if(n.kind==='question')t=t.replace(/^Resolve:\s*/i,'');
+ return t?t.charAt(0).toUpperCase()+t.slice(1):n.id}
+function wrap(el,str,maxW,maxLines,x,y0,lh){const words=str.split(/\s+/);let line=[],n=0,y=y0;
+ const span=()=>{const t=mk('tspan',{x,y},el);n++;y+=lh;return t};let t=span();
+ for(let i=0;i<words.length;i++){line.push(words[i]);t.textContent=line.join(' ');
+  if(t.getComputedTextLength()>maxW&&line.length>1){line.pop();t.textContent=line.join(' ');
+   if(n===maxLines){t.textContent=line.join(' ')+' …';fit(t,maxW);return n}
+   line=[words[i]];t=span();t.textContent=words[i]}}
+ fit(t,maxW);return n}
+function fit(t,maxW){while(t.getComputedTextLength()>maxW&&t.textContent.length>2)t.textContent=t.textContent.slice(0,-2)+'…'}
+function label(gg,n){const mode=$('lab').value,W=G.nodeW-18,del=n.deleted?' ✕':'';
+ mk('title',{},gg).textContent=`${n.id}${del}\n${n.title||''}${n.body&&n.body!==n.title?'\n\n'+n.body:''}`;
+ if(mode==='id'){const t=mk('text',{x:9,y:G.nodeH/2+4,style:'font-weight:600'},gg);t.textContent=n.id+del;fit(t,W);return}
+ const tt=mk('text',{class:'nt',style:'font-weight:600;font-size:12.5px'},gg);
+ const lines=wrap(tt,niceTitle(n)+del,W,2,9,mode==='title'?24:18,15);
+ if(mode==='title'&&lines===1)tt.firstChild.setAttribute('y',G.nodeH/2+4);
+ if(mode==='both'){const t=mk('text',{x:9,y:G.nodeH-9,class:'nid'},gg);t.textContent=n.id;fit(t,W)}}
 function focus(id,nb){document.querySelectorAll('#svg .n').forEach(el=>el.classList.toggle('dim',!!id&&el.dataset.id!==id&&!(nb[id]||new Set).has(el.dataset.id)));
  document.querySelectorAll('#svg .e').forEach(el=>el.classList.toggle('dim',!!id&&el.dataset.s!==id&&el.dataset.d!==id))}
 function side(){const g=cur(),a=$('side'),o=$('cmp').value?D.graphs[+$('cmp').value]:null;let h='';
@@ -291,7 +308,7 @@ function side(){const g=cur(),a=$('side'),o=$('cmp').value?D.graphs[+$('cmp').va
  h+='<div class="legend">'+kinds.map(k=>`<span><span class="sw" style="border:2px solid var(--${k},var(--edge))"></span>${esc(k)}</span>`).join('')+'</div>';
  h+='<div class="legend"><span>— confirmed</span><span>- - hypothesized</span>'+(o?`<span style="opacity:.5">ghost = only in ${esc(o.label)}</span>`:'')+'</div>';
  const n=sel&&(g.nodes.find(x=>x.id===sel)||(o&&o.nodes.find(x=>x.id===sel)));
- if(n){const src=g.nodes.includes(n)?g:o;h+=`<h2>${esc(n.id)}</h2><dl><dt>kind</dt><dd>${esc(n.kind)}${src!==g?' (only in '+esc(o.label)+')':''}</dd><dt>title</dt><dd>${esc(n.title)}</dd>`;
+ if(n){const src=g.nodes.includes(n)?g:o;h+=`<h2>${esc(niceTitle(n))}</h2><div class="nid" style="font-size:12px;color:var(--muted)">${esc(n.id)}</div><dl><dt>kind</dt><dd>${esc(n.kind)}${src!==g?' (only in '+esc(o.label)+')':''}</dd><dt>title</dt><dd>${esc(n.title)}</dd>`;
   if(n.body)h+=`<dt>body</dt><dd>${esc(n.body)}</dd>`;if(n.data&&Object.keys(n.data).length)h+=`<dt>data</dt><dd><pre>${esc(JSON.stringify(n.data,null,1))}</pre></dd>`;
   h+=`<dt>rev</dt><dd>${esc(n.rev)}</dd></dl><h2>Edges</h2><table>`+src.edges.filter(e=>e.src===n.id||e.dst===n.id)
    .map(e=>`<tr><td>${esc(e.src)}</td><td>${esc(e.relation)}${e.status==='hypothesized'?' (hyp.)':''}${e.deleted?' (deleted)':''}</td><td>${esc(e.dst)}</td></tr>`).join('')+'</table>'}
@@ -307,7 +324,8 @@ function side(){const g=cur(),a=$('side'),o=$('cmp').value?D.graphs[+$('cmp').va
   else h+='<p style="color:var(--muted);font-size:12px">No oracle loaded (pass --oracle) — grey rings are predictions only.</p>'}
  a.innerHTML=h}
 $('g').onchange=()=>{save('g',$('g').value);sel=null;fillCmp();draw()};
-['cmp','impact','deleted','elabels'].forEach(i=>$(i).onchange=draw);$('q').oninput=draw;
+['cmp','impact','deleted','elabels'].forEach(i=>$(i).onchange=draw);
+{const v=pref('lab');if(v)$('lab').value=v}$('lab').onchange=()=>{save('lab',$('lab').value);draw()};$('q').oninput=draw;
 fillCmp();draw();
 </script>
 </body></html>
