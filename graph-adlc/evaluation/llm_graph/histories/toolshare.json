@@ -1,0 +1,174 @@
+{
+  "project": "toolshare",
+  "description": "Community tool library: holds queue, pickup window, member notifications. Independently written meeting notes, requirements and architecture notes; a two-commit Python repository.",
+  "repo": {
+    "name": "toolshare",
+    "commits": [
+      {
+        "id": "c1",
+        "dir": "code/c1",
+        "message": "Initial holds, inventory and notifications",
+        "date": "2026-09-05T10:00:00+00:00"
+      },
+      {
+        "id": "c2",
+        "dir": "code/c2",
+        "message": "Notify members when their hold lapses; 48h pickup window",
+        "date": "2026-09-18T10:00:00+00:00"
+      }
+    ]
+  },
+  "probe": {
+    "node_id": "CON-NOTICE-FORMAT",
+    "aspect": "contract",
+    "event": "E5",
+    "description": "Notification format contract changes: SMS allowed (160-character bodies) and every message must state the desk opening hours."
+  },
+  "events": [
+    {
+      "id": "E1",
+      "kind": "discovery",
+      "sources": [
+        {
+          "path": "discovery/stakeholder_notes.md",
+          "type": "stakeholder_notes",
+          "version": "2026-08-28"
+        },
+        {
+          "path": "spec/requirements.v1.md",
+          "logical_path": "spec/requirements.md",
+          "type": "requirements",
+          "version": "draft-1"
+        },
+        {
+          "path": "spec/architecture.md",
+          "type": "architecture",
+          "version": "2026-09-02"
+        }
+      ],
+      "code": "c1",
+      "change_event": {
+        "kind": "initial_construction",
+        "summary": "Build the initial specification graph from the discovery notes, the first requirements draft, the architecture notes and the current repository."
+      }
+    },
+    {
+      "id": "E2",
+      "kind": "refinement",
+      "sources": [
+        {
+          "path": "spec/requirements.v2.md",
+          "logical_path": "spec/requirements.md",
+          "type": "requirements",
+          "version": "draft-2"
+        }
+      ],
+      "change_event": {
+        "kind": "source_revision",
+        "summary": "spec/requirements.md was revised to draft 2."
+      },
+      "lifecycle_after": [
+        {
+          "action": "work_create",
+          "requirement": "REQ-HOLD-EXPIRY",
+          "label": "W-EXPIRY"
+        },
+        {
+          "action": "work_create",
+          "requirement": "REQ-READY-NOTICE",
+          "label": "W-NOTICE"
+        }
+      ]
+    },
+    {
+      "id": "E3",
+      "kind": "implementation_observation",
+      "code": "c2",
+      "diff": [
+        "c1",
+        "c2"
+      ],
+      "challenge": true,
+      "change_event": {
+        "kind": "code_change",
+        "summary": "A new commit landed on the main branch of the toolshare repository."
+      },
+      "lifecycle_after": [
+        {
+          "action": "work_rebase",
+          "work": "W-EXPIRY"
+        },
+        {
+          "action": "work_rebase",
+          "work": "W-NOTICE"
+        },
+        {
+          "action": "work_submit",
+          "work": "W-EXPIRY",
+          "code": "c2",
+          "evidence": [
+            [
+              "TEST-HOLD-QUEUE",
+              "test_result",
+              "passed"
+            ]
+          ]
+        },
+        {
+          "action": "work_submit",
+          "work": "W-NOTICE",
+          "code": "c2",
+          "evidence": [
+            [
+              "TEST-NOTICE-FORMAT",
+              "test_result",
+              "passed"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "E4",
+      "kind": "wording_only",
+      "sources": [
+        {
+          "path": "spec/requirements.v3.md",
+          "logical_path": "spec/requirements.md",
+          "type": "requirements",
+          "version": "draft-3"
+        }
+      ],
+      "negative_probe": {
+        "node_id": "REQ-READY-NOTICE",
+        "aspect": "semantic"
+      },
+      "change_event": {
+        "kind": "source_revision",
+        "summary": "spec/requirements.md was revised to draft 3."
+      }
+    },
+    {
+      "id": "E5",
+      "kind": "change",
+      "sources": [
+        {
+          "path": "spec/requirements.v4.md",
+          "logical_path": "spec/requirements.md",
+          "type": "requirements",
+          "version": "draft-4"
+        }
+      ],
+      "challenge": true,
+      "change_event": {
+        "kind": "source_revision",
+        "summary": "spec/requirements.md was revised to draft 4."
+      },
+      "lifecycle_after": [
+        {
+          "action": "reconcile_all"
+        }
+      ]
+    }
+  ]
+}

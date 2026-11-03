@@ -1,0 +1,5114 @@
+{
+ "arm": "G2",
+ "change_log": [
+  {
+   "actor": "llm-graph:P-0001 reviewed-by:policy:conservative-v1",
+   "graph_rev": 2,
+   "id": "CHG-2",
+   "rationale": "P-0001: Initial graph from discovery notes, requirements draft 1, architecture notes and repository c1 [ops op-1, op-2, op-3, op-4, op-5, op-6, op-7, op-8, op-9, op-10, op-11, op-12, op-13, op-14, op-15, op-16, op-17, op-18, op-19, op-20, op-21, op-22, op-23, op-24, op-25, op-26, op-27, op-28, op-29, op-30, op-31, op-32, op-33, op-34]"
+  },
+  {
+   "actor": "llm-graph:P-0002 reviewed-by:policy:conservative-v1",
+   "graph_rev": 3,
+   "id": "CHG-3",
+   "rationale": "P-0002: Requirements draft 2 resolves the pickup window and adds expiry acceptance criteria [ops op-1, op-2]"
+  },
+  {
+   "actor": "llm-graph:P-0003 reviewed-by:policy:conservative-v1",
+   "graph_rev": 4,
+   "id": "CHG-4",
+   "rationale": "P-0003: Missing-dependency challenge (deterministic import scan) [ops scan-1]"
+  },
+  {
+   "actor": "llm-graph:P-0004 reviewed-by:policy:conservative-v1",
+   "graph_rev": 5,
+   "id": "CHG-5",
+   "rationale": "P-0004: Commit c2: hold expiry now sends a lapse email; 48h window constant [ops op-1]"
+  },
+  {
+   "actor": "llm-graph:P-0006 reviewed-by:policy:conservative-v1",
+   "graph_rev": 6,
+   "id": "CHG-6",
+   "rationale": "P-0006: Draft 4 changes the notification format contract [ops op-1]"
+  }
+ ],
+ "client": {
+  "is_fake": true,
+  "model": "none (scripted fixture responses)",
+  "provider": "scripted-fake"
+ },
+ "commits": {
+  "c1": "d1ca69603f4828bb812eba1e72f15c756ade52a4",
+  "c2": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+ },
+ "events": [
+  {
+   "diffs": [],
+   "event": "E1",
+   "graph_revision_after": 2,
+   "graph_revision_before": 1,
+   "kind": "discovery",
+   "lifecycle_after": [],
+   "lifecycle_before": [],
+   "probe_after": {
+    "aspect": "contract",
+    "graph_revision": 2,
+    "node_id": "CON-NOTICE-FORMAT",
+    "pairs": [
+     [
+      "CMP-NOTIFY",
+      "check_contract"
+     ],
+     [
+      "CMP-NOTIFY",
+      "review_implementation"
+     ],
+     [
+      "REQ-READY-NOTICE",
+      "check_contract"
+     ],
+     [
+      "REQ-READY-NOTICE",
+      "investigate_unknown"
+     ],
+     [
+      "TEST-NOTICE-FORMAT",
+      "rerun_test"
+     ]
+    ],
+    "present": true,
+    "provisional": [],
+    "pruned": [],
+    "targets": [
+     "CMP-NOTIFY",
+     "REQ-READY-NOTICE",
+     "TEST-NOTICE-FORMAT"
+    ]
+   },
+   "probe_before": {
+    "aspect": "contract",
+    "node_id": "CON-NOTICE-FORMAT",
+    "pairs": [],
+    "present": false,
+    "pruned": [],
+    "targets": []
+   },
+   "proposal_step": {
+    "call": {
+     "call_key": "toolshare/E1/propose",
+     "client": {
+      "is_fake": true,
+      "model": "none (scripted fixture responses)",
+      "provider": "scripted-fake"
+     },
+     "input": {
+      "chars": 12959,
+      "diffs": [],
+      "limits": {
+       "max_chars_per_doc": 12000,
+       "max_total_chars": 60000
+      },
+      "packed_sources_sha256": "fce3d34b680fc0be00fd6f81ac1529da4ece05b69a64d7c1f989dc707279a446",
+      "sha256": "e4aeb601fd977841e556ff9dc8aa673fbde53d94698c9343a9ca7c7ecff0b05d",
+      "sources": [
+       {
+        "line_count": 14,
+        "origin": "file",
+        "path": "discovery/stakeholder_notes.md",
+        "project": "toolshare",
+        "sha256": "e9a2bdd034c3f226aeaf5dcb1cadea9d6ce03f0f2a9acf9a88ac051469ef64b8",
+        "source_id": "toolshare:discovery/stakeholder_notes.md",
+        "source_type": "stakeholder_notes",
+        "version": "2026-08-28"
+       },
+       {
+        "line_count": 12,
+        "origin": "file",
+        "path": "spec/architecture.md",
+        "project": "toolshare",
+        "sha256": "1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300",
+        "source_id": "toolshare:spec/architecture.md",
+        "source_type": "architecture",
+        "version": "2026-09-02"
+       },
+       {
+        "line_count": 33,
+        "origin": "file",
+        "path": "spec/requirements.md",
+        "project": "toolshare",
+        "sha256": "aba608a7cba6d2494754607772e19d10e5e6823d409dae7c96d9e1917b6d3af0",
+        "source_id": "toolshare:spec/requirements.md",
+        "source_type": "requirements",
+        "version": "draft-1"
+       },
+       {
+        "commit": "d1ca69603f4828bb812eba1e72f15c756ade52a4",
+        "line_count": 9,
+        "origin": "git",
+        "path": "tests/test_holds.py",
+        "project": "toolshare",
+        "repo": "toolshare",
+        "sha256": "bf13124788ea0c7f04563932b8f21ed079e2a9d099ed49ee70fb2f7b4a8a89ed",
+        "source_id": "git:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4:tests/test_holds.py",
+        "source_type": "test",
+        "version": "d1ca69603f4828bb812eba1e72f15c756ade52a4"
+       },
+       {
+        "commit": "d1ca69603f4828bb812eba1e72f15c756ade52a4",
+        "line_count": 14,
+        "origin": "git",
+        "path": "tests/test_notifications.py",
+        "project": "toolshare",
+        "repo": "toolshare",
+        "sha256": "5723cb01fb2199145f4388ba8e9c0359c7c874acef4cd626516428337b5cd1e4",
+        "source_id": "git:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4:tests/test_notifications.py",
+        "source_type": "test",
+        "version": "d1ca69603f4828bb812eba1e72f15c756ade52a4"
+       },
+       {
+        "commit": "d1ca69603f4828bb812eba1e72f15c756ade52a4",
+        "line_count": 0,
+        "origin": "git",
+        "path": "toolshare/__init__.py",
+        "project": "toolshare",
+        "repo": "toolshare",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "source_id": "git:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4:toolshare/__init__.py",
+        "source_type": "code",
+        "version": "d1ca69603f4828bb812eba1e72f15c756ade52a4"
+       },
+       {
+        "commit": "d1ca69603f4828bb812eba1e72f15c756ade52a4",
+        "line_count": 25,
+        "origin": "git",
+        "path": "toolshare/holds.py",
+        "project": "toolshare",
+        "repo": "toolshare",
+        "sha256": "db71ce7ce55d98719ff83f228de5e5efdef7de97a09a6d89f02ebc6f0e5e1a8d",
+        "source_id": "git:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4:toolshare/holds.py",
+        "source_type": "code",
+        "version": "d1ca69603f4828bb812eba1e72f15c756ade52a4"
+       },
+       {
+        "commit": "d1ca69603f4828bb812eba1e72f15c756ade52a4",
+        "line_count": 15,
+        "origin": "git",
+        "path": "toolshare/inventory.py",
+        "project": "toolshare",
+        "repo": "toolshare",
+        "sha256": "5d5448a350375901f733929d43320921ed02ef91bd84d306a0fa7f0ade64f557",
+        "source_id": "git:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4:toolshare/inventory.py",
+        "source_type": "code",
+        "version": "d1ca69603f4828bb812eba1e72f15c756ade52a4"
+       },
+       {
+        "commit": "d1ca69603f4828bb812eba1e72f15c756ade52a4",
+        "line_count": 14,
+        "origin": "git",
+        "path": "toolshare/notifications.py",
+        "project": "toolshare",
+        "repo": "toolshare",
+        "sha256": "ae80be0576750da1fc879a76854887e3233dfbcab1c6b301b84ae84d16dd33b7",
+        "source_id": "git:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4:toolshare/notifications.py",
+        "source_type": "code",
+        "version": "d1ca69603f4828bb812eba1e72f15c756ade52a4"
+       }
+      ],
+      "truncation": []
+     },
+     "is_fake": true,
+     "latency_ms": null,
+     "model_reported": "none (scripted fixture responses)",
+     "output": {
+      "chars": 18694,
+      "sha256": "c9002a15120536cf1fff05fd98bbec35c262f69bba639603f6a987993deb2190",
+      "text": "{\"intent\": \"Initial graph from discovery notes, requirements draft 1, architecture notes and repository c1\", \"operations\": [{\"op_id\": \"op-1\", \"kind\": \"add_node\", \"node\": {\"id\": \"GOAL-FAIR-ACCESS\", \"kind\": \"goal\", \"title\": \"Fair, predictable tool borrowing\", \"body\": \"Members can borrow shared tools fairly and predictably.\", \"data\": {}}, \"reason\": \"stated in source\", \"support\": \"supported\", \"confidence\": 0.8, \"change_class\": \"structure\", \"source_evidence\": [{\"source_id\": \"toolshare:spec/requirements.md\", \"sha256\": \"aba608a7cba6d2494754607772e19d10e5e6823d409dae7c96d9e1917b6d3af0\", \"lines\": [7, 7], \"excerpt\": \"GOAL-FAIR-ACCESS — Members can borrow shared tools fairly and predictably.\"}]}, {\"op_id\": \"op-2\", \"kind\": \"add_node\", \"node\": {\"id\": \"CAP-HOLDS\", \"kind\": \"capability\", \"title\": \"Holds\", \"body\": \"Members can queue for tools that are not currently on the shelf.\", \"data\": {}}, \"reason\": \"stated in source\", \"support\": \"supported\", \"confidence\": 0.8, \"change_class\": \"structure\", \"source_evidence\": [{\"source_id\": \"toolshare:spec/requirements.md\", \"sha256\": \"aba608a7cba6d2494754607772e19d10e5e6823d409dae7c96d9e1917b6d3af0\", \"lines\": [11, 11], \"excerpt\": \"CAP-HOLDS — Members can queue for tools that are not currently on the shelf.\"}]}, {\"op_id\": \"op-3\", \"kind\": \"add_node\", \"node\": {\"id\": \"CAP-NOTIFY\", \"kind\": \"capability\", \"title\": \"Member notifications\", \"body\": \"Members are told when something they are waiting for changes.\", \"data\": {}}, \"reason\": \"stated in source\", \"support\": \"supported\", \"confidence\": 0.8, \"change_class\": \"structure\", \"source_evidence\": [{\"source_id\": \"toolshare:spec/requirements.md\", \"sha256\": \"aba608a7cba6d2494754607772e19d10e5e6823d409dae7c96d9e1917b6d3af0\", \"lines\": [26, 26], \"excerpt\": \"CAP-NOTIFY — Members are told when something they are waiting for changes.\"}]}, {\"op_id\": \"op-4\", \"kind\": \"add_node\", \"node\": {\"id\": \"REQ-PLACE-HOLD\", \"kind\": \"requirement\", \"title\": \"Place a hold\", \"body\": \"A member can place a hold on a catalogued tool that is on loan.\", \"data\": {\"acceptance_criteria\": [\"A member without overdue items can place a hold on any catalogued tool.\", \"Holds on the same tool are served first come, first served.\"]}}, \"reason\": \"stated in source\", \"support\": \"supported\", \"confidence\": 0.8, \"change_class\": \"structure\", \"source_evidence\": [{\"source_id\": \"toolshare:spec/requirements.md\", \"sha256\": \"aba608a7cba6d2494754607772e19d10e5e6823d409dae7c96d9e1917b6d3af0\", \"lines\": [13, 13], \"excerpt\": \"REQ-PLACE-HOLD — A member can place a hold on a catalogued tool that is on loan.\"}, {\"source_id\": \"toolshare:spec/requirements.md\", \"sha256\": \"aba608a7cba6d2494754607772e19d10e5e6823d409dae7c96d9e1917b6d3af0\", \"lines\": [16, 16], \"excerpt\": \"Holds on the same tool are served first come, first served.\"}]}, {\"op_id\": \"op-5\", \"kind\": \"add_node\", \"node\": {\"id\": \"REQ-HOLD-EXPIRY\", \"kind\": \"requirement\", \"title\": \"Hold expiry and pickup window\", \"body\": \"When a held tool becomes available, the member has a pickup window to collect it; otherwise the hold lapses and the tool passes to the next member.\", \"data\": {\"acceptance_criteria\": []}}, \"reason\": \"stated in source\", \"support\": \"supported\", \"confidence\": 0.8, \"change_class\": \"structure\", \"source_evidence\": [{\"source_id\": \"toolshare:spec/requirements.md\", \"sha256\": \"aba608a7cba6d2494754607772e19d10e5e6823d409dae7c96d9e1917b6d3af0\", \"lines\": [18, 18], \"excerpt\": \"REQ-HOLD-EXPIRY — When a held tool becomes available, the member has a pickup window to collect it.\"}]}, {\"op_id\": \"op-6\", \"kind\": \"add_node\", \"node\": {\"id\": \"Q-PICKUP-WINDOW\", \"kind\": \"question\", \"title\": \"How long is the pickup window?\", \"body\": \"The desk is staffed three days a week.\", \"data\": {\"blocking\": true, \"state\": \"open\"}}, \"reason\": \"stated in source\", \"support\": \"supported\", \"confidence\": 0.8, \"change_class\": \"structure\", \"source_evidence\": [{\"source_id\": \"toolshare:spec/requirements.md\", \"sha256\": \"aba608a7cba6d2494754607772e19d10e5e6823d409dae7c96d9e1917b6d3af0\", \"lines\": [22, 22], \"excerpt\": \"Q-PICKUP-WINDOW — How long is the pickup window? The desk is staffed three days a week. This blocks REQ-HOLD-EXPIRY.\"}]}, {\"op_id\": \"op-7\", \"kind\": \"add_node\", \"node\": {\"id\": \"REQ-READY-NOTICE\", \"kind\": \"requirement\", \"title\": \"Ready-for-pickup notice\", \"body\": \"When a held tool is ready for pickup, the member is notified by email.\", \"data\": {\"acceptance_criteria\": [\"The email names the tool and the pickup deadline.\"]}}, \"reason\": \"stated in source\", \"support\": \"supported\", \"confidence\": 0.8, \"change_class\": \"structure\", \"source_evidence\": [{\"source_id\": \"toolshare:spec/requirements.md\", \"sha256\": \"aba608a7cba6d2494754607772e19d10e5e6823d409dae7c96d9e1917b6d3af0\", \"lines\": [28, 28], \"excerpt\": \"REQ-READY-NOTICE — When a held tool is ready for pickup, the member is notified by email.\"}]}, {\"op_id\": \"op-8\", \"kind\": \"add_node\", \"node\": {\"id\": \"CON-NOTICE-FORMAT\", \"kind\": \"contract\", \"title\": \"Notification message format\", \"body\": \"Notification messages are plain-text emails with a subject line and at most 500 characters of body text.\", \"data\": {\"status\": \"accepted\"}}, \"reason\": \"stated in source\", \"support\": \"supported\", \"confidence\": 0.8, \"change_class\": \"structure\", \"source_evidence\": [{\"source_id\": \"toolshare:spec/requirements.md\", \"sha256\": \"aba608a7cba6d2494754607772e19d10e5e6823d409dae7c96d9e1917b6d3af0\", \"lines\": [32, 32], \"excerpt\": \"CON-NOTICE-FORMAT — Notification messages are plain-text emails with a subject line and at most 500 characters of\"}]}, {\"op_id\": \"op-9\", \"kind\": \"add_node\", \"node\": {\"id\": \"CMP-HOLDS\", \"kind\": \"component\", \"title\": \"Holds service\", \"body\": \"Owns the hold queue and hold expiry.\", \"data\": {}}, \"reason\": \"stated in source\", \"support\": \"supported\", \"confidence\": 0.8, \"change_class\": \"structure\", \"source_evidence\": [{\"source_id\": \"toolshare:spec/architecture.md\", \"sha256\": \"1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300\", \"lines\": [5, 5], \"excerpt\": \"CMP-HOLDS, the holds service (`toolshare/holds.py`), owns the hold queue and hold expiry.\"}]}, {\"op_id\": \"op-10\", \"kind\": \"add_node\", \"node\": {\"id\": \"CMP-INVENTORY\", \"kind\": \"component\", \"title\": \"Inventory module\", \"body\": \"Tracks whether a tool is on the shelf.\", \"data\": {}}, \"reason\": \"stated in source\", \"support\": \"supported\", \"confidence\": 0.8, \"change_class\": \"structure\", \"source_evidence\": [{\"source_id\": \"toolshare:spec/architecture.md\", \"sha256\": \"1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300\", \"lines\": [7, 7], \"excerpt\": \"CMP-INVENTORY, the inventory module (`toolshare/inventory.py`), tracks whether a tool is on the shelf.\"}]}, {\"op_id\": \"op-11\", \"kind\": \"add_node\", \"node\": {\"id\": \"CMP-NOTIFY\", \"kind\": \"component\", \"title\": \"Notification service\", \"body\": \"Sends member emails.\", \"data\": {}}, \"reason\": \"stated in source\", \"support\": \"supported\", \"confidence\": 0.8, \"change_class\": \"structure\", \"source_evidence\": [{\"source_id\": \"toolshare:spec/architecture.md\", \"sha256\": \"1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300\", \"lines\": [9, 9], \"excerpt\": \"CMP-NOTIFY, the notification service (`toolshare/notifications.py`), sends member emails and implements\"}]}, {\"op_id\": \"op-12\", \"kind\": \"add_node\", \"node\": {\"id\": \"ART-HOLDS\", \"kind\": \"artifact\", \"title\": \"toolshare/holds.py\", \"body\": \"Source file toolshare/holds.py.\", \"data\": {\"path\": \"toolshare/holds.py\"}}, \"reason\": \"stated in source\", \"support\": \"supported\", \"confidence\": 0.8, \"change_class\": \"structure\", \"source_evidence\": [{\"source_id\": \"toolshare:spec/architecture.md\", \"sha256\": \"1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300\", \"lines\": [5, 5], \"excerpt\": \"(`toolshare/holds.py`)\"}]}, {\"op_id\": \"op-13\", \"kind\": \"add_node\", \"node\": {\"id\": \"ART-INVENTORY\", \"kind\": \"artifact\", \"title\": \"toolshare/inventory.py\", \"body\": \"Source file toolshare/inventory.py.\", \"data\": {\"path\": \"toolshare/inventory.py\"}}, \"reason\": \"stated in source\", \"support\": \"supported\", \"confidence\": 0.8, \"change_class\": \"structure\", \"source_evidence\": [{\"source_id\": \"toolshare:spec/architecture.md\", \"sha256\": \"1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300\", \"lines\": [7, 7], \"excerpt\": \"(`toolshare/inventory.py`)\"}]}, {\"op_id\": \"op-14\", \"kind\": \"add_node\", \"node\": {\"id\": \"ART-NOTIFY\", \"kind\": \"artifact\", \"title\": \"toolshare/notifications.py\", \"body\": \"Source file toolshare/notifications.py.\", \"data\": {\"path\": \"toolshare/notifications.py\"}}, \"reason\": \"stated in source\", \"support\": \"supported\", \"confidence\": 0.8, \"change_class\": \"structure\", \"source_evidence\": [{\"source_id\": \"toolshare:spec/architecture.md\", \"sha256\": \"1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300\", \"lines\": [9, 9], \"excerpt\": \"(`toolshare/notifications.py`)\"}]}, {\"op_id\": \"op-15\", \"kind\": \"add_node\", \"node\": {\"id\": \"TEST-HOLD-QUEUE\", \"kind\": \"test\", \"title\": \"Hold queue test\", \"body\": \"Checks queue order and expiry.\", \"data\": {\"command\": \"pytest -q tests/test_holds.py\"}}, \"reason\": \"stated in source\", \"support\": \"supported\", \"confidence\": 0.8, \"change_class\": \"structure\", \"source_evidence\": [{\"source_id\": \"toolshare:spec/architecture.md\", \"sha256\": \"1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300\", \"lines\": [11, 11], \"excerpt\": \"TEST-HOLD-QUEUE (`tests/test_holds.py`) checks queue order and expiry.\"}]}, {\"op_id\": \"op-16\", \"kind\": \"add_node\", \"node\": {\"id\": \"TEST-NOTICE-FORMAT\", \"kind\": \"test\", \"title\": \"Notice format test\", \"body\": \"Checks messages against CON-NOTICE-FORMAT.\", \"data\": {\"command\": \"pytest -q tests/test_notifications.py\"}}, \"reason\": \"stated in source\", \"support\": \"supported\", \"confidence\": 0.8, \"change_class\": \"structure\", \"source_evidence\": [{\"source_id\": \"toolshare:spec/architecture.md\", \"sha256\": \"1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300\", \"lines\": [11, 11], \"excerpt\": \"TEST-NOTICE-FORMAT\"}]}, {\"op_id\": \"op-17\", \"kind\": \"add_edge\", \"edge\": {\"src\": \"GOAL-FAIR-ACCESS\", \"dst\": \"CAP-HOLDS\", \"relation\": \"refines\"}, \"reason\": \"capability listed under the goal\", \"support\": \"hypothesized\", \"confidence\": 0.8, \"change_class\": \"structure\", \"source_evidence\": [{\"source_id\": \"toolshare:spec/requirements.md\", \"sha256\": \"aba608a7cba6d2494754607772e19d10e5e6823d409dae7c96d9e1917b6d3af0\", \"lines\": [9, 9], \"excerpt\": \"## Capability: Holds\"}]}, {\"op_id\": \"op-18\", \"kind\": \"add_edge\", \"edge\": {\"src\": \"GOAL-FAIR-ACCESS\", \"dst\": \"CAP-NOTIFY\", \"relation\": \"refines\"}, \"reason\": \"capability listed under the goal\", \"support\": \"hypothesized\", \"confidence\": 0.8, \"change_class\": \"structure\", \"source_evidence\": [{\"source_id\": \"toolshare:spec/requirements.md\", \"sha256\": \"aba608a7cba6d2494754607772e19d10e5e6823d409dae7c96d9e1917b6d3af0\", \"lines\": [24, 24], \"excerpt\": \"## Capability: Member notifications\"}]}, {\"op_id\": \"op-19\", \"kind\": \"add_edge\", \"edge\": {\"src\": \"CAP-HOLDS\", \"dst\": \"REQ-PLACE-HOLD\", \"relation\": \"refines\"}, \"reason\": \"listed under CAP-HOLDS\", \"support\": \"supported\", \"confidence\": 0.8, \"change_class\": \"structure\", \"source_evidence\": [{\"source_id\": \"toolshare:spec/requirements.md\", \"sha256\": \"aba608a7cba6d2494754607772e19d10e5e6823d409dae7c96d9e1917b6d3af0\", \"lines\": [13, 13], \"excerpt\": \"REQ-PLACE-HOLD — A member can place a hold\"}]}, {\"op_id\": \"op-20\", \"kind\": \"add_edge\", \"edge\": {\"src\": \"CAP-HOLDS\", \"dst\": \"REQ-HOLD-EXPIRY\", \"relation\": \"refines\"}, \"reason\": \"listed under CAP-HOLDS\", \"support\": \"supported\", \"confidence\": 0.8, \"change_class\": \"structure\", \"source_evidence\": [{\"source_id\": \"toolshare:spec/requirements.md\", \"sha256\": \"aba608a7cba6d2494754607772e19d10e5e6823d409dae7c96d9e1917b6d3af0\", \"lines\": [18, 18], \"excerpt\": \"REQ-HOLD-EXPIRY — When a held tool becomes available\"}]}, {\"op_id\": \"op-21\", \"kind\": \"add_edge\", \"edge\": {\"src\": \"CAP-NOTIFY\", \"dst\": \"REQ-READY-NOTICE\", \"relation\": \"refines\"}, \"reason\": \"listed under CAP-NOTIFY\", \"support\": \"supported\", \"confidence\": 0.8, \"change_class\": \"structure\", \"source_evidence\": [{\"source_id\": \"toolshare:spec/requirements.md\", \"sha256\": \"aba608a7cba6d2494754607772e19d10e5e6823d409dae7c96d9e1917b6d3af0\", \"lines\": [28, 28], \"excerpt\": \"REQ-READY-NOTICE — When a held tool is ready for pickup\"}]}, {\"op_id\": \"op-22\", \"kind\": \"add_edge\", \"edge\": {\"src\": \"Q-PICKUP-WINDOW\", \"dst\": \"REQ-HOLD-EXPIRY\", \"relation\": \"blocks\"}, \"reason\": \"stated in source\", \"support\": \"supported\", \"confidence\": 0.8, \"change_class\": \"structure\", \"source_evidence\": [{\"source_id\": \"toolshare:spec/requirements.md\", \"sha256\": \"aba608a7cba6d2494754607772e19d10e5e6823d409dae7c96d9e1917b6d3af0\", \"lines\": [22, 22], \"excerpt\": \"This blocks REQ-HOLD-EXPIRY.\"}]}, {\"op_id\": \"op-23\", \"kind\": \"add_edge\", \"edge\": {\"src\": \"CMP-HOLDS\", \"dst\": \"REQ-PLACE-HOLD\", \"relation\": \"implements\"}, \"reason\": \"stated in source\", \"support\": \"supported\", \"confidence\": 0.8, \"change_class\": \"structure\", \"source_evidence\": [{\"source_id\": \"toolshare:spec/architecture.md\", \"sha256\": \"1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300\", \"lines\": [5, 6], \"excerpt\": \"It implements REQ-PLACE-HOLD and REQ-HOLD-EXPIRY.\"}]}, {\"op_id\": \"op-24\", \"kind\": \"add_edge\", \"edge\": {\"src\": \"CMP-HOLDS\", \"dst\": \"REQ-HOLD-EXPIRY\", \"relation\": \"implements\"}, \"reason\": \"stated in source\", \"support\": \"supported\", \"confidence\": 0.8, \"change_class\": \"structure\", \"source_evidence\": [{\"source_id\": \"toolshare:spec/architecture.md\", \"sha256\": \"1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300\", \"lines\": [5, 6], \"excerpt\": \"It implements REQ-PLACE-HOLD and REQ-HOLD-EXPIRY.\"}]}, {\"op_id\": \"op-25\", \"kind\": \"add_edge\", \"edge\": {\"src\": \"CMP-NOTIFY\", \"dst\": \"REQ-READY-NOTICE\", \"relation\": \"implements\"}, \"reason\": \"stated in source\", \"support\": \"supported\", \"confidence\": 0.8, \"change_class\": \"structure\", \"source_evidence\": [{\"source_id\": \"toolshare:spec/architecture.md\", \"sha256\": \"1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300\", \"lines\": [10, 10], \"excerpt\": \"REQ-READY-NOTICE. Every message it sends must follow CON-NOTICE-FORMAT.\"}]}, {\"op_id\": \"op-26\", \"kind\": \"add_edge\", \"edge\": {\"src\": \"CMP-HOLDS\", \"dst\": \"CMP-INVENTORY\", \"relation\": \"depends_on\"}, \"reason\": \"stated in source\", \"support\": \"supported\", \"confidence\": 0.8, \"change_class\": \"structure\", \"source_evidence\": [{\"source_id\": \"toolshare:spec/architecture.md\", \"sha256\": \"1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300\", \"lines\": [7, 8], \"excerpt\": \"The holds service reads availability from inventory.\"}, {\"source_id\": \"git:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4:toolshare/holds.py\", \"sha256\": \"db71ce7ce55d98719ff83f228de5e5efdef7de97a09a6d89f02ebc6f0e5e1a8d\", \"lines\": [5, 5], \"excerpt\": \"from toolshare.inventory import is_on_shelf\"}]}, {\"op_id\": \"op-27\", \"kind\": \"add_edge\", \"edge\": {\"src\": \"CMP-NOTIFY\", \"dst\": \"CON-NOTICE-FORMAT\", \"relation\": \"constrained_by\"}, \"reason\": \"stated in source\", \"support\": \"supported\", \"confidence\": 0.8, \"change_class\": \"structure\", \"source_evidence\": [{\"source_id\": \"toolshare:spec/architecture.md\", \"sha256\": \"1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300\", \"lines\": [10, 10], \"excerpt\": \"Every message it sends must follow CON-NOTICE-FORMAT.\"}]}, {\"op_id\": \"op-28\", \"kind\": \"add_edge\", \"edge\": {\"src\": \"CMP-HOLDS\", \"dst\": \"ART-HOLDS\", \"relation\": \"realized_by\"}, \"reason\": \"stated in source\", \"support\": \"supported\", \"confidence\": 0.8, \"change_class\": \"structure\", \"source_evidence\": [{\"source_id\": \"toolshare:spec/architecture.md\", \"sha256\": \"1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300\", \"lines\": [5, 5], \"excerpt\": \"(`toolshare/holds.py`)\"}]}, {\"op_id\": \"op-29\", \"kind\": \"add_edge\", \"edge\": {\"src\": \"CMP-INVENTORY\", \"dst\": \"ART-INVENTORY\", \"relation\": \"realized_by\"}, \"reason\": \"stated in source\", \"support\": \"supported\", \"confidence\": 0.8, \"change_class\": \"structure\", \"source_evidence\": [{\"source_id\": \"toolshare:spec/architecture.md\", \"sha256\": \"1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300\", \"lines\": [7, 7], \"excerpt\": \"(`toolshare/inventory.py`)\"}]}, {\"op_id\": \"op-30\", \"kind\": \"add_edge\", \"edge\": {\"src\": \"CMP-NOTIFY\", \"dst\": \"ART-NOTIFY\", \"relation\": \"realized_by\"}, \"reason\": \"stated in source\", \"support\": \"supported\", \"confidence\": 0.8, \"change_class\": \"structure\", \"source_evidence\": [{\"source_id\": \"toolshare:spec/architecture.md\", \"sha256\": \"1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300\", \"lines\": [9, 9], \"excerpt\": \"(`toolshare/notifications.py`)\"}]}, {\"op_id\": \"op-31\", \"kind\": \"add_edge\", \"edge\": {\"src\": \"TEST-HOLD-QUEUE\", \"dst\": \"REQ-HOLD-EXPIRY\", \"relation\": \"verifies\"}, \"reason\": \"stated in source\", \"support\": \"supported\", \"confidence\": 0.8, \"change_class\": \"structure\", \"source_evidence\": [{\"source_id\": \"toolshare:spec/architecture.md\", \"sha256\": \"1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300\", \"lines\": [11, 11], \"excerpt\": \"checks queue order and expiry.\"}]}, {\"op_id\": \"op-32\", \"kind\": \"add_edge\", \"edge\": {\"src\": \"TEST-HOLD-QUEUE\", \"dst\": \"REQ-PLACE-HOLD\", \"relation\": \"verifies\"}, \"reason\": \"queue order is the REQ-PLACE-HOLD criterion\", \"support\": \"hypothesized\", \"confidence\": 0.8, \"change_class\": \"structure\", \"source_evidence\": [{\"source_id\": \"toolshare:spec/architecture.md\", \"sha256\": \"1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300\", \"lines\": [11, 11], \"excerpt\": \"checks queue order and expiry.\"}]}, {\"op_id\": \"op-33\", \"kind\": \"add_edge\", \"edge\": {\"src\": \"TEST-NOTICE-FORMAT\", \"dst\": \"CON-NOTICE-FORMAT\", \"relation\": \"verifies\"}, \"reason\": \"stated in source\", \"support\": \"supported\", \"confidence\": 0.8, \"change_class\": \"structure\", \"source_evidence\": [{\"source_id\": \"toolshare:spec/architecture.md\", \"sha256\": \"1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300\", \"lines\": [12, 12], \"excerpt\": \"checks messages against CON-NOTICE-FORMAT.\"}]}, {\"op_id\": \"op-34\", \"kind\": \"add_edge\", \"edge\": {\"src\": \"REQ-READY-NOTICE\", \"dst\": \"CON-NOTICE-FORMAT\", \"relation\": \"constrained_by\"}, \"reason\": \"the ready notice is a notification message; the document does not link them explicitly\", \"support\": \"hypothesized\", \"confidence\": 0.8, \"change_class\": \"structure\", \"source_evidence\": [{\"source_id\": \"toolshare:spec/requirements.md\", \"sha256\": \"aba608a7cba6d2494754607772e19d10e5e6823d409dae7c96d9e1917b6d3af0\", \"lines\": [32, 32], \"excerpt\": \"Notification messages are plain-text emails\"}]}], \"unresolved_questions\": [{\"question\": \"Are fines for late pickup in scope?\", \"about\": [\"REQ-HOLD-EXPIRY\"], \"blocking\": false, \"source_evidence\": [{\"source_id\": \"toolshare:discovery/stakeholder_notes.md\", \"sha256\": \"e9a2bdd034c3f226aeaf5dcb1cadea9d6ce03f0f2a9acf9a88ac051469ef64b8\", \"lines\": [14, 14], \"excerpt\": \"Fines for late pickup came up. Parked — not in scope for now.\"}]}], \"possible_contradictions\": []}"
+     },
+     "parse": {
+      "ok": true
+     },
+     "prompt": {
+      "prompt_id": "propose_update",
+      "sha256": "cf3981f23ec4eab621bdbb0b07a2878275e2ebb99e4dad3210c2fd8a16a483c8",
+      "version": "v1"
+     },
+     "stop_reason": null,
+     "usage": null
+    },
+    "decisions": [
+     {
+      "decision": "accept",
+      "op_id": "op-1",
+      "rationale": "policy: admissible",
+      "reviewer": "policy:conservative-v1"
+     },
+     {
+      "decision": "accept",
+      "op_id": "op-2",
+      "rationale": "policy: admissible",
+      "reviewer": "policy:conservative-v1"
+     },
+     {
+      "decision": "accept",
+      "op_id": "op-3",
+      "rationale": "policy: admissible",
+      "reviewer": "policy:conservative-v1"
+     },
+     {
+      "decision": "accept",
+      "op_id": "op-4",
+      "rationale": "policy: admissible",
+      "reviewer": "policy:conservative-v1"
+     },
+     {
+      "decision": "accept",
+      "op_id": "op-5",
+      "rationale": "policy: admissible",
+      "reviewer": "policy:conservative-v1"
+     },
+     {
+      "decision": "accept",
+      "op_id": "op-6",
+      "rationale": "policy: admissible",
+      "reviewer": "policy:conservative-v1"
+     },
+     {
+      "decision": "accept",
+      "op_id": "op-7",
+      "rationale": "policy: admissible",
+      "reviewer": "policy:conservative-v1"
+     },
+     {
+      "decision": "accept",
+      "op_id": "op-8",
+      "rationale": "policy: admissible",
+      "reviewer": "policy:conservative-v1"
+     },
+     {
+      "decision": "accept",
+      "op_id": "op-9",
+      "rationale": "policy: admissible",
+      "reviewer": "policy:conservative-v1"
+     },
+     {
+      "decision": "accept",
+      "op_id": "op-10",
+      "rationale": "policy: admissible",
+      "reviewer": "policy:conservative-v1"
+     },
+     {
+      "decision": "accept",
+      "op_id": "op-11",
+      "rationale": "policy: admissible",
+      "reviewer": "policy:conservative-v1"
+     },
+     {
+      "decision": "accept",
+      "op_id": "op-12",
+      "rationale": "policy: admissible",
+      "reviewer": "policy:conservative-v1"
+     },
+     {
+      "decision": "accept",
+      "op_id": "op-13",
+      "rationale": "policy: admissible",
+      "reviewer": "policy:conservative-v1"
+     },
+     {
+      "decision": "accept",
+      "op_id": "op-14",
+      "rationale": "policy: admissible",
+      "reviewer": "policy:conservative-v1"
+     },
+     {
+      "decision": "accept",
+      "op_id": "op-15",
+      "rationale": "policy: admissible",
+      "reviewer": "policy:conservative-v1"
+     },
+     {
+      "decision": "accept",
+      "op_id": "op-16",
+      "rationale": "policy: admissible",
+      "reviewer": "policy:conservative-v1"
+     },
+     {
+      "decision": "accept",
+      "op_id": "op-17",
+      "rationale": "policy: admissible",
+      "reviewer": "policy:conservative-v1"
+     },
+     {
+      "decision": "accept",
+      "op_id": "op-18",
+      "rationale": "policy: admissible",
+      "reviewer": "policy:conservative-v1"
+     },
+     {
+      "decision": "accept",
+      "op_id": "op-19",
+      "rationale": "policy: admissible",
+      "reviewer": "policy:conservative-v1"
+     },
+     {
+      "decision": "accept",
+      "op_id": "op-20",
+      "rationale": "policy: admissible",
+      "reviewer": "policy:conservative-v1"
+     },
+     {
+      "decision": "accept",
+      "op_id": "op-21",
+      "rationale": "policy: admissible",
+      "reviewer": "policy:conservative-v1"
+     },
+     {
+      "decision": "accept",
+      "op_id": "op-22",
+      "rationale": "policy: admissible",
+      "reviewer": "policy:conservative-v1"
+     },
+     {
+      "decision": "accept",
+      "op_id": "op-23",
+      "rationale": "policy: admissible",
+      "reviewer": "policy:conservative-v1"
+     },
+     {
+      "decision": "accept",
+      "op_id": "op-24",
+      "rationale": "policy: admissible",
+      "reviewer": "policy:conservative-v1"
+     },
+     {
+      "decision": "accept",
+      "op_id": "op-25",
+      "rationale": "policy: admissible",
+      "reviewer": "policy:conservative-v1"
+     },
+     {
+      "decision": "accept",
+      "op_id": "op-26",
+      "rationale": "policy: admissible",
+      "reviewer": "policy:conservative-v1"
+     },
+     {
+      "decision": "accept",
+      "op_id": "op-27",
+      "rationale": "policy: admissible",
+      "reviewer": "policy:conservative-v1"
+     },
+     {
+      "decision": "accept",
+      "op_id": "op-28",
+      "rationale": "policy: admissible",
+      "reviewer": "policy:conservative-v1"
+     },
+     {
+      "decision": "accept",
+      "op_id": "op-29",
+      "rationale": "policy: admissible",
+      "reviewer": "policy:conservative-v1"
+     },
+     {
+      "decision": "accept",
+      "op_id": "op-30",
+      "rationale": "policy: admissible",
+      "reviewer": "policy:conservative-v1"
+     },
+     {
+      "decision": "accept",
+      "op_id": "op-31",
+      "rationale": "policy: admissible",
+      "reviewer": "policy:conservative-v1"
+     },
+     {
+      "decision": "accept",
+      "op_id": "op-32",
+      "rationale": "policy: admissible",
+      "reviewer": "policy:conservative-v1"
+     },
+     {
+      "decision": "accept",
+      "op_id": "op-33",
+      "rationale": "policy: admissible",
+      "reviewer": "policy:conservative-v1"
+     },
+     {
+      "decision": "accept",
+      "op_id": "op-34",
+      "rationale": "policy: admissible",
+      "reviewer": "policy:conservative-v1"
+     }
+    ],
+    "errors": [],
+    "outcome": {
+     "accepted": [
+      "op-1",
+      "op-2",
+      "op-3",
+      "op-4",
+      "op-5",
+      "op-6",
+      "op-7",
+      "op-8",
+      "op-9",
+      "op-10",
+      "op-11",
+      "op-12",
+      "op-13",
+      "op-14",
+      "op-15",
+      "op-16",
+      "op-17",
+      "op-18",
+      "op-19",
+      "op-20",
+      "op-21",
+      "op-22",
+      "op-23",
+      "op-24",
+      "op-25",
+      "op-26",
+      "op-27",
+      "op-28",
+      "op-29",
+      "op-30",
+      "op-31",
+      "op-32",
+      "op-33",
+      "op-34"
+     ],
+     "change_id": "CHG-2",
+     "deferred": [],
+     "invalidated": {
+      "evidence": [],
+      "work_units": []
+     },
+     "no_change_records": [],
+     "obligations": 30,
+     "readiness_changes": [
+      {
+       "from": null,
+       "requirement_id": "REQ-HOLD-EXPIRY",
+       "to": "blocked"
+      },
+      {
+       "from": null,
+       "requirement_id": "REQ-PLACE-HOLD",
+       "to": "ready"
+      },
+      {
+       "from": null,
+       "requirement_id": "REQ-READY-NOTICE",
+       "to": "conditional"
+      }
+     ],
+     "rebased": false,
+     "rejected": [],
+     "required_actions": {
+      "check_contract": [
+       "CMP-HOLDS",
+       "CMP-NOTIFY",
+       "REQ-READY-NOTICE"
+      ],
+      "investigate_unknown": [
+       "CAP-HOLDS",
+       "CAP-NOTIFY",
+       "CON-NOTICE-FORMAT",
+       "GOAL-FAIR-ACCESS",
+       "REQ-PLACE-HOLD",
+       "REQ-READY-NOTICE",
+       "TEST-HOLD-QUEUE"
+      ],
+      "rerun_test": [
+       "TEST-HOLD-QUEUE",
+       "TEST-NOTICE-FORMAT"
+      ],
+      "review_implementation": [
+       "ART-HOLDS",
+       "ART-INVENTORY",
+       "ART-NOTIFY",
+       "CMP-HOLDS",
+       "CMP-INVENTORY",
+       "CMP-NOTIFY",
+       "REQ-HOLD-EXPIRY",
+       "REQ-PLACE-HOLD",
+       "REQ-READY-NOTICE"
+      ],
+      "review_spec": [
+       "CAP-HOLDS",
+       "CAP-NOTIFY",
+       "CMP-INVENTORY",
+       "CON-NOTICE-FORMAT",
+       "GOAL-FAIR-ACCESS",
+       "Q-PICKUP-WINDOW",
+       "REQ-HOLD-EXPIRY",
+       "REQ-PLACE-HOLD",
+       "REQ-READY-NOTICE"
+      ]
+     }
+    },
+    "proposal": {
+     "base_graph_revision": 1,
+     "intent": "Initial graph from discovery notes, requirements draft 1, architecture notes and repository c1",
+     "operations": [
+      {
+       "change_class": "structure",
+       "confidence": 0.8,
+       "kind": "add_node",
+       "node": {
+        "body": "Members can borrow shared tools fairly and predictably.",
+        "data": {},
+        "id": "GOAL-FAIR-ACCESS",
+        "kind": "goal",
+        "title": "Fair, predictable tool borrowing"
+       },
+       "op_id": "op-1",
+       "reason": "stated in source",
+       "source_evidence": [
+        {
+         "excerpt": "GOAL-FAIR-ACCESS — Members can borrow shared tools fairly and predictably.",
+         "lines": [
+          7,
+          7
+         ],
+         "sha256": "aba608a7cba6d2494754607772e19d10e5e6823d409dae7c96d9e1917b6d3af0",
+         "source_id": "toolshare:spec/requirements.md"
+        }
+       ],
+       "support": "supported"
+      },
+      {
+       "change_class": "structure",
+       "confidence": 0.8,
+       "kind": "add_node",
+       "node": {
+        "body": "Members can queue for tools that are not currently on the shelf.",
+        "data": {},
+        "id": "CAP-HOLDS",
+        "kind": "capability",
+        "title": "Holds"
+       },
+       "op_id": "op-2",
+       "reason": "stated in source",
+       "source_evidence": [
+        {
+         "excerpt": "CAP-HOLDS — Members can queue for tools that are not currently on the shelf.",
+         "lines": [
+          11,
+          11
+         ],
+         "sha256": "aba608a7cba6d2494754607772e19d10e5e6823d409dae7c96d9e1917b6d3af0",
+         "source_id": "toolshare:spec/requirements.md"
+        }
+       ],
+       "support": "supported"
+      },
+      {
+       "change_class": "structure",
+       "confidence": 0.8,
+       "kind": "add_node",
+       "node": {
+        "body": "Members are told when something they are waiting for changes.",
+        "data": {},
+        "id": "CAP-NOTIFY",
+        "kind": "capability",
+        "title": "Member notifications"
+       },
+       "op_id": "op-3",
+       "reason": "stated in source",
+       "source_evidence": [
+        {
+         "excerpt": "CAP-NOTIFY — Members are told when something they are waiting for changes.",
+         "lines": [
+          26,
+          26
+         ],
+         "sha256": "aba608a7cba6d2494754607772e19d10e5e6823d409dae7c96d9e1917b6d3af0",
+         "source_id": "toolshare:spec/requirements.md"
+        }
+       ],
+       "support": "supported"
+      },
+      {
+       "change_class": "structure",
+       "confidence": 0.8,
+       "kind": "add_node",
+       "node": {
+        "body": "A member can place a hold on a catalogued tool that is on loan.",
+        "data": {
+         "acceptance_criteria": [
+          "A member without overdue items can place a hold on any catalogued tool.",
+          "Holds on the same tool are served first come, first served."
+         ]
+        },
+        "id": "REQ-PLACE-HOLD",
+        "kind": "requirement",
+        "title": "Place a hold"
+       },
+       "op_id": "op-4",
+       "reason": "stated in source",
+       "source_evidence": [
+        {
+         "excerpt": "REQ-PLACE-HOLD — A member can place a hold on a catalogued tool that is on loan.",
+         "lines": [
+          13,
+          13
+         ],
+         "sha256": "aba608a7cba6d2494754607772e19d10e5e6823d409dae7c96d9e1917b6d3af0",
+         "source_id": "toolshare:spec/requirements.md"
+        },
+        {
+         "excerpt": "Holds on the same tool are served first come, first served.",
+         "lines": [
+          16,
+          16
+         ],
+         "sha256": "aba608a7cba6d2494754607772e19d10e5e6823d409dae7c96d9e1917b6d3af0",
+         "source_id": "toolshare:spec/requirements.md"
+        }
+       ],
+       "support": "supported"
+      },
+      {
+       "change_class": "structure",
+       "confidence": 0.8,
+       "kind": "add_node",
+       "node": {
+        "body": "When a held tool becomes available, the member has a pickup window to collect it; otherwise the hold lapses and the tool passes to the next member.",
+        "data": {
+         "acceptance_criteria": []
+        },
+        "id": "REQ-HOLD-EXPIRY",
+        "kind": "requirement",
+        "title": "Hold expiry and pickup window"
+       },
+       "op_id": "op-5",
+       "reason": "stated in source",
+       "source_evidence": [
+        {
+         "excerpt": "REQ-HOLD-EXPIRY — When a held tool becomes available, the member has a pickup window to collect it.",
+         "lines": [
+          18,
+          18
+         ],
+         "sha256": "aba608a7cba6d2494754607772e19d10e5e6823d409dae7c96d9e1917b6d3af0",
+         "source_id": "toolshare:spec/requirements.md"
+        }
+       ],
+       "support": "supported"
+      },
+      {
+       "change_class": "structure",
+       "confidence": 0.8,
+       "kind": "add_node",
+       "node": {
+        "body": "The desk is staffed three days a week.",
+        "data": {
+         "blocking": true,
+         "state": "open"
+        },
+        "id": "Q-PICKUP-WINDOW",
+        "kind": "question",
+        "title": "How long is the pickup window?"
+       },
+       "op_id": "op-6",
+       "reason": "stated in source",
+       "source_evidence": [
+        {
+         "excerpt": "Q-PICKUP-WINDOW — How long is the pickup window? The desk is staffed three days a week. This blocks REQ-HOLD-EXPIRY.",
+         "lines": [
+          22,
+          22
+         ],
+         "sha256": "aba608a7cba6d2494754607772e19d10e5e6823d409dae7c96d9e1917b6d3af0",
+         "source_id": "toolshare:spec/requirements.md"
+        }
+       ],
+       "support": "supported"
+      },
+      {
+       "change_class": "structure",
+       "confidence": 0.8,
+       "kind": "add_node",
+       "node": {
+        "body": "When a held tool is ready for pickup, the member is notified by email.",
+        "data": {
+         "acceptance_criteria": [
+          "The email names the tool and the pickup deadline."
+         ]
+        },
+        "id": "REQ-READY-NOTICE",
+        "kind": "requirement",
+        "title": "Ready-for-pickup notice"
+       },
+       "op_id": "op-7",
+       "reason": "stated in source",
+       "source_evidence": [
+        {
+         "excerpt": "REQ-READY-NOTICE — When a held tool is ready for pickup, the member is notified by email.",
+         "lines": [
+          28,
+          28
+         ],
+         "sha256": "aba608a7cba6d2494754607772e19d10e5e6823d409dae7c96d9e1917b6d3af0",
+         "source_id": "toolshare:spec/requirements.md"
+        }
+       ],
+       "support": "supported"
+      },
+      {
+       "change_class": "structure",
+       "confidence": 0.8,
+       "kind": "add_node",
+       "node": {
+        "body": "Notification messages are plain-text emails with a subject line and at most 500 characters of body text.",
+        "data": {
+         "status": "accepted"
+        },
+        "id": "CON-NOTICE-FORMAT",
+        "kind": "contract",
+        "title": "Notification message format"
+       },
+       "op_id": "op-8",
+       "reason": "stated in source",
+       "source_evidence": [
+        {
+         "excerpt": "CON-NOTICE-FORMAT — Notification messages are plain-text emails with a subject line and at most 500 characters of",
+         "lines": [
+          32,
+          32
+         ],
+         "sha256": "aba608a7cba6d2494754607772e19d10e5e6823d409dae7c96d9e1917b6d3af0",
+         "source_id": "toolshare:spec/requirements.md"
+        }
+       ],
+       "support": "supported"
+      },
+      {
+       "change_class": "structure",
+       "confidence": 0.8,
+       "kind": "add_node",
+       "node": {
+        "body": "Owns the hold queue and hold expiry.",
+        "data": {},
+        "id": "CMP-HOLDS",
+        "kind": "component",
+        "title": "Holds service"
+       },
+       "op_id": "op-9",
+       "reason": "stated in source",
+       "source_evidence": [
+        {
+         "excerpt": "CMP-HOLDS, the holds service (`toolshare/holds.py`), owns the hold queue and hold expiry.",
+         "lines": [
+          5,
+          5
+         ],
+         "sha256": "1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300",
+         "source_id": "toolshare:spec/architecture.md"
+        }
+       ],
+       "support": "supported"
+      },
+      {
+       "change_class": "structure",
+       "confidence": 0.8,
+       "kind": "add_node",
+       "node": {
+        "body": "Tracks whether a tool is on the shelf.",
+        "data": {},
+        "id": "CMP-INVENTORY",
+        "kind": "component",
+        "title": "Inventory module"
+       },
+       "op_id": "op-10",
+       "reason": "stated in source",
+       "source_evidence": [
+        {
+         "excerpt": "CMP-INVENTORY, the inventory module (`toolshare/inventory.py`), tracks whether a tool is on the shelf.",
+         "lines": [
+          7,
+          7
+         ],
+         "sha256": "1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300",
+         "source_id": "toolshare:spec/architecture.md"
+        }
+       ],
+       "support": "supported"
+      },
+      {
+       "change_class": "structure",
+       "confidence": 0.8,
+       "kind": "add_node",
+       "node": {
+        "body": "Sends member emails.",
+        "data": {},
+        "id": "CMP-NOTIFY",
+        "kind": "component",
+        "title": "Notification service"
+       },
+       "op_id": "op-11",
+       "reason": "stated in source",
+       "source_evidence": [
+        {
+         "excerpt": "CMP-NOTIFY, the notification service (`toolshare/notifications.py`), sends member emails and implements",
+         "lines": [
+          9,
+          9
+         ],
+         "sha256": "1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300",
+         "source_id": "toolshare:spec/architecture.md"
+        }
+       ],
+       "support": "supported"
+      },
+      {
+       "change_class": "structure",
+       "confidence": 0.8,
+       "kind": "add_node",
+       "node": {
+        "body": "Source file toolshare/holds.py.",
+        "data": {
+         "path": "toolshare/holds.py"
+        },
+        "id": "ART-HOLDS",
+        "kind": "artifact",
+        "title": "toolshare/holds.py"
+       },
+       "op_id": "op-12",
+       "reason": "stated in source",
+       "source_evidence": [
+        {
+         "excerpt": "(`toolshare/holds.py`)",
+         "lines": [
+          5,
+          5
+         ],
+         "sha256": "1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300",
+         "source_id": "toolshare:spec/architecture.md"
+        }
+       ],
+       "support": "supported"
+      },
+      {
+       "change_class": "structure",
+       "confidence": 0.8,
+       "kind": "add_node",
+       "node": {
+        "body": "Source file toolshare/inventory.py.",
+        "data": {
+         "path": "toolshare/inventory.py"
+        },
+        "id": "ART-INVENTORY",
+        "kind": "artifact",
+        "title": "toolshare/inventory.py"
+       },
+       "op_id": "op-13",
+       "reason": "stated in source",
+       "source_evidence": [
+        {
+         "excerpt": "(`toolshare/inventory.py`)",
+         "lines": [
+          7,
+          7
+         ],
+         "sha256": "1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300",
+         "source_id": "toolshare:spec/architecture.md"
+        }
+       ],
+       "support": "supported"
+      },
+      {
+       "change_class": "structure",
+       "confidence": 0.8,
+       "kind": "add_node",
+       "node": {
+        "body": "Source file toolshare/notifications.py.",
+        "data": {
+         "path": "toolshare/notifications.py"
+        },
+        "id": "ART-NOTIFY",
+        "kind": "artifact",
+        "title": "toolshare/notifications.py"
+       },
+       "op_id": "op-14",
+       "reason": "stated in source",
+       "source_evidence": [
+        {
+         "excerpt": "(`toolshare/notifications.py`)",
+         "lines": [
+          9,
+          9
+         ],
+         "sha256": "1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300",
+         "source_id": "toolshare:spec/architecture.md"
+        }
+       ],
+       "support": "supported"
+      },
+      {
+       "change_class": "structure",
+       "confidence": 0.8,
+       "kind": "add_node",
+       "node": {
+        "body": "Checks queue order and expiry.",
+        "data": {
+         "command": "pytest -q tests/test_holds.py"
+        },
+        "id": "TEST-HOLD-QUEUE",
+        "kind": "test",
+        "title": "Hold queue test"
+       },
+       "op_id": "op-15",
+       "reason": "stated in source",
+       "source_evidence": [
+        {
+         "excerpt": "TEST-HOLD-QUEUE (`tests/test_holds.py`) checks queue order and expiry.",
+         "lines": [
+          11,
+          11
+         ],
+         "sha256": "1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300",
+         "source_id": "toolshare:spec/architecture.md"
+        }
+       ],
+       "support": "supported"
+      },
+      {
+       "change_class": "structure",
+       "confidence": 0.8,
+       "kind": "add_node",
+       "node": {
+        "body": "Checks messages against CON-NOTICE-FORMAT.",
+        "data": {
+         "command": "pytest -q tests/test_notifications.py"
+        },
+        "id": "TEST-NOTICE-FORMAT",
+        "kind": "test",
+        "title": "Notice format test"
+       },
+       "op_id": "op-16",
+       "reason": "stated in source",
+       "source_evidence": [
+        {
+         "excerpt": "TEST-NOTICE-FORMAT",
+         "lines": [
+          11,
+          11
+         ],
+         "sha256": "1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300",
+         "source_id": "toolshare:spec/architecture.md"
+        }
+       ],
+       "support": "supported"
+      },
+      {
+       "change_class": "structure",
+       "confidence": 0.8,
+       "edge": {
+        "dst": "CAP-HOLDS",
+        "relation": "refines",
+        "src": "GOAL-FAIR-ACCESS"
+       },
+       "kind": "add_edge",
+       "op_id": "op-17",
+       "reason": "capability listed under the goal",
+       "source_evidence": [
+        {
+         "excerpt": "## Capability: Holds",
+         "lines": [
+          9,
+          9
+         ],
+         "sha256": "aba608a7cba6d2494754607772e19d10e5e6823d409dae7c96d9e1917b6d3af0",
+         "source_id": "toolshare:spec/requirements.md"
+        }
+       ],
+       "support": "hypothesized"
+      },
+      {
+       "change_class": "structure",
+       "confidence": 0.8,
+       "edge": {
+        "dst": "CAP-NOTIFY",
+        "relation": "refines",
+        "src": "GOAL-FAIR-ACCESS"
+       },
+       "kind": "add_edge",
+       "op_id": "op-18",
+       "reason": "capability listed under the goal",
+       "source_evidence": [
+        {
+         "excerpt": "## Capability: Member notifications",
+         "lines": [
+          24,
+          24
+         ],
+         "sha256": "aba608a7cba6d2494754607772e19d10e5e6823d409dae7c96d9e1917b6d3af0",
+         "source_id": "toolshare:spec/requirements.md"
+        }
+       ],
+       "support": "hypothesized"
+      },
+      {
+       "change_class": "structure",
+       "confidence": 0.8,
+       "edge": {
+        "dst": "REQ-PLACE-HOLD",
+        "relation": "refines",
+        "src": "CAP-HOLDS"
+       },
+       "kind": "add_edge",
+       "op_id": "op-19",
+       "reason": "listed under CAP-HOLDS",
+       "source_evidence": [
+        {
+         "excerpt": "REQ-PLACE-HOLD — A member can place a hold",
+         "lines": [
+          13,
+          13
+         ],
+         "sha256": "aba608a7cba6d2494754607772e19d10e5e6823d409dae7c96d9e1917b6d3af0",
+         "source_id": "toolshare:spec/requirements.md"
+        }
+       ],
+       "support": "supported"
+      },
+      {
+       "change_class": "structure",
+       "confidence": 0.8,
+       "edge": {
+        "dst": "REQ-HOLD-EXPIRY",
+        "relation": "refines",
+        "src": "CAP-HOLDS"
+       },
+       "kind": "add_edge",
+       "op_id": "op-20",
+       "reason": "listed under CAP-HOLDS",
+       "source_evidence": [
+        {
+         "excerpt": "REQ-HOLD-EXPIRY — When a held tool becomes available",
+         "lines": [
+          18,
+          18
+         ],
+         "sha256": "aba608a7cba6d2494754607772e19d10e5e6823d409dae7c96d9e1917b6d3af0",
+         "source_id": "toolshare:spec/requirements.md"
+        }
+       ],
+       "support": "supported"
+      },
+      {
+       "change_class": "structure",
+       "confidence": 0.8,
+       "edge": {
+        "dst": "REQ-READY-NOTICE",
+        "relation": "refines",
+        "src": "CAP-NOTIFY"
+       },
+       "kind": "add_edge",
+       "op_id": "op-21",
+       "reason": "listed under CAP-NOTIFY",
+       "source_evidence": [
+        {
+         "excerpt": "REQ-READY-NOTICE — When a held tool is ready for pickup",
+         "lines": [
+          28,
+          28
+         ],
+         "sha256": "aba608a7cba6d2494754607772e19d10e5e6823d409dae7c96d9e1917b6d3af0",
+         "source_id": "toolshare:spec/requirements.md"
+        }
+       ],
+       "support": "supported"
+      },
+      {
+       "change_class": "structure",
+       "confidence": 0.8,
+       "edge": {
+        "dst": "REQ-HOLD-EXPIRY",
+        "relation": "blocks",
+        "src": "Q-PICKUP-WINDOW"
+       },
+       "kind": "add_edge",
+       "op_id": "op-22",
+       "reason": "stated in source",
+       "source_evidence": [
+        {
+         "excerpt": "This blocks REQ-HOLD-EXPIRY.",
+         "lines": [
+          22,
+          22
+         ],
+         "sha256": "aba608a7cba6d2494754607772e19d10e5e6823d409dae7c96d9e1917b6d3af0",
+         "source_id": "toolshare:spec/requirements.md"
+        }
+       ],
+       "support": "supported"
+      },
+      {
+       "change_class": "structure",
+       "confidence": 0.8,
+       "edge": {
+        "dst": "REQ-PLACE-HOLD",
+        "relation": "implements",
+        "src": "CMP-HOLDS"
+       },
+       "kind": "add_edge",
+       "op_id": "op-23",
+       "reason": "stated in source",
+       "source_evidence": [
+        {
+         "excerpt": "It implements REQ-PLACE-HOLD and REQ-HOLD-EXPIRY.",
+         "lines": [
+          5,
+          6
+         ],
+         "sha256": "1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300",
+         "source_id": "toolshare:spec/architecture.md"
+        }
+       ],
+       "support": "supported"
+      },
+      {
+       "change_class": "structure",
+       "confidence": 0.8,
+       "edge": {
+        "dst": "REQ-HOLD-EXPIRY",
+        "relation": "implements",
+        "src": "CMP-HOLDS"
+       },
+       "kind": "add_edge",
+       "op_id": "op-24",
+       "reason": "stated in source",
+       "source_evidence": [
+        {
+         "excerpt": "It implements REQ-PLACE-HOLD and REQ-HOLD-EXPIRY.",
+         "lines": [
+          5,
+          6
+         ],
+         "sha256": "1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300",
+         "source_id": "toolshare:spec/architecture.md"
+        }
+       ],
+       "support": "supported"
+      },
+      {
+       "change_class": "structure",
+       "confidence": 0.8,
+       "edge": {
+        "dst": "REQ-READY-NOTICE",
+        "relation": "implements",
+        "src": "CMP-NOTIFY"
+       },
+       "kind": "add_edge",
+       "op_id": "op-25",
+       "reason": "stated in source",
+       "source_evidence": [
+        {
+         "excerpt": "REQ-READY-NOTICE. Every message it sends must follow CON-NOTICE-FORMAT.",
+         "lines": [
+          10,
+          10
+         ],
+         "sha256": "1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300",
+         "source_id": "toolshare:spec/architecture.md"
+        }
+       ],
+       "support": "supported"
+      },
+      {
+       "change_class": "structure",
+       "confidence": 0.8,
+       "edge": {
+        "dst": "CMP-INVENTORY",
+        "relation": "depends_on",
+        "src": "CMP-HOLDS"
+       },
+       "kind": "add_edge",
+       "op_id": "op-26",
+       "reason": "stated in source",
+       "source_evidence": [
+        {
+         "excerpt": "The holds service reads availability from inventory.",
+         "lines": [
+          7,
+          8
+         ],
+         "sha256": "1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300",
+         "source_id": "toolshare:spec/architecture.md"
+        },
+        {
+         "excerpt": "from toolshare.inventory import is_on_shelf",
+         "lines": [
+          5,
+          5
+         ],
+         "sha256": "db71ce7ce55d98719ff83f228de5e5efdef7de97a09a6d89f02ebc6f0e5e1a8d",
+         "source_id": "git:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4:toolshare/holds.py"
+        }
+       ],
+       "support": "supported"
+      },
+      {
+       "change_class": "structure",
+       "confidence": 0.8,
+       "edge": {
+        "dst": "CON-NOTICE-FORMAT",
+        "relation": "constrained_by",
+        "src": "CMP-NOTIFY"
+       },
+       "kind": "add_edge",
+       "op_id": "op-27",
+       "reason": "stated in source",
+       "source_evidence": [
+        {
+         "excerpt": "Every message it sends must follow CON-NOTICE-FORMAT.",
+         "lines": [
+          10,
+          10
+         ],
+         "sha256": "1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300",
+         "source_id": "toolshare:spec/architecture.md"
+        }
+       ],
+       "support": "supported"
+      },
+      {
+       "change_class": "structure",
+       "confidence": 0.8,
+       "edge": {
+        "dst": "ART-HOLDS",
+        "relation": "realized_by",
+        "src": "CMP-HOLDS"
+       },
+       "kind": "add_edge",
+       "op_id": "op-28",
+       "reason": "stated in source",
+       "source_evidence": [
+        {
+         "excerpt": "(`toolshare/holds.py`)",
+         "lines": [
+          5,
+          5
+         ],
+         "sha256": "1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300",
+         "source_id": "toolshare:spec/architecture.md"
+        }
+       ],
+       "support": "supported"
+      },
+      {
+       "change_class": "structure",
+       "confidence": 0.8,
+       "edge": {
+        "dst": "ART-INVENTORY",
+        "relation": "realized_by",
+        "src": "CMP-INVENTORY"
+       },
+       "kind": "add_edge",
+       "op_id": "op-29",
+       "reason": "stated in source",
+       "source_evidence": [
+        {
+         "excerpt": "(`toolshare/inventory.py`)",
+         "lines": [
+          7,
+          7
+         ],
+         "sha256": "1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300",
+         "source_id": "toolshare:spec/architecture.md"
+        }
+       ],
+       "support": "supported"
+      },
+      {
+       "change_class": "structure",
+       "confidence": 0.8,
+       "edge": {
+        "dst": "ART-NOTIFY",
+        "relation": "realized_by",
+        "src": "CMP-NOTIFY"
+       },
+       "kind": "add_edge",
+       "op_id": "op-30",
+       "reason": "stated in source",
+       "source_evidence": [
+        {
+         "excerpt": "(`toolshare/notifications.py`)",
+         "lines": [
+          9,
+          9
+         ],
+         "sha256": "1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300",
+         "source_id": "toolshare:spec/architecture.md"
+        }
+       ],
+       "support": "supported"
+      },
+      {
+       "change_class": "structure",
+       "confidence": 0.8,
+       "edge": {
+        "dst": "REQ-HOLD-EXPIRY",
+        "relation": "verifies",
+        "src": "TEST-HOLD-QUEUE"
+       },
+       "kind": "add_edge",
+       "op_id": "op-31",
+       "reason": "stated in source",
+       "source_evidence": [
+        {
+         "excerpt": "checks queue order and expiry.",
+         "lines": [
+          11,
+          11
+         ],
+         "sha256": "1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300",
+         "source_id": "toolshare:spec/architecture.md"
+        }
+       ],
+       "support": "supported"
+      },
+      {
+       "change_class": "structure",
+       "confidence": 0.8,
+       "edge": {
+        "dst": "REQ-PLACE-HOLD",
+        "relation": "verifies",
+        "src": "TEST-HOLD-QUEUE"
+       },
+       "kind": "add_edge",
+       "op_id": "op-32",
+       "reason": "queue order is the REQ-PLACE-HOLD criterion",
+       "source_evidence": [
+        {
+         "excerpt": "checks queue order and expiry.",
+         "lines": [
+          11,
+          11
+         ],
+         "sha256": "1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300",
+         "source_id": "toolshare:spec/architecture.md"
+        }
+       ],
+       "support": "hypothesized"
+      },
+      {
+       "change_class": "structure",
+       "confidence": 0.8,
+       "edge": {
+        "dst": "CON-NOTICE-FORMAT",
+        "relation": "verifies",
+        "src": "TEST-NOTICE-FORMAT"
+       },
+       "kind": "add_edge",
+       "op_id": "op-33",
+       "reason": "stated in source",
+       "source_evidence": [
+        {
+         "excerpt": "checks messages against CON-NOTICE-FORMAT.",
+         "lines": [
+          12,
+          12
+         ],
+         "sha256": "1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300",
+         "source_id": "toolshare:spec/architecture.md"
+        }
+       ],
+       "support": "supported"
+      },
+      {
+       "change_class": "structure",
+       "confidence": 0.8,
+       "edge": {
+        "dst": "CON-NOTICE-FORMAT",
+        "relation": "constrained_by",
+        "src": "REQ-READY-NOTICE"
+       },
+       "kind": "add_edge",
+       "op_id": "op-34",
+       "reason": "the ready notice is a notification message; the document does not link them explicitly",
+       "source_evidence": [
+        {
+         "excerpt": "Notification messages are plain-text emails",
+         "lines": [
+          32,
+          32
+         ],
+         "sha256": "aba608a7cba6d2494754607772e19d10e5e6823d409dae7c96d9e1917b6d3af0",
+         "source_id": "toolshare:spec/requirements.md"
+        }
+       ],
+       "support": "hypothesized"
+      }
+     ],
+     "origin": {
+      "call_id": "CALL-0001",
+      "call_key": "toolshare/E1/propose",
+      "client": {
+       "is_fake": true,
+       "model": "none (scripted fixture responses)",
+       "provider": "scripted-fake"
+      },
+      "input_sha256": "e4aeb601fd977841e556ff9dc8aa673fbde53d94698c9343a9ca7c7ecff0b05d",
+      "is_fake": true,
+      "prompt": {
+       "prompt_id": "propose_update",
+       "sha256": "cf3981f23ec4eab621bdbb0b07a2878275e2ebb99e4dad3210c2fd8a16a483c8",
+       "version": "v1"
+      }
+     },
+     "possible_contradictions": [],
+     "proposal_id": "P-0001",
+     "unresolved_questions": [
+      {
+       "about": [
+        "REQ-HOLD-EXPIRY"
+       ],
+       "blocking": false,
+       "question": "Are fines for late pickup in scope?",
+       "source_evidence": [
+        {
+         "excerpt": "Fines for late pickup came up. Parked — not in scope for now.",
+         "lines": [
+          14,
+          14
+         ],
+         "sha256": "e9a2bdd034c3f226aeaf5dcb1cadea9d6ce03f0f2a9acf9a88ac051469ef64b8",
+         "source_id": "toolshare:discovery/stakeholder_notes.md"
+        }
+       ]
+      }
+     ]
+    },
+    "review_text": "Proposal P-0001 against graph r1 (current r1)\nIntent: Initial graph from discovery notes, requirements draft 1, architecture notes and repository c1\nOrigin: scripted-fake (FAKE — not a model output), prompt propose_update.v1\n\n[ADMISSIBLE ] op-1 add_node GOAL-FAIR-ACCESS (goal): 'Fair, predictable tool borrowing'\n    support: claimed=supported effective=supported (model confidence 0.8, not used)\n    reason: stated in source\n    evidence [verified] toolshare:spec/requirements.md L[7, 7]: \"GOAL-FAIR-ACCESS — Members can borrow shared tools fairly and predictably.\"\n[ADMISSIBLE ] op-2 add_node CAP-HOLDS (capability): 'Holds'\n    support: claimed=supported effective=supported (model confidence 0.8, not used)\n    reason: stated in source\n    evidence [verified] toolshare:spec/requirements.md L[11, 11]: \"CAP-HOLDS — Members can queue for tools that are not currently on the shelf.\"\n[ADMISSIBLE ] op-3 add_node CAP-NOTIFY (capability): 'Member notifications'\n    support: claimed=supported effective=supported (model confidence 0.8, not used)\n    reason: stated in source\n    evidence [verified] toolshare:spec/requirements.md L[26, 26]: \"CAP-NOTIFY — Members are told when something they are waiting for changes.\"\n[ADMISSIBLE ] op-4 add_node REQ-PLACE-HOLD (requirement): 'Place a hold'\n    support: claimed=supported effective=supported (model confidence 0.8, not used)\n    reason: stated in source\n    evidence [verified] toolshare:spec/requirements.md L[13, 13]: \"REQ-PLACE-HOLD — A member can place a hold on a catalogued tool that is on loan.\"\n    evidence [verified] toolshare:spec/requirements.md L[16, 16]: \"Holds on the same tool are served first come, first served.\"\n[ADMISSIBLE ] op-5 add_node REQ-HOLD-EXPIRY (requirement): 'Hold expiry and pickup window'\n    support: claimed=supported effective=supported (model confidence 0.8, not used)\n    reason: stated in source\n    evidence [verified] toolshare:spec/requirements.md L[18, 18]: \"REQ-HOLD-EXPIRY — When a held tool becomes available, the member has a pickup window to collect it.\"\n[ADMISSIBLE ] op-6 add_node Q-PICKUP-WINDOW (question): 'How long is the pickup window?'\n    support: claimed=supported effective=supported (model confidence 0.8, not used)\n    reason: stated in source\n    evidence [verified] toolshare:spec/requirements.md L[22, 22]: \"Q-PICKUP-WINDOW — How long is the pickup window? The desk is staffed three days a week. This blocks REQ-HOLD-EXPIRY.\"\n[ADMISSIBLE ] op-7 add_node REQ-READY-NOTICE (requirement): 'Ready-for-pickup notice'\n    support: claimed=supported effective=supported (model confidence 0.8, not used)\n    reason: stated in source\n    evidence [verified] toolshare:spec/requirements.md L[28, 28]: \"REQ-READY-NOTICE — When a held tool is ready for pickup, the member is notified by email.\"\n[ADMISSIBLE ] op-8 add_node CON-NOTICE-FORMAT (contract): 'Notification message format'\n    support: claimed=supported effective=supported (model confidence 0.8, not used)\n    reason: stated in source\n    evidence [verified] toolshare:spec/requirements.md L[32, 32]: \"CON-NOTICE-FORMAT — Notification messages are plain-text emails with a subject line and at most 500 characters of\"\n[ADMISSIBLE ] op-9 add_node CMP-HOLDS (component): 'Holds service'\n    support: claimed=supported effective=supported (model confidence 0.8, not used)\n    reason: stated in source\n    evidence [verified] toolshare:spec/architecture.md L[5, 5]: \"CMP-HOLDS, the holds service (`toolshare/holds.py`), owns the hold queue and hold expiry.\"\n[ADMISSIBLE ] op-10 add_node CMP-INVENTORY (component): 'Inventory module'\n    support: claimed=supported effective=supported (model confidence 0.8, not used)\n    reason: stated in source\n    evidence [verified] toolshare:spec/architecture.md L[7, 7]: \"CMP-INVENTORY, the inventory module (`toolshare/inventory.py`), tracks whether a tool is on the shelf.\"\n[ADMISSIBLE ] op-11 add_node CMP-NOTIFY (component): 'Notification service'\n    support: claimed=supported effective=supported (model confidence 0.8, not used)\n    reason: stated in source\n    evidence [verified] toolshare:spec/architecture.md L[9, 9]: \"CMP-NOTIFY, the notification service (`toolshare/notifications.py`), sends member emails and implements\"\n[ADMISSIBLE ] op-12 add_node ART-HOLDS (artifact): 'toolshare/holds.py'\n    support: claimed=supported effective=supported (model confidence 0.8, not used)\n    reason: stated in source\n    evidence [verified] toolshare:spec/architecture.md L[5, 5]: \"(`toolshare/holds.py`)\"\n[ADMISSIBLE ] op-13 add_node ART-INVENTORY (artifact): 'toolshare/inventory.py'\n    support: claimed=supported effective=supported (model confidence 0.8, not used)\n    reason: stated in source\n    evidence [verified] toolshare:spec/architecture.md L[7, 7]: \"(`toolshare/inventory.py`)\"\n[ADMISSIBLE ] op-14 add_node ART-NOTIFY (artifact): 'toolshare/notifications.py'\n    support: claimed=supported effective=supported (model confidence 0.8, not used)\n    reason: stated in source\n    evidence [verified] toolshare:spec/architecture.md L[9, 9]: \"(`toolshare/notifications.py`)\"\n[ADMISSIBLE ] op-15 add_node TEST-HOLD-QUEUE (test): 'Hold queue test'\n    support: claimed=supported effective=supported (model confidence 0.8, not used)\n    reason: stated in source\n    evidence [verified] toolshare:spec/architecture.md L[11, 11]: \"TEST-HOLD-QUEUE (`tests/test_holds.py`) checks queue order and expiry.\"\n[ADMISSIBLE ] op-16 add_node TEST-NOTICE-FORMAT (test): 'Notice format test'\n    support: claimed=supported effective=supported (model confidence 0.8, not used)\n    reason: stated in source\n    evidence [verified] toolshare:spec/architecture.md L[11, 11]: \"TEST-NOTICE-FORMAT\"\n[ADMISSIBLE ] op-17 add_edge GOAL-FAIR-ACCESS -refines-> CAP-HOLDS\n    support: claimed=hypothesized effective=hypothesized (model confidence 0.8, not used)\n    reason: capability listed under the goal\n    evidence [verified] toolshare:spec/requirements.md L[9, 9]: \"## Capability: Holds\"\n    info: stored_as_hypothesized — will be stored with status 'hypothesized' (raises investigate_unknown)\n[ADMISSIBLE ] op-18 add_edge GOAL-FAIR-ACCESS -refines-> CAP-NOTIFY\n    support: claimed=hypothesized effective=hypothesized (model confidence 0.8, not used)\n    reason: capability listed under the goal\n    evidence [verified] toolshare:spec/requirements.md L[24, 24]: \"## Capability: Member notifications\"\n    info: stored_as_hypothesized — will be stored with status 'hypothesized' (raises investigate_unknown)\n[ADMISSIBLE ] op-19 add_edge CAP-HOLDS -refines-> REQ-PLACE-HOLD\n    support: claimed=supported effective=supported (model confidence 0.8, not used)\n    reason: listed under CAP-HOLDS\n    evidence [verified] toolshare:spec/requirements.md L[13, 13]: \"REQ-PLACE-HOLD — A member can place a hold\"\n[ADMISSIBLE ] op-20 add_edge CAP-HOLDS -refines-> REQ-HOLD-EXPIRY\n    support: claimed=supported effective=supported (model confidence 0.8, not used)\n    reason: listed under CAP-HOLDS\n    evidence [verified] toolshare:spec/requirements.md L[18, 18]: \"REQ-HOLD-EXPIRY — When a held tool becomes available\"\n[ADMISSIBLE ] op-21 add_edge CAP-NOTIFY -refines-> REQ-READY-NOTICE\n    support: claimed=supported effective=supported (model confidence 0.8, not used)\n    reason: listed under CAP-NOTIFY\n    evidence [verified] toolshare:spec/requirements.md L[28, 28]: \"REQ-READY-NOTICE — When a held tool is ready for pickup\"\n[ADMISSIBLE ] op-22 add_edge Q-PICKUP-WINDOW -blocks-> REQ-HOLD-EXPIRY\n    support: claimed=supported effective=supported (model confidence 0.8, not used)\n    reason: stated in source\n    evidence [verified] toolshare:spec/requirements.md L[22, 22]: \"This blocks REQ-HOLD-EXPIRY.\"\n[ADMISSIBLE ] op-23 add_edge CMP-HOLDS -implements-> REQ-PLACE-HOLD\n    support: claimed=supported effective=supported (model confidence 0.8, not used)\n    reason: stated in source\n    evidence [verified] toolshare:spec/architecture.md L[5, 6]: \"It implements REQ-PLACE-HOLD and REQ-HOLD-EXPIRY.\"\n[ADMISSIBLE ] op-24 add_edge CMP-HOLDS -implements-> REQ-HOLD-EXPIRY\n    support: claimed=supported effective=supported (model confidence 0.8, not used)\n    reason: stated in source\n    evidence [verified] toolshare:spec/architecture.md L[5, 6]: \"It implements REQ-PLACE-HOLD and REQ-HOLD-EXPIRY.\"\n[ADMISSIBLE ] op-25 add_edge CMP-NOTIFY -implements-> REQ-READY-NOTICE\n    support: claimed=supported effective=supported (model confidence 0.8, not used)\n    reason: stated in source\n    evidence [verified] toolshare:spec/architecture.md L[10, 10]: \"REQ-READY-NOTICE. Every message it sends must follow CON-NOTICE-FORMAT.\"\n[ADMISSIBLE ] op-26 add_edge CMP-HOLDS -depends_on-> CMP-INVENTORY\n    support: claimed=supported effective=supported (model confidence 0.8, not used)\n    reason: stated in source\n    evidence [verified] toolshare:spec/architecture.md L[7, 8]: \"The holds service reads availability from inventory.\"\n    evidence [verified] git:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4:toolshare/holds.py L[5, 5]: \"from toolshare.inventory import is_on_shelf\"\n[ADMISSIBLE ] op-27 add_edge CMP-NOTIFY -constrained_by-> CON-NOTICE-FORMAT\n    support: claimed=supported effective=supported (model confidence 0.8, not used)\n    reason: stated in source\n    evidence [verified] toolshare:spec/architecture.md L[10, 10]: \"Every message it sends must follow CON-NOTICE-FORMAT.\"\n[ADMISSIBLE ] op-28 add_edge CMP-HOLDS -realized_by-> ART-HOLDS\n    support: claimed=supported effective=supported (model confidence 0.8, not used)\n    reason: stated in source\n    evidence [verified] toolshare:spec/architecture.md L[5, 5]: \"(`toolshare/holds.py`)\"\n[ADMISSIBLE ] op-29 add_edge CMP-INVENTORY -realized_by-> ART-INVENTORY\n    support: claimed=supported effective=supported (model confidence 0.8, not used)\n    reason: stated in source\n    evidence [verified] toolshare:spec/architecture.md L[7, 7]: \"(`toolshare/inventory.py`)\"\n[ADMISSIBLE ] op-30 add_edge CMP-NOTIFY -realized_by-> ART-NOTIFY\n    support: claimed=supported effective=supported (model confidence 0.8, not used)\n    reason: stated in source\n    evidence [verified] toolshare:spec/architecture.md L[9, 9]: \"(`toolshare/notifications.py`)\"\n[ADMISSIBLE ] op-31 add_edge TEST-HOLD-QUEUE -verifies-> REQ-HOLD-EXPIRY\n    support: claimed=supported effective=supported (model confidence 0.8, not used)\n    reason: stated in source\n    evidence [verified] toolshare:spec/architecture.md L[11, 11]: \"checks queue order and expiry.\"\n[ADMISSIBLE ] op-32 add_edge TEST-HOLD-QUEUE -verifies-> REQ-PLACE-HOLD\n    support: claimed=hypothesized effective=hypothesized (model confidence 0.8, not used)\n    reason: queue order is the REQ-PLACE-HOLD criterion\n    evidence [verified] toolshare:spec/architecture.md L[11, 11]: \"checks queue order and expiry.\"\n    info: stored_as_hypothesized — will be stored with status 'hypothesized' (raises investigate_unknown)\n[ADMISSIBLE ] op-33 add_edge TEST-NOTICE-FORMAT -verifies-> CON-NOTICE-FORMAT\n    support: claimed=supported effective=supported (model confidence 0.8, not used)\n    reason: stated in source\n    evidence [verified] toolshare:spec/architecture.md L[12, 12]: \"checks messages against CON-NOTICE-FORMAT.\"\n[ADMISSIBLE ] op-34 add_edge REQ-READY-NOTICE -constrained_by-> CON-NOTICE-FORMAT\n    support: claimed=hypothesized effective=hypothesized (model confidence 0.8, not used)\n    reason: the ready notice is a notification message; the document does not link them explicitly\n    evidence [verified] toolshare:spec/requirements.md L[32, 32]: \"Notification messages are plain-text emails\"\n    info: stored_as_hypothesized — will be stored with status 'hypothesized' (raises investigate_unknown)\n\nUnresolved questions:\n  - Are fines for late pickup in scope? (about ['REQ-HOLD-EXPIRY'])\n\nInfluence preview if every admissible/quarantined op were accepted:\n  check_contract: CMP-HOLDS, CMP-NOTIFY, REQ-READY-NOTICE\n  investigate_unknown: CAP-HOLDS, CAP-NOTIFY, CON-NOTICE-FORMAT, GOAL-FAIR-ACCESS, REQ-PLACE-HOLD, REQ-READY-NOTICE, TEST-HOLD-QUEUE\n  rerun_test: TEST-HOLD-QUEUE, TEST-NOTICE-FORMAT\n  review_implementation: ART-HOLDS, ART-INVENTORY, ART-NOTIFY, CMP-HOLDS, CMP-INVENTORY, CMP-NOTIFY, REQ-HOLD-EXPIRY, REQ-PLACE-HOLD, REQ-READY-NOTICE\n  review_spec: CAP-HOLDS, CAP-NOTIFY, CMP-INVENTORY, CON-NOTICE-FORMAT, GOAL-FAIR-ACCESS, Q-PICKUP-WINDOW, REQ-HOLD-EXPIRY, REQ-PLACE-HOLD, REQ-READY-NOTICE\n  readiness REQ-HOLD-EXPIRY: None -> blocked\n  readiness REQ-PLACE-HOLD: None -> ready\n  readiness REQ-READY-NOTICE: None -> conditional\n\nNote: Schema, citation and engine validity do not imply semantic correctness. A verified excerpt shows the text exists, not that the proposed relationship follows from it. A missing edge is not proof of independence.",
+    "validation": {
+     "base_graph_revision": 1,
+     "engine_preview": {
+      "committable": true,
+      "errors": null,
+      "ran": true,
+      "readiness_changes": [
+       {
+        "from": null,
+        "requirement_id": "REQ-HOLD-EXPIRY",
+        "to": "blocked"
+       },
+       {
+        "from": null,
+        "requirement_id": "REQ-PLACE-HOLD",
+        "to": "ready"
+       },
+       {
+        "from": null,
+        "requirement_id": "REQ-READY-NOTICE",
+        "to": "conditional"
+       }
+      ],
+      "required_actions": {
+       "check_contract": [
+        "CMP-HOLDS",
+        "CMP-NOTIFY",
+        "REQ-READY-NOTICE"
+       ],
+       "investigate_unknown": [
+        "CAP-HOLDS",
+        "CAP-NOTIFY",
+        "CON-NOTICE-FORMAT",
+        "GOAL-FAIR-ACCESS",
+        "REQ-PLACE-HOLD",
+        "REQ-READY-NOTICE",
+        "TEST-HOLD-QUEUE"
+       ],
+       "rerun_test": [
+        "TEST-HOLD-QUEUE",
+        "TEST-NOTICE-FORMAT"
+       ],
+       "review_implementation": [
+        "ART-HOLDS",
+        "ART-INVENTORY",
+        "ART-NOTIFY",
+        "CMP-HOLDS",
+        "CMP-INVENTORY",
+        "CMP-NOTIFY",
+        "REQ-HOLD-EXPIRY",
+        "REQ-PLACE-HOLD",
+        "REQ-READY-NOTICE"
+       ],
+       "review_spec": [
+        "CAP-HOLDS",
+        "CAP-NOTIFY",
+        "CMP-INVENTORY",
+        "CON-NOTICE-FORMAT",
+        "GOAL-FAIR-ACCESS",
+        "Q-PICKUP-WINDOW",
+        "REQ-HOLD-EXPIRY",
+        "REQ-PLACE-HOLD",
+        "REQ-READY-NOTICE"
+       ]
+      }
+     },
+     "graph_revision": 1,
+     "ops": {
+      "op-1": {
+       "citations": [
+        "verified:toolshare:spec/requirements.md:[7, 7]"
+       ],
+       "effective_support": "supported",
+       "findings": [],
+       "verdict": "admissible"
+      },
+      "op-10": {
+       "citations": [
+        "verified:toolshare:spec/architecture.md:[7, 7]"
+       ],
+       "effective_support": "supported",
+       "findings": [],
+       "verdict": "admissible"
+      },
+      "op-11": {
+       "citations": [
+        "verified:toolshare:spec/architecture.md:[9, 9]"
+       ],
+       "effective_support": "supported",
+       "findings": [],
+       "verdict": "admissible"
+      },
+      "op-12": {
+       "citations": [
+        "verified:toolshare:spec/architecture.md:[5, 5]"
+       ],
+       "effective_support": "supported",
+       "findings": [],
+       "verdict": "admissible"
+      },
+      "op-13": {
+       "citations": [
+        "verified:toolshare:spec/architecture.md:[7, 7]"
+       ],
+       "effective_support": "supported",
+       "findings": [],
+       "verdict": "admissible"
+      },
+      "op-14": {
+       "citations": [
+        "verified:toolshare:spec/architecture.md:[9, 9]"
+       ],
+       "effective_support": "supported",
+       "findings": [],
+       "verdict": "admissible"
+      },
+      "op-15": {
+       "citations": [
+        "verified:toolshare:spec/architecture.md:[11, 11]"
+       ],
+       "effective_support": "supported",
+       "findings": [],
+       "verdict": "admissible"
+      },
+      "op-16": {
+       "citations": [
+        "verified:toolshare:spec/architecture.md:[11, 11]"
+       ],
+       "effective_support": "supported",
+       "findings": [],
+       "verdict": "admissible"
+      },
+      "op-17": {
+       "citations": [
+        "verified:toolshare:spec/requirements.md:[9, 9]"
+       ],
+       "effective_support": "hypothesized",
+       "findings": [
+        "info:stored_as_hypothesized"
+       ],
+       "verdict": "admissible"
+      },
+      "op-18": {
+       "citations": [
+        "verified:toolshare:spec/requirements.md:[24, 24]"
+       ],
+       "effective_support": "hypothesized",
+       "findings": [
+        "info:stored_as_hypothesized"
+       ],
+       "verdict": "admissible"
+      },
+      "op-19": {
+       "citations": [
+        "verified:toolshare:spec/requirements.md:[13, 13]"
+       ],
+       "effective_support": "supported",
+       "findings": [],
+       "verdict": "admissible"
+      },
+      "op-2": {
+       "citations": [
+        "verified:toolshare:spec/requirements.md:[11, 11]"
+       ],
+       "effective_support": "supported",
+       "findings": [],
+       "verdict": "admissible"
+      },
+      "op-20": {
+       "citations": [
+        "verified:toolshare:spec/requirements.md:[18, 18]"
+       ],
+       "effective_support": "supported",
+       "findings": [],
+       "verdict": "admissible"
+      },
+      "op-21": {
+       "citations": [
+        "verified:toolshare:spec/requirements.md:[28, 28]"
+       ],
+       "effective_support": "supported",
+       "findings": [],
+       "verdict": "admissible"
+      },
+      "op-22": {
+       "citations": [
+        "verified:toolshare:spec/requirements.md:[22, 22]"
+       ],
+       "effective_support": "supported",
+       "findings": [],
+       "verdict": "admissible"
+      },
+      "op-23": {
+       "citations": [
+        "verified:toolshare:spec/architecture.md:[5, 6]"
+       ],
+       "effective_support": "supported",
+       "findings": [],
+       "verdict": "admissible"
+      },
+      "op-24": {
+       "citations": [
+        "verified:toolshare:spec/architecture.md:[5, 6]"
+       ],
+       "effective_support": "supported",
+       "findings": [],
+       "verdict": "admissible"
+      },
+      "op-25": {
+       "citations": [
+        "verified:toolshare:spec/architecture.md:[10, 10]"
+       ],
+       "effective_support": "supported",
+       "findings": [],
+       "verdict": "admissible"
+      },
+      "op-26": {
+       "citations": [
+        "verified:toolshare:spec/architecture.md:[7, 8]",
+        "verified:git:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4:toolshare/holds.py:[5, 5]"
+       ],
+       "effective_support": "supported",
+       "findings": [],
+       "verdict": "admissible"
+      },
+      "op-27": {
+       "citations": [
+        "verified:toolshare:spec/architecture.md:[10, 10]"
+       ],
+       "effective_support": "supported",
+       "findings": [],
+       "verdict": "admissible"
+      },
+      "op-28": {
+       "citations": [
+        "verified:toolshare:spec/architecture.md:[5, 5]"
+       ],
+       "effective_support": "supported",
+       "findings": [],
+       "verdict": "admissible"
+      },
+      "op-29": {
+       "citations": [
+        "verified:toolshare:spec/architecture.md:[7, 7]"
+       ],
+       "effective_support": "supported",
+       "findings": [],
+       "verdict": "admissible"
+      },
+      "op-3": {
+       "citations": [
+        "verified:toolshare:spec/requirements.md:[26, 26]"
+       ],
+       "effective_support": "supported",
+       "findings": [],
+       "verdict": "admissible"
+      },
+      "op-30": {
+       "citations": [
+        "verified:toolshare:spec/architecture.md:[9, 9]"
+       ],
+       "effective_support": "supported",
+       "findings": [],
+       "verdict": "admissible"
+      },
+      "op-31": {
+       "citations": [
+        "verified:toolshare:spec/architecture.md:[11, 11]"
+       ],
+       "effective_support": "supported",
+       "findings": [],
+       "verdict": "admissible"
+      },
+      "op-32": {
+       "citations": [
+        "verified:toolshare:spec/architecture.md:[11, 11]"
+       ],
+       "effective_support": "hypothesized",
+       "findings": [
+        "info:stored_as_hypothesized"
+       ],
+       "verdict": "admissible"
+      },
+      "op-33": {
+       "citations": [
+        "verified:toolshare:spec/architecture.md:[12, 12]"
+       ],
+       "effective_support": "supported",
+       "findings": [],
+       "verdict": "admissible"
+      },
+      "op-34": {
+       "citations": [
+        "verified:toolshare:spec/requirements.md:[32, 32]"
+       ],
+       "effective_support": "hypothesized",
+       "findings": [
+        "info:stored_as_hypothesized"
+       ],
+       "verdict": "admissible"
+      },
+      "op-4": {
+       "citations": [
+        "verified:toolshare:spec/requirements.md:[13, 13]",
+        "verified:toolshare:spec/requirements.md:[16, 16]"
+       ],
+       "effective_support": "supported",
+       "findings": [],
+       "verdict": "admissible"
+      },
+      "op-5": {
+       "citations": [
+        "verified:toolshare:spec/requirements.md:[18, 18]"
+       ],
+       "effective_support": "supported",
+       "findings": [],
+       "verdict": "admissible"
+      },
+      "op-6": {
+       "citations": [
+        "verified:toolshare:spec/requirements.md:[22, 22]"
+       ],
+       "effective_support": "supported",
+       "findings": [],
+       "verdict": "admissible"
+      },
+      "op-7": {
+       "citations": [
+        "verified:toolshare:spec/requirements.md:[28, 28]"
+       ],
+       "effective_support": "supported",
+       "findings": [],
+       "verdict": "admissible"
+      },
+      "op-8": {
+       "citations": [
+        "verified:toolshare:spec/requirements.md:[32, 32]"
+       ],
+       "effective_support": "supported",
+       "findings": [],
+       "verdict": "admissible"
+      },
+      "op-9": {
+       "citations": [
+        "verified:toolshare:spec/architecture.md:[5, 5]"
+       ],
+       "effective_support": "supported",
+       "findings": [],
+       "verdict": "admissible"
+      }
+     },
+     "stale_base": false,
+     "summary": {
+      "admissible": [
+       "op-1",
+       "op-10",
+       "op-11",
+       "op-12",
+       "op-13",
+       "op-14",
+       "op-15",
+       "op-16",
+       "op-17",
+       "op-18",
+       "op-19",
+       "op-2",
+       "op-20",
+       "op-21",
+       "op-22",
+       "op-23",
+       "op-24",
+       "op-25",
+       "op-26",
+       "op-27",
+       "op-28",
+       "op-29",
+       "op-3",
+       "op-30",
+       "op-31",
+       "op-32",
+       "op-33",
+       "op-34",
+       "op-4",
+       "op-5",
+       "op-6",
+       "op-7",
+       "op-8",
+       "op-9"
+      ],
+      "duplicate": [],
+      "invalid": [],
+      "quarantined": []
+     }
+    }
+   },
+   "sources": [
+    {
+     "line_count": 14,
+     "origin": "file",
+     "path": "discovery/stakeholder_notes.md",
+     "project": "toolshare",
+     "sha256": "e9a2bdd034c3f226aeaf5dcb1cadea9d6ce03f0f2a9acf9a88ac051469ef64b8",
+     "source_id": "toolshare:discovery/stakeholder_notes.md",
+     "source_type": "stakeholder_notes",
+     "version": "2026-08-28"
+    },
+    {
+     "line_count": 12,
+     "origin": "file",
+     "path": "spec/architecture.md",
+     "project": "toolshare",
+     "sha256": "1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300",
+     "source_id": "toolshare:spec/architecture.md",
+     "source_type": "architecture",
+     "version": "2026-09-02"
+    },
+    {
+     "line_count": 33,
+     "origin": "file",
+     "path": "spec/requirements.md",
+     "project": "toolshare",
+     "sha256": "aba608a7cba6d2494754607772e19d10e5e6823d409dae7c96d9e1917b6d3af0",
+     "source_id": "toolshare:spec/requirements.md",
+     "source_type": "requirements",
+     "version": "draft-1"
+    },
+    {
+     "commit": "d1ca69603f4828bb812eba1e72f15c756ade52a4",
+     "line_count": 9,
+     "origin": "git",
+     "path": "tests/test_holds.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "bf13124788ea0c7f04563932b8f21ed079e2a9d099ed49ee70fb2f7b4a8a89ed",
+     "source_id": "git:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4:tests/test_holds.py",
+     "source_type": "test",
+     "version": "d1ca69603f4828bb812eba1e72f15c756ade52a4"
+    },
+    {
+     "commit": "d1ca69603f4828bb812eba1e72f15c756ade52a4",
+     "line_count": 14,
+     "origin": "git",
+     "path": "tests/test_notifications.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "5723cb01fb2199145f4388ba8e9c0359c7c874acef4cd626516428337b5cd1e4",
+     "source_id": "git:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4:tests/test_notifications.py",
+     "source_type": "test",
+     "version": "d1ca69603f4828bb812eba1e72f15c756ade52a4"
+    },
+    {
+     "commit": "d1ca69603f4828bb812eba1e72f15c756ade52a4",
+     "line_count": 0,
+     "origin": "git",
+     "path": "toolshare/__init__.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "source_id": "git:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4:toolshare/__init__.py",
+     "source_type": "code",
+     "version": "d1ca69603f4828bb812eba1e72f15c756ade52a4"
+    },
+    {
+     "commit": "d1ca69603f4828bb812eba1e72f15c756ade52a4",
+     "line_count": 25,
+     "origin": "git",
+     "path": "toolshare/holds.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "db71ce7ce55d98719ff83f228de5e5efdef7de97a09a6d89f02ebc6f0e5e1a8d",
+     "source_id": "git:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4:toolshare/holds.py",
+     "source_type": "code",
+     "version": "d1ca69603f4828bb812eba1e72f15c756ade52a4"
+    },
+    {
+     "commit": "d1ca69603f4828bb812eba1e72f15c756ade52a4",
+     "line_count": 15,
+     "origin": "git",
+     "path": "toolshare/inventory.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "5d5448a350375901f733929d43320921ed02ef91bd84d306a0fa7f0ade64f557",
+     "source_id": "git:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4:toolshare/inventory.py",
+     "source_type": "code",
+     "version": "d1ca69603f4828bb812eba1e72f15c756ade52a4"
+    },
+    {
+     "commit": "d1ca69603f4828bb812eba1e72f15c756ade52a4",
+     "line_count": 14,
+     "origin": "git",
+     "path": "toolshare/notifications.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "ae80be0576750da1fc879a76854887e3233dfbcab1c6b301b84ae84d16dd33b7",
+     "source_id": "git:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4:toolshare/notifications.py",
+     "source_type": "code",
+     "version": "d1ca69603f4828bb812eba1e72f15c756ade52a4"
+    }
+   ],
+   "spec_projection": "spec_E1.md"
+  },
+  {
+   "diffs": [],
+   "event": "E2",
+   "graph_revision_after": 3,
+   "graph_revision_before": 2,
+   "kind": "refinement",
+   "lifecycle_after": [
+    {
+     "action": "work_create",
+     "label": "W-EXPIRY",
+     "requirement": "REQ-HOLD-EXPIRY",
+     "status": "active",
+     "work_id": "WORK-1"
+    },
+    {
+     "action": "work_create",
+     "label": "W-NOTICE",
+     "requirement": "REQ-READY-NOTICE",
+     "status": "active",
+     "work_id": "WORK-2"
+    }
+   ],
+   "lifecycle_before": [],
+   "probe_after": {
+    "aspect": "contract",
+    "graph_revision": 3,
+    "node_id": "CON-NOTICE-FORMAT",
+    "pairs": [
+     [
+      "CMP-NOTIFY",
+      "check_contract"
+     ],
+     [
+      "CMP-NOTIFY",
+      "review_implementation"
+     ],
+     [
+      "REQ-READY-NOTICE",
+      "check_contract"
+     ],
+     [
+      "REQ-READY-NOTICE",
+      "investigate_unknown"
+     ],
+     [
+      "TEST-NOTICE-FORMAT",
+      "rerun_test"
+     ]
+    ],
+    "present": true,
+    "provisional": [],
+    "pruned": [],
+    "targets": [
+     "CMP-NOTIFY",
+     "REQ-READY-NOTICE",
+     "TEST-NOTICE-FORMAT"
+    ]
+   },
+   "probe_before": {
+    "aspect": "contract",
+    "graph_revision": 2,
+    "node_id": "CON-NOTICE-FORMAT",
+    "pairs": [
+     [
+      "CMP-NOTIFY",
+      "check_contract"
+     ],
+     [
+      "CMP-NOTIFY",
+      "review_implementation"
+     ],
+     [
+      "REQ-READY-NOTICE",
+      "check_contract"
+     ],
+     [
+      "REQ-READY-NOTICE",
+      "investigate_unknown"
+     ],
+     [
+      "TEST-NOTICE-FORMAT",
+      "rerun_test"
+     ]
+    ],
+    "present": true,
+    "provisional": [],
+    "pruned": [],
+    "targets": [
+     "CMP-NOTIFY",
+     "REQ-READY-NOTICE",
+     "TEST-NOTICE-FORMAT"
+    ]
+   },
+   "proposal_step": {
+    "call": {
+     "call_key": "toolshare/E2/propose",
+     "client": {
+      "is_fake": true,
+      "model": "none (scripted fixture responses)",
+      "provider": "scripted-fake"
+     },
+     "input": {
+      "chars": 20015,
+      "diffs": [],
+      "limits": {
+       "max_chars_per_doc": 12000,
+       "max_total_chars": 60000
+      },
+      "packed_sources_sha256": "e7074fad51ee4374286057a74ac77bcc8b427f927d444dd5c71c32ce02e035fc",
+      "sha256": "57102bb2ceaf02eb2cca9518443b35983c8aaee5083da19295edcafcfe7c8b85",
+      "sources": [
+       {
+        "line_count": 14,
+        "origin": "file",
+        "path": "discovery/stakeholder_notes.md",
+        "project": "toolshare",
+        "sha256": "e9a2bdd034c3f226aeaf5dcb1cadea9d6ce03f0f2a9acf9a88ac051469ef64b8",
+        "source_id": "toolshare:discovery/stakeholder_notes.md",
+        "source_type": "stakeholder_notes",
+        "version": "2026-08-28"
+       },
+       {
+        "line_count": 12,
+        "origin": "file",
+        "path": "spec/architecture.md",
+        "project": "toolshare",
+        "sha256": "1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300",
+        "source_id": "toolshare:spec/architecture.md",
+        "source_type": "architecture",
+        "version": "2026-09-02"
+       },
+       {
+        "line_count": 36,
+        "origin": "file",
+        "path": "spec/requirements.md",
+        "project": "toolshare",
+        "sha256": "069e49112dfe418410bd88df5d778f3c6761cb30b9233208e7c692659aa146c4",
+        "source_id": "toolshare:spec/requirements.md",
+        "source_type": "requirements",
+        "version": "draft-2"
+       },
+       {
+        "commit": "d1ca69603f4828bb812eba1e72f15c756ade52a4",
+        "line_count": 9,
+        "origin": "git",
+        "path": "tests/test_holds.py",
+        "project": "toolshare",
+        "repo": "toolshare",
+        "sha256": "bf13124788ea0c7f04563932b8f21ed079e2a9d099ed49ee70fb2f7b4a8a89ed",
+        "source_id": "git:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4:tests/test_holds.py",
+        "source_type": "test",
+        "version": "d1ca69603f4828bb812eba1e72f15c756ade52a4"
+       },
+       {
+        "commit": "d1ca69603f4828bb812eba1e72f15c756ade52a4",
+        "line_count": 14,
+        "origin": "git",
+        "path": "tests/test_notifications.py",
+        "project": "toolshare",
+        "repo": "toolshare",
+        "sha256": "5723cb01fb2199145f4388ba8e9c0359c7c874acef4cd626516428337b5cd1e4",
+        "source_id": "git:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4:tests/test_notifications.py",
+        "source_type": "test",
+        "version": "d1ca69603f4828bb812eba1e72f15c756ade52a4"
+       },
+       {
+        "commit": "d1ca69603f4828bb812eba1e72f15c756ade52a4",
+        "line_count": 0,
+        "origin": "git",
+        "path": "toolshare/__init__.py",
+        "project": "toolshare",
+        "repo": "toolshare",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "source_id": "git:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4:toolshare/__init__.py",
+        "source_type": "code",
+        "version": "d1ca69603f4828bb812eba1e72f15c756ade52a4"
+       },
+       {
+        "commit": "d1ca69603f4828bb812eba1e72f15c756ade52a4",
+        "line_count": 25,
+        "origin": "git",
+        "path": "toolshare/holds.py",
+        "project": "toolshare",
+        "repo": "toolshare",
+        "sha256": "db71ce7ce55d98719ff83f228de5e5efdef7de97a09a6d89f02ebc6f0e5e1a8d",
+        "source_id": "git:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4:toolshare/holds.py",
+        "source_type": "code",
+        "version": "d1ca69603f4828bb812eba1e72f15c756ade52a4"
+       },
+       {
+        "commit": "d1ca69603f4828bb812eba1e72f15c756ade52a4",
+        "line_count": 15,
+        "origin": "git",
+        "path": "toolshare/inventory.py",
+        "project": "toolshare",
+        "repo": "toolshare",
+        "sha256": "5d5448a350375901f733929d43320921ed02ef91bd84d306a0fa7f0ade64f557",
+        "source_id": "git:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4:toolshare/inventory.py",
+        "source_type": "code",
+        "version": "d1ca69603f4828bb812eba1e72f15c756ade52a4"
+       },
+       {
+        "commit": "d1ca69603f4828bb812eba1e72f15c756ade52a4",
+        "line_count": 14,
+        "origin": "git",
+        "path": "toolshare/notifications.py",
+        "project": "toolshare",
+        "repo": "toolshare",
+        "sha256": "ae80be0576750da1fc879a76854887e3233dfbcab1c6b301b84ae84d16dd33b7",
+        "source_id": "git:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4:toolshare/notifications.py",
+        "source_type": "code",
+        "version": "d1ca69603f4828bb812eba1e72f15c756ade52a4"
+       }
+      ],
+      "truncation": []
+     },
+     "is_fake": true,
+     "latency_ms": null,
+     "model_reported": "none (scripted fixture responses)",
+     "output": {
+      "chars": 1727,
+      "sha256": "47731e12d56ac550e0a3b50add082094392141247d8603a4419202ba60a859a8",
+      "text": "{\"intent\": \"Requirements draft 2 resolves the pickup window and adds expiry acceptance criteria\", \"operations\": [{\"op_id\": \"op-1\", \"kind\": \"update_node\", \"id\": \"Q-PICKUP-WINDOW\", \"expected_rev\": 1, \"aspect\": \"semantic\", \"patch\": {\"body\": \"Decided by the board on 2026-09-10: 48 hours from the ready notice.\", \"data\": {\"state\": \"resolved\"}}, \"reason\": \"question resolved in draft 2\", \"support\": \"supported\", \"confidence\": 0.8, \"change_class\": \"semantic\", \"source_evidence\": [{\"source_id\": \"toolshare:spec/requirements.md\", \"sha256\": \"069e49112dfe418410bd88df5d778f3c6761cb30b9233208e7c692659aa146c4\", \"lines\": [24, 25], \"excerpt\": \"Decided by the board on 2026-09-10: 48 hours from the ready notice. Resolved.\"}]}, {\"op_id\": \"op-2\", \"kind\": \"update_node\", \"id\": \"REQ-HOLD-EXPIRY\", \"expected_rev\": 1, \"aspect\": \"semantic\", \"patch\": {\"data\": {\"acceptance_criteria\": [\"The pickup window is 48 hours from the moment the ready notice is sent.\", \"When the window passes, the hold lapses and the next member in the queue is offered the tool.\"]}}, \"reason\": \"acceptance criteria added in draft 2\", \"support\": \"supported\", \"confidence\": 0.8, \"change_class\": \"semantic\", \"source_evidence\": [{\"source_id\": \"toolshare:spec/requirements.md\", \"sha256\": \"069e49112dfe418410bd88df5d778f3c6761cb30b9233208e7c692659aa146c4\", \"lines\": [21, 21], \"excerpt\": \"The pickup window is 48 hours from the moment the ready notice is sent.\"}, {\"source_id\": \"toolshare:spec/requirements.md\", \"sha256\": \"069e49112dfe418410bd88df5d778f3c6761cb30b9233208e7c692659aa146c4\", \"lines\": [22, 22], \"excerpt\": \"When the window passes, the hold lapses and the next member in the queue is offered the tool.\"}]}], \"unresolved_questions\": [], \"possible_contradictions\": []}"
+     },
+     "parse": {
+      "ok": true
+     },
+     "prompt": {
+      "prompt_id": "propose_update",
+      "sha256": "cf3981f23ec4eab621bdbb0b07a2878275e2ebb99e4dad3210c2fd8a16a483c8",
+      "version": "v1"
+     },
+     "stop_reason": null,
+     "usage": null
+    },
+    "decisions": [
+     {
+      "decision": "accept",
+      "op_id": "op-1",
+      "rationale": "policy: admissible",
+      "reviewer": "policy:conservative-v1"
+     },
+     {
+      "decision": "accept",
+      "op_id": "op-2",
+      "rationale": "policy: admissible",
+      "reviewer": "policy:conservative-v1"
+     }
+    ],
+    "errors": [],
+    "outcome": {
+     "accepted": [
+      "op-1",
+      "op-2"
+     ],
+     "change_id": "CHG-3",
+     "deferred": [],
+     "invalidated": {
+      "evidence": [],
+      "work_units": []
+     },
+     "no_change_records": [],
+     "obligations": 5,
+     "readiness_changes": [
+      {
+       "from": "blocked",
+       "requirement_id": "REQ-HOLD-EXPIRY",
+       "to": "ready"
+      }
+     ],
+     "rebased": false,
+     "rejected": [],
+     "required_actions": {
+      "check_contract": [
+       "REQ-PLACE-HOLD"
+      ],
+      "rerun_test": [
+       "TEST-HOLD-QUEUE"
+      ],
+      "review_implementation": [
+       "CMP-HOLDS"
+      ],
+      "review_spec": [
+       "CAP-HOLDS",
+       "REQ-HOLD-EXPIRY"
+      ]
+     }
+    },
+    "proposal": {
+     "base_graph_revision": 2,
+     "intent": "Requirements draft 2 resolves the pickup window and adds expiry acceptance criteria",
+     "operations": [
+      {
+       "aspect": "semantic",
+       "change_class": "semantic",
+       "confidence": 0.8,
+       "expected_rev": 1,
+       "id": "Q-PICKUP-WINDOW",
+       "kind": "update_node",
+       "op_id": "op-1",
+       "patch": {
+        "body": "Decided by the board on 2026-09-10: 48 hours from the ready notice.",
+        "data": {
+         "state": "resolved"
+        }
+       },
+       "reason": "question resolved in draft 2",
+       "source_evidence": [
+        {
+         "excerpt": "Decided by the board on 2026-09-10: 48 hours from the ready notice. Resolved.",
+         "lines": [
+          24,
+          25
+         ],
+         "sha256": "069e49112dfe418410bd88df5d778f3c6761cb30b9233208e7c692659aa146c4",
+         "source_id": "toolshare:spec/requirements.md"
+        }
+       ],
+       "support": "supported"
+      },
+      {
+       "aspect": "semantic",
+       "change_class": "semantic",
+       "confidence": 0.8,
+       "expected_rev": 1,
+       "id": "REQ-HOLD-EXPIRY",
+       "kind": "update_node",
+       "op_id": "op-2",
+       "patch": {
+        "data": {
+         "acceptance_criteria": [
+          "The pickup window is 48 hours from the moment the ready notice is sent.",
+          "When the window passes, the hold lapses and the next member in the queue is offered the tool."
+         ]
+        }
+       },
+       "reason": "acceptance criteria added in draft 2",
+       "source_evidence": [
+        {
+         "excerpt": "The pickup window is 48 hours from the moment the ready notice is sent.",
+         "lines": [
+          21,
+          21
+         ],
+         "sha256": "069e49112dfe418410bd88df5d778f3c6761cb30b9233208e7c692659aa146c4",
+         "source_id": "toolshare:spec/requirements.md"
+        },
+        {
+         "excerpt": "When the window passes, the hold lapses and the next member in the queue is offered the tool.",
+         "lines": [
+          22,
+          22
+         ],
+         "sha256": "069e49112dfe418410bd88df5d778f3c6761cb30b9233208e7c692659aa146c4",
+         "source_id": "toolshare:spec/requirements.md"
+        }
+       ],
+       "support": "supported"
+      }
+     ],
+     "origin": {
+      "call_id": "CALL-0002",
+      "call_key": "toolshare/E2/propose",
+      "client": {
+       "is_fake": true,
+       "model": "none (scripted fixture responses)",
+       "provider": "scripted-fake"
+      },
+      "input_sha256": "57102bb2ceaf02eb2cca9518443b35983c8aaee5083da19295edcafcfe7c8b85",
+      "is_fake": true,
+      "prompt": {
+       "prompt_id": "propose_update",
+       "sha256": "cf3981f23ec4eab621bdbb0b07a2878275e2ebb99e4dad3210c2fd8a16a483c8",
+       "version": "v1"
+      }
+     },
+     "possible_contradictions": [],
+     "proposal_id": "P-0002",
+     "unresolved_questions": []
+    },
+    "review_text": "Proposal P-0002 against graph r2 (current r2)\nIntent: Requirements draft 2 resolves the pickup window and adds expiry acceptance criteria\nOrigin: scripted-fake (FAKE — not a model output), prompt propose_update.v1\n\n[ADMISSIBLE ] op-1 update_node Q-PICKUP-WINDOW@r1 fields ['body', 'data']\n    support: claimed=supported effective=supported (model confidence 0.8, not used)\n    reason: question resolved in draft 2\n    evidence [verified] toolshare:spec/requirements.md L[24, 25]: \"Decided by the board on 2026-09-10: 48 hours from the ready notice. Resolved.\"\n[ADMISSIBLE ] op-2 update_node REQ-HOLD-EXPIRY@r1 fields ['data']\n    support: claimed=supported effective=supported (model confidence 0.8, not used)\n    reason: acceptance criteria added in draft 2\n    evidence [verified] toolshare:spec/requirements.md L[21, 21]: \"The pickup window is 48 hours from the moment the ready notice is sent.\"\n    evidence [verified] toolshare:spec/requirements.md L[22, 22]: \"When the window passes, the hold lapses and the next member in the queue is offered the tool.\"\n\nInfluence preview if every admissible/quarantined op were accepted:\n  check_contract: REQ-PLACE-HOLD\n  rerun_test: TEST-HOLD-QUEUE\n  review_implementation: CMP-HOLDS\n  review_spec: CAP-HOLDS, REQ-HOLD-EXPIRY\n  readiness REQ-HOLD-EXPIRY: blocked -> ready\n\nNote: Schema, citation and engine validity do not imply semantic correctness. A verified excerpt shows the text exists, not that the proposed relationship follows from it. A missing edge is not proof of independence.",
+    "validation": {
+     "base_graph_revision": 2,
+     "engine_preview": {
+      "committable": true,
+      "errors": null,
+      "ran": true,
+      "readiness_changes": [
+       {
+        "from": "blocked",
+        "requirement_id": "REQ-HOLD-EXPIRY",
+        "to": "ready"
+       }
+      ],
+      "required_actions": {
+       "check_contract": [
+        "REQ-PLACE-HOLD"
+       ],
+       "rerun_test": [
+        "TEST-HOLD-QUEUE"
+       ],
+       "review_implementation": [
+        "CMP-HOLDS"
+       ],
+       "review_spec": [
+        "CAP-HOLDS",
+        "REQ-HOLD-EXPIRY"
+       ]
+      }
+     },
+     "graph_revision": 2,
+     "ops": {
+      "op-1": {
+       "citations": [
+        "verified:toolshare:spec/requirements.md:[24, 25]"
+       ],
+       "effective_support": "supported",
+       "findings": [],
+       "verdict": "admissible"
+      },
+      "op-2": {
+       "citations": [
+        "verified:toolshare:spec/requirements.md:[21, 21]",
+        "verified:toolshare:spec/requirements.md:[22, 22]"
+       ],
+       "effective_support": "supported",
+       "findings": [],
+       "verdict": "admissible"
+      }
+     },
+     "stale_base": false,
+     "summary": {
+      "admissible": [
+       "op-1",
+       "op-2"
+      ],
+      "duplicate": [],
+      "invalid": [],
+      "quarantined": []
+     }
+    }
+   },
+   "sources": [
+    {
+     "line_count": 14,
+     "origin": "file",
+     "path": "discovery/stakeholder_notes.md",
+     "project": "toolshare",
+     "sha256": "e9a2bdd034c3f226aeaf5dcb1cadea9d6ce03f0f2a9acf9a88ac051469ef64b8",
+     "source_id": "toolshare:discovery/stakeholder_notes.md",
+     "source_type": "stakeholder_notes",
+     "version": "2026-08-28"
+    },
+    {
+     "line_count": 12,
+     "origin": "file",
+     "path": "spec/architecture.md",
+     "project": "toolshare",
+     "sha256": "1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300",
+     "source_id": "toolshare:spec/architecture.md",
+     "source_type": "architecture",
+     "version": "2026-09-02"
+    },
+    {
+     "line_count": 36,
+     "origin": "file",
+     "path": "spec/requirements.md",
+     "project": "toolshare",
+     "sha256": "069e49112dfe418410bd88df5d778f3c6761cb30b9233208e7c692659aa146c4",
+     "source_id": "toolshare:spec/requirements.md",
+     "source_type": "requirements",
+     "version": "draft-2"
+    },
+    {
+     "commit": "d1ca69603f4828bb812eba1e72f15c756ade52a4",
+     "line_count": 9,
+     "origin": "git",
+     "path": "tests/test_holds.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "bf13124788ea0c7f04563932b8f21ed079e2a9d099ed49ee70fb2f7b4a8a89ed",
+     "source_id": "git:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4:tests/test_holds.py",
+     "source_type": "test",
+     "version": "d1ca69603f4828bb812eba1e72f15c756ade52a4"
+    },
+    {
+     "commit": "d1ca69603f4828bb812eba1e72f15c756ade52a4",
+     "line_count": 14,
+     "origin": "git",
+     "path": "tests/test_notifications.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "5723cb01fb2199145f4388ba8e9c0359c7c874acef4cd626516428337b5cd1e4",
+     "source_id": "git:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4:tests/test_notifications.py",
+     "source_type": "test",
+     "version": "d1ca69603f4828bb812eba1e72f15c756ade52a4"
+    },
+    {
+     "commit": "d1ca69603f4828bb812eba1e72f15c756ade52a4",
+     "line_count": 0,
+     "origin": "git",
+     "path": "toolshare/__init__.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "source_id": "git:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4:toolshare/__init__.py",
+     "source_type": "code",
+     "version": "d1ca69603f4828bb812eba1e72f15c756ade52a4"
+    },
+    {
+     "commit": "d1ca69603f4828bb812eba1e72f15c756ade52a4",
+     "line_count": 25,
+     "origin": "git",
+     "path": "toolshare/holds.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "db71ce7ce55d98719ff83f228de5e5efdef7de97a09a6d89f02ebc6f0e5e1a8d",
+     "source_id": "git:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4:toolshare/holds.py",
+     "source_type": "code",
+     "version": "d1ca69603f4828bb812eba1e72f15c756ade52a4"
+    },
+    {
+     "commit": "d1ca69603f4828bb812eba1e72f15c756ade52a4",
+     "line_count": 15,
+     "origin": "git",
+     "path": "toolshare/inventory.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "5d5448a350375901f733929d43320921ed02ef91bd84d306a0fa7f0ade64f557",
+     "source_id": "git:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4:toolshare/inventory.py",
+     "source_type": "code",
+     "version": "d1ca69603f4828bb812eba1e72f15c756ade52a4"
+    },
+    {
+     "commit": "d1ca69603f4828bb812eba1e72f15c756ade52a4",
+     "line_count": 14,
+     "origin": "git",
+     "path": "toolshare/notifications.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "ae80be0576750da1fc879a76854887e3233dfbcab1c6b301b84ae84d16dd33b7",
+     "source_id": "git:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4:toolshare/notifications.py",
+     "source_type": "code",
+     "version": "d1ca69603f4828bb812eba1e72f15c756ade52a4"
+    }
+   ],
+   "spec_projection": "spec_E2.md"
+  },
+  {
+   "challenge": {
+    "change": {
+     "aspect": "implementation",
+     "node_id": "CMP-HOLDS"
+    },
+    "changed_components": [
+     "CMP-HOLDS"
+    ],
+    "domain": {
+     "note": "complete only relative to registered edges; a missing edge is not proof of independence",
+     "origin": [
+      "CMP-HOLDS"
+     ],
+     "records": [
+      {
+       "confidence": "high",
+       "obligation": "check_contract",
+       "path": [
+        "LE-CMP-HOLDS--implements--REQ-HOLD-EXPIRY"
+       ],
+       "target_id": "REQ-HOLD-EXPIRY"
+      },
+      {
+       "confidence": "high",
+       "obligation": "check_contract",
+       "path": [
+        "LE-CMP-HOLDS--implements--REQ-PLACE-HOLD"
+       ],
+       "target_id": "REQ-PLACE-HOLD"
+      }
+     ],
+     "targets": [
+      "REQ-HOLD-EXPIRY",
+      "REQ-PLACE-HOLD"
+     ]
+    },
+    "steps": {
+     "scan": {
+      "decisions": [
+       {
+        "decision": "accept",
+        "op_id": "scan-1",
+        "rationale": "policy: admissible",
+        "reviewer": "policy:conservative-v1"
+       }
+      ],
+      "errors": [],
+      "outcome": {
+       "accepted": [
+        "scan-1"
+       ],
+       "change_id": "CHG-4",
+       "deferred": [],
+       "invalidated": {
+        "evidence": [],
+        "work_units": []
+       },
+       "no_change_records": [],
+       "obligations": 2,
+       "readiness_changes": [],
+       "rebased": false,
+       "rejected": [],
+       "required_actions": {
+        "check_contract": [
+         "CMP-HOLDS"
+        ],
+        "review_spec": [
+         "CMP-NOTIFY"
+        ]
+       }
+      },
+      "proposal": {
+       "base_graph_revision": 3,
+       "intent": "Missing-dependency challenge (deterministic import scan)",
+       "operations": [
+        {
+         "change_class": "structure",
+         "confidence": null,
+         "edge": {
+          "dst": "CMP-NOTIFY",
+          "relation": "depends_on",
+          "src": "CMP-HOLDS"
+         },
+         "kind": "add_edge",
+         "op_id": "scan-1",
+         "reason": "toolshare/holds.py (realizes CMP-HOLDS) imports toolshare.notifications from toolshare/notifications.py (realizes CMP-NOTIFY); no depends_on edge is registered — touches the candidate influence domain",
+         "source_evidence": [
+          {
+           "excerpt": "from toolshare.notifications import send_email",
+           "lines": [
+            6,
+            6
+           ],
+           "sha256": "b3024276c517744afea68dfec8b1041dc3e488d6125307cb1a36f40819fe1ecf",
+           "source_id": "git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:toolshare/holds.py"
+          }
+         ],
+         "support": "supported"
+        }
+       ],
+       "origin": {
+        "client": {
+         "is_fake": false,
+         "provider": "deterministic-import-scan"
+        },
+        "is_fake": false,
+        "prompt": {
+         "prompt_id": "none",
+         "version": "scan-v1"
+        }
+       },
+       "possible_contradictions": [],
+       "proposal_id": "P-0003",
+       "unresolved_questions": []
+      },
+      "review_text": "Proposal P-0003 against graph r3 (current r3)\nIntent: Missing-dependency challenge (deterministic import scan)\nOrigin: deterministic-import-scan, prompt none.scan-v1\n\n[ADMISSIBLE ] scan-1 add_edge CMP-HOLDS -depends_on-> CMP-NOTIFY\n    support: claimed=supported effective=supported\n    reason: toolshare/holds.py (realizes CMP-HOLDS) imports toolshare.notifications from toolshare/notifications.py (realizes CMP-NOTIFY); no depends_on edge is registered — touches the candidate influence domain\n    evidence [verified] git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:toolshare/holds.py L[6, 6]: \"from toolshare.notifications import send_email\"\n\nInfluence preview if every admissible/quarantined op were accepted:\n  check_contract: CMP-HOLDS\n  review_spec: CMP-NOTIFY\n\nNote: Schema, citation and engine validity do not imply semantic correctness. A verified excerpt shows the text exists, not that the proposed relationship follows from it. A missing edge is not proof of independence.",
+      "validation": {
+       "base_graph_revision": 3,
+       "engine_preview": {
+        "committable": true,
+        "errors": null,
+        "ran": true,
+        "readiness_changes": [],
+        "required_actions": {
+         "check_contract": [
+          "CMP-HOLDS"
+         ],
+         "review_spec": [
+          "CMP-NOTIFY"
+         ]
+        }
+       },
+       "graph_revision": 3,
+       "ops": {
+        "scan-1": {
+         "citations": [
+          "verified:git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:toolshare/holds.py:[6, 6]"
+         ],
+         "effective_support": "supported",
+         "findings": [],
+         "verdict": "admissible"
+        }
+       },
+       "stale_base": false,
+       "summary": {
+        "admissible": [
+         "scan-1"
+        ],
+        "duplicate": [],
+        "invalid": [],
+        "quarantined": []
+       }
+      }
+     }
+    }
+   },
+   "diffs": [
+    "git-diff:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4..3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+   ],
+   "event": "E3",
+   "graph_revision_after": 5,
+   "graph_revision_before": 3,
+   "kind": "implementation_observation",
+   "lifecycle_after": [
+    {
+     "action": "work_rebase",
+     "baseline_mismatches": [],
+     "rebased": true,
+     "status_after": "active",
+     "status_before": "needs_revalidation",
+     "work": "W-EXPIRY",
+     "work_id": "WORK-1"
+    },
+    {
+     "action": "work_rebase",
+     "skipped": "not invalidated; nothing to rebase",
+     "work": "W-NOTICE",
+     "work_id": "WORK-2"
+    },
+    {
+     "action": "work_submit",
+     "code": "c2",
+     "evidence": [
+      [
+       "TEST-HOLD-QUEUE",
+       "test_result",
+       "passed"
+      ]
+     ],
+     "missing_checks": [],
+     "status": "verified",
+     "work": "W-EXPIRY",
+     "work_id": "WORK-1"
+    },
+    {
+     "action": "work_submit",
+     "code": "c2",
+     "evidence": [
+      [
+       "TEST-NOTICE-FORMAT",
+       "test_result",
+       "passed"
+      ]
+     ],
+     "missing_checks": [],
+     "status": "verified",
+     "work": "W-NOTICE",
+     "work_id": "WORK-2"
+    }
+   ],
+   "lifecycle_before": [],
+   "probe_after": {
+    "aspect": "contract",
+    "graph_revision": 5,
+    "node_id": "CON-NOTICE-FORMAT",
+    "pairs": [
+     [
+      "CMP-HOLDS",
+      "check_contract"
+     ],
+     [
+      "CMP-NOTIFY",
+      "check_contract"
+     ],
+     [
+      "CMP-NOTIFY",
+      "review_implementation"
+     ],
+     [
+      "REQ-READY-NOTICE",
+      "check_contract"
+     ],
+     [
+      "REQ-READY-NOTICE",
+      "investigate_unknown"
+     ],
+     [
+      "TEST-NOTICE-FORMAT",
+      "rerun_test"
+     ]
+    ],
+    "present": true,
+    "provisional": [],
+    "pruned": [],
+    "targets": [
+     "CMP-HOLDS",
+     "CMP-NOTIFY",
+     "REQ-READY-NOTICE",
+     "TEST-NOTICE-FORMAT"
+    ]
+   },
+   "probe_before": {
+    "aspect": "contract",
+    "graph_revision": 3,
+    "node_id": "CON-NOTICE-FORMAT",
+    "pairs": [
+     [
+      "CMP-NOTIFY",
+      "check_contract"
+     ],
+     [
+      "CMP-NOTIFY",
+      "review_implementation"
+     ],
+     [
+      "REQ-READY-NOTICE",
+      "check_contract"
+     ],
+     [
+      "REQ-READY-NOTICE",
+      "investigate_unknown"
+     ],
+     [
+      "TEST-NOTICE-FORMAT",
+      "rerun_test"
+     ]
+    ],
+    "present": true,
+    "provisional": [],
+    "pruned": [],
+    "targets": [
+     "CMP-NOTIFY",
+     "REQ-READY-NOTICE",
+     "TEST-NOTICE-FORMAT"
+    ]
+   },
+   "proposal_step": {
+    "call": {
+     "call_key": "toolshare/E3/propose",
+     "client": {
+      "is_fake": true,
+      "model": "none (scripted fixture responses)",
+      "provider": "scripted-fake"
+     },
+     "input": {
+      "chars": 22562,
+      "diffs": [
+       "git-diff:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4..3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+      ],
+      "limits": {
+       "max_chars_per_doc": 12000,
+       "max_total_chars": 60000
+      },
+      "packed_sources_sha256": "dee189d429ec218512592339ef805960e21e49a27a785441ec5acbbd680cd27c",
+      "sha256": "1f8b9abecfbc94870c285e67ef4e7697bf138217dfd59d57c6c7a9a718cfd1da",
+      "sources": [
+       {
+        "line_count": 14,
+        "origin": "file",
+        "path": "discovery/stakeholder_notes.md",
+        "project": "toolshare",
+        "sha256": "e9a2bdd034c3f226aeaf5dcb1cadea9d6ce03f0f2a9acf9a88ac051469ef64b8",
+        "source_id": "toolshare:discovery/stakeholder_notes.md",
+        "source_type": "stakeholder_notes",
+        "version": "2026-08-28"
+       },
+       {
+        "line_count": 12,
+        "origin": "file",
+        "path": "spec/architecture.md",
+        "project": "toolshare",
+        "sha256": "1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300",
+        "source_id": "toolshare:spec/architecture.md",
+        "source_type": "architecture",
+        "version": "2026-09-02"
+       },
+       {
+        "line_count": 36,
+        "origin": "file",
+        "path": "spec/requirements.md",
+        "project": "toolshare",
+        "sha256": "069e49112dfe418410bd88df5d778f3c6761cb30b9233208e7c692659aa146c4",
+        "source_id": "toolshare:spec/requirements.md",
+        "source_type": "requirements",
+        "version": "draft-2"
+       },
+       {
+        "commit": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa",
+        "line_count": 10,
+        "origin": "git",
+        "path": "tests/test_holds.py",
+        "project": "toolshare",
+        "repo": "toolshare",
+        "sha256": "1d75cbe25e962f50d6f2b7d6dc3f1bfbc0535f1fa588658d75a13e6bdd0a413b",
+        "source_id": "git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:tests/test_holds.py",
+        "source_type": "test",
+        "version": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+       },
+       {
+        "commit": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa",
+        "line_count": 14,
+        "origin": "git",
+        "path": "tests/test_notifications.py",
+        "project": "toolshare",
+        "repo": "toolshare",
+        "sha256": "5723cb01fb2199145f4388ba8e9c0359c7c874acef4cd626516428337b5cd1e4",
+        "source_id": "git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:tests/test_notifications.py",
+        "source_type": "test",
+        "version": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+       },
+       {
+        "commit": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa",
+        "line_count": 0,
+        "origin": "git",
+        "path": "toolshare/__init__.py",
+        "project": "toolshare",
+        "repo": "toolshare",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "source_id": "git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:toolshare/__init__.py",
+        "source_type": "code",
+        "version": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+       },
+       {
+        "commit": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa",
+        "line_count": 30,
+        "origin": "git",
+        "path": "toolshare/holds.py",
+        "project": "toolshare",
+        "repo": "toolshare",
+        "sha256": "b3024276c517744afea68dfec8b1041dc3e488d6125307cb1a36f40819fe1ecf",
+        "source_id": "git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:toolshare/holds.py",
+        "source_type": "code",
+        "version": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+       },
+       {
+        "commit": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa",
+        "line_count": 15,
+        "origin": "git",
+        "path": "toolshare/inventory.py",
+        "project": "toolshare",
+        "repo": "toolshare",
+        "sha256": "5d5448a350375901f733929d43320921ed02ef91bd84d306a0fa7f0ade64f557",
+        "source_id": "git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:toolshare/inventory.py",
+        "source_type": "code",
+        "version": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+       },
+       {
+        "commit": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa",
+        "line_count": 14,
+        "origin": "git",
+        "path": "toolshare/notifications.py",
+        "project": "toolshare",
+        "repo": "toolshare",
+        "sha256": "ae80be0576750da1fc879a76854887e3233dfbcab1c6b301b84ae84d16dd33b7",
+        "source_id": "git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:toolshare/notifications.py",
+        "source_type": "code",
+        "version": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+       }
+      ],
+      "truncation": []
+     },
+     "is_fake": true,
+     "latency_ms": null,
+     "model_reported": "none (scripted fixture responses)",
+     "output": {
+      "chars": 1619,
+      "sha256": "32f36b13d6b143b402768e0a2598be03d7b6a0f39bd6df38447b6b1a0c0e8bd3",
+      "text": "{\"intent\": \"Commit c2: hold expiry now sends a lapse email; 48h window constant\", \"operations\": [{\"op_id\": \"op-1\", \"kind\": \"update_node\", \"id\": \"ART-HOLDS\", \"expected_rev\": 1, \"aspect\": \"implementation\", \"patch\": {\"data\": {\"notes\": \"expire_hold sends a lapse email; PICKUP_WINDOW_HOURS = 48\"}}, \"reason\": \"implementation detail changed in c2\", \"support\": \"supported\", \"confidence\": 0.8, \"change_class\": \"implementation\", \"source_evidence\": [{\"source_id\": \"git-diff:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4..3e93b8e1693e95c68fd953f7bf71da76cd8717aa\", \"excerpt\": \"+PICKUP_WINDOW_HOURS = 48\"}]}, {\"op_id\": \"op-2\", \"kind\": \"add_edge\", \"edge\": {\"src\": \"TEST-HOLD-QUEUE\", \"dst\": \"REQ-READY-NOTICE\", \"relation\": \"verifies\"}, \"reason\": \"the hold test checks the notice body\", \"support\": \"supported\", \"confidence\": 0.8, \"change_class\": \"structure\", \"source_evidence\": [{\"source_id\": \"git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:tests/test_holds.py\", \"sha256\": \"1d75cbe25e962f50d6f2b7d6dc3f1bfbc0535f1fa588658d75a13e6bdd0a413b\", \"lines\": [10, 10], \"excerpt\": \"assert notifications.OUTBOX[-1][\\\"body\\\"].startswith(\\\"Your hold\\\")\"}]}], \"unresolved_questions\": [{\"question\": \"Is the lapse email part of REQ-HOLD-EXPIRY? No requirement mentions it.\", \"about\": [\"REQ-HOLD-EXPIRY\"], \"blocking\": false, \"source_evidence\": [{\"source_id\": \"git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:toolshare/holds.py\", \"sha256\": \"b3024276c517744afea68dfec8b1041dc3e488d6125307cb1a36f40819fe1ecf\", \"lines\": [27, 27], \"excerpt\": \"send_email(lapsed, f\\\"Your hold on {tool} has lapsed\\\",\"}]}], \"possible_contradictions\": []}"
+     },
+     "parse": {
+      "ok": true
+     },
+     "prompt": {
+      "prompt_id": "propose_update",
+      "sha256": "cf3981f23ec4eab621bdbb0b07a2878275e2ebb99e4dad3210c2fd8a16a483c8",
+      "version": "v1"
+     },
+     "stop_reason": null,
+     "usage": null
+    },
+    "decisions": [
+     {
+      "decision": "accept",
+      "op_id": "op-1",
+      "rationale": "policy: admissible",
+      "reviewer": "policy:conservative-v1"
+     },
+     {
+      "decision": "reject",
+      "op_id": "op-2",
+      "rationale": "policy: failed validation",
+      "reviewer": "policy:conservative-v1"
+     }
+    ],
+    "errors": [],
+    "outcome": {
+     "accepted": [
+      "op-1"
+     ],
+     "change_id": "CHG-5",
+     "deferred": [],
+     "invalidated": {
+      "evidence": [],
+      "work_units": [
+       {
+        "reasons": [
+         "REQ-HOLD-EXPIRY received a verification obligation"
+        ],
+        "status": "active",
+        "work_unit_id": "WORK-1"
+       }
+      ]
+     },
+     "no_change_records": [],
+     "obligations": 3,
+     "readiness_changes": [],
+     "rebased": false,
+     "rejected": [
+      "op-2"
+     ],
+     "required_actions": {
+      "check_contract": [
+       "REQ-HOLD-EXPIRY",
+       "REQ-PLACE-HOLD"
+      ],
+      "review_implementation": [
+       "CMP-HOLDS"
+      ]
+     }
+    },
+    "proposal": {
+     "base_graph_revision": 4,
+     "intent": "Commit c2: hold expiry now sends a lapse email; 48h window constant",
+     "operations": [
+      {
+       "aspect": "implementation",
+       "change_class": "implementation",
+       "confidence": 0.8,
+       "expected_rev": 1,
+       "id": "ART-HOLDS",
+       "kind": "update_node",
+       "op_id": "op-1",
+       "patch": {
+        "data": {
+         "notes": "expire_hold sends a lapse email; PICKUP_WINDOW_HOURS = 48"
+        }
+       },
+       "reason": "implementation detail changed in c2",
+       "source_evidence": [
+        {
+         "excerpt": "+PICKUP_WINDOW_HOURS = 48",
+         "sha256": null,
+         "source_id": "git-diff:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4..3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+        }
+       ],
+       "support": "supported"
+      },
+      {
+       "change_class": "structure",
+       "confidence": 0.8,
+       "edge": {
+        "dst": "REQ-READY-NOTICE",
+        "relation": "verifies",
+        "src": "TEST-HOLD-QUEUE"
+       },
+       "kind": "add_edge",
+       "op_id": "op-2",
+       "reason": "the hold test checks the notice body",
+       "source_evidence": [
+        {
+         "excerpt": "assert notifications.OUTBOX[-1][\"body\"].startswith(\"Your hold\")",
+         "lines": [
+          10,
+          10
+         ],
+         "sha256": "1d75cbe25e962f50d6f2b7d6dc3f1bfbc0535f1fa588658d75a13e6bdd0a413b",
+         "source_id": "git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:tests/test_holds.py"
+        }
+       ],
+       "support": "supported"
+      }
+     ],
+     "origin": {
+      "call_id": "CALL-0003",
+      "call_key": "toolshare/E3/propose",
+      "client": {
+       "is_fake": true,
+       "model": "none (scripted fixture responses)",
+       "provider": "scripted-fake"
+      },
+      "input_sha256": "1f8b9abecfbc94870c285e67ef4e7697bf138217dfd59d57c6c7a9a718cfd1da",
+      "is_fake": true,
+      "prompt": {
+       "prompt_id": "propose_update",
+       "sha256": "cf3981f23ec4eab621bdbb0b07a2878275e2ebb99e4dad3210c2fd8a16a483c8",
+       "version": "v1"
+      }
+     },
+     "possible_contradictions": [],
+     "proposal_id": "P-0004",
+     "unresolved_questions": [
+      {
+       "about": [
+        "REQ-HOLD-EXPIRY"
+       ],
+       "blocking": false,
+       "question": "Is the lapse email part of REQ-HOLD-EXPIRY? No requirement mentions it.",
+       "source_evidence": [
+        {
+         "excerpt": "send_email(lapsed, f\"Your hold on {tool} has lapsed\",",
+         "lines": [
+          27,
+          27
+         ],
+         "sha256": "b3024276c517744afea68dfec8b1041dc3e488d6125307cb1a36f40819fe1ecf",
+         "source_id": "git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:toolshare/holds.py"
+        }
+       ]
+      }
+     ]
+    },
+    "review_text": "Proposal P-0004 against graph r4 (current r4)\nIntent: Commit c2: hold expiry now sends a lapse email; 48h window constant\nOrigin: scripted-fake (FAKE — not a model output), prompt propose_update.v1\n\n[ADMISSIBLE ] op-1 update_node ART-HOLDS@r1 fields ['data']\n    support: claimed=supported effective=supported (model confidence 0.8, not used)\n    reason: implementation detail changed in c2\n    evidence [verified] git-diff:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4..3e93b8e1693e95c68fd953f7bf71da76cd8717aa LNone: \"+PICKUP_WINDOW_HOURS = 48\"\n[INVALID    ] op-2 add_edge TEST-HOLD-QUEUE -verifies-> REQ-READY-NOTICE\n    support: claimed=supported effective=insufficient (model confidence 0.8, not used)\n    reason: the hold test checks the notice body\n    evidence [fabricated] git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:tests/test_holds.py L[10, 10]: \"assert notifications.OUTBOX[-1][\"body\"].startswith(\"Your hold\")\" — excerpt does not occur in the source\n    error: fabricated_citation — git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:tests/test_holds.py: excerpt does not occur in the source\n    review: unsupported_claim — marked 'supported' but no citation could be verified\n\nUnresolved questions:\n  - Is the lapse email part of REQ-HOLD-EXPIRY? No requirement mentions it. (about ['REQ-HOLD-EXPIRY'])\n\nInfluence preview if every admissible/quarantined op were accepted:\n  check_contract: REQ-HOLD-EXPIRY, REQ-PLACE-HOLD\n  review_implementation: CMP-HOLDS\n\nNote: Schema, citation and engine validity do not imply semantic correctness. A verified excerpt shows the text exists, not that the proposed relationship follows from it. A missing edge is not proof of independence.",
+    "validation": {
+     "base_graph_revision": 4,
+     "engine_preview": {
+      "committable": true,
+      "errors": null,
+      "ran": true,
+      "readiness_changes": [],
+      "required_actions": {
+       "check_contract": [
+        "REQ-HOLD-EXPIRY",
+        "REQ-PLACE-HOLD"
+       ],
+       "review_implementation": [
+        "CMP-HOLDS"
+       ]
+      }
+     },
+     "graph_revision": 4,
+     "ops": {
+      "op-1": {
+       "citations": [
+        "verified:git-diff:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4..3e93b8e1693e95c68fd953f7bf71da76cd8717aa:None"
+       ],
+       "effective_support": "supported",
+       "findings": [],
+       "verdict": "admissible"
+      },
+      "op-2": {
+       "citations": [
+        "fabricated:git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:tests/test_holds.py:None"
+       ],
+       "effective_support": "insufficient",
+       "findings": [
+        "error:fabricated_citation",
+        "review:unsupported_claim"
+       ],
+       "verdict": "invalid"
+      }
+     },
+     "stale_base": false,
+     "summary": {
+      "admissible": [
+       "op-1"
+      ],
+      "duplicate": [],
+      "invalid": [
+       "op-2"
+      ],
+      "quarantined": []
+     }
+    }
+   },
+   "sources": [
+    {
+     "line_count": 14,
+     "origin": "file",
+     "path": "discovery/stakeholder_notes.md",
+     "project": "toolshare",
+     "sha256": "e9a2bdd034c3f226aeaf5dcb1cadea9d6ce03f0f2a9acf9a88ac051469ef64b8",
+     "source_id": "toolshare:discovery/stakeholder_notes.md",
+     "source_type": "stakeholder_notes",
+     "version": "2026-08-28"
+    },
+    {
+     "line_count": 12,
+     "origin": "file",
+     "path": "spec/architecture.md",
+     "project": "toolshare",
+     "sha256": "1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300",
+     "source_id": "toolshare:spec/architecture.md",
+     "source_type": "architecture",
+     "version": "2026-09-02"
+    },
+    {
+     "line_count": 36,
+     "origin": "file",
+     "path": "spec/requirements.md",
+     "project": "toolshare",
+     "sha256": "069e49112dfe418410bd88df5d778f3c6761cb30b9233208e7c692659aa146c4",
+     "source_id": "toolshare:spec/requirements.md",
+     "source_type": "requirements",
+     "version": "draft-2"
+    },
+    {
+     "commit": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa",
+     "line_count": 10,
+     "origin": "git",
+     "path": "tests/test_holds.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "1d75cbe25e962f50d6f2b7d6dc3f1bfbc0535f1fa588658d75a13e6bdd0a413b",
+     "source_id": "git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:tests/test_holds.py",
+     "source_type": "test",
+     "version": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+    },
+    {
+     "commit": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa",
+     "line_count": 14,
+     "origin": "git",
+     "path": "tests/test_notifications.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "5723cb01fb2199145f4388ba8e9c0359c7c874acef4cd626516428337b5cd1e4",
+     "source_id": "git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:tests/test_notifications.py",
+     "source_type": "test",
+     "version": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+    },
+    {
+     "commit": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa",
+     "line_count": 0,
+     "origin": "git",
+     "path": "toolshare/__init__.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "source_id": "git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:toolshare/__init__.py",
+     "source_type": "code",
+     "version": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+    },
+    {
+     "commit": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa",
+     "line_count": 30,
+     "origin": "git",
+     "path": "toolshare/holds.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "b3024276c517744afea68dfec8b1041dc3e488d6125307cb1a36f40819fe1ecf",
+     "source_id": "git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:toolshare/holds.py",
+     "source_type": "code",
+     "version": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+    },
+    {
+     "commit": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa",
+     "line_count": 15,
+     "origin": "git",
+     "path": "toolshare/inventory.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "5d5448a350375901f733929d43320921ed02ef91bd84d306a0fa7f0ade64f557",
+     "source_id": "git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:toolshare/inventory.py",
+     "source_type": "code",
+     "version": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+    },
+    {
+     "commit": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa",
+     "line_count": 14,
+     "origin": "git",
+     "path": "toolshare/notifications.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "ae80be0576750da1fc879a76854887e3233dfbcab1c6b301b84ae84d16dd33b7",
+     "source_id": "git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:toolshare/notifications.py",
+     "source_type": "code",
+     "version": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+    }
+   ],
+   "spec_projection": "spec_E3.md"
+  },
+  {
+   "diffs": [],
+   "event": "E4",
+   "graph_revision_after": 5,
+   "graph_revision_before": 5,
+   "kind": "wording_only",
+   "lifecycle_after": [],
+   "lifecycle_before": [],
+   "probe_after": {
+    "aspect": "contract",
+    "graph_revision": 5,
+    "node_id": "CON-NOTICE-FORMAT",
+    "pairs": [
+     [
+      "CMP-HOLDS",
+      "check_contract"
+     ],
+     [
+      "CMP-NOTIFY",
+      "check_contract"
+     ],
+     [
+      "CMP-NOTIFY",
+      "review_implementation"
+     ],
+     [
+      "REQ-READY-NOTICE",
+      "check_contract"
+     ],
+     [
+      "REQ-READY-NOTICE",
+      "investigate_unknown"
+     ],
+     [
+      "TEST-NOTICE-FORMAT",
+      "rerun_test"
+     ]
+    ],
+    "present": true,
+    "provisional": [],
+    "pruned": [],
+    "targets": [
+     "CMP-HOLDS",
+     "CMP-NOTIFY",
+     "REQ-READY-NOTICE",
+     "TEST-NOTICE-FORMAT"
+    ]
+   },
+   "probe_before": {
+    "aspect": "contract",
+    "graph_revision": 5,
+    "node_id": "CON-NOTICE-FORMAT",
+    "pairs": [
+     [
+      "CMP-HOLDS",
+      "check_contract"
+     ],
+     [
+      "CMP-NOTIFY",
+      "check_contract"
+     ],
+     [
+      "CMP-NOTIFY",
+      "review_implementation"
+     ],
+     [
+      "REQ-READY-NOTICE",
+      "check_contract"
+     ],
+     [
+      "REQ-READY-NOTICE",
+      "investigate_unknown"
+     ],
+     [
+      "TEST-NOTICE-FORMAT",
+      "rerun_test"
+     ]
+    ],
+    "present": true,
+    "provisional": [],
+    "pruned": [],
+    "targets": [
+     "CMP-HOLDS",
+     "CMP-NOTIFY",
+     "REQ-READY-NOTICE",
+     "TEST-NOTICE-FORMAT"
+    ]
+   },
+   "proposal_step": {
+    "call": {
+     "call_key": "toolshare/E4/propose",
+     "client": {
+      "is_fake": true,
+      "model": "none (scripted fixture responses)",
+      "provider": "scripted-fake"
+     },
+     "input": {
+      "chars": 20941,
+      "diffs": [],
+      "limits": {
+       "max_chars_per_doc": 12000,
+       "max_total_chars": 60000
+      },
+      "packed_sources_sha256": "852c5e6075834965c37d5dc71a9f4218d0f230573fbe4145b80875d364b9530f",
+      "sha256": "39776ddb9170554a5c2cc67fb41d32db6a97979f73349b3e95ac5fd85a72fd97",
+      "sources": [
+       {
+        "line_count": 14,
+        "origin": "file",
+        "path": "discovery/stakeholder_notes.md",
+        "project": "toolshare",
+        "sha256": "e9a2bdd034c3f226aeaf5dcb1cadea9d6ce03f0f2a9acf9a88ac051469ef64b8",
+        "source_id": "toolshare:discovery/stakeholder_notes.md",
+        "source_type": "stakeholder_notes",
+        "version": "2026-08-28"
+       },
+       {
+        "line_count": 12,
+        "origin": "file",
+        "path": "spec/architecture.md",
+        "project": "toolshare",
+        "sha256": "1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300",
+        "source_id": "toolshare:spec/architecture.md",
+        "source_type": "architecture",
+        "version": "2026-09-02"
+       },
+       {
+        "line_count": 36,
+        "origin": "file",
+        "path": "spec/requirements.md",
+        "project": "toolshare",
+        "sha256": "3d4e44476b367c2663cdc3b08e38da7c885a7eb952e7f4adc615afc629b44428",
+        "source_id": "toolshare:spec/requirements.md",
+        "source_type": "requirements",
+        "version": "draft-3"
+       },
+       {
+        "commit": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa",
+        "line_count": 10,
+        "origin": "git",
+        "path": "tests/test_holds.py",
+        "project": "toolshare",
+        "repo": "toolshare",
+        "sha256": "1d75cbe25e962f50d6f2b7d6dc3f1bfbc0535f1fa588658d75a13e6bdd0a413b",
+        "source_id": "git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:tests/test_holds.py",
+        "source_type": "test",
+        "version": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+       },
+       {
+        "commit": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa",
+        "line_count": 14,
+        "origin": "git",
+        "path": "tests/test_notifications.py",
+        "project": "toolshare",
+        "repo": "toolshare",
+        "sha256": "5723cb01fb2199145f4388ba8e9c0359c7c874acef4cd626516428337b5cd1e4",
+        "source_id": "git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:tests/test_notifications.py",
+        "source_type": "test",
+        "version": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+       },
+       {
+        "commit": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa",
+        "line_count": 0,
+        "origin": "git",
+        "path": "toolshare/__init__.py",
+        "project": "toolshare",
+        "repo": "toolshare",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "source_id": "git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:toolshare/__init__.py",
+        "source_type": "code",
+        "version": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+       },
+       {
+        "commit": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa",
+        "line_count": 30,
+        "origin": "git",
+        "path": "toolshare/holds.py",
+        "project": "toolshare",
+        "repo": "toolshare",
+        "sha256": "b3024276c517744afea68dfec8b1041dc3e488d6125307cb1a36f40819fe1ecf",
+        "source_id": "git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:toolshare/holds.py",
+        "source_type": "code",
+        "version": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+       },
+       {
+        "commit": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa",
+        "line_count": 15,
+        "origin": "git",
+        "path": "toolshare/inventory.py",
+        "project": "toolshare",
+        "repo": "toolshare",
+        "sha256": "5d5448a350375901f733929d43320921ed02ef91bd84d306a0fa7f0ade64f557",
+        "source_id": "git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:toolshare/inventory.py",
+        "source_type": "code",
+        "version": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+       },
+       {
+        "commit": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa",
+        "line_count": 14,
+        "origin": "git",
+        "path": "toolshare/notifications.py",
+        "project": "toolshare",
+        "repo": "toolshare",
+        "sha256": "ae80be0576750da1fc879a76854887e3233dfbcab1c6b301b84ae84d16dd33b7",
+        "source_id": "git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:toolshare/notifications.py",
+        "source_type": "code",
+        "version": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+       }
+      ],
+      "truncation": []
+     },
+     "is_fake": true,
+     "latency_ms": null,
+     "model_reported": "none (scripted fixture responses)",
+     "output": {
+      "chars": 887,
+      "sha256": "6d50f6f23f08989d318891ca3960713fcd9a5eed5461440852eb1276e8b67604",
+      "text": "{\"intent\": \"Draft 3 rewords REQ-READY-NOTICE without changing its meaning\", \"operations\": [{\"op_id\": \"op-1\", \"kind\": \"no_change\", \"target\": \"REQ-READY-NOTICE\", \"reason\": \"wording only; same obligation\", \"support\": \"supported\", \"confidence\": 0.8, \"change_class\": \"editorial\", \"source_evidence\": [{\"source_id\": \"toolshare:spec/requirements.md\", \"sha256\": \"3d4e44476b367c2663cdc3b08e38da7c885a7eb952e7f4adc615afc629b44428\", \"lines\": [31, 31], \"excerpt\": \"REQ-READY-NOTICE — When a held tool is ready to be picked up, we notify the member by email.\"}]}, {\"op_id\": \"op-2\", \"kind\": \"remove_edge\", \"id\": \"LE-CMP-HOLDS--depends_on--CMP-INVENTORY\", \"expected_rev\": 1, \"reason\": \"draft 3 of the requirements no longer mentions inventory\", \"support\": \"hypothesized\", \"confidence\": 0.8, \"change_class\": \"structure\", \"source_evidence\": []}], \"unresolved_questions\": [], \"possible_contradictions\": []}"
+     },
+     "parse": {
+      "ok": true
+     },
+     "prompt": {
+      "prompt_id": "propose_update",
+      "sha256": "cf3981f23ec4eab621bdbb0b07a2878275e2ebb99e4dad3210c2fd8a16a483c8",
+      "version": "v1"
+     },
+     "stop_reason": null,
+     "usage": null
+    },
+    "decisions": [
+     {
+      "decision": "accept",
+      "op_id": "op-1",
+      "rationale": "policy: admissible",
+      "reviewer": "policy:conservative-v1"
+     },
+     {
+      "decision": "reject",
+      "op_id": "op-2",
+      "rationale": "policy: failed validation",
+      "reviewer": "policy:conservative-v1"
+     }
+    ],
+    "errors": [],
+    "outcome": {
+     "accepted": [
+      "op-1"
+     ],
+     "change_id": null,
+     "deferred": [],
+     "no_change_records": [
+      "op-1"
+     ],
+     "rebased": false,
+     "rejected": [
+      "op-2"
+     ]
+    },
+    "proposal": {
+     "base_graph_revision": 5,
+     "intent": "Draft 3 rewords REQ-READY-NOTICE without changing its meaning",
+     "operations": [
+      {
+       "change_class": "editorial",
+       "confidence": 0.8,
+       "kind": "no_change",
+       "op_id": "op-1",
+       "reason": "wording only; same obligation",
+       "source_evidence": [
+        {
+         "excerpt": "REQ-READY-NOTICE — When a held tool is ready to be picked up, we notify the member by email.",
+         "lines": [
+          31,
+          31
+         ],
+         "sha256": "3d4e44476b367c2663cdc3b08e38da7c885a7eb952e7f4adc615afc629b44428",
+         "source_id": "toolshare:spec/requirements.md"
+        }
+       ],
+       "support": "supported",
+       "target": "REQ-READY-NOTICE"
+      },
+      {
+       "change_class": "structure",
+       "confidence": 0.8,
+       "expected_rev": 1,
+       "id": "LE-CMP-HOLDS--depends_on--CMP-INVENTORY",
+       "kind": "remove_edge",
+       "op_id": "op-2",
+       "reason": "draft 3 of the requirements no longer mentions inventory",
+       "source_evidence": [],
+       "support": "hypothesized"
+      }
+     ],
+     "origin": {
+      "call_id": "CALL-0004",
+      "call_key": "toolshare/E4/propose",
+      "client": {
+       "is_fake": true,
+       "model": "none (scripted fixture responses)",
+       "provider": "scripted-fake"
+      },
+      "input_sha256": "39776ddb9170554a5c2cc67fb41d32db6a97979f73349b3e95ac5fd85a72fd97",
+      "is_fake": true,
+      "prompt": {
+       "prompt_id": "propose_update",
+       "sha256": "cf3981f23ec4eab621bdbb0b07a2878275e2ebb99e4dad3210c2fd8a16a483c8",
+       "version": "v1"
+      }
+     },
+     "possible_contradictions": [],
+     "proposal_id": "P-0005",
+     "unresolved_questions": []
+    },
+    "review_text": "Proposal P-0005 against graph r5 (current r5)\nIntent: Draft 3 rewords REQ-READY-NOTICE without changing its meaning\nOrigin: scripted-fake (FAKE — not a model output), prompt propose_update.v1\n\n[ADMISSIBLE ] op-1 no_change REQ-READY-NOTICE\n    support: claimed=supported effective=supported (model confidence 0.8, not used)\n    reason: wording only; same obligation\n    evidence [verified] toolshare:spec/requirements.md L[31, 31]: \"REQ-READY-NOTICE — When a held tool is ready to be picked up, we notify the member by email.\"\n    info: editorial_no_op — recorded as wording-only; no graph change and no propagation\n[INVALID    ] op-2 remove_edge LE-CMP-HOLDS--depends_on--CMP-INVENTORY@r1\n    support: claimed=hypothesized effective=hypothesized (model confidence 0.8, not used)\n    reason: draft 3 of the requirements no longer mentions inventory\n    error: removal_without_evidence — a source being silent is not evidence of removal; an explicit cited statement is required\n    review: requires_authorization — removals always need explicit human authorization\n\nInfluence preview if every admissible/quarantined op were accepted:\n  (not run: no graph operations to preview)\n\nNote: Schema, citation and engine validity do not imply semantic correctness. A verified excerpt shows the text exists, not that the proposed relationship follows from it. A missing edge is not proof of independence.",
+    "validation": {
+     "base_graph_revision": 5,
+     "engine_preview": {
+      "committable": null,
+      "errors": null,
+      "ran": false,
+      "readiness_changes": null,
+      "required_actions": null
+     },
+     "graph_revision": 5,
+     "ops": {
+      "op-1": {
+       "citations": [
+        "verified:toolshare:spec/requirements.md:[31, 31]"
+       ],
+       "effective_support": "supported",
+       "findings": [
+        "info:editorial_no_op"
+       ],
+       "verdict": "admissible"
+      },
+      "op-2": {
+       "citations": [],
+       "effective_support": "hypothesized",
+       "findings": [
+        "error:removal_without_evidence",
+        "review:requires_authorization"
+       ],
+       "verdict": "invalid"
+      }
+     },
+     "stale_base": false,
+     "summary": {
+      "admissible": [
+       "op-1"
+      ],
+      "duplicate": [],
+      "invalid": [
+       "op-2"
+      ],
+      "quarantined": []
+     }
+    }
+   },
+   "sources": [
+    {
+     "line_count": 14,
+     "origin": "file",
+     "path": "discovery/stakeholder_notes.md",
+     "project": "toolshare",
+     "sha256": "e9a2bdd034c3f226aeaf5dcb1cadea9d6ce03f0f2a9acf9a88ac051469ef64b8",
+     "source_id": "toolshare:discovery/stakeholder_notes.md",
+     "source_type": "stakeholder_notes",
+     "version": "2026-08-28"
+    },
+    {
+     "line_count": 12,
+     "origin": "file",
+     "path": "spec/architecture.md",
+     "project": "toolshare",
+     "sha256": "1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300",
+     "source_id": "toolshare:spec/architecture.md",
+     "source_type": "architecture",
+     "version": "2026-09-02"
+    },
+    {
+     "line_count": 36,
+     "origin": "file",
+     "path": "spec/requirements.md",
+     "project": "toolshare",
+     "sha256": "3d4e44476b367c2663cdc3b08e38da7c885a7eb952e7f4adc615afc629b44428",
+     "source_id": "toolshare:spec/requirements.md",
+     "source_type": "requirements",
+     "version": "draft-3"
+    },
+    {
+     "commit": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa",
+     "line_count": 10,
+     "origin": "git",
+     "path": "tests/test_holds.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "1d75cbe25e962f50d6f2b7d6dc3f1bfbc0535f1fa588658d75a13e6bdd0a413b",
+     "source_id": "git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:tests/test_holds.py",
+     "source_type": "test",
+     "version": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+    },
+    {
+     "commit": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa",
+     "line_count": 14,
+     "origin": "git",
+     "path": "tests/test_notifications.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "5723cb01fb2199145f4388ba8e9c0359c7c874acef4cd626516428337b5cd1e4",
+     "source_id": "git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:tests/test_notifications.py",
+     "source_type": "test",
+     "version": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+    },
+    {
+     "commit": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa",
+     "line_count": 0,
+     "origin": "git",
+     "path": "toolshare/__init__.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "source_id": "git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:toolshare/__init__.py",
+     "source_type": "code",
+     "version": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+    },
+    {
+     "commit": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa",
+     "line_count": 30,
+     "origin": "git",
+     "path": "toolshare/holds.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "b3024276c517744afea68dfec8b1041dc3e488d6125307cb1a36f40819fe1ecf",
+     "source_id": "git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:toolshare/holds.py",
+     "source_type": "code",
+     "version": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+    },
+    {
+     "commit": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa",
+     "line_count": 15,
+     "origin": "git",
+     "path": "toolshare/inventory.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "5d5448a350375901f733929d43320921ed02ef91bd84d306a0fa7f0ade64f557",
+     "source_id": "git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:toolshare/inventory.py",
+     "source_type": "code",
+     "version": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+    },
+    {
+     "commit": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa",
+     "line_count": 14,
+     "origin": "git",
+     "path": "toolshare/notifications.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "ae80be0576750da1fc879a76854887e3233dfbcab1c6b301b84ae84d16dd33b7",
+     "source_id": "git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:toolshare/notifications.py",
+     "source_type": "code",
+     "version": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+    }
+   ],
+   "spec_projection": "spec_E4.md"
+  },
+  {
+   "challenge": {
+    "change": {
+     "aspect": "contract",
+     "node_id": "CON-NOTICE-FORMAT"
+    },
+    "changed_components": [],
+    "domain": {
+     "note": "complete only relative to registered edges; a missing edge is not proof of independence",
+     "origin": [
+      "CON-NOTICE-FORMAT"
+     ],
+     "records": [
+      {
+       "confidence": "high",
+       "obligation": "check_contract",
+       "path": [
+        "LE-CMP-NOTIFY--constrained_by--CON-NOTICE-FORMAT",
+        "LE-CMP-HOLDS--depends_on--CMP-NOTIFY"
+       ],
+       "target_id": "CMP-HOLDS"
+      },
+      {
+       "confidence": "high",
+       "obligation": "check_contract",
+       "path": [
+        "LE-CMP-NOTIFY--constrained_by--CON-NOTICE-FORMAT"
+       ],
+       "target_id": "CMP-NOTIFY"
+      },
+      {
+       "confidence": "low",
+       "obligation": "review_implementation",
+       "path": [
+        "LE-REQ-READY-NOTICE--constrained_by--CON-NOTICE-FORMAT",
+        "LE-CMP-NOTIFY--implements--REQ-READY-NOTICE"
+       ],
+       "target_id": "CMP-NOTIFY"
+      },
+      {
+       "confidence": "low",
+       "obligation": "check_contract",
+       "path": [
+        "LE-REQ-READY-NOTICE--constrained_by--CON-NOTICE-FORMAT"
+       ],
+       "target_id": "REQ-READY-NOTICE"
+      },
+      {
+       "confidence": "low",
+       "obligation": "investigate_unknown",
+       "path": [
+        "LE-REQ-READY-NOTICE--constrained_by--CON-NOTICE-FORMAT"
+       ],
+       "target_id": "REQ-READY-NOTICE"
+      },
+      {
+       "confidence": "high",
+       "obligation": "rerun_test",
+       "path": [
+        "LE-TEST-NOTICE-FORMAT--verifies--CON-NOTICE-FORMAT"
+       ],
+       "target_id": "TEST-NOTICE-FORMAT"
+      }
+     ],
+     "targets": [
+      "CMP-HOLDS",
+      "CMP-NOTIFY",
+      "REQ-READY-NOTICE",
+      "TEST-NOTICE-FORMAT"
+     ]
+    },
+    "steps": {}
+   },
+   "diffs": [],
+   "event": "E5",
+   "graph_revision_after": 6,
+   "graph_revision_before": 5,
+   "kind": "change",
+   "lifecycle_after": [
+    {
+     "action": "reconcile",
+     "baseline_mismatches": [],
+     "can_verify": false,
+     "obligations_since_baseline": [
+      [
+       "CMP-HOLDS",
+       "check_contract"
+      ]
+     ],
+     "stale_evidence": [],
+     "status": "verified",
+     "targets": [
+      "REQ-HOLD-EXPIRY"
+     ],
+     "work_id": "WORK-1"
+    },
+    {
+     "action": "reconcile",
+     "baseline_mismatches": [
+      {
+       "baseline_rev": 1,
+       "current_rev": 2,
+       "node_id": "CON-NOTICE-FORMAT"
+      }
+     ],
+     "can_verify": false,
+     "obligations_since_baseline": [
+      [
+       "CMP-NOTIFY",
+       "check_contract"
+      ],
+      [
+       "CMP-NOTIFY",
+       "review_implementation"
+      ],
+      [
+       "CMP-NOTIFY",
+       "review_spec"
+      ],
+      [
+       "REQ-READY-NOTICE",
+       "check_contract"
+      ],
+      [
+       "REQ-READY-NOTICE",
+       "investigate_unknown"
+      ]
+     ],
+     "stale_evidence": [
+      "EV-2"
+     ],
+     "status": "needs_revalidation",
+     "targets": [
+      "REQ-READY-NOTICE"
+     ],
+     "work_id": "WORK-2"
+    }
+   ],
+   "lifecycle_before": [],
+   "probe_after": {
+    "aspect": "contract",
+    "graph_revision": 6,
+    "node_id": "CON-NOTICE-FORMAT",
+    "pairs": [
+     [
+      "CMP-HOLDS",
+      "check_contract"
+     ],
+     [
+      "CMP-NOTIFY",
+      "check_contract"
+     ],
+     [
+      "CMP-NOTIFY",
+      "review_implementation"
+     ],
+     [
+      "REQ-READY-NOTICE",
+      "check_contract"
+     ],
+     [
+      "REQ-READY-NOTICE",
+      "investigate_unknown"
+     ],
+     [
+      "TEST-NOTICE-FORMAT",
+      "rerun_test"
+     ]
+    ],
+    "present": true,
+    "provisional": [],
+    "pruned": [],
+    "targets": [
+     "CMP-HOLDS",
+     "CMP-NOTIFY",
+     "REQ-READY-NOTICE",
+     "TEST-NOTICE-FORMAT"
+    ]
+   },
+   "probe_before": {
+    "aspect": "contract",
+    "graph_revision": 5,
+    "node_id": "CON-NOTICE-FORMAT",
+    "pairs": [
+     [
+      "CMP-HOLDS",
+      "check_contract"
+     ],
+     [
+      "CMP-NOTIFY",
+      "check_contract"
+     ],
+     [
+      "CMP-NOTIFY",
+      "review_implementation"
+     ],
+     [
+      "REQ-READY-NOTICE",
+      "check_contract"
+     ],
+     [
+      "REQ-READY-NOTICE",
+      "investigate_unknown"
+     ],
+     [
+      "TEST-NOTICE-FORMAT",
+      "rerun_test"
+     ]
+    ],
+    "present": true,
+    "provisional": [],
+    "pruned": [],
+    "targets": [
+     "CMP-HOLDS",
+     "CMP-NOTIFY",
+     "REQ-READY-NOTICE",
+     "TEST-NOTICE-FORMAT"
+    ]
+   },
+   "proposal_step": {
+    "call": {
+     "call_key": "toolshare/E5/propose",
+     "client": {
+      "is_fake": true,
+      "model": "none (scripted fixture responses)",
+      "provider": "scripted-fake"
+     },
+     "input": {
+      "chars": 21109,
+      "diffs": [],
+      "limits": {
+       "max_chars_per_doc": 12000,
+       "max_total_chars": 60000
+      },
+      "packed_sources_sha256": "f3a6f2a541e8881e3e901499b9e64b9d3d7d123443f90ca64f10e2997c36be93",
+      "sha256": "fe04086a72f8d2aabcf860f46f9f781915f46d1e78f29cbbc350df9fcca7bf25",
+      "sources": [
+       {
+        "line_count": 14,
+        "origin": "file",
+        "path": "discovery/stakeholder_notes.md",
+        "project": "toolshare",
+        "sha256": "e9a2bdd034c3f226aeaf5dcb1cadea9d6ce03f0f2a9acf9a88ac051469ef64b8",
+        "source_id": "toolshare:discovery/stakeholder_notes.md",
+        "source_type": "stakeholder_notes",
+        "version": "2026-08-28"
+       },
+       {
+        "line_count": 12,
+        "origin": "file",
+        "path": "spec/architecture.md",
+        "project": "toolshare",
+        "sha256": "1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300",
+        "source_id": "toolshare:spec/architecture.md",
+        "source_type": "architecture",
+        "version": "2026-09-02"
+       },
+       {
+        "line_count": 38,
+        "origin": "file",
+        "path": "spec/requirements.md",
+        "project": "toolshare",
+        "sha256": "ff5dae59d469eaa8e5ccd104ce6857802879e3b97104182b938c13f84f1fe755",
+        "source_id": "toolshare:spec/requirements.md",
+        "source_type": "requirements",
+        "version": "draft-4"
+       },
+       {
+        "commit": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa",
+        "line_count": 10,
+        "origin": "git",
+        "path": "tests/test_holds.py",
+        "project": "toolshare",
+        "repo": "toolshare",
+        "sha256": "1d75cbe25e962f50d6f2b7d6dc3f1bfbc0535f1fa588658d75a13e6bdd0a413b",
+        "source_id": "git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:tests/test_holds.py",
+        "source_type": "test",
+        "version": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+       },
+       {
+        "commit": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa",
+        "line_count": 14,
+        "origin": "git",
+        "path": "tests/test_notifications.py",
+        "project": "toolshare",
+        "repo": "toolshare",
+        "sha256": "5723cb01fb2199145f4388ba8e9c0359c7c874acef4cd626516428337b5cd1e4",
+        "source_id": "git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:tests/test_notifications.py",
+        "source_type": "test",
+        "version": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+       },
+       {
+        "commit": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa",
+        "line_count": 0,
+        "origin": "git",
+        "path": "toolshare/__init__.py",
+        "project": "toolshare",
+        "repo": "toolshare",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "source_id": "git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:toolshare/__init__.py",
+        "source_type": "code",
+        "version": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+       },
+       {
+        "commit": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa",
+        "line_count": 30,
+        "origin": "git",
+        "path": "toolshare/holds.py",
+        "project": "toolshare",
+        "repo": "toolshare",
+        "sha256": "b3024276c517744afea68dfec8b1041dc3e488d6125307cb1a36f40819fe1ecf",
+        "source_id": "git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:toolshare/holds.py",
+        "source_type": "code",
+        "version": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+       },
+       {
+        "commit": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa",
+        "line_count": 15,
+        "origin": "git",
+        "path": "toolshare/inventory.py",
+        "project": "toolshare",
+        "repo": "toolshare",
+        "sha256": "5d5448a350375901f733929d43320921ed02ef91bd84d306a0fa7f0ade64f557",
+        "source_id": "git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:toolshare/inventory.py",
+        "source_type": "code",
+        "version": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+       },
+       {
+        "commit": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa",
+        "line_count": 14,
+        "origin": "git",
+        "path": "toolshare/notifications.py",
+        "project": "toolshare",
+        "repo": "toolshare",
+        "sha256": "ae80be0576750da1fc879a76854887e3233dfbcab1c6b301b84ae84d16dd33b7",
+        "source_id": "git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:toolshare/notifications.py",
+        "source_type": "code",
+        "version": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+       }
+      ],
+      "truncation": []
+     },
+     "is_fake": true,
+     "latency_ms": null,
+     "model_reported": "none (scripted fixture responses)",
+     "output": {
+      "chars": 1507,
+      "sha256": "67ceb888c779f98d0b3d1ee8fd2e63f36e0aceb37c5cea4f92907b32461a99a4",
+      "text": "{\"intent\": \"Draft 4 changes the notification format contract\", \"operations\": [{\"op_id\": \"op-1\", \"kind\": \"update_node\", \"id\": \"CON-NOTICE-FORMAT\", \"expected_rev\": 1, \"aspect\": \"contract\", \"patch\": {\"body\": \"Notification messages are plain text, sent by email or, if the member prefers, by SMS. An SMS body is at most 160 characters; an email has a subject line and at most 500 characters of body text. Every message states the desk opening hours (Tue/Thu/Sat).\"}, \"reason\": \"contract revised in draft 4\", \"support\": \"supported\", \"confidence\": 0.8, \"change_class\": \"contract\", \"source_evidence\": [{\"source_id\": \"toolshare:spec/requirements.md\", \"sha256\": \"ff5dae59d469eaa8e5ccd104ce6857802879e3b97104182b938c13f84f1fe755\", \"lines\": [36, 36], \"excerpt\": \"SMS. An SMS body is at most 160 characters; an email has a subject line and at most 500 characters of body text.\"}, {\"source_id\": \"toolshare:spec/requirements.md\", \"sha256\": \"ff5dae59d469eaa8e5ccd104ce6857802879e3b97104182b938c13f84f1fe755\", \"lines\": [37, 37], \"excerpt\": \"Every message states the desk opening hours (Tue/Thu/Sat).\"}]}], \"unresolved_questions\": [{\"question\": \"REQ-READY-NOTICE still says the member is notified by email; should it allow SMS?\", \"about\": [\"REQ-READY-NOTICE\"], \"blocking\": false, \"source_evidence\": [{\"source_id\": \"toolshare:spec/requirements.md\", \"sha256\": \"ff5dae59d469eaa8e5ccd104ce6857802879e3b97104182b938c13f84f1fe755\", \"lines\": [31, 31], \"excerpt\": \"we notify the member by email.\"}]}], \"possible_contradictions\": []}"
+     },
+     "parse": {
+      "ok": true
+     },
+     "prompt": {
+      "prompt_id": "propose_update",
+      "sha256": "cf3981f23ec4eab621bdbb0b07a2878275e2ebb99e4dad3210c2fd8a16a483c8",
+      "version": "v1"
+     },
+     "stop_reason": null,
+     "usage": null
+    },
+    "decisions": [
+     {
+      "decision": "accept",
+      "op_id": "op-1",
+      "rationale": "policy: admissible",
+      "reviewer": "policy:conservative-v1"
+     }
+    ],
+    "errors": [],
+    "outcome": {
+     "accepted": [
+      "op-1"
+     ],
+     "change_id": "CHG-6",
+     "deferred": [],
+     "invalidated": {
+      "evidence": [
+       {
+        "evidence_id": "EV-2",
+        "node_id": "TEST-NOTICE-FORMAT",
+        "reasons": [
+         "CON-NOTICE-FORMAT recorded at r1, now r2",
+         "TEST-NOTICE-FORMAT received a verification obligation"
+        ]
+       }
+      ],
+      "work_units": [
+       {
+        "reasons": [
+         "CON-NOTICE-FORMAT r1 -> r2",
+         "REQ-READY-NOTICE received a verification obligation"
+        ],
+        "status": "verified",
+        "work_unit_id": "WORK-2"
+       }
+      ]
+     },
+     "no_change_records": [],
+     "obligations": 6,
+     "readiness_changes": [],
+     "rebased": false,
+     "rejected": [],
+     "required_actions": {
+      "check_contract": [
+       "CMP-HOLDS",
+       "CMP-NOTIFY",
+       "REQ-READY-NOTICE"
+      ],
+      "investigate_unknown": [
+       "REQ-READY-NOTICE"
+      ],
+      "rerun_test": [
+       "TEST-NOTICE-FORMAT"
+      ],
+      "review_implementation": [
+       "CMP-NOTIFY"
+      ]
+     }
+    },
+    "proposal": {
+     "base_graph_revision": 5,
+     "intent": "Draft 4 changes the notification format contract",
+     "operations": [
+      {
+       "aspect": "contract",
+       "change_class": "contract",
+       "confidence": 0.8,
+       "expected_rev": 1,
+       "id": "CON-NOTICE-FORMAT",
+       "kind": "update_node",
+       "op_id": "op-1",
+       "patch": {
+        "body": "Notification messages are plain text, sent by email or, if the member prefers, by SMS. An SMS body is at most 160 characters; an email has a subject line and at most 500 characters of body text. Every message states the desk opening hours (Tue/Thu/Sat)."
+       },
+       "reason": "contract revised in draft 4",
+       "source_evidence": [
+        {
+         "excerpt": "SMS. An SMS body is at most 160 characters; an email has a subject line and at most 500 characters of body text.",
+         "lines": [
+          36,
+          36
+         ],
+         "sha256": "ff5dae59d469eaa8e5ccd104ce6857802879e3b97104182b938c13f84f1fe755",
+         "source_id": "toolshare:spec/requirements.md"
+        },
+        {
+         "excerpt": "Every message states the desk opening hours (Tue/Thu/Sat).",
+         "lines": [
+          37,
+          37
+         ],
+         "sha256": "ff5dae59d469eaa8e5ccd104ce6857802879e3b97104182b938c13f84f1fe755",
+         "source_id": "toolshare:spec/requirements.md"
+        }
+       ],
+       "support": "supported"
+      }
+     ],
+     "origin": {
+      "call_id": "CALL-0005",
+      "call_key": "toolshare/E5/propose",
+      "client": {
+       "is_fake": true,
+       "model": "none (scripted fixture responses)",
+       "provider": "scripted-fake"
+      },
+      "input_sha256": "fe04086a72f8d2aabcf860f46f9f781915f46d1e78f29cbbc350df9fcca7bf25",
+      "is_fake": true,
+      "prompt": {
+       "prompt_id": "propose_update",
+       "sha256": "cf3981f23ec4eab621bdbb0b07a2878275e2ebb99e4dad3210c2fd8a16a483c8",
+       "version": "v1"
+      }
+     },
+     "possible_contradictions": [],
+     "proposal_id": "P-0006",
+     "unresolved_questions": [
+      {
+       "about": [
+        "REQ-READY-NOTICE"
+       ],
+       "blocking": false,
+       "question": "REQ-READY-NOTICE still says the member is notified by email; should it allow SMS?",
+       "source_evidence": [
+        {
+         "excerpt": "we notify the member by email.",
+         "lines": [
+          31,
+          31
+         ],
+         "sha256": "ff5dae59d469eaa8e5ccd104ce6857802879e3b97104182b938c13f84f1fe755",
+         "source_id": "toolshare:spec/requirements.md"
+        }
+       ]
+      }
+     ]
+    },
+    "review_text": "Proposal P-0006 against graph r5 (current r5)\nIntent: Draft 4 changes the notification format contract\nOrigin: scripted-fake (FAKE — not a model output), prompt propose_update.v1\n\n[ADMISSIBLE ] op-1 update_node CON-NOTICE-FORMAT@r1 fields ['body']\n    support: claimed=supported effective=supported (model confidence 0.8, not used)\n    reason: contract revised in draft 4\n    evidence [verified] toolshare:spec/requirements.md L[36, 36]: \"SMS. An SMS body is at most 160 characters; an email has a subject line and at most 500 characters of body text.\"\n    evidence [verified] toolshare:spec/requirements.md L[37, 37]: \"Every message states the desk opening hours (Tue/Thu/Sat).\"\n\nUnresolved questions:\n  - REQ-READY-NOTICE still says the member is notified by email; should it allow SMS? (about ['REQ-READY-NOTICE'])\n\nInfluence preview if every admissible/quarantined op were accepted:\n  check_contract: CMP-HOLDS, CMP-NOTIFY, REQ-READY-NOTICE\n  investigate_unknown: REQ-READY-NOTICE\n  rerun_test: TEST-NOTICE-FORMAT\n  review_implementation: CMP-NOTIFY\n\nNote: Schema, citation and engine validity do not imply semantic correctness. A verified excerpt shows the text exists, not that the proposed relationship follows from it. A missing edge is not proof of independence.",
+    "validation": {
+     "base_graph_revision": 5,
+     "engine_preview": {
+      "committable": true,
+      "errors": null,
+      "ran": true,
+      "readiness_changes": [],
+      "required_actions": {
+       "check_contract": [
+        "CMP-HOLDS",
+        "CMP-NOTIFY",
+        "REQ-READY-NOTICE"
+       ],
+       "investigate_unknown": [
+        "REQ-READY-NOTICE"
+       ],
+       "rerun_test": [
+        "TEST-NOTICE-FORMAT"
+       ],
+       "review_implementation": [
+        "CMP-NOTIFY"
+       ]
+      }
+     },
+     "graph_revision": 5,
+     "ops": {
+      "op-1": {
+       "citations": [
+        "verified:toolshare:spec/requirements.md:[36, 36]",
+        "verified:toolshare:spec/requirements.md:[37, 37]"
+       ],
+       "effective_support": "supported",
+       "findings": [],
+       "verdict": "admissible"
+      }
+     },
+     "stale_base": false,
+     "summary": {
+      "admissible": [
+       "op-1"
+      ],
+      "duplicate": [],
+      "invalid": [],
+      "quarantined": []
+     }
+    }
+   },
+   "sources": [
+    {
+     "line_count": 14,
+     "origin": "file",
+     "path": "discovery/stakeholder_notes.md",
+     "project": "toolshare",
+     "sha256": "e9a2bdd034c3f226aeaf5dcb1cadea9d6ce03f0f2a9acf9a88ac051469ef64b8",
+     "source_id": "toolshare:discovery/stakeholder_notes.md",
+     "source_type": "stakeholder_notes",
+     "version": "2026-08-28"
+    },
+    {
+     "line_count": 12,
+     "origin": "file",
+     "path": "spec/architecture.md",
+     "project": "toolshare",
+     "sha256": "1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300",
+     "source_id": "toolshare:spec/architecture.md",
+     "source_type": "architecture",
+     "version": "2026-09-02"
+    },
+    {
+     "line_count": 38,
+     "origin": "file",
+     "path": "spec/requirements.md",
+     "project": "toolshare",
+     "sha256": "ff5dae59d469eaa8e5ccd104ce6857802879e3b97104182b938c13f84f1fe755",
+     "source_id": "toolshare:spec/requirements.md",
+     "source_type": "requirements",
+     "version": "draft-4"
+    },
+    {
+     "commit": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa",
+     "line_count": 10,
+     "origin": "git",
+     "path": "tests/test_holds.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "1d75cbe25e962f50d6f2b7d6dc3f1bfbc0535f1fa588658d75a13e6bdd0a413b",
+     "source_id": "git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:tests/test_holds.py",
+     "source_type": "test",
+     "version": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+    },
+    {
+     "commit": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa",
+     "line_count": 14,
+     "origin": "git",
+     "path": "tests/test_notifications.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "5723cb01fb2199145f4388ba8e9c0359c7c874acef4cd626516428337b5cd1e4",
+     "source_id": "git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:tests/test_notifications.py",
+     "source_type": "test",
+     "version": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+    },
+    {
+     "commit": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa",
+     "line_count": 0,
+     "origin": "git",
+     "path": "toolshare/__init__.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "source_id": "git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:toolshare/__init__.py",
+     "source_type": "code",
+     "version": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+    },
+    {
+     "commit": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa",
+     "line_count": 30,
+     "origin": "git",
+     "path": "toolshare/holds.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "b3024276c517744afea68dfec8b1041dc3e488d6125307cb1a36f40819fe1ecf",
+     "source_id": "git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:toolshare/holds.py",
+     "source_type": "code",
+     "version": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+    },
+    {
+     "commit": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa",
+     "line_count": 15,
+     "origin": "git",
+     "path": "toolshare/inventory.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "5d5448a350375901f733929d43320921ed02ef91bd84d306a0fa7f0ade64f557",
+     "source_id": "git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:toolshare/inventory.py",
+     "source_type": "code",
+     "version": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+    },
+    {
+     "commit": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa",
+     "line_count": 14,
+     "origin": "git",
+     "path": "toolshare/notifications.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "ae80be0576750da1fc879a76854887e3233dfbcab1c6b301b84ae84d16dd33b7",
+     "source_id": "git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:toolshare/notifications.py",
+     "source_type": "code",
+     "version": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+    }
+   ],
+   "spec_projection": "spec_E5.md"
+  }
+ ],
+ "final_graph": {
+  "edges": [
+   {
+    "dst": "REQ-HOLD-EXPIRY",
+    "evidence_ref": "P-0001/op-20",
+    "id": "LE-CAP-HOLDS--refines--REQ-HOLD-EXPIRY",
+    "relation": "refines",
+    "rev": 1,
+    "src": "CAP-HOLDS",
+    "status": "confirmed"
+   },
+   {
+    "dst": "REQ-PLACE-HOLD",
+    "evidence_ref": "P-0001/op-19",
+    "id": "LE-CAP-HOLDS--refines--REQ-PLACE-HOLD",
+    "relation": "refines",
+    "rev": 1,
+    "src": "CAP-HOLDS",
+    "status": "confirmed"
+   },
+   {
+    "dst": "REQ-READY-NOTICE",
+    "evidence_ref": "P-0001/op-21",
+    "id": "LE-CAP-NOTIFY--refines--REQ-READY-NOTICE",
+    "relation": "refines",
+    "rev": 1,
+    "src": "CAP-NOTIFY",
+    "status": "confirmed"
+   },
+   {
+    "dst": "CMP-INVENTORY",
+    "evidence_ref": "P-0001/op-26",
+    "id": "LE-CMP-HOLDS--depends_on--CMP-INVENTORY",
+    "relation": "depends_on",
+    "rev": 1,
+    "src": "CMP-HOLDS",
+    "status": "confirmed"
+   },
+   {
+    "dst": "CMP-NOTIFY",
+    "evidence_ref": "P-0003/scan-1",
+    "id": "LE-CMP-HOLDS--depends_on--CMP-NOTIFY",
+    "relation": "depends_on",
+    "rev": 1,
+    "src": "CMP-HOLDS",
+    "status": "confirmed"
+   },
+   {
+    "dst": "REQ-HOLD-EXPIRY",
+    "evidence_ref": "P-0001/op-24",
+    "id": "LE-CMP-HOLDS--implements--REQ-HOLD-EXPIRY",
+    "relation": "implements",
+    "rev": 1,
+    "src": "CMP-HOLDS",
+    "status": "confirmed"
+   },
+   {
+    "dst": "REQ-PLACE-HOLD",
+    "evidence_ref": "P-0001/op-23",
+    "id": "LE-CMP-HOLDS--implements--REQ-PLACE-HOLD",
+    "relation": "implements",
+    "rev": 1,
+    "src": "CMP-HOLDS",
+    "status": "confirmed"
+   },
+   {
+    "dst": "ART-HOLDS",
+    "evidence_ref": "P-0001/op-28",
+    "id": "LE-CMP-HOLDS--realized_by--ART-HOLDS",
+    "relation": "realized_by",
+    "rev": 1,
+    "src": "CMP-HOLDS",
+    "status": "confirmed"
+   },
+   {
+    "dst": "ART-INVENTORY",
+    "evidence_ref": "P-0001/op-29",
+    "id": "LE-CMP-INVENTORY--realized_by--ART-INVENTORY",
+    "relation": "realized_by",
+    "rev": 1,
+    "src": "CMP-INVENTORY",
+    "status": "confirmed"
+   },
+   {
+    "dst": "CON-NOTICE-FORMAT",
+    "evidence_ref": "P-0001/op-27",
+    "id": "LE-CMP-NOTIFY--constrained_by--CON-NOTICE-FORMAT",
+    "relation": "constrained_by",
+    "rev": 1,
+    "src": "CMP-NOTIFY",
+    "status": "confirmed"
+   },
+   {
+    "dst": "REQ-READY-NOTICE",
+    "evidence_ref": "P-0001/op-25",
+    "id": "LE-CMP-NOTIFY--implements--REQ-READY-NOTICE",
+    "relation": "implements",
+    "rev": 1,
+    "src": "CMP-NOTIFY",
+    "status": "confirmed"
+   },
+   {
+    "dst": "ART-NOTIFY",
+    "evidence_ref": "P-0001/op-30",
+    "id": "LE-CMP-NOTIFY--realized_by--ART-NOTIFY",
+    "relation": "realized_by",
+    "rev": 1,
+    "src": "CMP-NOTIFY",
+    "status": "confirmed"
+   },
+   {
+    "dst": "CAP-HOLDS",
+    "evidence_ref": "P-0001/op-17",
+    "id": "LE-GOAL-FAIR-ACCESS--refines--CAP-HOLDS",
+    "relation": "refines",
+    "rev": 1,
+    "src": "GOAL-FAIR-ACCESS",
+    "status": "hypothesized"
+   },
+   {
+    "dst": "CAP-NOTIFY",
+    "evidence_ref": "P-0001/op-18",
+    "id": "LE-GOAL-FAIR-ACCESS--refines--CAP-NOTIFY",
+    "relation": "refines",
+    "rev": 1,
+    "src": "GOAL-FAIR-ACCESS",
+    "status": "hypothesized"
+   },
+   {
+    "dst": "REQ-HOLD-EXPIRY",
+    "evidence_ref": "P-0001/op-22",
+    "id": "LE-Q-PICKUP-WINDOW--blocks--REQ-HOLD-EXPIRY",
+    "relation": "blocks",
+    "rev": 1,
+    "src": "Q-PICKUP-WINDOW",
+    "status": "confirmed"
+   },
+   {
+    "dst": "CON-NOTICE-FORMAT",
+    "evidence_ref": "P-0001/op-34",
+    "id": "LE-REQ-READY-NOTICE--constrained_by--CON-NOTICE-FORMAT",
+    "relation": "constrained_by",
+    "rev": 1,
+    "src": "REQ-READY-NOTICE",
+    "status": "hypothesized"
+   },
+   {
+    "dst": "REQ-HOLD-EXPIRY",
+    "evidence_ref": "P-0001/op-31",
+    "id": "LE-TEST-HOLD-QUEUE--verifies--REQ-HOLD-EXPIRY",
+    "relation": "verifies",
+    "rev": 1,
+    "src": "TEST-HOLD-QUEUE",
+    "status": "confirmed"
+   },
+   {
+    "dst": "REQ-PLACE-HOLD",
+    "evidence_ref": "P-0001/op-32",
+    "id": "LE-TEST-HOLD-QUEUE--verifies--REQ-PLACE-HOLD",
+    "relation": "verifies",
+    "rev": 1,
+    "src": "TEST-HOLD-QUEUE",
+    "status": "hypothesized"
+   },
+   {
+    "dst": "CON-NOTICE-FORMAT",
+    "evidence_ref": "P-0001/op-33",
+    "id": "LE-TEST-NOTICE-FORMAT--verifies--CON-NOTICE-FORMAT",
+    "relation": "verifies",
+    "rev": 1,
+    "src": "TEST-NOTICE-FORMAT",
+    "status": "confirmed"
+   }
+  ],
+  "graph_revision": 6,
+  "nodes": [
+   {
+    "body": "Source file toolshare/holds.py.",
+    "data": {
+     "notes": "expire_hold sends a lapse email; PICKUP_WINDOW_HOURS = 48",
+     "path": "toolshare/holds.py"
+    },
+    "id": "ART-HOLDS",
+    "kind": "artifact",
+    "rev": 2,
+    "title": "toolshare/holds.py"
+   },
+   {
+    "body": "Source file toolshare/inventory.py.",
+    "data": {
+     "path": "toolshare/inventory.py"
+    },
+    "id": "ART-INVENTORY",
+    "kind": "artifact",
+    "rev": 1,
+    "title": "toolshare/inventory.py"
+   },
+   {
+    "body": "Source file toolshare/notifications.py.",
+    "data": {
+     "path": "toolshare/notifications.py"
+    },
+    "id": "ART-NOTIFY",
+    "kind": "artifact",
+    "rev": 1,
+    "title": "toolshare/notifications.py"
+   },
+   {
+    "body": "Members can queue for tools that are not currently on the shelf.",
+    "data": {},
+    "id": "CAP-HOLDS",
+    "kind": "capability",
+    "rev": 1,
+    "title": "Holds"
+   },
+   {
+    "body": "Members are told when something they are waiting for changes.",
+    "data": {},
+    "id": "CAP-NOTIFY",
+    "kind": "capability",
+    "rev": 1,
+    "title": "Member notifications"
+   },
+   {
+    "body": "Owns the hold queue and hold expiry.",
+    "data": {},
+    "id": "CMP-HOLDS",
+    "kind": "component",
+    "rev": 1,
+    "title": "Holds service"
+   },
+   {
+    "body": "Tracks whether a tool is on the shelf.",
+    "data": {},
+    "id": "CMP-INVENTORY",
+    "kind": "component",
+    "rev": 1,
+    "title": "Inventory module"
+   },
+   {
+    "body": "Sends member emails.",
+    "data": {},
+    "id": "CMP-NOTIFY",
+    "kind": "component",
+    "rev": 1,
+    "title": "Notification service"
+   },
+   {
+    "body": "Notification messages are plain text, sent by email or, if the member prefers, by SMS. An SMS body is at most 160 characters; an email has a subject line and at most 500 characters of body text. Every message states the desk opening hours (Tue/Thu/Sat).",
+    "data": {
+     "status": "accepted"
+    },
+    "id": "CON-NOTICE-FORMAT",
+    "kind": "contract",
+    "rev": 2,
+    "title": "Notification message format"
+   },
+   {
+    "body": "Members can borrow shared tools fairly and predictably.",
+    "data": {},
+    "id": "GOAL-FAIR-ACCESS",
+    "kind": "goal",
+    "rev": 1,
+    "title": "Fair, predictable tool borrowing"
+   },
+   {
+    "body": "Decided by the board on 2026-09-10: 48 hours from the ready notice.",
+    "data": {
+     "blocking": true,
+     "state": "resolved"
+    },
+    "id": "Q-PICKUP-WINDOW",
+    "kind": "question",
+    "rev": 2,
+    "title": "How long is the pickup window?"
+   },
+   {
+    "body": "When a held tool becomes available, the member has a pickup window to collect it; otherwise the hold lapses and the tool passes to the next member.",
+    "data": {
+     "acceptance_criteria": [
+      "The pickup window is 48 hours from the moment the ready notice is sent.",
+      "When the window passes, the hold lapses and the next member in the queue is offered the tool."
+     ]
+    },
+    "id": "REQ-HOLD-EXPIRY",
+    "kind": "requirement",
+    "rev": 2,
+    "title": "Hold expiry and pickup window"
+   },
+   {
+    "body": "A member can place a hold on a catalogued tool that is on loan.",
+    "data": {
+     "acceptance_criteria": [
+      "A member without overdue items can place a hold on any catalogued tool.",
+      "Holds on the same tool are served first come, first served."
+     ]
+    },
+    "id": "REQ-PLACE-HOLD",
+    "kind": "requirement",
+    "rev": 1,
+    "title": "Place a hold"
+   },
+   {
+    "body": "When a held tool is ready for pickup, the member is notified by email.",
+    "data": {
+     "acceptance_criteria": [
+      "The email names the tool and the pickup deadline."
+     ]
+    },
+    "id": "REQ-READY-NOTICE",
+    "kind": "requirement",
+    "rev": 1,
+    "title": "Ready-for-pickup notice"
+   },
+   {
+    "body": "Checks queue order and expiry.",
+    "data": {
+     "command": "pytest -q tests/test_holds.py"
+    },
+    "id": "TEST-HOLD-QUEUE",
+    "kind": "test",
+    "rev": 1,
+    "title": "Hold queue test"
+   },
+   {
+    "body": "Checks messages against CON-NOTICE-FORMAT.",
+    "data": {
+     "command": "pytest -q tests/test_notifications.py"
+    },
+    "id": "TEST-NOTICE-FORMAT",
+    "kind": "test",
+    "rev": 1,
+    "title": "Notice format test"
+   }
+  ]
+ },
+ "ledger": {
+  "calls": 5,
+  "decisions": [
+   {
+    "change_id": "CHG-2",
+    "decision": "accept",
+    "op_id": "op-1",
+    "proposal_id": "P-0001",
+    "reviewer": "policy:conservative-v1"
+   },
+   {
+    "change_id": "CHG-2",
+    "decision": "accept",
+    "op_id": "op-10",
+    "proposal_id": "P-0001",
+    "reviewer": "policy:conservative-v1"
+   },
+   {
+    "change_id": "CHG-2",
+    "decision": "accept",
+    "op_id": "op-11",
+    "proposal_id": "P-0001",
+    "reviewer": "policy:conservative-v1"
+   },
+   {
+    "change_id": "CHG-2",
+    "decision": "accept",
+    "op_id": "op-12",
+    "proposal_id": "P-0001",
+    "reviewer": "policy:conservative-v1"
+   },
+   {
+    "change_id": "CHG-2",
+    "decision": "accept",
+    "op_id": "op-13",
+    "proposal_id": "P-0001",
+    "reviewer": "policy:conservative-v1"
+   },
+   {
+    "change_id": "CHG-2",
+    "decision": "accept",
+    "op_id": "op-14",
+    "proposal_id": "P-0001",
+    "reviewer": "policy:conservative-v1"
+   },
+   {
+    "change_id": "CHG-2",
+    "decision": "accept",
+    "op_id": "op-15",
+    "proposal_id": "P-0001",
+    "reviewer": "policy:conservative-v1"
+   },
+   {
+    "change_id": "CHG-2",
+    "decision": "accept",
+    "op_id": "op-16",
+    "proposal_id": "P-0001",
+    "reviewer": "policy:conservative-v1"
+   },
+   {
+    "change_id": "CHG-2",
+    "decision": "accept",
+    "op_id": "op-17",
+    "proposal_id": "P-0001",
+    "reviewer": "policy:conservative-v1"
+   },
+   {
+    "change_id": "CHG-2",
+    "decision": "accept",
+    "op_id": "op-18",
+    "proposal_id": "P-0001",
+    "reviewer": "policy:conservative-v1"
+   },
+   {
+    "change_id": "CHG-2",
+    "decision": "accept",
+    "op_id": "op-19",
+    "proposal_id": "P-0001",
+    "reviewer": "policy:conservative-v1"
+   },
+   {
+    "change_id": "CHG-2",
+    "decision": "accept",
+    "op_id": "op-2",
+    "proposal_id": "P-0001",
+    "reviewer": "policy:conservative-v1"
+   },
+   {
+    "change_id": "CHG-2",
+    "decision": "accept",
+    "op_id": "op-20",
+    "proposal_id": "P-0001",
+    "reviewer": "policy:conservative-v1"
+   },
+   {
+    "change_id": "CHG-2",
+    "decision": "accept",
+    "op_id": "op-21",
+    "proposal_id": "P-0001",
+    "reviewer": "policy:conservative-v1"
+   },
+   {
+    "change_id": "CHG-2",
+    "decision": "accept",
+    "op_id": "op-22",
+    "proposal_id": "P-0001",
+    "reviewer": "policy:conservative-v1"
+   },
+   {
+    "change_id": "CHG-2",
+    "decision": "accept",
+    "op_id": "op-23",
+    "proposal_id": "P-0001",
+    "reviewer": "policy:conservative-v1"
+   },
+   {
+    "change_id": "CHG-2",
+    "decision": "accept",
+    "op_id": "op-24",
+    "proposal_id": "P-0001",
+    "reviewer": "policy:conservative-v1"
+   },
+   {
+    "change_id": "CHG-2",
+    "decision": "accept",
+    "op_id": "op-25",
+    "proposal_id": "P-0001",
+    "reviewer": "policy:conservative-v1"
+   },
+   {
+    "change_id": "CHG-2",
+    "decision": "accept",
+    "op_id": "op-26",
+    "proposal_id": "P-0001",
+    "reviewer": "policy:conservative-v1"
+   },
+   {
+    "change_id": "CHG-2",
+    "decision": "accept",
+    "op_id": "op-27",
+    "proposal_id": "P-0001",
+    "reviewer": "policy:conservative-v1"
+   },
+   {
+    "change_id": "CHG-2",
+    "decision": "accept",
+    "op_id": "op-28",
+    "proposal_id": "P-0001",
+    "reviewer": "policy:conservative-v1"
+   },
+   {
+    "change_id": "CHG-2",
+    "decision": "accept",
+    "op_id": "op-29",
+    "proposal_id": "P-0001",
+    "reviewer": "policy:conservative-v1"
+   },
+   {
+    "change_id": "CHG-2",
+    "decision": "accept",
+    "op_id": "op-3",
+    "proposal_id": "P-0001",
+    "reviewer": "policy:conservative-v1"
+   },
+   {
+    "change_id": "CHG-2",
+    "decision": "accept",
+    "op_id": "op-30",
+    "proposal_id": "P-0001",
+    "reviewer": "policy:conservative-v1"
+   },
+   {
+    "change_id": "CHG-2",
+    "decision": "accept",
+    "op_id": "op-31",
+    "proposal_id": "P-0001",
+    "reviewer": "policy:conservative-v1"
+   },
+   {
+    "change_id": "CHG-2",
+    "decision": "accept",
+    "op_id": "op-32",
+    "proposal_id": "P-0001",
+    "reviewer": "policy:conservative-v1"
+   },
+   {
+    "change_id": "CHG-2",
+    "decision": "accept",
+    "op_id": "op-33",
+    "proposal_id": "P-0001",
+    "reviewer": "policy:conservative-v1"
+   },
+   {
+    "change_id": "CHG-2",
+    "decision": "accept",
+    "op_id": "op-34",
+    "proposal_id": "P-0001",
+    "reviewer": "policy:conservative-v1"
+   },
+   {
+    "change_id": "CHG-2",
+    "decision": "accept",
+    "op_id": "op-4",
+    "proposal_id": "P-0001",
+    "reviewer": "policy:conservative-v1"
+   },
+   {
+    "change_id": "CHG-2",
+    "decision": "accept",
+    "op_id": "op-5",
+    "proposal_id": "P-0001",
+    "reviewer": "policy:conservative-v1"
+   },
+   {
+    "change_id": "CHG-2",
+    "decision": "accept",
+    "op_id": "op-6",
+    "proposal_id": "P-0001",
+    "reviewer": "policy:conservative-v1"
+   },
+   {
+    "change_id": "CHG-2",
+    "decision": "accept",
+    "op_id": "op-7",
+    "proposal_id": "P-0001",
+    "reviewer": "policy:conservative-v1"
+   },
+   {
+    "change_id": "CHG-2",
+    "decision": "accept",
+    "op_id": "op-8",
+    "proposal_id": "P-0001",
+    "reviewer": "policy:conservative-v1"
+   },
+   {
+    "change_id": "CHG-2",
+    "decision": "accept",
+    "op_id": "op-9",
+    "proposal_id": "P-0001",
+    "reviewer": "policy:conservative-v1"
+   },
+   {
+    "change_id": "CHG-3",
+    "decision": "accept",
+    "op_id": "op-1",
+    "proposal_id": "P-0002",
+    "reviewer": "policy:conservative-v1"
+   },
+   {
+    "change_id": "CHG-3",
+    "decision": "accept",
+    "op_id": "op-2",
+    "proposal_id": "P-0002",
+    "reviewer": "policy:conservative-v1"
+   },
+   {
+    "change_id": "CHG-4",
+    "decision": "accept",
+    "op_id": "scan-1",
+    "proposal_id": "P-0003",
+    "reviewer": "policy:conservative-v1"
+   },
+   {
+    "change_id": "CHG-5",
+    "decision": "accept",
+    "op_id": "op-1",
+    "proposal_id": "P-0004",
+    "reviewer": "policy:conservative-v1"
+   },
+   {
+    "change_id": null,
+    "decision": "reject",
+    "op_id": "op-2",
+    "proposal_id": "P-0004",
+    "reviewer": "policy:conservative-v1"
+   },
+   {
+    "change_id": null,
+    "decision": "accept",
+    "op_id": "op-1",
+    "proposal_id": "P-0005",
+    "reviewer": "policy:conservative-v1"
+   },
+   {
+    "change_id": null,
+    "decision": "reject",
+    "op_id": "op-2",
+    "proposal_id": "P-0005",
+    "reviewer": "policy:conservative-v1"
+   },
+   {
+    "change_id": "CHG-6",
+    "decision": "accept",
+    "op_id": "op-1",
+    "proposal_id": "P-0006",
+    "reviewer": "policy:conservative-v1"
+   }
+  ],
+  "proposals": [
+   {
+    "change_id": "CHG-2",
+    "id": "P-0001",
+    "status": "committed"
+   },
+   {
+    "change_id": "CHG-3",
+    "id": "P-0002",
+    "status": "committed"
+   },
+   {
+    "change_id": "CHG-4",
+    "id": "P-0003",
+    "status": "committed"
+   },
+   {
+    "change_id": "CHG-5",
+    "id": "P-0004",
+    "status": "committed"
+   },
+   {
+    "change_id": null,
+    "id": "P-0005",
+    "status": "reviewed"
+   },
+   {
+    "change_id": "CHG-6",
+    "id": "P-0006",
+    "status": "committed"
+   }
+  ]
+ },
+ "negative": {
+  "E4": {
+   "committed_obligations": 0,
+   "deferred_ops": [],
+   "no_change_records": [
+    "op-1"
+   ],
+   "required_actions": {}
+  }
+ },
+ "prediction": {
+  "E5": {
+   "aspect": "contract",
+   "graph_revision": 5,
+   "node_id": "CON-NOTICE-FORMAT",
+   "pairs": [
+    [
+     "CMP-HOLDS",
+     "check_contract"
+    ],
+    [
+     "CMP-NOTIFY",
+     "check_contract"
+    ],
+    [
+     "CMP-NOTIFY",
+     "review_implementation"
+    ],
+    [
+     "REQ-READY-NOTICE",
+     "check_contract"
+    ],
+    [
+     "REQ-READY-NOTICE",
+     "investigate_unknown"
+    ],
+    [
+     "TEST-NOTICE-FORMAT",
+     "rerun_test"
+    ]
+   ],
+   "present": true,
+   "provisional": [],
+   "pruned": [],
+   "targets": [
+    "CMP-HOLDS",
+    "CMP-NOTIFY",
+    "REQ-READY-NOTICE",
+    "TEST-NOTICE-FORMAT"
+   ]
+  }
+ },
+ "probe": {
+  "aspect": "contract",
+  "description": "Notification format contract changes: SMS allowed (160-character bodies) and every message must state the desk opening hours.",
+  "event": "E5",
+  "node_id": "CON-NOTICE-FORMAT"
+ },
+ "project": "toolshare"
+}

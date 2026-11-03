@@ -218,3 +218,27 @@ sorted keys. Timestamps are UTC; set `GADLC_FIXED_TIME` to make them reproducibl
 24-scenario corpus with a frozen oracle, comparing a document baseline, this engine, and this engine with
 evidence-gated pruning. Reproduce it with `evaluation/run_all.sh`; findings are in
 [`evaluation/RESULTS.md`](evaluation/RESULTS.md).
+
+## v0.3: LLM-assisted graph maintenance (opt-in)
+
+[`graph_adlc/llm_graph/`](graph_adlc/llm_graph/) adds a bounded maintenance loop on top of the unchanged engine.
+Independently written specs and read-only Git code go to a model, which returns a cited proposal. The proposal is
+validated for evidence and provenance, reviewed op by op by a human, and committed through the normal
+`propose`/`commit` path. The loop also produces a spec-only Markdown export and a missing-edge challenge. Design:
+[`docs/V03_DESIGN.md`](docs/V03_DESIGN.md). Handoff: [`docs/v0_3/`](docs/v0_3/).
+
+```bash
+gadlc-llm --db g.sqlite propose --bundle bundle.json --event "requirements draft 2" --provider anthropic --model <id>
+gadlc-llm --db g.sqlite show    --bundle bundle.json P-0001
+gadlc-llm --db g.sqlite decide  --bundle bundle.json P-0001 --reviewer alice --accept op-1,op-2 --defer op-3
+gadlc-llm --db g.sqlite challenge --bundle bundle.json --node CON-X --aspect contract
+gadlc-llm --db g.sqlite export-spec --out spec.md
+```
+
+The longitudinal evaluation is in [`evaluation/llm_graph/`](evaluation/llm_graph/): two projects, 5 events each, one
+persistent graph per arm.
+* `evaluation/llm_graph/run_all.sh` runs the deterministic scripted replay, scoring, the report and 26 tests.
+  These include the v0.1 and v0.2 suites.
+* `run_replay.py --mode live` is the separate, explicit live trial.
+
+**No live model has been evaluated yet.** See [`evaluation/llm_graph/RESULTS.md`](evaluation/llm_graph/RESULTS.md).

@@ -14,9 +14,13 @@ test = ["pytest>=8"]
 
 [project.scripts]
 gadlc = "graph_adlc.cli:main"
+gadlc-llm = "graph_adlc.llm_graph.cli:main"
 
 [tool.setuptools]
-packages = ["graph_adlc"]
+packages = ["graph_adlc", "graph_adlc.llm_graph"]
+
+[tool.setuptools.package-data]
+"graph_adlc.llm_graph" = ["prompts/*.md"]
 
 [tool.pytest.ini_options]
 pythonpath = ["."]

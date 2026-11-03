@@ -1,0 +1,4353 @@
+{
+ "evidential_status": "PIPELINE SELF-CHECK: model outputs are scripted fixtures authored by the implementing agent; nothing here measures a language model",
+ "mode": "scripted",
+ "projects": {
+  "ledgerlite": {
+   "G0": {
+    "client": {
+     "is_fake": true,
+     "model": "none (scripted fixture responses)",
+     "provider": "scripted-fake"
+    },
+    "costs": {
+     "fake_calls": 1,
+     "graph_ops_committed": 27,
+     "input_chars": 10250,
+     "input_tokens": null,
+     "latency_ms": null,
+     "model_calls": 1,
+     "output_chars": 14388,
+     "output_tokens": null,
+     "review_decisions": {
+      "accept": 27,
+      "defer": 0,
+      "reject": 0
+     }
+    },
+    "final_graph": {
+     "edges": [
+      {
+       "dst": "REQ-CSV-EXPORT",
+       "evidence_ref": "P-0001/op-18",
+       "id": "LE-CAP-ACCOUNTING-EXPORT--refines--REQ-CSV-EXPORT",
+       "relation": "refines",
+       "rev": 1,
+       "src": "CAP-ACCOUNTING-EXPORT",
+       "status": "hypothesized"
+      },
+      {
+       "dst": "REQ-PDF-INVOICE",
+       "evidence_ref": "P-0001/op-17",
+       "id": "LE-CAP-INVOICING--refines--REQ-PDF-INVOICE",
+       "relation": "refines",
+       "rev": 1,
+       "src": "CAP-INVOICING",
+       "status": "hypothesized"
+      },
+      {
+       "dst": "REQ-CSV-EXPORT",
+       "evidence_ref": "P-0001/op-21",
+       "id": "LE-CMP-CSV--implements--REQ-CSV-EXPORT",
+       "relation": "implements",
+       "rev": 1,
+       "src": "CMP-CSV",
+       "status": "confirmed"
+      },
+      {
+       "dst": "ART-CSV",
+       "evidence_ref": "P-0001/op-26",
+       "id": "LE-CMP-CSV--realized_by--ART-CSV",
+       "relation": "realized_by",
+       "rev": 1,
+       "src": "CMP-CSV",
+       "status": "confirmed"
+      },
+      {
+       "dst": "CON-MONEY-FORMAT",
+       "evidence_ref": "P-0001/op-23",
+       "id": "LE-CMP-MONEY--constrained_by--CON-MONEY-FORMAT",
+       "relation": "constrained_by",
+       "rev": 1,
+       "src": "CMP-MONEY",
+       "status": "confirmed"
+      },
+      {
+       "dst": "ART-MONEY",
+       "evidence_ref": "P-0001/op-24",
+       "id": "LE-CMP-MONEY--realized_by--ART-MONEY",
+       "relation": "realized_by",
+       "rev": 1,
+       "src": "CMP-MONEY",
+       "status": "confirmed"
+      },
+      {
+       "dst": "CMP-MONEY",
+       "evidence_ref": "P-0001/op-22",
+       "id": "LE-CMP-PDF--depends_on--CMP-MONEY",
+       "relation": "depends_on",
+       "rev": 1,
+       "src": "CMP-PDF",
+       "status": "confirmed"
+      },
+      {
+       "dst": "REQ-PDF-INVOICE",
+       "evidence_ref": "P-0001/op-20",
+       "id": "LE-CMP-PDF--implements--REQ-PDF-INVOICE",
+       "relation": "implements",
+       "rev": 1,
+       "src": "CMP-PDF",
+       "status": "confirmed"
+      },
+      {
+       "dst": "ART-PDF",
+       "evidence_ref": "P-0001/op-25",
+       "id": "LE-CMP-PDF--realized_by--ART-PDF",
+       "relation": "realized_by",
+       "rev": 1,
+       "src": "CMP-PDF",
+       "status": "confirmed"
+      },
+      {
+       "dst": "CAP-ACCOUNTING-EXPORT",
+       "evidence_ref": "P-0001/op-16",
+       "id": "LE-GOAL-BILLING--refines--CAP-ACCOUNTING-EXPORT",
+       "relation": "refines",
+       "rev": 1,
+       "src": "GOAL-BILLING",
+       "status": "hypothesized"
+      },
+      {
+       "dst": "CAP-INVOICING",
+       "evidence_ref": "P-0001/op-15",
+       "id": "LE-GOAL-BILLING--refines--CAP-INVOICING",
+       "relation": "refines",
+       "rev": 1,
+       "src": "GOAL-BILLING",
+       "status": "hypothesized"
+      },
+      {
+       "dst": "REQ-CSV-EXPORT",
+       "evidence_ref": "P-0001/op-19",
+       "id": "LE-Q-CSV-LAYOUT--blocks--REQ-CSV-EXPORT",
+       "relation": "blocks",
+       "rev": 1,
+       "src": "Q-CSV-LAYOUT",
+       "status": "confirmed"
+      },
+      {
+       "dst": "CON-MONEY-FORMAT",
+       "evidence_ref": "P-0001/op-27",
+       "id": "LE-TEST-MONEY-FORMAT--verifies--CON-MONEY-FORMAT",
+       "relation": "verifies",
+       "rev": 1,
+       "src": "TEST-MONEY-FORMAT",
+       "status": "confirmed"
+      }
+     ],
+     "graph_revision": 2,
+     "nodes": [
+      {
+       "body": "Source file ledgerlite/csv_export.py.",
+       "data": {
+        "path": "ledgerlite/csv_export.py"
+       },
+       "id": "ART-CSV",
+       "kind": "artifact",
+       "rev": 1,
+       "title": "ledgerlite/csv_export.py"
+      },
+      {
+       "body": "Source file ledgerlite/money.py.",
+       "data": {
+        "path": "ledgerlite/money.py"
+       },
+       "id": "ART-MONEY",
+       "kind": "artifact",
+       "rev": 1,
+       "title": "ledgerlite/money.py"
+      },
+      {
+       "body": "Source file ledgerlite/pdf_invoice.py.",
+       "data": {
+        "path": "ledgerlite/pdf_invoice.py"
+       },
+       "id": "ART-PDF",
+       "kind": "artifact",
+       "rev": 1,
+       "title": "ledgerlite/pdf_invoice.py"
+      },
+      {
+       "body": "Hand invoice data to the accountant.",
+       "data": {},
+       "id": "CAP-ACCOUNTING-EXPORT",
+       "kind": "capability",
+       "rev": 1,
+       "title": "Accounting export"
+      },
+      {
+       "body": "Produce invoices for clients.",
+       "data": {},
+       "id": "CAP-INVOICING",
+       "kind": "capability",
+       "rev": 1,
+       "title": "Invoicing"
+      },
+      {
+       "body": "CSV exporter (ledgerlite/csv_export.py).",
+       "data": {},
+       "id": "CMP-CSV",
+       "kind": "component",
+       "rev": 1,
+       "title": "CSV exporter"
+      },
+      {
+       "body": "Money formatting (ledgerlite/money.py).",
+       "data": {},
+       "id": "CMP-MONEY",
+       "kind": "component",
+       "rev": 1,
+       "title": "Money formatting"
+      },
+      {
+       "body": "PDF invoice renderer (ledgerlite/pdf_invoice.py).",
+       "data": {},
+       "id": "CMP-PDF",
+       "kind": "component",
+       "rev": 1,
+       "title": "PDF invoice renderer"
+      },
+      {
+       "body": "Amounts are rendered with exactly two decimals and '.' as the decimal separator, followed by the ISO currency code.",
+       "data": {
+        "status": "accepted"
+       },
+       "id": "CON-MONEY-FORMAT",
+       "kind": "contract",
+       "rev": 1,
+       "title": "Money format"
+      },
+      {
+       "body": "Small studios can bill clients and hand clean numbers to their accountant.",
+       "data": {},
+       "id": "GOAL-BILLING",
+       "kind": "goal",
+       "rev": 1,
+       "title": "Billing and clean accounting numbers"
+      },
+      {
+       "body": "Which columns and number format does the accountant's import expect?",
+       "data": {
+        "blocking": true,
+        "state": "open"
+       },
+       "id": "Q-CSV-LAYOUT",
+       "kind": "question",
+       "rev": 1,
+       "title": "CSV layout expected by the accountant"
+      },
+      {
+       "body": "Finance can export all invoices of a month as a CSV file for the accountant's bookkeeping tool.",
+       "data": {
+        "acceptance_criteria": []
+       },
+       "id": "REQ-CSV-EXPORT",
+       "kind": "requirement",
+       "rev": 1,
+       "title": "Monthly CSV export"
+      },
+      {
+       "body": "Each invoice can be downloaded as a PDF that a client can read and pay from.",
+       "data": {
+        "acceptance_criteria": [
+         "The PDF shows every line item, the tax and the total.",
+         "Amounts are shown in the studio's currency with two decimals."
+        ]
+       },
+       "id": "REQ-PDF-INVOICE",
+       "kind": "requirement",
+       "rev": 1,
+       "title": "PDF invoice"
+      },
+      {
+       "body": "Checks the formatter against CON-MONEY-FORMAT with a table of sample amounts.",
+       "data": {
+        "command": "pytest -q tests/test_money.py"
+       },
+       "id": "TEST-MONEY-FORMAT",
+       "kind": "test",
+       "rev": 1,
+       "title": "Money format test"
+      }
+     ]
+    },
+    "ledger": {
+     "calls": 1,
+     "decisions": [
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-1",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-10",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-11",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-12",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-13",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-14",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-15",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-16",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-17",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-18",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-19",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-2",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-20",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-21",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-22",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-23",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-24",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-25",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-26",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-27",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-3",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-4",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-5",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-6",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-7",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-8",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-9",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      }
+     ],
+     "proposals": [
+      {
+       "change_id": "CHG-2",
+       "id": "P-0001",
+       "status": "committed"
+      }
+     ]
+    },
+    "negative": {
+     "E4": {
+      "engine_semantic_probe": {
+       "aspect": "semantic",
+       "graph_revision": 2,
+       "node_id": "REQ-PDF-INVOICE",
+       "pairs": [
+        [
+         "CAP-INVOICING",
+         "investigate_unknown"
+        ],
+        [
+         "CAP-INVOICING",
+         "review_spec"
+        ],
+        [
+         "CMP-PDF",
+         "review_implementation"
+        ]
+       ],
+       "present": true,
+       "provisional": [],
+       "pruned": [],
+       "targets": [
+        "CAP-INVOICING",
+        "CMP-PDF"
+       ]
+      }
+     }
+    },
+    "prediction": {
+     "E5": {
+      "aspect": "implementation",
+      "graph_revision": 2,
+      "node_id": "CMP-MONEY",
+      "pairs": [
+       [
+        "CMP-PDF",
+        "check_contract"
+       ]
+      ],
+      "present": true,
+      "provisional": [
+       "CMP-PDF"
+      ],
+      "pruned": [],
+      "targets": [
+       "CMP-PDF"
+      ]
+     }
+    }
+   },
+   "G1": {
+    "client": {
+     "is_fake": true,
+     "model": "none (scripted fixture responses)",
+     "provider": "scripted-fake"
+    },
+    "costs": {
+     "fake_calls": 5,
+     "graph_ops_committed": 36,
+     "input_chars": 83083,
+     "input_tokens": null,
+     "latency_ms": null,
+     "model_calls": 5,
+     "output_chars": 21312,
+     "output_tokens": null,
+     "review_decisions": {
+      "accept": 36,
+      "defer": 2,
+      "reject": 0
+     }
+    },
+    "final_graph": {
+     "edges": [
+      {
+       "dst": "REQ-CSV-EXPORT",
+       "evidence_ref": "P-0001/op-18",
+       "id": "LE-CAP-ACCOUNTING-EXPORT--refines--REQ-CSV-EXPORT",
+       "relation": "refines",
+       "rev": 1,
+       "src": "CAP-ACCOUNTING-EXPORT",
+       "status": "hypothesized"
+      },
+      {
+       "dst": "REQ-PDF-INVOICE",
+       "evidence_ref": "P-0001/op-17",
+       "id": "LE-CAP-INVOICING--refines--REQ-PDF-INVOICE",
+       "relation": "refines",
+       "rev": 1,
+       "src": "CAP-INVOICING",
+       "status": "hypothesized"
+      },
+      {
+       "dst": "CON-CSV-LAYOUT",
+       "evidence_ref": "P-0002/op-5",
+       "id": "LE-CMP-CSV--constrained_by--CON-CSV-LAYOUT",
+       "relation": "constrained_by",
+       "rev": 1,
+       "src": "CMP-CSV",
+       "status": "hypothesized"
+      },
+      {
+       "dst": "CMP-MONEY",
+       "evidence_ref": "P-0003/op-1",
+       "id": "LE-CMP-CSV--depends_on--CMP-MONEY",
+       "relation": "depends_on",
+       "rev": 1,
+       "src": "CMP-CSV",
+       "status": "hypothesized"
+      },
+      {
+       "dst": "REQ-CSV-EXPORT",
+       "evidence_ref": "P-0001/op-21",
+       "id": "LE-CMP-CSV--implements--REQ-CSV-EXPORT",
+       "relation": "implements",
+       "rev": 1,
+       "src": "CMP-CSV",
+       "status": "confirmed"
+      },
+      {
+       "dst": "ART-CSV",
+       "evidence_ref": "P-0001/op-26",
+       "id": "LE-CMP-CSV--realized_by--ART-CSV",
+       "relation": "realized_by",
+       "rev": 1,
+       "src": "CMP-CSV",
+       "status": "confirmed"
+      },
+      {
+       "dst": "CON-MONEY-FORMAT",
+       "evidence_ref": "P-0001/op-23",
+       "id": "LE-CMP-MONEY--constrained_by--CON-MONEY-FORMAT",
+       "relation": "constrained_by",
+       "rev": 1,
+       "src": "CMP-MONEY",
+       "status": "confirmed"
+      },
+      {
+       "dst": "ART-MONEY",
+       "evidence_ref": "P-0001/op-24",
+       "id": "LE-CMP-MONEY--realized_by--ART-MONEY",
+       "relation": "realized_by",
+       "rev": 1,
+       "src": "CMP-MONEY",
+       "status": "confirmed"
+      },
+      {
+       "dst": "CMP-MONEY",
+       "evidence_ref": "P-0001/op-22",
+       "id": "LE-CMP-PDF--depends_on--CMP-MONEY",
+       "relation": "depends_on",
+       "rev": 1,
+       "src": "CMP-PDF",
+       "status": "confirmed"
+      },
+      {
+       "dst": "REQ-PDF-INVOICE",
+       "evidence_ref": "P-0001/op-20",
+       "id": "LE-CMP-PDF--implements--REQ-PDF-INVOICE",
+       "relation": "implements",
+       "rev": 1,
+       "src": "CMP-PDF",
+       "status": "confirmed"
+      },
+      {
+       "dst": "ART-PDF",
+       "evidence_ref": "P-0001/op-25",
+       "id": "LE-CMP-PDF--realized_by--ART-PDF",
+       "relation": "realized_by",
+       "rev": 1,
+       "src": "CMP-PDF",
+       "status": "confirmed"
+      },
+      {
+       "dst": "CAP-ACCOUNTING-EXPORT",
+       "evidence_ref": "P-0001/op-16",
+       "id": "LE-GOAL-BILLING--refines--CAP-ACCOUNTING-EXPORT",
+       "relation": "refines",
+       "rev": 1,
+       "src": "GOAL-BILLING",
+       "status": "hypothesized"
+      },
+      {
+       "dst": "CAP-INVOICING",
+       "evidence_ref": "P-0001/op-15",
+       "id": "LE-GOAL-BILLING--refines--CAP-INVOICING",
+       "relation": "refines",
+       "rev": 1,
+       "src": "GOAL-BILLING",
+       "status": "hypothesized"
+      },
+      {
+       "dst": "REQ-CSV-EXPORT",
+       "evidence_ref": "P-0001/op-19",
+       "id": "LE-Q-CSV-LAYOUT--blocks--REQ-CSV-EXPORT",
+       "relation": "blocks",
+       "rev": 1,
+       "src": "Q-CSV-LAYOUT",
+       "status": "confirmed"
+      },
+      {
+       "dst": "CMP-CSV",
+       "evidence_ref": "P-0003/auto-q1-b1",
+       "id": "LE-Q-P-0003-C1--blocks--CMP-CSV",
+       "relation": "blocks",
+       "rev": 1,
+       "src": "Q-P-0003-C1",
+       "status": "confirmed"
+      },
+      {
+       "dst": "CON-CSV-LAYOUT",
+       "evidence_ref": "P-0002/op-4",
+       "id": "LE-REQ-CSV-EXPORT--constrained_by--CON-CSV-LAYOUT",
+       "relation": "constrained_by",
+       "rev": 1,
+       "src": "REQ-CSV-EXPORT",
+       "status": "confirmed"
+      },
+      {
+       "dst": "CON-MONEY-FORMAT",
+       "evidence_ref": "P-0001/op-27",
+       "id": "LE-TEST-MONEY-FORMAT--verifies--CON-MONEY-FORMAT",
+       "relation": "verifies",
+       "rev": 1,
+       "src": "TEST-MONEY-FORMAT",
+       "status": "confirmed"
+      }
+     ],
+     "graph_revision": 5,
+     "nodes": [
+      {
+       "body": "Source file ledgerlite/csv_export.py.",
+       "data": {
+        "path": "ledgerlite/csv_export.py"
+       },
+       "id": "ART-CSV",
+       "kind": "artifact",
+       "rev": 1,
+       "title": "ledgerlite/csv_export.py"
+      },
+      {
+       "body": "Source file ledgerlite/money.py.",
+       "data": {
+        "path": "ledgerlite/money.py"
+       },
+       "id": "ART-MONEY",
+       "kind": "artifact",
+       "rev": 1,
+       "title": "ledgerlite/money.py"
+      },
+      {
+       "body": "Source file ledgerlite/pdf_invoice.py.",
+       "data": {
+        "path": "ledgerlite/pdf_invoice.py"
+       },
+       "id": "ART-PDF",
+       "kind": "artifact",
+       "rev": 1,
+       "title": "ledgerlite/pdf_invoice.py"
+      },
+      {
+       "body": "Hand invoice data to the accountant.",
+       "data": {},
+       "id": "CAP-ACCOUNTING-EXPORT",
+       "kind": "capability",
+       "rev": 1,
+       "title": "Accounting export"
+      },
+      {
+       "body": "Produce invoices for clients.",
+       "data": {},
+       "id": "CAP-INVOICING",
+       "kind": "capability",
+       "rev": 1,
+       "title": "Invoicing"
+      },
+      {
+       "body": "CSV exporter (ledgerlite/csv_export.py).",
+       "data": {},
+       "id": "CMP-CSV",
+       "kind": "component",
+       "rev": 1,
+       "title": "CSV exporter"
+      },
+      {
+       "body": "Money formatting (ledgerlite/money.py).",
+       "data": {
+        "implementation_note": "format_amount inserts ',' thousands separators (c3)"
+       },
+       "id": "CMP-MONEY",
+       "kind": "component",
+       "rev": 2,
+       "title": "Money formatting"
+      },
+      {
+       "body": "PDF invoice renderer (ledgerlite/pdf_invoice.py).",
+       "data": {},
+       "id": "CMP-PDF",
+       "kind": "component",
+       "rev": 1,
+       "title": "PDF invoice renderer"
+      },
+      {
+       "body": "Columns invoice_id,date,client,net,tax,total; amounts are plain numbers with '.' decimal separator, no thousands separators, no currency code.",
+       "data": {
+        "status": "accepted"
+       },
+       "id": "CON-CSV-LAYOUT",
+       "kind": "contract",
+       "rev": 1,
+       "title": "Accountant CSV layout"
+      },
+      {
+       "body": "Amounts are rendered with exactly two decimals and '.' as the decimal separator, followed by the ISO currency code.",
+       "data": {
+        "status": "accepted"
+       },
+       "id": "CON-MONEY-FORMAT",
+       "kind": "contract",
+       "rev": 1,
+       "title": "Money format"
+      },
+      {
+       "body": "Small studios can bill clients and hand clean numbers to their accountant.",
+       "data": {},
+       "id": "GOAL-BILLING",
+       "kind": "goal",
+       "rev": 1,
+       "title": "Billing and clean accounting numbers"
+      },
+      {
+       "body": "Resolved by DR-001: columns invoice_id,date,client,net,tax,total; plain amounts.",
+       "data": {
+        "blocking": true,
+        "state": "resolved"
+       },
+       "id": "Q-CSV-LAYOUT",
+       "kind": "question",
+       "rev": 2,
+       "title": "CSV layout expected by the accountant"
+      },
+      {
+       "body": "architecture.md says the CSV exporter does not use the money formatter, but commit c2 makes csv_export.py call format_amount",
+       "data": {
+        "about": [
+         "CMP-CSV"
+        ],
+        "blocking": true,
+        "state": "open"
+       },
+       "id": "Q-P-0003-C1",
+       "kind": "question",
+       "rev": 1,
+       "title": "Resolve: architecture.md says the CSV exporter does not use the money formatter, but commit c2 …"
+      },
+      {
+       "body": "Finance can export all invoices of a month as a CSV file for the accountant's bookkeeping tool.",
+       "data": {
+        "acceptance_criteria": [
+         "The file has the columns invoice_id, date, client, net, tax, total.",
+         "Amounts are plain numbers with '.' as decimal separator, no thousands separators and no currency code."
+        ]
+       },
+       "id": "REQ-CSV-EXPORT",
+       "kind": "requirement",
+       "rev": 2,
+       "title": "Monthly CSV export"
+      },
+      {
+       "body": "Each invoice can be downloaded as a PDF that a client can read and pay from.",
+       "data": {
+        "acceptance_criteria": [
+         "The PDF shows every line item, the tax and the total.",
+         "Amounts are shown in the studio's currency with two decimals."
+        ]
+       },
+       "id": "REQ-PDF-INVOICE",
+       "kind": "requirement",
+       "rev": 1,
+       "title": "PDF invoice"
+      },
+      {
+       "body": "Checks the formatter against CON-MONEY-FORMAT with a table of sample amounts.",
+       "data": {
+        "command": "pytest -q tests/test_money.py"
+       },
+       "id": "TEST-MONEY-FORMAT",
+       "kind": "test",
+       "rev": 1,
+       "title": "Money format test"
+      }
+     ]
+    },
+    "ledger": {
+     "calls": 5,
+     "decisions": [
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-1",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-10",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-11",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-12",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-13",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-14",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-15",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-16",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-17",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-18",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-19",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-2",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-20",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-21",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-22",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-23",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-24",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-25",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-26",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-27",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-3",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-4",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-5",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-6",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-7",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-8",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-9",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-3",
+       "decision": "accept",
+       "op_id": "op-1",
+       "proposal_id": "P-0002",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-3",
+       "decision": "accept",
+       "op_id": "op-2",
+       "proposal_id": "P-0002",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-3",
+       "decision": "accept",
+       "op_id": "op-3",
+       "proposal_id": "P-0002",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-3",
+       "decision": "accept",
+       "op_id": "op-4",
+       "proposal_id": "P-0002",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-3",
+       "decision": "accept",
+       "op_id": "op-5",
+       "proposal_id": "P-0002",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-4",
+       "decision": "accept",
+       "op_id": "auto-q1",
+       "proposal_id": "P-0003",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-4",
+       "decision": "accept",
+       "op_id": "auto-q1-b1",
+       "proposal_id": "P-0003",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-4",
+       "decision": "accept",
+       "op_id": "op-1",
+       "proposal_id": "P-0003",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": null,
+       "decision": "defer",
+       "op_id": "op-2",
+       "proposal_id": "P-0003",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": null,
+       "decision": "defer",
+       "op_id": "op-1",
+       "proposal_id": "P-0004",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-5",
+       "decision": "accept",
+       "op_id": "op-1",
+       "proposal_id": "P-0005",
+       "reviewer": "policy:conservative-v1"
+      }
+     ],
+     "proposals": [
+      {
+       "change_id": "CHG-2",
+       "id": "P-0001",
+       "status": "committed"
+      },
+      {
+       "change_id": "CHG-3",
+       "id": "P-0002",
+       "status": "committed"
+      },
+      {
+       "change_id": "CHG-4",
+       "id": "P-0003",
+       "status": "committed"
+      },
+      {
+       "change_id": null,
+       "id": "P-0004",
+       "status": "reviewed"
+      },
+      {
+       "change_id": "CHG-5",
+       "id": "P-0005",
+       "status": "committed"
+      }
+     ]
+    },
+    "negative": {
+     "E4": {
+      "committed_obligations": 0,
+      "deferred_ops": [
+       "op-1"
+      ],
+      "no_change_records": [],
+      "required_actions": {}
+     }
+    },
+    "prediction": {
+     "E5": {
+      "aspect": "implementation",
+      "graph_revision": 4,
+      "node_id": "CMP-MONEY",
+      "pairs": [
+       [
+        "CMP-CSV",
+        "check_contract"
+       ],
+       [
+        "CMP-CSV",
+        "investigate_unknown"
+       ],
+       [
+        "CMP-PDF",
+        "check_contract"
+       ]
+      ],
+      "present": true,
+      "provisional": [
+       "CMP-CSV",
+       "CMP-PDF"
+      ],
+      "pruned": [],
+      "targets": [
+       "CMP-CSV",
+       "CMP-PDF"
+      ]
+     },
+     "exploratory_pruning": {
+      "engine_pruning_with_all_evidence": {
+       "aspect": "implementation",
+       "graph_revision": 4,
+       "node_id": "CMP-MONEY",
+       "pairs": [
+        [
+         "CMP-CSV",
+         "check_contract"
+        ],
+        [
+         "CMP-CSV",
+         "investigate_unknown"
+        ]
+       ],
+       "present": true,
+       "provisional": [
+        "CMP-CSV"
+       ],
+       "pruned": [
+        {
+         "consumer_id": "CMP-PDF",
+         "contracts": {
+          "CON-MONEY-FORMAT": 1
+         },
+         "edge_id": "LE-CMP-PDF--depends_on--CMP-MONEY",
+         "evidence_id": "EV-1",
+         "provider_id": "CMP-MONEY",
+         "reason": "EV-1 records contracts ['CON-MONEY-FORMAT'] of CMP-MONEY as preserved at the current revisions; implementation-only change does not cross this boundary"
+        }
+       ],
+       "targets": [
+        "CMP-CSV"
+       ]
+      },
+      "engine_pruning_with_gate_admitted_evidence": {
+       "aspect": "implementation",
+       "graph_revision": 4,
+       "node_id": "CMP-MONEY",
+       "pairs": [
+        [
+         "CMP-CSV",
+         "check_contract"
+        ],
+        [
+         "CMP-CSV",
+         "investigate_unknown"
+        ],
+        [
+         "CMP-PDF",
+         "check_contract"
+        ]
+       ],
+       "present": true,
+       "provisional": [
+        "CMP-CSV",
+        "CMP-PDF"
+       ],
+       "pruned": [],
+       "targets": [
+        "CMP-CSV",
+        "CMP-PDF"
+       ]
+      },
+      "evidence_gate": {
+       "admissible": [],
+       "affected_domain": {
+        "amount_range": [
+         "0-999",
+         "1000+"
+        ]
+       },
+       "policy": "pruning is disabled by default in v0.3; this gate only decides which evidence would be eligible in an explicitly exploratory pruning condition",
+       "provider_id": "CMP-MONEY",
+       "refused": [
+        {
+         "evidence_id": "EV-1",
+         "reasons": [
+          "coverage of 'amount_range' lacks ['1000+'] (covered: ['0-999'])"
+         ]
+        }
+       ]
+      }
+     }
+    }
+   },
+   "G2": {
+    "client": {
+     "is_fake": true,
+     "model": "none (scripted fixture responses)",
+     "provider": "scripted-fake"
+    },
+    "costs": {
+     "fake_calls": 5,
+     "graph_ops_committed": 36,
+     "input_chars": 83243,
+     "input_tokens": null,
+     "latency_ms": null,
+     "model_calls": 5,
+     "output_chars": 21312,
+     "output_tokens": null,
+     "review_decisions": {
+      "accept": 37,
+      "defer": 2,
+      "reject": 0
+     }
+    },
+    "final_graph": {
+     "edges": [
+      {
+       "dst": "REQ-CSV-EXPORT",
+       "evidence_ref": "P-0001/op-18",
+       "id": "LE-CAP-ACCOUNTING-EXPORT--refines--REQ-CSV-EXPORT",
+       "relation": "refines",
+       "rev": 1,
+       "src": "CAP-ACCOUNTING-EXPORT",
+       "status": "hypothesized"
+      },
+      {
+       "dst": "REQ-PDF-INVOICE",
+       "evidence_ref": "P-0001/op-17",
+       "id": "LE-CAP-INVOICING--refines--REQ-PDF-INVOICE",
+       "relation": "refines",
+       "rev": 1,
+       "src": "CAP-INVOICING",
+       "status": "hypothesized"
+      },
+      {
+       "dst": "CON-CSV-LAYOUT",
+       "evidence_ref": "P-0002/op-5",
+       "id": "LE-CMP-CSV--constrained_by--CON-CSV-LAYOUT",
+       "relation": "constrained_by",
+       "rev": 1,
+       "src": "CMP-CSV",
+       "status": "hypothesized"
+      },
+      {
+       "dst": "CMP-MONEY",
+       "evidence_ref": "P-0003/scan-1",
+       "id": "LE-CMP-CSV--depends_on--CMP-MONEY",
+       "relation": "depends_on",
+       "rev": 1,
+       "src": "CMP-CSV",
+       "status": "confirmed"
+      },
+      {
+       "dst": "REQ-CSV-EXPORT",
+       "evidence_ref": "P-0001/op-21",
+       "id": "LE-CMP-CSV--implements--REQ-CSV-EXPORT",
+       "relation": "implements",
+       "rev": 1,
+       "src": "CMP-CSV",
+       "status": "confirmed"
+      },
+      {
+       "dst": "ART-CSV",
+       "evidence_ref": "P-0001/op-26",
+       "id": "LE-CMP-CSV--realized_by--ART-CSV",
+       "relation": "realized_by",
+       "rev": 1,
+       "src": "CMP-CSV",
+       "status": "confirmed"
+      },
+      {
+       "dst": "CON-MONEY-FORMAT",
+       "evidence_ref": "P-0001/op-23",
+       "id": "LE-CMP-MONEY--constrained_by--CON-MONEY-FORMAT",
+       "relation": "constrained_by",
+       "rev": 1,
+       "src": "CMP-MONEY",
+       "status": "confirmed"
+      },
+      {
+       "dst": "ART-MONEY",
+       "evidence_ref": "P-0001/op-24",
+       "id": "LE-CMP-MONEY--realized_by--ART-MONEY",
+       "relation": "realized_by",
+       "rev": 1,
+       "src": "CMP-MONEY",
+       "status": "confirmed"
+      },
+      {
+       "dst": "CMP-MONEY",
+       "evidence_ref": "P-0001/op-22",
+       "id": "LE-CMP-PDF--depends_on--CMP-MONEY",
+       "relation": "depends_on",
+       "rev": 1,
+       "src": "CMP-PDF",
+       "status": "confirmed"
+      },
+      {
+       "dst": "REQ-PDF-INVOICE",
+       "evidence_ref": "P-0001/op-20",
+       "id": "LE-CMP-PDF--implements--REQ-PDF-INVOICE",
+       "relation": "implements",
+       "rev": 1,
+       "src": "CMP-PDF",
+       "status": "confirmed"
+      },
+      {
+       "dst": "ART-PDF",
+       "evidence_ref": "P-0001/op-25",
+       "id": "LE-CMP-PDF--realized_by--ART-PDF",
+       "relation": "realized_by",
+       "rev": 1,
+       "src": "CMP-PDF",
+       "status": "confirmed"
+      },
+      {
+       "dst": "CAP-ACCOUNTING-EXPORT",
+       "evidence_ref": "P-0001/op-16",
+       "id": "LE-GOAL-BILLING--refines--CAP-ACCOUNTING-EXPORT",
+       "relation": "refines",
+       "rev": 1,
+       "src": "GOAL-BILLING",
+       "status": "hypothesized"
+      },
+      {
+       "dst": "CAP-INVOICING",
+       "evidence_ref": "P-0001/op-15",
+       "id": "LE-GOAL-BILLING--refines--CAP-INVOICING",
+       "relation": "refines",
+       "rev": 1,
+       "src": "GOAL-BILLING",
+       "status": "hypothesized"
+      },
+      {
+       "dst": "REQ-CSV-EXPORT",
+       "evidence_ref": "P-0001/op-19",
+       "id": "LE-Q-CSV-LAYOUT--blocks--REQ-CSV-EXPORT",
+       "relation": "blocks",
+       "rev": 1,
+       "src": "Q-CSV-LAYOUT",
+       "status": "confirmed"
+      },
+      {
+       "dst": "CMP-CSV",
+       "evidence_ref": "P-0004/auto-q1-b1",
+       "id": "LE-Q-P-0004-C1--blocks--CMP-CSV",
+       "relation": "blocks",
+       "rev": 1,
+       "src": "Q-P-0004-C1",
+       "status": "confirmed"
+      },
+      {
+       "dst": "CON-CSV-LAYOUT",
+       "evidence_ref": "P-0002/op-4",
+       "id": "LE-REQ-CSV-EXPORT--constrained_by--CON-CSV-LAYOUT",
+       "relation": "constrained_by",
+       "rev": 1,
+       "src": "REQ-CSV-EXPORT",
+       "status": "confirmed"
+      },
+      {
+       "dst": "CON-MONEY-FORMAT",
+       "evidence_ref": "P-0001/op-27",
+       "id": "LE-TEST-MONEY-FORMAT--verifies--CON-MONEY-FORMAT",
+       "relation": "verifies",
+       "rev": 1,
+       "src": "TEST-MONEY-FORMAT",
+       "status": "confirmed"
+      }
+     ],
+     "graph_revision": 6,
+     "nodes": [
+      {
+       "body": "Source file ledgerlite/csv_export.py.",
+       "data": {
+        "path": "ledgerlite/csv_export.py"
+       },
+       "id": "ART-CSV",
+       "kind": "artifact",
+       "rev": 1,
+       "title": "ledgerlite/csv_export.py"
+      },
+      {
+       "body": "Source file ledgerlite/money.py.",
+       "data": {
+        "path": "ledgerlite/money.py"
+       },
+       "id": "ART-MONEY",
+       "kind": "artifact",
+       "rev": 1,
+       "title": "ledgerlite/money.py"
+      },
+      {
+       "body": "Source file ledgerlite/pdf_invoice.py.",
+       "data": {
+        "path": "ledgerlite/pdf_invoice.py"
+       },
+       "id": "ART-PDF",
+       "kind": "artifact",
+       "rev": 1,
+       "title": "ledgerlite/pdf_invoice.py"
+      },
+      {
+       "body": "Hand invoice data to the accountant.",
+       "data": {},
+       "id": "CAP-ACCOUNTING-EXPORT",
+       "kind": "capability",
+       "rev": 1,
+       "title": "Accounting export"
+      },
+      {
+       "body": "Produce invoices for clients.",
+       "data": {},
+       "id": "CAP-INVOICING",
+       "kind": "capability",
+       "rev": 1,
+       "title": "Invoicing"
+      },
+      {
+       "body": "CSV exporter (ledgerlite/csv_export.py).",
+       "data": {},
+       "id": "CMP-CSV",
+       "kind": "component",
+       "rev": 1,
+       "title": "CSV exporter"
+      },
+      {
+       "body": "Money formatting (ledgerlite/money.py).",
+       "data": {
+        "implementation_note": "format_amount inserts ',' thousands separators (c3)"
+       },
+       "id": "CMP-MONEY",
+       "kind": "component",
+       "rev": 2,
+       "title": "Money formatting"
+      },
+      {
+       "body": "PDF invoice renderer (ledgerlite/pdf_invoice.py).",
+       "data": {},
+       "id": "CMP-PDF",
+       "kind": "component",
+       "rev": 1,
+       "title": "PDF invoice renderer"
+      },
+      {
+       "body": "Columns invoice_id,date,client,net,tax,total; amounts are plain numbers with '.' decimal separator, no thousands separators, no currency code.",
+       "data": {
+        "status": "accepted"
+       },
+       "id": "CON-CSV-LAYOUT",
+       "kind": "contract",
+       "rev": 1,
+       "title": "Accountant CSV layout"
+      },
+      {
+       "body": "Amounts are rendered with exactly two decimals and '.' as the decimal separator, followed by the ISO currency code.",
+       "data": {
+        "status": "accepted"
+       },
+       "id": "CON-MONEY-FORMAT",
+       "kind": "contract",
+       "rev": 1,
+       "title": "Money format"
+      },
+      {
+       "body": "Small studios can bill clients and hand clean numbers to their accountant.",
+       "data": {},
+       "id": "GOAL-BILLING",
+       "kind": "goal",
+       "rev": 1,
+       "title": "Billing and clean accounting numbers"
+      },
+      {
+       "body": "Resolved by DR-001: columns invoice_id,date,client,net,tax,total; plain amounts.",
+       "data": {
+        "blocking": true,
+        "state": "resolved"
+       },
+       "id": "Q-CSV-LAYOUT",
+       "kind": "question",
+       "rev": 2,
+       "title": "CSV layout expected by the accountant"
+      },
+      {
+       "body": "architecture.md says the CSV exporter does not use the money formatter, but commit c2 makes csv_export.py call format_amount",
+       "data": {
+        "about": [
+         "CMP-CSV"
+        ],
+        "blocking": true,
+        "state": "open"
+       },
+       "id": "Q-P-0004-C1",
+       "kind": "question",
+       "rev": 1,
+       "title": "Resolve: architecture.md says the CSV exporter does not use the money formatter, but commit c2 …"
+      },
+      {
+       "body": "Finance can export all invoices of a month as a CSV file for the accountant's bookkeeping tool.",
+       "data": {
+        "acceptance_criteria": [
+         "The file has the columns invoice_id, date, client, net, tax, total.",
+         "Amounts are plain numbers with '.' as decimal separator, no thousands separators and no currency code."
+        ]
+       },
+       "id": "REQ-CSV-EXPORT",
+       "kind": "requirement",
+       "rev": 2,
+       "title": "Monthly CSV export"
+      },
+      {
+       "body": "Each invoice can be downloaded as a PDF that a client can read and pay from.",
+       "data": {
+        "acceptance_criteria": [
+         "The PDF shows every line item, the tax and the total.",
+         "Amounts are shown in the studio's currency with two decimals."
+        ]
+       },
+       "id": "REQ-PDF-INVOICE",
+       "kind": "requirement",
+       "rev": 1,
+       "title": "PDF invoice"
+      },
+      {
+       "body": "Checks the formatter against CON-MONEY-FORMAT with a table of sample amounts.",
+       "data": {
+        "command": "pytest -q tests/test_money.py"
+       },
+       "id": "TEST-MONEY-FORMAT",
+       "kind": "test",
+       "rev": 1,
+       "title": "Money format test"
+      }
+     ]
+    },
+    "ledger": {
+     "calls": 5,
+     "decisions": [
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-1",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-10",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-11",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-12",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-13",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-14",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-15",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-16",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-17",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-18",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-19",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-2",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-20",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-21",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-22",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-23",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-24",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-25",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-26",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-27",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-3",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-4",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-5",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-6",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-7",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-8",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-9",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-3",
+       "decision": "accept",
+       "op_id": "op-1",
+       "proposal_id": "P-0002",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-3",
+       "decision": "accept",
+       "op_id": "op-2",
+       "proposal_id": "P-0002",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-3",
+       "decision": "accept",
+       "op_id": "op-3",
+       "proposal_id": "P-0002",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-3",
+       "decision": "accept",
+       "op_id": "op-4",
+       "proposal_id": "P-0002",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-3",
+       "decision": "accept",
+       "op_id": "op-5",
+       "proposal_id": "P-0002",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-4",
+       "decision": "accept",
+       "op_id": "scan-1",
+       "proposal_id": "P-0003",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-5",
+       "decision": "accept",
+       "op_id": "auto-q1",
+       "proposal_id": "P-0004",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-5",
+       "decision": "accept",
+       "op_id": "auto-q1-b1",
+       "proposal_id": "P-0004",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-5",
+       "decision": "accept",
+       "op_id": "op-1",
+       "proposal_id": "P-0004",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": null,
+       "decision": "defer",
+       "op_id": "op-2",
+       "proposal_id": "P-0004",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": null,
+       "decision": "defer",
+       "op_id": "op-1",
+       "proposal_id": "P-0005",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-6",
+       "decision": "accept",
+       "op_id": "op-1",
+       "proposal_id": "P-0006",
+       "reviewer": "policy:conservative-v1"
+      }
+     ],
+     "proposals": [
+      {
+       "change_id": "CHG-2",
+       "id": "P-0001",
+       "status": "committed"
+      },
+      {
+       "change_id": "CHG-3",
+       "id": "P-0002",
+       "status": "committed"
+      },
+      {
+       "change_id": "CHG-4",
+       "id": "P-0003",
+       "status": "committed"
+      },
+      {
+       "change_id": "CHG-5",
+       "id": "P-0004",
+       "status": "committed"
+      },
+      {
+       "change_id": null,
+       "id": "P-0005",
+       "status": "reviewed"
+      },
+      {
+       "change_id": "CHG-6",
+       "id": "P-0006",
+       "status": "committed"
+      }
+     ]
+    },
+    "negative": {
+     "E4": {
+      "committed_obligations": 0,
+      "deferred_ops": [
+       "op-1"
+      ],
+      "no_change_records": [],
+      "required_actions": {}
+     }
+    },
+    "prediction": {
+     "E5": {
+      "aspect": "implementation",
+      "graph_revision": 5,
+      "node_id": "CMP-MONEY",
+      "pairs": [
+       [
+        "CMP-CSV",
+        "check_contract"
+       ],
+       [
+        "CMP-PDF",
+        "check_contract"
+       ]
+      ],
+      "present": true,
+      "provisional": [
+       "CMP-CSV",
+       "CMP-PDF"
+      ],
+      "pruned": [],
+      "targets": [
+       "CMP-CSV",
+       "CMP-PDF"
+      ]
+     },
+     "exploratory_pruning": {
+      "engine_pruning_with_all_evidence": {
+       "aspect": "implementation",
+       "graph_revision": 5,
+       "node_id": "CMP-MONEY",
+       "pairs": [],
+       "present": true,
+       "provisional": [],
+       "pruned": [
+        {
+         "consumer_id": "CMP-CSV",
+         "contracts": {
+          "CON-MONEY-FORMAT": 1
+         },
+         "edge_id": "LE-CMP-CSV--depends_on--CMP-MONEY",
+         "evidence_id": "EV-1",
+         "provider_id": "CMP-MONEY",
+         "reason": "EV-1 records contracts ['CON-MONEY-FORMAT'] of CMP-MONEY as preserved at the current revisions; implementation-only change does not cross this boundary"
+        },
+        {
+         "consumer_id": "CMP-PDF",
+         "contracts": {
+          "CON-MONEY-FORMAT": 1
+         },
+         "edge_id": "LE-CMP-PDF--depends_on--CMP-MONEY",
+         "evidence_id": "EV-1",
+         "provider_id": "CMP-MONEY",
+         "reason": "EV-1 records contracts ['CON-MONEY-FORMAT'] of CMP-MONEY as preserved at the current revisions; implementation-only change does not cross this boundary"
+        }
+       ],
+       "targets": []
+      },
+      "engine_pruning_with_gate_admitted_evidence": {
+       "aspect": "implementation",
+       "graph_revision": 5,
+       "node_id": "CMP-MONEY",
+       "pairs": [
+        [
+         "CMP-CSV",
+         "check_contract"
+        ],
+        [
+         "CMP-PDF",
+         "check_contract"
+        ]
+       ],
+       "present": true,
+       "provisional": [
+        "CMP-CSV",
+        "CMP-PDF"
+       ],
+       "pruned": [],
+       "targets": [
+        "CMP-CSV",
+        "CMP-PDF"
+       ]
+      },
+      "evidence_gate": {
+       "admissible": [],
+       "affected_domain": {
+        "amount_range": [
+         "0-999",
+         "1000+"
+        ]
+       },
+       "policy": "pruning is disabled by default in v0.3; this gate only decides which evidence would be eligible in an explicitly exploratory pruning condition",
+       "provider_id": "CMP-MONEY",
+       "refused": [
+        {
+         "evidence_id": "EV-1",
+         "reasons": [
+          "coverage of 'amount_range' lacks ['1000+'] (covered: ['0-999'])"
+         ]
+        }
+       ]
+      }
+     }
+    }
+   },
+   "H": {
+    "client": null,
+    "costs": {
+     "fake_calls": 0,
+     "graph_ops_committed": 0,
+     "input_chars": 0,
+     "input_tokens": null,
+     "latency_ms": null,
+     "model_calls": 0,
+     "output_chars": 0,
+     "output_tokens": null,
+     "review_decisions": {
+      "accept": 0,
+      "defer": 0,
+      "reject": 0
+     }
+    },
+    "final_graph": null,
+    "ledger": null,
+    "negative": {
+     "E4": {
+      "engine_semantic_probe": {
+       "aspect": "semantic",
+       "graph_revision": 1,
+       "node_id": "REQ-PDF-INVOICE",
+       "pairs": [
+        [
+         "CAP-INVOICING",
+         "review_spec"
+        ],
+        [
+         "CMP-PDF",
+         "review_implementation"
+        ]
+       ],
+       "present": true,
+       "provisional": [],
+       "pruned": [],
+       "targets": [
+        "CAP-INVOICING",
+        "CMP-PDF"
+       ]
+      },
+      "note": "no maintenance loop: the engine has no editorial aspect"
+     }
+    },
+    "prediction": {
+     "E5": {
+      "aspect": "implementation",
+      "graph_revision": 1,
+      "node_id": "CMP-MONEY",
+      "pairs": [
+       [
+        "CMP-CSV",
+        "check_contract"
+       ],
+       [
+        "CMP-PDF",
+        "check_contract"
+       ]
+      ],
+      "present": true,
+      "provisional": [
+       "CMP-CSV",
+       "CMP-PDF"
+      ],
+      "pruned": [],
+      "targets": [
+       "CMP-CSV",
+       "CMP-PDF"
+      ]
+     }
+    }
+   }
+  },
+  "toolshare": {
+   "G0": {
+    "client": {
+     "is_fake": true,
+     "model": "none (scripted fixture responses)",
+     "provider": "scripted-fake"
+    },
+    "costs": {
+     "fake_calls": 1,
+     "graph_ops_committed": 34,
+     "input_chars": 12959,
+     "input_tokens": null,
+     "latency_ms": null,
+     "model_calls": 1,
+     "output_chars": 18694,
+     "output_tokens": null,
+     "review_decisions": {
+      "accept": 34,
+      "defer": 0,
+      "reject": 0
+     }
+    },
+    "final_graph": {
+     "edges": [
+      {
+       "dst": "REQ-HOLD-EXPIRY",
+       "evidence_ref": "P-0001/op-20",
+       "id": "LE-CAP-HOLDS--refines--REQ-HOLD-EXPIRY",
+       "relation": "refines",
+       "rev": 1,
+       "src": "CAP-HOLDS",
+       "status": "confirmed"
+      },
+      {
+       "dst": "REQ-PLACE-HOLD",
+       "evidence_ref": "P-0001/op-19",
+       "id": "LE-CAP-HOLDS--refines--REQ-PLACE-HOLD",
+       "relation": "refines",
+       "rev": 1,
+       "src": "CAP-HOLDS",
+       "status": "confirmed"
+      },
+      {
+       "dst": "REQ-READY-NOTICE",
+       "evidence_ref": "P-0001/op-21",
+       "id": "LE-CAP-NOTIFY--refines--REQ-READY-NOTICE",
+       "relation": "refines",
+       "rev": 1,
+       "src": "CAP-NOTIFY",
+       "status": "confirmed"
+      },
+      {
+       "dst": "CMP-INVENTORY",
+       "evidence_ref": "P-0001/op-26",
+       "id": "LE-CMP-HOLDS--depends_on--CMP-INVENTORY",
+       "relation": "depends_on",
+       "rev": 1,
+       "src": "CMP-HOLDS",
+       "status": "confirmed"
+      },
+      {
+       "dst": "REQ-HOLD-EXPIRY",
+       "evidence_ref": "P-0001/op-24",
+       "id": "LE-CMP-HOLDS--implements--REQ-HOLD-EXPIRY",
+       "relation": "implements",
+       "rev": 1,
+       "src": "CMP-HOLDS",
+       "status": "confirmed"
+      },
+      {
+       "dst": "REQ-PLACE-HOLD",
+       "evidence_ref": "P-0001/op-23",
+       "id": "LE-CMP-HOLDS--implements--REQ-PLACE-HOLD",
+       "relation": "implements",
+       "rev": 1,
+       "src": "CMP-HOLDS",
+       "status": "confirmed"
+      },
+      {
+       "dst": "ART-HOLDS",
+       "evidence_ref": "P-0001/op-28",
+       "id": "LE-CMP-HOLDS--realized_by--ART-HOLDS",
+       "relation": "realized_by",
+       "rev": 1,
+       "src": "CMP-HOLDS",
+       "status": "confirmed"
+      },
+      {
+       "dst": "ART-INVENTORY",
+       "evidence_ref": "P-0001/op-29",
+       "id": "LE-CMP-INVENTORY--realized_by--ART-INVENTORY",
+       "relation": "realized_by",
+       "rev": 1,
+       "src": "CMP-INVENTORY",
+       "status": "confirmed"
+      },
+      {
+       "dst": "CON-NOTICE-FORMAT",
+       "evidence_ref": "P-0001/op-27",
+       "id": "LE-CMP-NOTIFY--constrained_by--CON-NOTICE-FORMAT",
+       "relation": "constrained_by",
+       "rev": 1,
+       "src": "CMP-NOTIFY",
+       "status": "confirmed"
+      },
+      {
+       "dst": "REQ-READY-NOTICE",
+       "evidence_ref": "P-0001/op-25",
+       "id": "LE-CMP-NOTIFY--implements--REQ-READY-NOTICE",
+       "relation": "implements",
+       "rev": 1,
+       "src": "CMP-NOTIFY",
+       "status": "confirmed"
+      },
+      {
+       "dst": "ART-NOTIFY",
+       "evidence_ref": "P-0001/op-30",
+       "id": "LE-CMP-NOTIFY--realized_by--ART-NOTIFY",
+       "relation": "realized_by",
+       "rev": 1,
+       "src": "CMP-NOTIFY",
+       "status": "confirmed"
+      },
+      {
+       "dst": "CAP-HOLDS",
+       "evidence_ref": "P-0001/op-17",
+       "id": "LE-GOAL-FAIR-ACCESS--refines--CAP-HOLDS",
+       "relation": "refines",
+       "rev": 1,
+       "src": "GOAL-FAIR-ACCESS",
+       "status": "hypothesized"
+      },
+      {
+       "dst": "CAP-NOTIFY",
+       "evidence_ref": "P-0001/op-18",
+       "id": "LE-GOAL-FAIR-ACCESS--refines--CAP-NOTIFY",
+       "relation": "refines",
+       "rev": 1,
+       "src": "GOAL-FAIR-ACCESS",
+       "status": "hypothesized"
+      },
+      {
+       "dst": "REQ-HOLD-EXPIRY",
+       "evidence_ref": "P-0001/op-22",
+       "id": "LE-Q-PICKUP-WINDOW--blocks--REQ-HOLD-EXPIRY",
+       "relation": "blocks",
+       "rev": 1,
+       "src": "Q-PICKUP-WINDOW",
+       "status": "confirmed"
+      },
+      {
+       "dst": "CON-NOTICE-FORMAT",
+       "evidence_ref": "P-0001/op-34",
+       "id": "LE-REQ-READY-NOTICE--constrained_by--CON-NOTICE-FORMAT",
+       "relation": "constrained_by",
+       "rev": 1,
+       "src": "REQ-READY-NOTICE",
+       "status": "hypothesized"
+      },
+      {
+       "dst": "REQ-HOLD-EXPIRY",
+       "evidence_ref": "P-0001/op-31",
+       "id": "LE-TEST-HOLD-QUEUE--verifies--REQ-HOLD-EXPIRY",
+       "relation": "verifies",
+       "rev": 1,
+       "src": "TEST-HOLD-QUEUE",
+       "status": "confirmed"
+      },
+      {
+       "dst": "REQ-PLACE-HOLD",
+       "evidence_ref": "P-0001/op-32",
+       "id": "LE-TEST-HOLD-QUEUE--verifies--REQ-PLACE-HOLD",
+       "relation": "verifies",
+       "rev": 1,
+       "src": "TEST-HOLD-QUEUE",
+       "status": "hypothesized"
+      },
+      {
+       "dst": "CON-NOTICE-FORMAT",
+       "evidence_ref": "P-0001/op-33",
+       "id": "LE-TEST-NOTICE-FORMAT--verifies--CON-NOTICE-FORMAT",
+       "relation": "verifies",
+       "rev": 1,
+       "src": "TEST-NOTICE-FORMAT",
+       "status": "confirmed"
+      }
+     ],
+     "graph_revision": 2,
+     "nodes": [
+      {
+       "body": "Source file toolshare/holds.py.",
+       "data": {
+        "path": "toolshare/holds.py"
+       },
+       "id": "ART-HOLDS",
+       "kind": "artifact",
+       "rev": 1,
+       "title": "toolshare/holds.py"
+      },
+      {
+       "body": "Source file toolshare/inventory.py.",
+       "data": {
+        "path": "toolshare/inventory.py"
+       },
+       "id": "ART-INVENTORY",
+       "kind": "artifact",
+       "rev": 1,
+       "title": "toolshare/inventory.py"
+      },
+      {
+       "body": "Source file toolshare/notifications.py.",
+       "data": {
+        "path": "toolshare/notifications.py"
+       },
+       "id": "ART-NOTIFY",
+       "kind": "artifact",
+       "rev": 1,
+       "title": "toolshare/notifications.py"
+      },
+      {
+       "body": "Members can queue for tools that are not currently on the shelf.",
+       "data": {},
+       "id": "CAP-HOLDS",
+       "kind": "capability",
+       "rev": 1,
+       "title": "Holds"
+      },
+      {
+       "body": "Members are told when something they are waiting for changes.",
+       "data": {},
+       "id": "CAP-NOTIFY",
+       "kind": "capability",
+       "rev": 1,
+       "title": "Member notifications"
+      },
+      {
+       "body": "Owns the hold queue and hold expiry.",
+       "data": {},
+       "id": "CMP-HOLDS",
+       "kind": "component",
+       "rev": 1,
+       "title": "Holds service"
+      },
+      {
+       "body": "Tracks whether a tool is on the shelf.",
+       "data": {},
+       "id": "CMP-INVENTORY",
+       "kind": "component",
+       "rev": 1,
+       "title": "Inventory module"
+      },
+      {
+       "body": "Sends member emails.",
+       "data": {},
+       "id": "CMP-NOTIFY",
+       "kind": "component",
+       "rev": 1,
+       "title": "Notification service"
+      },
+      {
+       "body": "Notification messages are plain-text emails with a subject line and at most 500 characters of body text.",
+       "data": {
+        "status": "accepted"
+       },
+       "id": "CON-NOTICE-FORMAT",
+       "kind": "contract",
+       "rev": 1,
+       "title": "Notification message format"
+      },
+      {
+       "body": "Members can borrow shared tools fairly and predictably.",
+       "data": {},
+       "id": "GOAL-FAIR-ACCESS",
+       "kind": "goal",
+       "rev": 1,
+       "title": "Fair, predictable tool borrowing"
+      },
+      {
+       "body": "The desk is staffed three days a week.",
+       "data": {
+        "blocking": true,
+        "state": "open"
+       },
+       "id": "Q-PICKUP-WINDOW",
+       "kind": "question",
+       "rev": 1,
+       "title": "How long is the pickup window?"
+      },
+      {
+       "body": "When a held tool becomes available, the member has a pickup window to collect it; otherwise the hold lapses and the tool passes to the next member.",
+       "data": {
+        "acceptance_criteria": []
+       },
+       "id": "REQ-HOLD-EXPIRY",
+       "kind": "requirement",
+       "rev": 1,
+       "title": "Hold expiry and pickup window"
+      },
+      {
+       "body": "A member can place a hold on a catalogued tool that is on loan.",
+       "data": {
+        "acceptance_criteria": [
+         "A member without overdue items can place a hold on any catalogued tool.",
+         "Holds on the same tool are served first come, first served."
+        ]
+       },
+       "id": "REQ-PLACE-HOLD",
+       "kind": "requirement",
+       "rev": 1,
+       "title": "Place a hold"
+      },
+      {
+       "body": "When a held tool is ready for pickup, the member is notified by email.",
+       "data": {
+        "acceptance_criteria": [
+         "The email names the tool and the pickup deadline."
+        ]
+       },
+       "id": "REQ-READY-NOTICE",
+       "kind": "requirement",
+       "rev": 1,
+       "title": "Ready-for-pickup notice"
+      },
+      {
+       "body": "Checks queue order and expiry.",
+       "data": {
+        "command": "pytest -q tests/test_holds.py"
+       },
+       "id": "TEST-HOLD-QUEUE",
+       "kind": "test",
+       "rev": 1,
+       "title": "Hold queue test"
+      },
+      {
+       "body": "Checks messages against CON-NOTICE-FORMAT.",
+       "data": {
+        "command": "pytest -q tests/test_notifications.py"
+       },
+       "id": "TEST-NOTICE-FORMAT",
+       "kind": "test",
+       "rev": 1,
+       "title": "Notice format test"
+      }
+     ]
+    },
+    "ledger": {
+     "calls": 1,
+     "decisions": [
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-1",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-10",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-11",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-12",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-13",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-14",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-15",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-16",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-17",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-18",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-19",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-2",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-20",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-21",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-22",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-23",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-24",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-25",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-26",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-27",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-28",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-29",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-3",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-30",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-31",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-32",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-33",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-34",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-4",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-5",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-6",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-7",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-8",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-9",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      }
+     ],
+     "proposals": [
+      {
+       "change_id": "CHG-2",
+       "id": "P-0001",
+       "status": "committed"
+      }
+     ]
+    },
+    "negative": {
+     "E4": {
+      "engine_semantic_probe": {
+       "aspect": "semantic",
+       "graph_revision": 2,
+       "node_id": "REQ-READY-NOTICE",
+       "pairs": [
+        [
+         "CAP-NOTIFY",
+         "review_spec"
+        ],
+        [
+         "CMP-NOTIFY",
+         "review_implementation"
+        ]
+       ],
+       "present": true,
+       "provisional": [],
+       "pruned": [],
+       "targets": [
+        "CAP-NOTIFY",
+        "CMP-NOTIFY"
+       ]
+      }
+     }
+    },
+    "prediction": {
+     "E5": {
+      "aspect": "contract",
+      "graph_revision": 2,
+      "node_id": "CON-NOTICE-FORMAT",
+      "pairs": [
+       [
+        "CMP-NOTIFY",
+        "check_contract"
+       ],
+       [
+        "CMP-NOTIFY",
+        "review_implementation"
+       ],
+       [
+        "REQ-READY-NOTICE",
+        "check_contract"
+       ],
+       [
+        "REQ-READY-NOTICE",
+        "investigate_unknown"
+       ],
+       [
+        "TEST-NOTICE-FORMAT",
+        "rerun_test"
+       ]
+      ],
+      "present": true,
+      "provisional": [],
+      "pruned": [],
+      "targets": [
+       "CMP-NOTIFY",
+       "REQ-READY-NOTICE",
+       "TEST-NOTICE-FORMAT"
+      ]
+     }
+    }
+   },
+   "G1": {
+    "client": {
+     "is_fake": true,
+     "model": "none (scripted fixture responses)",
+     "provider": "scripted-fake"
+    },
+    "costs": {
+     "fake_calls": 5,
+     "graph_ops_committed": 38,
+     "input_chars": 97070,
+     "input_tokens": null,
+     "latency_ms": null,
+     "model_calls": 5,
+     "output_chars": 24434,
+     "output_tokens": null,
+     "review_decisions": {
+      "accept": 39,
+      "defer": 0,
+      "reject": 2
+     }
+    },
+    "final_graph": {
+     "edges": [
+      {
+       "dst": "REQ-HOLD-EXPIRY",
+       "evidence_ref": "P-0001/op-20",
+       "id": "LE-CAP-HOLDS--refines--REQ-HOLD-EXPIRY",
+       "relation": "refines",
+       "rev": 1,
+       "src": "CAP-HOLDS",
+       "status": "confirmed"
+      },
+      {
+       "dst": "REQ-PLACE-HOLD",
+       "evidence_ref": "P-0001/op-19",
+       "id": "LE-CAP-HOLDS--refines--REQ-PLACE-HOLD",
+       "relation": "refines",
+       "rev": 1,
+       "src": "CAP-HOLDS",
+       "status": "confirmed"
+      },
+      {
+       "dst": "REQ-READY-NOTICE",
+       "evidence_ref": "P-0001/op-21",
+       "id": "LE-CAP-NOTIFY--refines--REQ-READY-NOTICE",
+       "relation": "refines",
+       "rev": 1,
+       "src": "CAP-NOTIFY",
+       "status": "confirmed"
+      },
+      {
+       "dst": "CMP-INVENTORY",
+       "evidence_ref": "P-0001/op-26",
+       "id": "LE-CMP-HOLDS--depends_on--CMP-INVENTORY",
+       "relation": "depends_on",
+       "rev": 1,
+       "src": "CMP-HOLDS",
+       "status": "confirmed"
+      },
+      {
+       "dst": "REQ-HOLD-EXPIRY",
+       "evidence_ref": "P-0001/op-24",
+       "id": "LE-CMP-HOLDS--implements--REQ-HOLD-EXPIRY",
+       "relation": "implements",
+       "rev": 1,
+       "src": "CMP-HOLDS",
+       "status": "confirmed"
+      },
+      {
+       "dst": "REQ-PLACE-HOLD",
+       "evidence_ref": "P-0001/op-23",
+       "id": "LE-CMP-HOLDS--implements--REQ-PLACE-HOLD",
+       "relation": "implements",
+       "rev": 1,
+       "src": "CMP-HOLDS",
+       "status": "confirmed"
+      },
+      {
+       "dst": "ART-HOLDS",
+       "evidence_ref": "P-0001/op-28",
+       "id": "LE-CMP-HOLDS--realized_by--ART-HOLDS",
+       "relation": "realized_by",
+       "rev": 1,
+       "src": "CMP-HOLDS",
+       "status": "confirmed"
+      },
+      {
+       "dst": "ART-INVENTORY",
+       "evidence_ref": "P-0001/op-29",
+       "id": "LE-CMP-INVENTORY--realized_by--ART-INVENTORY",
+       "relation": "realized_by",
+       "rev": 1,
+       "src": "CMP-INVENTORY",
+       "status": "confirmed"
+      },
+      {
+       "dst": "CON-NOTICE-FORMAT",
+       "evidence_ref": "P-0001/op-27",
+       "id": "LE-CMP-NOTIFY--constrained_by--CON-NOTICE-FORMAT",
+       "relation": "constrained_by",
+       "rev": 1,
+       "src": "CMP-NOTIFY",
+       "status": "confirmed"
+      },
+      {
+       "dst": "REQ-READY-NOTICE",
+       "evidence_ref": "P-0001/op-25",
+       "id": "LE-CMP-NOTIFY--implements--REQ-READY-NOTICE",
+       "relation": "implements",
+       "rev": 1,
+       "src": "CMP-NOTIFY",
+       "status": "confirmed"
+      },
+      {
+       "dst": "ART-NOTIFY",
+       "evidence_ref": "P-0001/op-30",
+       "id": "LE-CMP-NOTIFY--realized_by--ART-NOTIFY",
+       "relation": "realized_by",
+       "rev": 1,
+       "src": "CMP-NOTIFY",
+       "status": "confirmed"
+      },
+      {
+       "dst": "CAP-HOLDS",
+       "evidence_ref": "P-0001/op-17",
+       "id": "LE-GOAL-FAIR-ACCESS--refines--CAP-HOLDS",
+       "relation": "refines",
+       "rev": 1,
+       "src": "GOAL-FAIR-ACCESS",
+       "status": "hypothesized"
+      },
+      {
+       "dst": "CAP-NOTIFY",
+       "evidence_ref": "P-0001/op-18",
+       "id": "LE-GOAL-FAIR-ACCESS--refines--CAP-NOTIFY",
+       "relation": "refines",
+       "rev": 1,
+       "src": "GOAL-FAIR-ACCESS",
+       "status": "hypothesized"
+      },
+      {
+       "dst": "REQ-HOLD-EXPIRY",
+       "evidence_ref": "P-0001/op-22",
+       "id": "LE-Q-PICKUP-WINDOW--blocks--REQ-HOLD-EXPIRY",
+       "relation": "blocks",
+       "rev": 1,
+       "src": "Q-PICKUP-WINDOW",
+       "status": "confirmed"
+      },
+      {
+       "dst": "CON-NOTICE-FORMAT",
+       "evidence_ref": "P-0001/op-34",
+       "id": "LE-REQ-READY-NOTICE--constrained_by--CON-NOTICE-FORMAT",
+       "relation": "constrained_by",
+       "rev": 1,
+       "src": "REQ-READY-NOTICE",
+       "status": "hypothesized"
+      },
+      {
+       "dst": "REQ-HOLD-EXPIRY",
+       "evidence_ref": "P-0001/op-31",
+       "id": "LE-TEST-HOLD-QUEUE--verifies--REQ-HOLD-EXPIRY",
+       "relation": "verifies",
+       "rev": 1,
+       "src": "TEST-HOLD-QUEUE",
+       "status": "confirmed"
+      },
+      {
+       "dst": "REQ-PLACE-HOLD",
+       "evidence_ref": "P-0001/op-32",
+       "id": "LE-TEST-HOLD-QUEUE--verifies--REQ-PLACE-HOLD",
+       "relation": "verifies",
+       "rev": 1,
+       "src": "TEST-HOLD-QUEUE",
+       "status": "hypothesized"
+      },
+      {
+       "dst": "CON-NOTICE-FORMAT",
+       "evidence_ref": "P-0001/op-33",
+       "id": "LE-TEST-NOTICE-FORMAT--verifies--CON-NOTICE-FORMAT",
+       "relation": "verifies",
+       "rev": 1,
+       "src": "TEST-NOTICE-FORMAT",
+       "status": "confirmed"
+      }
+     ],
+     "graph_revision": 5,
+     "nodes": [
+      {
+       "body": "Source file toolshare/holds.py.",
+       "data": {
+        "notes": "expire_hold sends a lapse email; PICKUP_WINDOW_HOURS = 48",
+        "path": "toolshare/holds.py"
+       },
+       "id": "ART-HOLDS",
+       "kind": "artifact",
+       "rev": 2,
+       "title": "toolshare/holds.py"
+      },
+      {
+       "body": "Source file toolshare/inventory.py.",
+       "data": {
+        "path": "toolshare/inventory.py"
+       },
+       "id": "ART-INVENTORY",
+       "kind": "artifact",
+       "rev": 1,
+       "title": "toolshare/inventory.py"
+      },
+      {
+       "body": "Source file toolshare/notifications.py.",
+       "data": {
+        "path": "toolshare/notifications.py"
+       },
+       "id": "ART-NOTIFY",
+       "kind": "artifact",
+       "rev": 1,
+       "title": "toolshare/notifications.py"
+      },
+      {
+       "body": "Members can queue for tools that are not currently on the shelf.",
+       "data": {},
+       "id": "CAP-HOLDS",
+       "kind": "capability",
+       "rev": 1,
+       "title": "Holds"
+      },
+      {
+       "body": "Members are told when something they are waiting for changes.",
+       "data": {},
+       "id": "CAP-NOTIFY",
+       "kind": "capability",
+       "rev": 1,
+       "title": "Member notifications"
+      },
+      {
+       "body": "Owns the hold queue and hold expiry.",
+       "data": {},
+       "id": "CMP-HOLDS",
+       "kind": "component",
+       "rev": 1,
+       "title": "Holds service"
+      },
+      {
+       "body": "Tracks whether a tool is on the shelf.",
+       "data": {},
+       "id": "CMP-INVENTORY",
+       "kind": "component",
+       "rev": 1,
+       "title": "Inventory module"
+      },
+      {
+       "body": "Sends member emails.",
+       "data": {},
+       "id": "CMP-NOTIFY",
+       "kind": "component",
+       "rev": 1,
+       "title": "Notification service"
+      },
+      {
+       "body": "Notification messages are plain text, sent by email or, if the member prefers, by SMS. An SMS body is at most 160 characters; an email has a subject line and at most 500 characters of body text. Every message states the desk opening hours (Tue/Thu/Sat).",
+       "data": {
+        "status": "accepted"
+       },
+       "id": "CON-NOTICE-FORMAT",
+       "kind": "contract",
+       "rev": 2,
+       "title": "Notification message format"
+      },
+      {
+       "body": "Members can borrow shared tools fairly and predictably.",
+       "data": {},
+       "id": "GOAL-FAIR-ACCESS",
+       "kind": "goal",
+       "rev": 1,
+       "title": "Fair, predictable tool borrowing"
+      },
+      {
+       "body": "Decided by the board on 2026-09-10: 48 hours from the ready notice.",
+       "data": {
+        "blocking": true,
+        "state": "resolved"
+       },
+       "id": "Q-PICKUP-WINDOW",
+       "kind": "question",
+       "rev": 2,
+       "title": "How long is the pickup window?"
+      },
+      {
+       "body": "When a held tool becomes available, the member has a pickup window to collect it; otherwise the hold lapses and the tool passes to the next member.",
+       "data": {
+        "acceptance_criteria": [
+         "The pickup window is 48 hours from the moment the ready notice is sent.",
+         "When the window passes, the hold lapses and the next member in the queue is offered the tool."
+        ]
+       },
+       "id": "REQ-HOLD-EXPIRY",
+       "kind": "requirement",
+       "rev": 2,
+       "title": "Hold expiry and pickup window"
+      },
+      {
+       "body": "A member can place a hold on a catalogued tool that is on loan.",
+       "data": {
+        "acceptance_criteria": [
+         "A member without overdue items can place a hold on any catalogued tool.",
+         "Holds on the same tool are served first come, first served."
+        ]
+       },
+       "id": "REQ-PLACE-HOLD",
+       "kind": "requirement",
+       "rev": 1,
+       "title": "Place a hold"
+      },
+      {
+       "body": "When a held tool is ready for pickup, the member is notified by email.",
+       "data": {
+        "acceptance_criteria": [
+         "The email names the tool and the pickup deadline."
+        ]
+       },
+       "id": "REQ-READY-NOTICE",
+       "kind": "requirement",
+       "rev": 1,
+       "title": "Ready-for-pickup notice"
+      },
+      {
+       "body": "Checks queue order and expiry.",
+       "data": {
+        "command": "pytest -q tests/test_holds.py"
+       },
+       "id": "TEST-HOLD-QUEUE",
+       "kind": "test",
+       "rev": 1,
+       "title": "Hold queue test"
+      },
+      {
+       "body": "Checks messages against CON-NOTICE-FORMAT.",
+       "data": {
+        "command": "pytest -q tests/test_notifications.py"
+       },
+       "id": "TEST-NOTICE-FORMAT",
+       "kind": "test",
+       "rev": 1,
+       "title": "Notice format test"
+      }
+     ]
+    },
+    "ledger": {
+     "calls": 5,
+     "decisions": [
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-1",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-10",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-11",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-12",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-13",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-14",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-15",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-16",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-17",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-18",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-19",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-2",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-20",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-21",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-22",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-23",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-24",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-25",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-26",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-27",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-28",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-29",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-3",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-30",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-31",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-32",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-33",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-34",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-4",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-5",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-6",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-7",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-8",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-9",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-3",
+       "decision": "accept",
+       "op_id": "op-1",
+       "proposal_id": "P-0002",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-3",
+       "decision": "accept",
+       "op_id": "op-2",
+       "proposal_id": "P-0002",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-4",
+       "decision": "accept",
+       "op_id": "op-1",
+       "proposal_id": "P-0003",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": null,
+       "decision": "reject",
+       "op_id": "op-2",
+       "proposal_id": "P-0003",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": null,
+       "decision": "accept",
+       "op_id": "op-1",
+       "proposal_id": "P-0004",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": null,
+       "decision": "reject",
+       "op_id": "op-2",
+       "proposal_id": "P-0004",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-5",
+       "decision": "accept",
+       "op_id": "op-1",
+       "proposal_id": "P-0005",
+       "reviewer": "policy:conservative-v1"
+      }
+     ],
+     "proposals": [
+      {
+       "change_id": "CHG-2",
+       "id": "P-0001",
+       "status": "committed"
+      },
+      {
+       "change_id": "CHG-3",
+       "id": "P-0002",
+       "status": "committed"
+      },
+      {
+       "change_id": "CHG-4",
+       "id": "P-0003",
+       "status": "committed"
+      },
+      {
+       "change_id": null,
+       "id": "P-0004",
+       "status": "reviewed"
+      },
+      {
+       "change_id": "CHG-5",
+       "id": "P-0005",
+       "status": "committed"
+      }
+     ]
+    },
+    "negative": {
+     "E4": {
+      "committed_obligations": 0,
+      "deferred_ops": [],
+      "no_change_records": [
+       "op-1"
+      ],
+      "required_actions": {}
+     }
+    },
+    "prediction": {
+     "E5": {
+      "aspect": "contract",
+      "graph_revision": 4,
+      "node_id": "CON-NOTICE-FORMAT",
+      "pairs": [
+       [
+        "CMP-NOTIFY",
+        "check_contract"
+       ],
+       [
+        "CMP-NOTIFY",
+        "review_implementation"
+       ],
+       [
+        "REQ-READY-NOTICE",
+        "check_contract"
+       ],
+       [
+        "REQ-READY-NOTICE",
+        "investigate_unknown"
+       ],
+       [
+        "TEST-NOTICE-FORMAT",
+        "rerun_test"
+       ]
+      ],
+      "present": true,
+      "provisional": [],
+      "pruned": [],
+      "targets": [
+       "CMP-NOTIFY",
+       "REQ-READY-NOTICE",
+       "TEST-NOTICE-FORMAT"
+      ]
+     }
+    }
+   },
+   "G2": {
+    "client": {
+     "is_fake": true,
+     "model": "none (scripted fixture responses)",
+     "provider": "scripted-fake"
+    },
+    "costs": {
+     "fake_calls": 5,
+     "graph_ops_committed": 39,
+     "input_chars": 97586,
+     "input_tokens": null,
+     "latency_ms": null,
+     "model_calls": 5,
+     "output_chars": 24434,
+     "output_tokens": null,
+     "review_decisions": {
+      "accept": 40,
+      "defer": 0,
+      "reject": 2
+     }
+    },
+    "final_graph": {
+     "edges": [
+      {
+       "dst": "REQ-HOLD-EXPIRY",
+       "evidence_ref": "P-0001/op-20",
+       "id": "LE-CAP-HOLDS--refines--REQ-HOLD-EXPIRY",
+       "relation": "refines",
+       "rev": 1,
+       "src": "CAP-HOLDS",
+       "status": "confirmed"
+      },
+      {
+       "dst": "REQ-PLACE-HOLD",
+       "evidence_ref": "P-0001/op-19",
+       "id": "LE-CAP-HOLDS--refines--REQ-PLACE-HOLD",
+       "relation": "refines",
+       "rev": 1,
+       "src": "CAP-HOLDS",
+       "status": "confirmed"
+      },
+      {
+       "dst": "REQ-READY-NOTICE",
+       "evidence_ref": "P-0001/op-21",
+       "id": "LE-CAP-NOTIFY--refines--REQ-READY-NOTICE",
+       "relation": "refines",
+       "rev": 1,
+       "src": "CAP-NOTIFY",
+       "status": "confirmed"
+      },
+      {
+       "dst": "CMP-INVENTORY",
+       "evidence_ref": "P-0001/op-26",
+       "id": "LE-CMP-HOLDS--depends_on--CMP-INVENTORY",
+       "relation": "depends_on",
+       "rev": 1,
+       "src": "CMP-HOLDS",
+       "status": "confirmed"
+      },
+      {
+       "dst": "CMP-NOTIFY",
+       "evidence_ref": "P-0003/scan-1",
+       "id": "LE-CMP-HOLDS--depends_on--CMP-NOTIFY",
+       "relation": "depends_on",
+       "rev": 1,
+       "src": "CMP-HOLDS",
+       "status": "confirmed"
+      },
+      {
+       "dst": "REQ-HOLD-EXPIRY",
+       "evidence_ref": "P-0001/op-24",
+       "id": "LE-CMP-HOLDS--implements--REQ-HOLD-EXPIRY",
+       "relation": "implements",
+       "rev": 1,
+       "src": "CMP-HOLDS",
+       "status": "confirmed"
+      },
+      {
+       "dst": "REQ-PLACE-HOLD",
+       "evidence_ref": "P-0001/op-23",
+       "id": "LE-CMP-HOLDS--implements--REQ-PLACE-HOLD",
+       "relation": "implements",
+       "rev": 1,
+       "src": "CMP-HOLDS",
+       "status": "confirmed"
+      },
+      {
+       "dst": "ART-HOLDS",
+       "evidence_ref": "P-0001/op-28",
+       "id": "LE-CMP-HOLDS--realized_by--ART-HOLDS",
+       "relation": "realized_by",
+       "rev": 1,
+       "src": "CMP-HOLDS",
+       "status": "confirmed"
+      },
+      {
+       "dst": "ART-INVENTORY",
+       "evidence_ref": "P-0001/op-29",
+       "id": "LE-CMP-INVENTORY--realized_by--ART-INVENTORY",
+       "relation": "realized_by",
+       "rev": 1,
+       "src": "CMP-INVENTORY",
+       "status": "confirmed"
+      },
+      {
+       "dst": "CON-NOTICE-FORMAT",
+       "evidence_ref": "P-0001/op-27",
+       "id": "LE-CMP-NOTIFY--constrained_by--CON-NOTICE-FORMAT",
+       "relation": "constrained_by",
+       "rev": 1,
+       "src": "CMP-NOTIFY",
+       "status": "confirmed"
+      },
+      {
+       "dst": "REQ-READY-NOTICE",
+       "evidence_ref": "P-0001/op-25",
+       "id": "LE-CMP-NOTIFY--implements--REQ-READY-NOTICE",
+       "relation": "implements",
+       "rev": 1,
+       "src": "CMP-NOTIFY",
+       "status": "confirmed"
+      },
+      {
+       "dst": "ART-NOTIFY",
+       "evidence_ref": "P-0001/op-30",
+       "id": "LE-CMP-NOTIFY--realized_by--ART-NOTIFY",
+       "relation": "realized_by",
+       "rev": 1,
+       "src": "CMP-NOTIFY",
+       "status": "confirmed"
+      },
+      {
+       "dst": "CAP-HOLDS",
+       "evidence_ref": "P-0001/op-17",
+       "id": "LE-GOAL-FAIR-ACCESS--refines--CAP-HOLDS",
+       "relation": "refines",
+       "rev": 1,
+       "src": "GOAL-FAIR-ACCESS",
+       "status": "hypothesized"
+      },
+      {
+       "dst": "CAP-NOTIFY",
+       "evidence_ref": "P-0001/op-18",
+       "id": "LE-GOAL-FAIR-ACCESS--refines--CAP-NOTIFY",
+       "relation": "refines",
+       "rev": 1,
+       "src": "GOAL-FAIR-ACCESS",
+       "status": "hypothesized"
+      },
+      {
+       "dst": "REQ-HOLD-EXPIRY",
+       "evidence_ref": "P-0001/op-22",
+       "id": "LE-Q-PICKUP-WINDOW--blocks--REQ-HOLD-EXPIRY",
+       "relation": "blocks",
+       "rev": 1,
+       "src": "Q-PICKUP-WINDOW",
+       "status": "confirmed"
+      },
+      {
+       "dst": "CON-NOTICE-FORMAT",
+       "evidence_ref": "P-0001/op-34",
+       "id": "LE-REQ-READY-NOTICE--constrained_by--CON-NOTICE-FORMAT",
+       "relation": "constrained_by",
+       "rev": 1,
+       "src": "REQ-READY-NOTICE",
+       "status": "hypothesized"
+      },
+      {
+       "dst": "REQ-HOLD-EXPIRY",
+       "evidence_ref": "P-0001/op-31",
+       "id": "LE-TEST-HOLD-QUEUE--verifies--REQ-HOLD-EXPIRY",
+       "relation": "verifies",
+       "rev": 1,
+       "src": "TEST-HOLD-QUEUE",
+       "status": "confirmed"
+      },
+      {
+       "dst": "REQ-PLACE-HOLD",
+       "evidence_ref": "P-0001/op-32",
+       "id": "LE-TEST-HOLD-QUEUE--verifies--REQ-PLACE-HOLD",
+       "relation": "verifies",
+       "rev": 1,
+       "src": "TEST-HOLD-QUEUE",
+       "status": "hypothesized"
+      },
+      {
+       "dst": "CON-NOTICE-FORMAT",
+       "evidence_ref": "P-0001/op-33",
+       "id": "LE-TEST-NOTICE-FORMAT--verifies--CON-NOTICE-FORMAT",
+       "relation": "verifies",
+       "rev": 1,
+       "src": "TEST-NOTICE-FORMAT",
+       "status": "confirmed"
+      }
+     ],
+     "graph_revision": 6,
+     "nodes": [
+      {
+       "body": "Source file toolshare/holds.py.",
+       "data": {
+        "notes": "expire_hold sends a lapse email; PICKUP_WINDOW_HOURS = 48",
+        "path": "toolshare/holds.py"
+       },
+       "id": "ART-HOLDS",
+       "kind": "artifact",
+       "rev": 2,
+       "title": "toolshare/holds.py"
+      },
+      {
+       "body": "Source file toolshare/inventory.py.",
+       "data": {
+        "path": "toolshare/inventory.py"
+       },
+       "id": "ART-INVENTORY",
+       "kind": "artifact",
+       "rev": 1,
+       "title": "toolshare/inventory.py"
+      },
+      {
+       "body": "Source file toolshare/notifications.py.",
+       "data": {
+        "path": "toolshare/notifications.py"
+       },
+       "id": "ART-NOTIFY",
+       "kind": "artifact",
+       "rev": 1,
+       "title": "toolshare/notifications.py"
+      },
+      {
+       "body": "Members can queue for tools that are not currently on the shelf.",
+       "data": {},
+       "id": "CAP-HOLDS",
+       "kind": "capability",
+       "rev": 1,
+       "title": "Holds"
+      },
+      {
+       "body": "Members are told when something they are waiting for changes.",
+       "data": {},
+       "id": "CAP-NOTIFY",
+       "kind": "capability",
+       "rev": 1,
+       "title": "Member notifications"
+      },
+      {
+       "body": "Owns the hold queue and hold expiry.",
+       "data": {},
+       "id": "CMP-HOLDS",
+       "kind": "component",
+       "rev": 1,
+       "title": "Holds service"
+      },
+      {
+       "body": "Tracks whether a tool is on the shelf.",
+       "data": {},
+       "id": "CMP-INVENTORY",
+       "kind": "component",
+       "rev": 1,
+       "title": "Inventory module"
+      },
+      {
+       "body": "Sends member emails.",
+       "data": {},
+       "id": "CMP-NOTIFY",
+       "kind": "component",
+       "rev": 1,
+       "title": "Notification service"
+      },
+      {
+       "body": "Notification messages are plain text, sent by email or, if the member prefers, by SMS. An SMS body is at most 160 characters; an email has a subject line and at most 500 characters of body text. Every message states the desk opening hours (Tue/Thu/Sat).",
+       "data": {
+        "status": "accepted"
+       },
+       "id": "CON-NOTICE-FORMAT",
+       "kind": "contract",
+       "rev": 2,
+       "title": "Notification message format"
+      },
+      {
+       "body": "Members can borrow shared tools fairly and predictably.",
+       "data": {},
+       "id": "GOAL-FAIR-ACCESS",
+       "kind": "goal",
+       "rev": 1,
+       "title": "Fair, predictable tool borrowing"
+      },
+      {
+       "body": "Decided by the board on 2026-09-10: 48 hours from the ready notice.",
+       "data": {
+        "blocking": true,
+        "state": "resolved"
+       },
+       "id": "Q-PICKUP-WINDOW",
+       "kind": "question",
+       "rev": 2,
+       "title": "How long is the pickup window?"
+      },
+      {
+       "body": "When a held tool becomes available, the member has a pickup window to collect it; otherwise the hold lapses and the tool passes to the next member.",
+       "data": {
+        "acceptance_criteria": [
+         "The pickup window is 48 hours from the moment the ready notice is sent.",
+         "When the window passes, the hold lapses and the next member in the queue is offered the tool."
+        ]
+       },
+       "id": "REQ-HOLD-EXPIRY",
+       "kind": "requirement",
+       "rev": 2,
+       "title": "Hold expiry and pickup window"
+      },
+      {
+       "body": "A member can place a hold on a catalogued tool that is on loan.",
+       "data": {
+        "acceptance_criteria": [
+         "A member without overdue items can place a hold on any catalogued tool.",
+         "Holds on the same tool are served first come, first served."
+        ]
+       },
+       "id": "REQ-PLACE-HOLD",
+       "kind": "requirement",
+       "rev": 1,
+       "title": "Place a hold"
+      },
+      {
+       "body": "When a held tool is ready for pickup, the member is notified by email.",
+       "data": {
+        "acceptance_criteria": [
+         "The email names the tool and the pickup deadline."
+        ]
+       },
+       "id": "REQ-READY-NOTICE",
+       "kind": "requirement",
+       "rev": 1,
+       "title": "Ready-for-pickup notice"
+      },
+      {
+       "body": "Checks queue order and expiry.",
+       "data": {
+        "command": "pytest -q tests/test_holds.py"
+       },
+       "id": "TEST-HOLD-QUEUE",
+       "kind": "test",
+       "rev": 1,
+       "title": "Hold queue test"
+      },
+      {
+       "body": "Checks messages against CON-NOTICE-FORMAT.",
+       "data": {
+        "command": "pytest -q tests/test_notifications.py"
+       },
+       "id": "TEST-NOTICE-FORMAT",
+       "kind": "test",
+       "rev": 1,
+       "title": "Notice format test"
+      }
+     ]
+    },
+    "ledger": {
+     "calls": 5,
+     "decisions": [
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-1",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-10",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-11",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-12",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-13",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-14",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-15",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-16",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-17",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-18",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-19",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-2",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-20",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-21",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-22",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-23",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-24",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-25",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-26",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-27",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-28",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-29",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-3",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-30",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-31",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-32",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-33",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-34",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-4",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-5",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-6",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-7",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-8",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-2",
+       "decision": "accept",
+       "op_id": "op-9",
+       "proposal_id": "P-0001",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-3",
+       "decision": "accept",
+       "op_id": "op-1",
+       "proposal_id": "P-0002",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-3",
+       "decision": "accept",
+       "op_id": "op-2",
+       "proposal_id": "P-0002",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-4",
+       "decision": "accept",
+       "op_id": "scan-1",
+       "proposal_id": "P-0003",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-5",
+       "decision": "accept",
+       "op_id": "op-1",
+       "proposal_id": "P-0004",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": null,
+       "decision": "reject",
+       "op_id": "op-2",
+       "proposal_id": "P-0004",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": null,
+       "decision": "accept",
+       "op_id": "op-1",
+       "proposal_id": "P-0005",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": null,
+       "decision": "reject",
+       "op_id": "op-2",
+       "proposal_id": "P-0005",
+       "reviewer": "policy:conservative-v1"
+      },
+      {
+       "change_id": "CHG-6",
+       "decision": "accept",
+       "op_id": "op-1",
+       "proposal_id": "P-0006",
+       "reviewer": "policy:conservative-v1"
+      }
+     ],
+     "proposals": [
+      {
+       "change_id": "CHG-2",
+       "id": "P-0001",
+       "status": "committed"
+      },
+      {
+       "change_id": "CHG-3",
+       "id": "P-0002",
+       "status": "committed"
+      },
+      {
+       "change_id": "CHG-4",
+       "id": "P-0003",
+       "status": "committed"
+      },
+      {
+       "change_id": "CHG-5",
+       "id": "P-0004",
+       "status": "committed"
+      },
+      {
+       "change_id": null,
+       "id": "P-0005",
+       "status": "reviewed"
+      },
+      {
+       "change_id": "CHG-6",
+       "id": "P-0006",
+       "status": "committed"
+      }
+     ]
+    },
+    "negative": {
+     "E4": {
+      "committed_obligations": 0,
+      "deferred_ops": [],
+      "no_change_records": [
+       "op-1"
+      ],
+      "required_actions": {}
+     }
+    },
+    "prediction": {
+     "E5": {
+      "aspect": "contract",
+      "graph_revision": 5,
+      "node_id": "CON-NOTICE-FORMAT",
+      "pairs": [
+       [
+        "CMP-HOLDS",
+        "check_contract"
+       ],
+       [
+        "CMP-NOTIFY",
+        "check_contract"
+       ],
+       [
+        "CMP-NOTIFY",
+        "review_implementation"
+       ],
+       [
+        "REQ-READY-NOTICE",
+        "check_contract"
+       ],
+       [
+        "REQ-READY-NOTICE",
+        "investigate_unknown"
+       ],
+       [
+        "TEST-NOTICE-FORMAT",
+        "rerun_test"
+       ]
+      ],
+      "present": true,
+      "provisional": [],
+      "pruned": [],
+      "targets": [
+       "CMP-HOLDS",
+       "CMP-NOTIFY",
+       "REQ-READY-NOTICE",
+       "TEST-NOTICE-FORMAT"
+      ]
+     }
+    }
+   },
+   "H": {
+    "client": null,
+    "costs": {
+     "fake_calls": 0,
+     "graph_ops_committed": 0,
+     "input_chars": 0,
+     "input_tokens": null,
+     "latency_ms": null,
+     "model_calls": 0,
+     "output_chars": 0,
+     "output_tokens": null,
+     "review_decisions": {
+      "accept": 0,
+      "defer": 0,
+      "reject": 0
+     }
+    },
+    "final_graph": null,
+    "ledger": null,
+    "negative": {
+     "E4": {
+      "engine_semantic_probe": {
+       "aspect": "semantic",
+       "graph_revision": 1,
+       "node_id": "REQ-READY-NOTICE",
+       "pairs": [
+        [
+         "CAP-NOTIFY",
+         "review_spec"
+        ],
+        [
+         "CMP-HOLDS",
+         "check_contract"
+        ],
+        [
+         "CMP-NOTIFY",
+         "review_implementation"
+        ]
+       ],
+       "present": true,
+       "provisional": [
+        "CMP-HOLDS"
+       ],
+       "pruned": [],
+       "targets": [
+        "CAP-NOTIFY",
+        "CMP-HOLDS",
+        "CMP-NOTIFY"
+       ]
+      },
+      "note": "no maintenance loop: the engine has no editorial aspect"
+     }
+    },
+    "prediction": {
+     "E5": {
+      "aspect": "contract",
+      "graph_revision": 1,
+      "node_id": "CON-NOTICE-FORMAT",
+      "pairs": [
+       [
+        "CMP-HOLDS",
+        "check_contract"
+       ],
+       [
+        "CMP-NOTIFY",
+        "check_contract"
+       ],
+       [
+        "CMP-NOTIFY",
+        "review_implementation"
+       ],
+       [
+        "REQ-READY-NOTICE",
+        "check_contract"
+       ],
+       [
+        "TEST-NOTICE-FORMAT",
+        "rerun_test"
+       ]
+      ],
+      "present": true,
+      "provisional": [],
+      "pruned": [],
+      "targets": [
+       "CMP-HOLDS",
+       "CMP-NOTIFY",
+       "REQ-READY-NOTICE",
+       "TEST-NOTICE-FORMAT"
+      ]
+     }
+    }
+   }
+  }
+ }
+}

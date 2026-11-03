@@ -1,0 +1,1144 @@
+{
+ "evidential_status": "PIPELINE SELF-CHECK: model outputs are scripted fixtures authored by the implementing agent; nothing here measures a language model",
+ "mode": "scripted",
+ "projects": {
+  "ledgerlite": {
+   "arms": {
+    "G0": {
+     "client": {
+      "is_fake": true,
+      "model": "none (scripted fixture responses)",
+      "provider": "scripted-fake"
+     },
+     "construction": {
+      "duplicate_titles": 0,
+      "entities_expected": 11,
+      "entities_found": 11,
+      "entity_recall": 1.0,
+      "extra_nodes": [],
+      "hidden_relations": [
+       {
+        "recovered": false,
+        "relation": [
+         "CMP-CSV",
+         "depends_on",
+         "CMP-MONEY"
+        ],
+        "status": null
+       }
+      ],
+      "hypothesized_edges": 4,
+      "measured": true,
+      "missing_entities": [],
+      "missing_relations": [
+       [
+        "CMP-CSV",
+        "depends_on",
+        "CMP-MONEY"
+       ]
+      ],
+      "relation_recall": 0.909,
+      "relations_found": 10,
+      "relations_not_in_oracle": [],
+      "relations_required": 11
+     },
+     "costs": {
+      "fake_calls": 1,
+      "graph_ops_committed": 27,
+      "input_chars": 10250,
+      "input_tokens": null,
+      "latency_ms": null,
+      "model_calls": 1,
+      "output_chars": 14388,
+      "output_tokens": null,
+      "review_decisions": {
+       "accept": 27,
+       "defer": 0,
+       "reject": 0
+      }
+     },
+     "guardrails": {
+      "finding_codes": {
+       "stored_as_hypothesized": 4
+      },
+      "op_verdicts": {
+       "admissible": 27
+      },
+      "probe_by_event": [
+       {
+        "after": [
+         "CMP-PDF"
+        ],
+        "before": [],
+        "event": "E1"
+       }
+      ],
+      "reconcile": []
+     },
+     "impact_E5": {
+      "critical_missed": [
+       "CMP-CSV",
+       "REQ-CSV-EXPORT"
+      ],
+      "critical_total": 2,
+      "fn": [
+       "CMP-CSV",
+       "REQ-CSV-EXPORT",
+       "TEST-MONEY-FORMAT"
+      ],
+      "fp": [],
+      "measured": true,
+      "precision": 1.0,
+      "predicted": [
+       "CMP-PDF"
+      ],
+      "recall": 0.25,
+      "tp": [
+       "CMP-PDF"
+      ],
+      "unknown_flagged": []
+     },
+     "negative_E4": {
+      "false_alarm_targets": [
+       "CAP-INVOICING",
+       "CMP-PDF"
+      ],
+      "false_alarms": 2,
+      "held_for_review": [],
+      "measured": true,
+      "no_change_records": []
+     }
+    },
+    "G1": {
+     "client": {
+      "is_fake": true,
+      "model": "none (scripted fixture responses)",
+      "provider": "scripted-fake"
+     },
+     "construction": {
+      "duplicate_titles": 0,
+      "entities_expected": 11,
+      "entities_found": 11,
+      "entity_recall": 1.0,
+      "extra_nodes": [
+       "Q-P-0003-C1"
+      ],
+      "hidden_relations": [
+       {
+        "recovered": true,
+        "relation": [
+         "CMP-CSV",
+         "depends_on",
+         "CMP-MONEY"
+        ],
+        "status": "hypothesized"
+       }
+      ],
+      "hypothesized_edges": 6,
+      "measured": true,
+      "missing_entities": [],
+      "missing_relations": [],
+      "relation_recall": 1.0,
+      "relations_found": 11,
+      "relations_not_in_oracle": [
+       [
+        "Q-P-0003-C1",
+        "blocks",
+        "CMP-CSV"
+       ]
+      ],
+      "relations_required": 11
+     },
+     "costs": {
+      "fake_calls": 5,
+      "graph_ops_committed": 36,
+      "input_chars": 83083,
+      "input_tokens": null,
+      "latency_ms": null,
+      "model_calls": 5,
+      "output_chars": 21312,
+      "output_tokens": null,
+      "review_decisions": {
+       "accept": 36,
+       "defer": 2,
+       "reject": 0
+      }
+     },
+     "exploratory_pruning": {
+      "engine_pruned_with_all_evidence": [
+       "CMP-PDF"
+      ],
+      "gate_admitted": [],
+      "gate_refused": [
+       {
+        "evidence_id": "EV-1",
+        "reasons": [
+         "coverage of 'amount_range' lacks ['1000+'] (covered: ['0-999'])"
+        ]
+       }
+      ],
+      "pruned_with_gate": [],
+      "unsafe_prunes": []
+     },
+     "guardrails": {
+      "finding_codes": {
+       "contradiction": 1,
+       "editorial_declared": 1,
+       "stored_as_hypothesized": 6
+      },
+      "op_verdicts": {
+       "admissible": 36,
+       "quarantined": 2
+      },
+      "probe_by_event": [
+       {
+        "after": [
+         "CMP-PDF"
+        ],
+        "before": [],
+        "event": "E1"
+       },
+       {
+        "after": [
+         "CMP-PDF"
+        ],
+        "before": [
+         "CMP-PDF"
+        ],
+        "event": "E2"
+       },
+       {
+        "after": [
+         "CMP-CSV",
+         "CMP-PDF"
+        ],
+        "before": [
+         "CMP-PDF"
+        ],
+        "event": "E3"
+       },
+       {
+        "after": [
+         "CMP-CSV",
+         "CMP-PDF"
+        ],
+        "before": [
+         "CMP-CSV",
+         "CMP-PDF"
+        ],
+        "event": "E4"
+       },
+       {
+        "after": [
+         "CMP-CSV",
+         "CMP-PDF"
+        ],
+        "before": [
+         "CMP-CSV",
+         "CMP-PDF"
+        ],
+        "event": "E5"
+       }
+      ],
+      "reconcile": [
+       {
+        "obligations_since_baseline": [
+         [
+          "CMP-CSV",
+          "check_contract"
+         ],
+         [
+          "CMP-CSV",
+          "investigate_unknown"
+         ],
+         [
+          "CMP-CSV",
+          "review_spec"
+         ]
+        ],
+        "stale_evidence": [],
+        "status": "verified",
+        "targets": [
+         "REQ-CSV-EXPORT"
+        ],
+        "work_id": "WORK-1"
+       }
+      ]
+     },
+     "impact_E5": {
+      "critical_missed": [
+       "REQ-CSV-EXPORT"
+      ],
+      "critical_total": 2,
+      "fn": [
+       "REQ-CSV-EXPORT",
+       "TEST-MONEY-FORMAT"
+      ],
+      "fp": [],
+      "measured": true,
+      "precision": 1.0,
+      "predicted": [
+       "CMP-CSV",
+       "CMP-PDF"
+      ],
+      "recall": 0.5,
+      "tp": [
+       "CMP-CSV",
+       "CMP-PDF"
+      ],
+      "unknown_flagged": []
+     },
+     "negative_E4": {
+      "false_alarm_targets": [],
+      "false_alarms": 0,
+      "held_for_review": [
+       "op-1"
+      ],
+      "measured": true,
+      "no_change_records": []
+     }
+    },
+    "G2": {
+     "client": {
+      "is_fake": true,
+      "model": "none (scripted fixture responses)",
+      "provider": "scripted-fake"
+     },
+     "construction": {
+      "duplicate_titles": 0,
+      "entities_expected": 11,
+      "entities_found": 11,
+      "entity_recall": 1.0,
+      "extra_nodes": [
+       "Q-P-0004-C1"
+      ],
+      "hidden_relations": [
+       {
+        "recovered": true,
+        "relation": [
+         "CMP-CSV",
+         "depends_on",
+         "CMP-MONEY"
+        ],
+        "status": "confirmed"
+       }
+      ],
+      "hypothesized_edges": 5,
+      "measured": true,
+      "missing_entities": [],
+      "missing_relations": [],
+      "relation_recall": 1.0,
+      "relations_found": 11,
+      "relations_not_in_oracle": [
+       [
+        "Q-P-0004-C1",
+        "blocks",
+        "CMP-CSV"
+       ]
+      ],
+      "relations_required": 11
+     },
+     "costs": {
+      "fake_calls": 5,
+      "graph_ops_committed": 36,
+      "input_chars": 83243,
+      "input_tokens": null,
+      "latency_ms": null,
+      "model_calls": 5,
+      "output_chars": 21312,
+      "output_tokens": null,
+      "review_decisions": {
+       "accept": 37,
+       "defer": 2,
+       "reject": 0
+      }
+     },
+     "exploratory_pruning": {
+      "engine_pruned_with_all_evidence": [
+       "CMP-CSV",
+       "CMP-PDF"
+      ],
+      "gate_admitted": [],
+      "gate_refused": [
+       {
+        "evidence_id": "EV-1",
+        "reasons": [
+         "coverage of 'amount_range' lacks ['1000+'] (covered: ['0-999'])"
+        ]
+       }
+      ],
+      "pruned_with_gate": [],
+      "unsafe_prunes": [
+       "CMP-CSV"
+      ]
+     },
+     "guardrails": {
+      "finding_codes": {
+       "contradiction": 1,
+       "duplicate": 1,
+       "editorial_declared": 1,
+       "stored_as_hypothesized": 6
+      },
+      "op_verdicts": {
+       "admissible": 36,
+       "duplicate": 1,
+       "quarantined": 2
+      },
+      "probe_by_event": [
+       {
+        "after": [
+         "CMP-PDF"
+        ],
+        "before": [],
+        "event": "E1"
+       },
+       {
+        "after": [
+         "CMP-PDF"
+        ],
+        "before": [
+         "CMP-PDF"
+        ],
+        "event": "E2"
+       },
+       {
+        "after": [
+         "CMP-CSV",
+         "CMP-PDF"
+        ],
+        "before": [
+         "CMP-PDF"
+        ],
+        "event": "E3"
+       },
+       {
+        "after": [
+         "CMP-CSV",
+         "CMP-PDF"
+        ],
+        "before": [
+         "CMP-CSV",
+         "CMP-PDF"
+        ],
+        "event": "E4"
+       },
+       {
+        "after": [
+         "CMP-CSV",
+         "CMP-PDF"
+        ],
+        "before": [
+         "CMP-CSV",
+         "CMP-PDF"
+        ],
+        "event": "E5"
+       }
+      ],
+      "reconcile": [
+       {
+        "obligations_since_baseline": [
+         [
+          "CMP-CSV",
+          "check_contract"
+         ],
+         [
+          "CMP-CSV",
+          "review_spec"
+         ]
+        ],
+        "stale_evidence": [],
+        "status": "verified",
+        "targets": [
+         "REQ-CSV-EXPORT"
+        ],
+        "work_id": "WORK-1"
+       }
+      ]
+     },
+     "impact_E5": {
+      "critical_missed": [
+       "REQ-CSV-EXPORT"
+      ],
+      "critical_total": 2,
+      "fn": [
+       "REQ-CSV-EXPORT",
+       "TEST-MONEY-FORMAT"
+      ],
+      "fp": [],
+      "measured": true,
+      "precision": 1.0,
+      "predicted": [
+       "CMP-CSV",
+       "CMP-PDF"
+      ],
+      "recall": 0.5,
+      "tp": [
+       "CMP-CSV",
+       "CMP-PDF"
+      ],
+      "unknown_flagged": []
+     },
+     "negative_E4": {
+      "false_alarm_targets": [],
+      "false_alarms": 0,
+      "held_for_review": [
+       "op-1"
+      ],
+      "measured": true,
+      "no_change_records": []
+     }
+    },
+    "H": {
+     "client": null,
+     "construction": {
+      "measured": false,
+      "note": "reference graph"
+     },
+     "costs": {
+      "fake_calls": 0,
+      "graph_ops_committed": 0,
+      "input_chars": 0,
+      "input_tokens": null,
+      "latency_ms": null,
+      "model_calls": 0,
+      "output_chars": 0,
+      "output_tokens": null,
+      "review_decisions": {
+       "accept": 0,
+       "defer": 0,
+       "reject": 0
+      }
+     },
+     "guardrails": {
+      "finding_codes": {},
+      "op_verdicts": {},
+      "probe_by_event": [],
+      "reconcile": []
+     },
+     "impact_E5": {
+      "critical_missed": [
+       "REQ-CSV-EXPORT"
+      ],
+      "critical_total": 2,
+      "fn": [
+       "REQ-CSV-EXPORT",
+       "TEST-MONEY-FORMAT"
+      ],
+      "fp": [],
+      "measured": true,
+      "precision": 1.0,
+      "predicted": [
+       "CMP-CSV",
+       "CMP-PDF"
+      ],
+      "recall": 0.5,
+      "tp": [
+       "CMP-CSV",
+       "CMP-PDF"
+      ],
+      "unknown_flagged": []
+     },
+     "negative_E4": {
+      "false_alarm_targets": [
+       "CAP-INVOICING",
+       "CMP-PDF"
+      ],
+      "false_alarms": 2,
+      "held_for_review": [],
+      "measured": true,
+      "no_change_records": []
+     }
+    }
+   },
+   "labeler": "single reviewer (the implementing agent); exploratory, not independent",
+   "oracle_version": "1.0"
+  },
+  "toolshare": {
+   "arms": {
+    "G0": {
+     "client": {
+      "is_fake": true,
+      "model": "none (scripted fixture responses)",
+      "provider": "scripted-fake"
+     },
+     "construction": {
+      "duplicate_titles": 0,
+      "entities_expected": 13,
+      "entities_found": 13,
+      "entity_recall": 1.0,
+      "extra_nodes": [],
+      "hidden_relations": [
+       {
+        "recovered": false,
+        "relation": [
+         "CMP-HOLDS",
+         "depends_on",
+         "CMP-NOTIFY"
+        ],
+        "status": null
+       }
+      ],
+      "hypothesized_edges": 4,
+      "measured": true,
+      "missing_entities": [],
+      "missing_relations": [
+       [
+        "CMP-HOLDS",
+        "depends_on",
+        "CMP-NOTIFY"
+       ]
+      ],
+      "relation_recall": 0.929,
+      "relations_found": 13,
+      "relations_not_in_oracle": [],
+      "relations_required": 14
+     },
+     "costs": {
+      "fake_calls": 1,
+      "graph_ops_committed": 34,
+      "input_chars": 12959,
+      "input_tokens": null,
+      "latency_ms": null,
+      "model_calls": 1,
+      "output_chars": 18694,
+      "output_tokens": null,
+      "review_decisions": {
+       "accept": 34,
+       "defer": 0,
+       "reject": 0
+      }
+     },
+     "guardrails": {
+      "finding_codes": {
+       "stored_as_hypothesized": 4
+      },
+      "op_verdicts": {
+       "admissible": 34
+      },
+      "probe_by_event": [
+       {
+        "after": [
+         "CMP-NOTIFY",
+         "REQ-READY-NOTICE",
+         "TEST-NOTICE-FORMAT"
+        ],
+        "before": [],
+        "event": "E1"
+       }
+      ],
+      "reconcile": []
+     },
+     "impact_E5": {
+      "critical_missed": [
+       "CMP-HOLDS"
+      ],
+      "critical_total": 2,
+      "fn": [
+       "CMP-HOLDS"
+      ],
+      "fp": [],
+      "measured": true,
+      "precision": 1.0,
+      "predicted": [
+       "CMP-NOTIFY",
+       "REQ-READY-NOTICE",
+       "TEST-NOTICE-FORMAT"
+      ],
+      "recall": 0.75,
+      "tp": [
+       "CMP-NOTIFY",
+       "REQ-READY-NOTICE",
+       "TEST-NOTICE-FORMAT"
+      ],
+      "unknown_flagged": []
+     },
+     "negative_E4": {
+      "false_alarm_targets": [
+       "CAP-NOTIFY",
+       "CMP-NOTIFY"
+      ],
+      "false_alarms": 2,
+      "held_for_review": [],
+      "measured": true,
+      "no_change_records": []
+     }
+    },
+    "G1": {
+     "client": {
+      "is_fake": true,
+      "model": "none (scripted fixture responses)",
+      "provider": "scripted-fake"
+     },
+     "construction": {
+      "duplicate_titles": 0,
+      "entities_expected": 13,
+      "entities_found": 13,
+      "entity_recall": 1.0,
+      "extra_nodes": [],
+      "hidden_relations": [
+       {
+        "recovered": false,
+        "relation": [
+         "CMP-HOLDS",
+         "depends_on",
+         "CMP-NOTIFY"
+        ],
+        "status": null
+       }
+      ],
+      "hypothesized_edges": 4,
+      "measured": true,
+      "missing_entities": [],
+      "missing_relations": [
+       [
+        "CMP-HOLDS",
+        "depends_on",
+        "CMP-NOTIFY"
+       ]
+      ],
+      "relation_recall": 0.929,
+      "relations_found": 13,
+      "relations_not_in_oracle": [],
+      "relations_required": 14
+     },
+     "costs": {
+      "fake_calls": 5,
+      "graph_ops_committed": 38,
+      "input_chars": 97070,
+      "input_tokens": null,
+      "latency_ms": null,
+      "model_calls": 5,
+      "output_chars": 24434,
+      "output_tokens": null,
+      "review_decisions": {
+       "accept": 39,
+       "defer": 0,
+       "reject": 2
+      }
+     },
+     "guardrails": {
+      "finding_codes": {
+       "editorial_no_op": 1,
+       "fabricated_citation": 1,
+       "removal_without_evidence": 1,
+       "requires_authorization": 1,
+       "stored_as_hypothesized": 4,
+       "unsupported_claim": 1
+      },
+      "op_verdicts": {
+       "admissible": 39,
+       "invalid": 2
+      },
+      "probe_by_event": [
+       {
+        "after": [
+         "CMP-NOTIFY",
+         "REQ-READY-NOTICE",
+         "TEST-NOTICE-FORMAT"
+        ],
+        "before": [],
+        "event": "E1"
+       },
+       {
+        "after": [
+         "CMP-NOTIFY",
+         "REQ-READY-NOTICE",
+         "TEST-NOTICE-FORMAT"
+        ],
+        "before": [
+         "CMP-NOTIFY",
+         "REQ-READY-NOTICE",
+         "TEST-NOTICE-FORMAT"
+        ],
+        "event": "E2"
+       },
+       {
+        "after": [
+         "CMP-NOTIFY",
+         "REQ-READY-NOTICE",
+         "TEST-NOTICE-FORMAT"
+        ],
+        "before": [
+         "CMP-NOTIFY",
+         "REQ-READY-NOTICE",
+         "TEST-NOTICE-FORMAT"
+        ],
+        "event": "E3"
+       },
+       {
+        "after": [
+         "CMP-NOTIFY",
+         "REQ-READY-NOTICE",
+         "TEST-NOTICE-FORMAT"
+        ],
+        "before": [
+         "CMP-NOTIFY",
+         "REQ-READY-NOTICE",
+         "TEST-NOTICE-FORMAT"
+        ],
+        "event": "E4"
+       },
+       {
+        "after": [
+         "CMP-NOTIFY",
+         "REQ-READY-NOTICE",
+         "TEST-NOTICE-FORMAT"
+        ],
+        "before": [
+         "CMP-NOTIFY",
+         "REQ-READY-NOTICE",
+         "TEST-NOTICE-FORMAT"
+        ],
+        "event": "E5"
+       }
+      ],
+      "reconcile": [
+       {
+        "obligations_since_baseline": [],
+        "stale_evidence": [],
+        "status": "verified",
+        "targets": [
+         "REQ-HOLD-EXPIRY"
+        ],
+        "work_id": "WORK-1"
+       },
+       {
+        "obligations_since_baseline": [
+         [
+          "CMP-NOTIFY",
+          "check_contract"
+         ],
+         [
+          "CMP-NOTIFY",
+          "review_implementation"
+         ],
+         [
+          "REQ-READY-NOTICE",
+          "check_contract"
+         ],
+         [
+          "REQ-READY-NOTICE",
+          "investigate_unknown"
+         ]
+        ],
+        "stale_evidence": [
+         "EV-2"
+        ],
+        "status": "needs_revalidation",
+        "targets": [
+         "REQ-READY-NOTICE"
+        ],
+        "work_id": "WORK-2"
+       }
+      ]
+     },
+     "impact_E5": {
+      "critical_missed": [
+       "CMP-HOLDS"
+      ],
+      "critical_total": 2,
+      "fn": [
+       "CMP-HOLDS"
+      ],
+      "fp": [],
+      "measured": true,
+      "precision": 1.0,
+      "predicted": [
+       "CMP-NOTIFY",
+       "REQ-READY-NOTICE",
+       "TEST-NOTICE-FORMAT"
+      ],
+      "recall": 0.75,
+      "tp": [
+       "CMP-NOTIFY",
+       "REQ-READY-NOTICE",
+       "TEST-NOTICE-FORMAT"
+      ],
+      "unknown_flagged": []
+     },
+     "negative_E4": {
+      "false_alarm_targets": [],
+      "false_alarms": 0,
+      "held_for_review": [],
+      "measured": true,
+      "no_change_records": [
+       "op-1"
+      ]
+     }
+    },
+    "G2": {
+     "client": {
+      "is_fake": true,
+      "model": "none (scripted fixture responses)",
+      "provider": "scripted-fake"
+     },
+     "construction": {
+      "duplicate_titles": 0,
+      "entities_expected": 13,
+      "entities_found": 13,
+      "entity_recall": 1.0,
+      "extra_nodes": [],
+      "hidden_relations": [
+       {
+        "recovered": true,
+        "relation": [
+         "CMP-HOLDS",
+         "depends_on",
+         "CMP-NOTIFY"
+        ],
+        "status": "confirmed"
+       }
+      ],
+      "hypothesized_edges": 4,
+      "measured": true,
+      "missing_entities": [],
+      "missing_relations": [],
+      "relation_recall": 1.0,
+      "relations_found": 14,
+      "relations_not_in_oracle": [],
+      "relations_required": 14
+     },
+     "costs": {
+      "fake_calls": 5,
+      "graph_ops_committed": 39,
+      "input_chars": 97586,
+      "input_tokens": null,
+      "latency_ms": null,
+      "model_calls": 5,
+      "output_chars": 24434,
+      "output_tokens": null,
+      "review_decisions": {
+       "accept": 40,
+       "defer": 0,
+       "reject": 2
+      }
+     },
+     "guardrails": {
+      "finding_codes": {
+       "editorial_no_op": 1,
+       "fabricated_citation": 1,
+       "removal_without_evidence": 1,
+       "requires_authorization": 1,
+       "stored_as_hypothesized": 4,
+       "unsupported_claim": 1
+      },
+      "op_verdicts": {
+       "admissible": 40,
+       "invalid": 2
+      },
+      "probe_by_event": [
+       {
+        "after": [
+         "CMP-NOTIFY",
+         "REQ-READY-NOTICE",
+         "TEST-NOTICE-FORMAT"
+        ],
+        "before": [],
+        "event": "E1"
+       },
+       {
+        "after": [
+         "CMP-NOTIFY",
+         "REQ-READY-NOTICE",
+         "TEST-NOTICE-FORMAT"
+        ],
+        "before": [
+         "CMP-NOTIFY",
+         "REQ-READY-NOTICE",
+         "TEST-NOTICE-FORMAT"
+        ],
+        "event": "E2"
+       },
+       {
+        "after": [
+         "CMP-HOLDS",
+         "CMP-NOTIFY",
+         "REQ-READY-NOTICE",
+         "TEST-NOTICE-FORMAT"
+        ],
+        "before": [
+         "CMP-NOTIFY",
+         "REQ-READY-NOTICE",
+         "TEST-NOTICE-FORMAT"
+        ],
+        "event": "E3"
+       },
+       {
+        "after": [
+         "CMP-HOLDS",
+         "CMP-NOTIFY",
+         "REQ-READY-NOTICE",
+         "TEST-NOTICE-FORMAT"
+        ],
+        "before": [
+         "CMP-HOLDS",
+         "CMP-NOTIFY",
+         "REQ-READY-NOTICE",
+         "TEST-NOTICE-FORMAT"
+        ],
+        "event": "E4"
+       },
+       {
+        "after": [
+         "CMP-HOLDS",
+         "CMP-NOTIFY",
+         "REQ-READY-NOTICE",
+         "TEST-NOTICE-FORMAT"
+        ],
+        "before": [
+         "CMP-HOLDS",
+         "CMP-NOTIFY",
+         "REQ-READY-NOTICE",
+         "TEST-NOTICE-FORMAT"
+        ],
+        "event": "E5"
+       }
+      ],
+      "reconcile": [
+       {
+        "obligations_since_baseline": [
+         [
+          "CMP-HOLDS",
+          "check_contract"
+         ]
+        ],
+        "stale_evidence": [],
+        "status": "verified",
+        "targets": [
+         "REQ-HOLD-EXPIRY"
+        ],
+        "work_id": "WORK-1"
+       },
+       {
+        "obligations_since_baseline": [
+         [
+          "CMP-NOTIFY",
+          "check_contract"
+         ],
+         [
+          "CMP-NOTIFY",
+          "review_implementation"
+         ],
+         [
+          "CMP-NOTIFY",
+          "review_spec"
+         ],
+         [
+          "REQ-READY-NOTICE",
+          "check_contract"
+         ],
+         [
+          "REQ-READY-NOTICE",
+          "investigate_unknown"
+         ]
+        ],
+        "stale_evidence": [
+         "EV-2"
+        ],
+        "status": "needs_revalidation",
+        "targets": [
+         "REQ-READY-NOTICE"
+        ],
+        "work_id": "WORK-2"
+       }
+      ]
+     },
+     "impact_E5": {
+      "critical_missed": [],
+      "critical_total": 2,
+      "fn": [],
+      "fp": [],
+      "measured": true,
+      "precision": 1.0,
+      "predicted": [
+       "CMP-HOLDS",
+       "CMP-NOTIFY",
+       "REQ-READY-NOTICE",
+       "TEST-NOTICE-FORMAT"
+      ],
+      "recall": 1.0,
+      "tp": [
+       "CMP-HOLDS",
+       "CMP-NOTIFY",
+       "REQ-READY-NOTICE",
+       "TEST-NOTICE-FORMAT"
+      ],
+      "unknown_flagged": []
+     },
+     "negative_E4": {
+      "false_alarm_targets": [],
+      "false_alarms": 0,
+      "held_for_review": [],
+      "measured": true,
+      "no_change_records": [
+       "op-1"
+      ]
+     }
+    },
+    "H": {
+     "client": null,
+     "construction": {
+      "measured": false,
+      "note": "reference graph"
+     },
+     "costs": {
+      "fake_calls": 0,
+      "graph_ops_committed": 0,
+      "input_chars": 0,
+      "input_tokens": null,
+      "latency_ms": null,
+      "model_calls": 0,
+      "output_chars": 0,
+      "output_tokens": null,
+      "review_decisions": {
+       "accept": 0,
+       "defer": 0,
+       "reject": 0
+      }
+     },
+     "guardrails": {
+      "finding_codes": {},
+      "op_verdicts": {},
+      "probe_by_event": [],
+      "reconcile": []
+     },
+     "impact_E5": {
+      "critical_missed": [],
+      "critical_total": 2,
+      "fn": [],
+      "fp": [],
+      "measured": true,
+      "precision": 1.0,
+      "predicted": [
+       "CMP-HOLDS",
+       "CMP-NOTIFY",
+       "REQ-READY-NOTICE",
+       "TEST-NOTICE-FORMAT"
+      ],
+      "recall": 1.0,
+      "tp": [
+       "CMP-HOLDS",
+       "CMP-NOTIFY",
+       "REQ-READY-NOTICE",
+       "TEST-NOTICE-FORMAT"
+      ],
+      "unknown_flagged": []
+     },
+     "negative_E4": {
+      "false_alarm_targets": [
+       "CAP-NOTIFY",
+       "CMP-HOLDS",
+       "CMP-NOTIFY"
+      ],
+      "false_alarms": 3,
+      "held_for_review": [],
+      "measured": true,
+      "no_change_records": []
+     }
+    }
+   },
+   "labeler": "single reviewer (the implementing agent); exploratory, not independent",
+   "oracle_version": "1.0"
+  }
+ }
+}

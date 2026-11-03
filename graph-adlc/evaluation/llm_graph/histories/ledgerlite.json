@@ -1,0 +1,173 @@
+{
+  "project": "ledgerlite",
+  "description": "Studio invoicing: PDF invoices, monthly CSV export for the accountant, a shared money formatter. Independently written requirements, architecture table and a decision record; a three-commit Python repository.",
+  "repo": {
+    "name": "ledgerlite",
+    "commits": [
+      {
+        "id": "c1",
+        "dir": "code/c1",
+        "message": "Invoices: money formatter, PDF lines, CSV export",
+        "date": "2026-09-03T09:00:00+00:00"
+      },
+      {
+        "id": "c2",
+        "dir": "code/c2",
+        "message": "CSV export: reuse the shared formatter so amounts always have two decimals",
+        "date": "2026-09-22T09:00:00+00:00"
+      },
+      {
+        "id": "c3",
+        "dir": "code/c3",
+        "message": "Group thousands in formatted amounts for readability",
+        "date": "2026-10-08T09:00:00+00:00"
+      }
+    ]
+  },
+  "probe": {
+    "node_id": "CMP-MONEY",
+    "aspect": "implementation",
+    "event": "E5",
+    "description": "The shared money formatter now inserts ',' thousands separators (commit c3).",
+    "affected_domain": {
+      "amount_range": [
+        "0-999",
+        "1000+"
+      ]
+    }
+  },
+  "events": [
+    {
+      "id": "E1",
+      "kind": "discovery",
+      "sources": [
+        {
+          "path": "docs/requirements.v1.md",
+          "logical_path": "docs/requirements.md",
+          "type": "requirements",
+          "version": "v1"
+        },
+        {
+          "path": "docs/architecture.md",
+          "type": "architecture",
+          "version": "v1"
+        }
+      ],
+      "code": "c1",
+      "change_event": {
+        "kind": "initial_construction",
+        "summary": "Build the initial specification graph from the requirements, the architecture table and the current repository."
+      }
+    },
+    {
+      "id": "E2",
+      "kind": "refinement",
+      "sources": [
+        {
+          "path": "docs/requirements.v2.md",
+          "logical_path": "docs/requirements.md",
+          "type": "requirements",
+          "version": "v2"
+        },
+        {
+          "path": "docs/decisions/DR-001-csv-layout.md",
+          "type": "decision",
+          "version": "2026-09-15"
+        }
+      ],
+      "change_event": {
+        "kind": "source_revision",
+        "summary": "docs/requirements.md was revised to v2 and decision record DR-001 was added."
+      },
+      "lifecycle_after": [
+        {
+          "action": "work_create",
+          "requirement": "REQ-CSV-EXPORT",
+          "label": "W-CSV"
+        }
+      ]
+    },
+    {
+      "id": "E3",
+      "kind": "implementation_observation",
+      "code": "c2",
+      "diff": [
+        "c1",
+        "c2"
+      ],
+      "challenge": true,
+      "change_event": {
+        "kind": "code_change",
+        "summary": "A new commit landed on the main branch of the ledgerlite repository."
+      },
+      "lifecycle_after": [
+        {
+          "action": "work_rebase",
+          "work": "W-CSV"
+        },
+        {
+          "action": "work_submit",
+          "work": "W-CSV",
+          "code": "c2",
+          "evidence": []
+        }
+      ]
+    },
+    {
+      "id": "E4",
+      "kind": "wording_only",
+      "sources": [
+        {
+          "path": "docs/requirements.v3.md",
+          "logical_path": "docs/requirements.md",
+          "type": "requirements",
+          "version": "v3"
+        }
+      ],
+      "negative_probe": {
+        "node_id": "REQ-PDF-INVOICE",
+        "aspect": "semantic"
+      },
+      "change_event": {
+        "kind": "source_revision",
+        "summary": "docs/requirements.md was revised to v3."
+      }
+    },
+    {
+      "id": "E5",
+      "kind": "change",
+      "code": "c3",
+      "diff": [
+        "c2",
+        "c3"
+      ],
+      "challenge": true,
+      "lifecycle_before": [
+        {
+          "action": "evidence",
+          "node": "CMP-MONEY",
+          "kind": "contract_preservation",
+          "result": "passed",
+          "code": "c3",
+          "details": {
+            "note": "TEST-MONEY-FORMAT green on the new formatter",
+            "coverage": {
+              "amount_range": [
+                "0-999"
+              ]
+            }
+          }
+        }
+      ],
+      "change_event": {
+        "kind": "code_change",
+        "summary": "A new commit landed on the main branch of the ledgerlite repository."
+      },
+      "lifecycle_after": [
+        {
+          "action": "reconcile_all"
+        }
+      ]
+    }
+  ]
+}

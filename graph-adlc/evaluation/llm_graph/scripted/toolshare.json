@@ -1,0 +1,1034 @@
+{
+ "_notice": "SCRIPTED FAKE MODEL OUTPUTS authored by the implementing agent to exercise the pipeline. They are NOT outputs of any language model and must never be reported as LLM results. Placeholders: '@<logical path>' / '@git:<path>' / '@diff' resolve to the current source id, 'sha256: @current' to its hash and 'lines: @auto' to the excerpt's location, at replay time.",
+ "responses": {
+  "toolshare/E1/propose": {
+   "intent": "Initial graph from discovery notes, requirements draft 1, architecture notes and repository c1",
+   "operations": [
+    {
+     "op_id": "op-1",
+     "kind": "add_node",
+     "node": {
+      "id": "GOAL-FAIR-ACCESS",
+      "kind": "goal",
+      "title": "Fair, predictable tool borrowing",
+      "body": "Members can borrow shared tools fairly and predictably.",
+      "data": {}
+     },
+     "reason": "stated in source",
+     "support": "supported",
+     "confidence": 0.8,
+     "change_class": "structure",
+     "source_evidence": [
+      {
+       "source_id": "@spec/requirements.md",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "GOAL-FAIR-ACCESS — Members can borrow shared tools fairly and predictably."
+      }
+     ]
+    },
+    {
+     "op_id": "op-2",
+     "kind": "add_node",
+     "node": {
+      "id": "CAP-HOLDS",
+      "kind": "capability",
+      "title": "Holds",
+      "body": "Members can queue for tools that are not currently on the shelf.",
+      "data": {}
+     },
+     "reason": "stated in source",
+     "support": "supported",
+     "confidence": 0.8,
+     "change_class": "structure",
+     "source_evidence": [
+      {
+       "source_id": "@spec/requirements.md",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "CAP-HOLDS — Members can queue for tools that are not currently on the shelf."
+      }
+     ]
+    },
+    {
+     "op_id": "op-3",
+     "kind": "add_node",
+     "node": {
+      "id": "CAP-NOTIFY",
+      "kind": "capability",
+      "title": "Member notifications",
+      "body": "Members are told when something they are waiting for changes.",
+      "data": {}
+     },
+     "reason": "stated in source",
+     "support": "supported",
+     "confidence": 0.8,
+     "change_class": "structure",
+     "source_evidence": [
+      {
+       "source_id": "@spec/requirements.md",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "CAP-NOTIFY — Members are told when something they are waiting for changes."
+      }
+     ]
+    },
+    {
+     "op_id": "op-4",
+     "kind": "add_node",
+     "node": {
+      "id": "REQ-PLACE-HOLD",
+      "kind": "requirement",
+      "title": "Place a hold",
+      "body": "A member can place a hold on a catalogued tool that is on loan.",
+      "data": {
+       "acceptance_criteria": [
+        "A member without overdue items can place a hold on any catalogued tool.",
+        "Holds on the same tool are served first come, first served."
+       ]
+      }
+     },
+     "reason": "stated in source",
+     "support": "supported",
+     "confidence": 0.8,
+     "change_class": "structure",
+     "source_evidence": [
+      {
+       "source_id": "@spec/requirements.md",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "REQ-PLACE-HOLD — A member can place a hold on a catalogued tool that is on loan."
+      },
+      {
+       "source_id": "@spec/requirements.md",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "Holds on the same tool are served first come, first served."
+      }
+     ]
+    },
+    {
+     "op_id": "op-5",
+     "kind": "add_node",
+     "node": {
+      "id": "REQ-HOLD-EXPIRY",
+      "kind": "requirement",
+      "title": "Hold expiry and pickup window",
+      "body": "When a held tool becomes available, the member has a pickup window to collect it; otherwise the hold lapses and the tool passes to the next member.",
+      "data": {
+       "acceptance_criteria": []
+      }
+     },
+     "reason": "stated in source",
+     "support": "supported",
+     "confidence": 0.8,
+     "change_class": "structure",
+     "source_evidence": [
+      {
+       "source_id": "@spec/requirements.md",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "REQ-HOLD-EXPIRY — When a held tool becomes available, the member has a pickup window to collect it."
+      }
+     ]
+    },
+    {
+     "op_id": "op-6",
+     "kind": "add_node",
+     "node": {
+      "id": "Q-PICKUP-WINDOW",
+      "kind": "question",
+      "title": "How long is the pickup window?",
+      "body": "The desk is staffed three days a week.",
+      "data": {
+       "blocking": true,
+       "state": "open"
+      }
+     },
+     "reason": "stated in source",
+     "support": "supported",
+     "confidence": 0.8,
+     "change_class": "structure",
+     "source_evidence": [
+      {
+       "source_id": "@spec/requirements.md",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "Q-PICKUP-WINDOW — How long is the pickup window? The desk is staffed three days a week. This blocks REQ-HOLD-EXPIRY."
+      }
+     ]
+    },
+    {
+     "op_id": "op-7",
+     "kind": "add_node",
+     "node": {
+      "id": "REQ-READY-NOTICE",
+      "kind": "requirement",
+      "title": "Ready-for-pickup notice",
+      "body": "When a held tool is ready for pickup, the member is notified by email.",
+      "data": {
+       "acceptance_criteria": [
+        "The email names the tool and the pickup deadline."
+       ]
+      }
+     },
+     "reason": "stated in source",
+     "support": "supported",
+     "confidence": 0.8,
+     "change_class": "structure",
+     "source_evidence": [
+      {
+       "source_id": "@spec/requirements.md",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "REQ-READY-NOTICE — When a held tool is ready for pickup, the member is notified by email."
+      }
+     ]
+    },
+    {
+     "op_id": "op-8",
+     "kind": "add_node",
+     "node": {
+      "id": "CON-NOTICE-FORMAT",
+      "kind": "contract",
+      "title": "Notification message format",
+      "body": "Notification messages are plain-text emails with a subject line and at most 500 characters of body text.",
+      "data": {
+       "status": "accepted"
+      }
+     },
+     "reason": "stated in source",
+     "support": "supported",
+     "confidence": 0.8,
+     "change_class": "structure",
+     "source_evidence": [
+      {
+       "source_id": "@spec/requirements.md",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "CON-NOTICE-FORMAT — Notification messages are plain-text emails with a subject line and at most 500 characters of"
+      }
+     ]
+    },
+    {
+     "op_id": "op-9",
+     "kind": "add_node",
+     "node": {
+      "id": "CMP-HOLDS",
+      "kind": "component",
+      "title": "Holds service",
+      "body": "Owns the hold queue and hold expiry.",
+      "data": {}
+     },
+     "reason": "stated in source",
+     "support": "supported",
+     "confidence": 0.8,
+     "change_class": "structure",
+     "source_evidence": [
+      {
+       "source_id": "@spec/architecture.md",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "CMP-HOLDS, the holds service (`toolshare/holds.py`), owns the hold queue and hold expiry."
+      }
+     ]
+    },
+    {
+     "op_id": "op-10",
+     "kind": "add_node",
+     "node": {
+      "id": "CMP-INVENTORY",
+      "kind": "component",
+      "title": "Inventory module",
+      "body": "Tracks whether a tool is on the shelf.",
+      "data": {}
+     },
+     "reason": "stated in source",
+     "support": "supported",
+     "confidence": 0.8,
+     "change_class": "structure",
+     "source_evidence": [
+      {
+       "source_id": "@spec/architecture.md",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "CMP-INVENTORY, the inventory module (`toolshare/inventory.py`), tracks whether a tool is on the shelf."
+      }
+     ]
+    },
+    {
+     "op_id": "op-11",
+     "kind": "add_node",
+     "node": {
+      "id": "CMP-NOTIFY",
+      "kind": "component",
+      "title": "Notification service",
+      "body": "Sends member emails.",
+      "data": {}
+     },
+     "reason": "stated in source",
+     "support": "supported",
+     "confidence": 0.8,
+     "change_class": "structure",
+     "source_evidence": [
+      {
+       "source_id": "@spec/architecture.md",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "CMP-NOTIFY, the notification service (`toolshare/notifications.py`), sends member emails and implements"
+      }
+     ]
+    },
+    {
+     "op_id": "op-12",
+     "kind": "add_node",
+     "node": {
+      "id": "ART-HOLDS",
+      "kind": "artifact",
+      "title": "toolshare/holds.py",
+      "body": "Source file toolshare/holds.py.",
+      "data": {
+       "path": "toolshare/holds.py"
+      }
+     },
+     "reason": "stated in source",
+     "support": "supported",
+     "confidence": 0.8,
+     "change_class": "structure",
+     "source_evidence": [
+      {
+       "source_id": "@spec/architecture.md",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "(`toolshare/holds.py`)"
+      }
+     ]
+    },
+    {
+     "op_id": "op-13",
+     "kind": "add_node",
+     "node": {
+      "id": "ART-INVENTORY",
+      "kind": "artifact",
+      "title": "toolshare/inventory.py",
+      "body": "Source file toolshare/inventory.py.",
+      "data": {
+       "path": "toolshare/inventory.py"
+      }
+     },
+     "reason": "stated in source",
+     "support": "supported",
+     "confidence": 0.8,
+     "change_class": "structure",
+     "source_evidence": [
+      {
+       "source_id": "@spec/architecture.md",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "(`toolshare/inventory.py`)"
+      }
+     ]
+    },
+    {
+     "op_id": "op-14",
+     "kind": "add_node",
+     "node": {
+      "id": "ART-NOTIFY",
+      "kind": "artifact",
+      "title": "toolshare/notifications.py",
+      "body": "Source file toolshare/notifications.py.",
+      "data": {
+       "path": "toolshare/notifications.py"
+      }
+     },
+     "reason": "stated in source",
+     "support": "supported",
+     "confidence": 0.8,
+     "change_class": "structure",
+     "source_evidence": [
+      {
+       "source_id": "@spec/architecture.md",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "(`toolshare/notifications.py`)"
+      }
+     ]
+    },
+    {
+     "op_id": "op-15",
+     "kind": "add_node",
+     "node": {
+      "id": "TEST-HOLD-QUEUE",
+      "kind": "test",
+      "title": "Hold queue test",
+      "body": "Checks queue order and expiry.",
+      "data": {
+       "command": "pytest -q tests/test_holds.py"
+      }
+     },
+     "reason": "stated in source",
+     "support": "supported",
+     "confidence": 0.8,
+     "change_class": "structure",
+     "source_evidence": [
+      {
+       "source_id": "@spec/architecture.md",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "TEST-HOLD-QUEUE (`tests/test_holds.py`) checks queue order and expiry."
+      }
+     ]
+    },
+    {
+     "op_id": "op-16",
+     "kind": "add_node",
+     "node": {
+      "id": "TEST-NOTICE-FORMAT",
+      "kind": "test",
+      "title": "Notice format test",
+      "body": "Checks messages against CON-NOTICE-FORMAT.",
+      "data": {
+       "command": "pytest -q tests/test_notifications.py"
+      }
+     },
+     "reason": "stated in source",
+     "support": "supported",
+     "confidence": 0.8,
+     "change_class": "structure",
+     "source_evidence": [
+      {
+       "source_id": "@spec/architecture.md",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "TEST-NOTICE-FORMAT"
+      }
+     ]
+    },
+    {
+     "op_id": "op-17",
+     "kind": "add_edge",
+     "edge": {
+      "src": "GOAL-FAIR-ACCESS",
+      "dst": "CAP-HOLDS",
+      "relation": "refines"
+     },
+     "reason": "capability listed under the goal",
+     "support": "hypothesized",
+     "confidence": 0.8,
+     "change_class": "structure",
+     "source_evidence": [
+      {
+       "source_id": "@spec/requirements.md",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "## Capability: Holds"
+      }
+     ]
+    },
+    {
+     "op_id": "op-18",
+     "kind": "add_edge",
+     "edge": {
+      "src": "GOAL-FAIR-ACCESS",
+      "dst": "CAP-NOTIFY",
+      "relation": "refines"
+     },
+     "reason": "capability listed under the goal",
+     "support": "hypothesized",
+     "confidence": 0.8,
+     "change_class": "structure",
+     "source_evidence": [
+      {
+       "source_id": "@spec/requirements.md",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "## Capability: Member notifications"
+      }
+     ]
+    },
+    {
+     "op_id": "op-19",
+     "kind": "add_edge",
+     "edge": {
+      "src": "CAP-HOLDS",
+      "dst": "REQ-PLACE-HOLD",
+      "relation": "refines"
+     },
+     "reason": "listed under CAP-HOLDS",
+     "support": "supported",
+     "confidence": 0.8,
+     "change_class": "structure",
+     "source_evidence": [
+      {
+       "source_id": "@spec/requirements.md",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "REQ-PLACE-HOLD — A member can place a hold"
+      }
+     ]
+    },
+    {
+     "op_id": "op-20",
+     "kind": "add_edge",
+     "edge": {
+      "src": "CAP-HOLDS",
+      "dst": "REQ-HOLD-EXPIRY",
+      "relation": "refines"
+     },
+     "reason": "listed under CAP-HOLDS",
+     "support": "supported",
+     "confidence": 0.8,
+     "change_class": "structure",
+     "source_evidence": [
+      {
+       "source_id": "@spec/requirements.md",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "REQ-HOLD-EXPIRY — When a held tool becomes available"
+      }
+     ]
+    },
+    {
+     "op_id": "op-21",
+     "kind": "add_edge",
+     "edge": {
+      "src": "CAP-NOTIFY",
+      "dst": "REQ-READY-NOTICE",
+      "relation": "refines"
+     },
+     "reason": "listed under CAP-NOTIFY",
+     "support": "supported",
+     "confidence": 0.8,
+     "change_class": "structure",
+     "source_evidence": [
+      {
+       "source_id": "@spec/requirements.md",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "REQ-READY-NOTICE — When a held tool is ready for pickup"
+      }
+     ]
+    },
+    {
+     "op_id": "op-22",
+     "kind": "add_edge",
+     "edge": {
+      "src": "Q-PICKUP-WINDOW",
+      "dst": "REQ-HOLD-EXPIRY",
+      "relation": "blocks"
+     },
+     "reason": "stated in source",
+     "support": "supported",
+     "confidence": 0.8,
+     "change_class": "structure",
+     "source_evidence": [
+      {
+       "source_id": "@spec/requirements.md",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "This blocks REQ-HOLD-EXPIRY."
+      }
+     ]
+    },
+    {
+     "op_id": "op-23",
+     "kind": "add_edge",
+     "edge": {
+      "src": "CMP-HOLDS",
+      "dst": "REQ-PLACE-HOLD",
+      "relation": "implements"
+     },
+     "reason": "stated in source",
+     "support": "supported",
+     "confidence": 0.8,
+     "change_class": "structure",
+     "source_evidence": [
+      {
+       "source_id": "@spec/architecture.md",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "It implements REQ-PLACE-HOLD and REQ-HOLD-EXPIRY."
+      }
+     ]
+    },
+    {
+     "op_id": "op-24",
+     "kind": "add_edge",
+     "edge": {
+      "src": "CMP-HOLDS",
+      "dst": "REQ-HOLD-EXPIRY",
+      "relation": "implements"
+     },
+     "reason": "stated in source",
+     "support": "supported",
+     "confidence": 0.8,
+     "change_class": "structure",
+     "source_evidence": [
+      {
+       "source_id": "@spec/architecture.md",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "It implements REQ-PLACE-HOLD and REQ-HOLD-EXPIRY."
+      }
+     ]
+    },
+    {
+     "op_id": "op-25",
+     "kind": "add_edge",
+     "edge": {
+      "src": "CMP-NOTIFY",
+      "dst": "REQ-READY-NOTICE",
+      "relation": "implements"
+     },
+     "reason": "stated in source",
+     "support": "supported",
+     "confidence": 0.8,
+     "change_class": "structure",
+     "source_evidence": [
+      {
+       "source_id": "@spec/architecture.md",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "REQ-READY-NOTICE. Every message it sends must follow CON-NOTICE-FORMAT."
+      }
+     ]
+    },
+    {
+     "op_id": "op-26",
+     "kind": "add_edge",
+     "edge": {
+      "src": "CMP-HOLDS",
+      "dst": "CMP-INVENTORY",
+      "relation": "depends_on"
+     },
+     "reason": "stated in source",
+     "support": "supported",
+     "confidence": 0.8,
+     "change_class": "structure",
+     "source_evidence": [
+      {
+       "source_id": "@spec/architecture.md",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "The holds service reads availability from inventory."
+      },
+      {
+       "source_id": "@git:toolshare/holds.py",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "from toolshare.inventory import is_on_shelf"
+      }
+     ]
+    },
+    {
+     "op_id": "op-27",
+     "kind": "add_edge",
+     "edge": {
+      "src": "CMP-NOTIFY",
+      "dst": "CON-NOTICE-FORMAT",
+      "relation": "constrained_by"
+     },
+     "reason": "stated in source",
+     "support": "supported",
+     "confidence": 0.8,
+     "change_class": "structure",
+     "source_evidence": [
+      {
+       "source_id": "@spec/architecture.md",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "Every message it sends must follow CON-NOTICE-FORMAT."
+      }
+     ]
+    },
+    {
+     "op_id": "op-28",
+     "kind": "add_edge",
+     "edge": {
+      "src": "CMP-HOLDS",
+      "dst": "ART-HOLDS",
+      "relation": "realized_by"
+     },
+     "reason": "stated in source",
+     "support": "supported",
+     "confidence": 0.8,
+     "change_class": "structure",
+     "source_evidence": [
+      {
+       "source_id": "@spec/architecture.md",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "(`toolshare/holds.py`)"
+      }
+     ]
+    },
+    {
+     "op_id": "op-29",
+     "kind": "add_edge",
+     "edge": {
+      "src": "CMP-INVENTORY",
+      "dst": "ART-INVENTORY",
+      "relation": "realized_by"
+     },
+     "reason": "stated in source",
+     "support": "supported",
+     "confidence": 0.8,
+     "change_class": "structure",
+     "source_evidence": [
+      {
+       "source_id": "@spec/architecture.md",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "(`toolshare/inventory.py`)"
+      }
+     ]
+    },
+    {
+     "op_id": "op-30",
+     "kind": "add_edge",
+     "edge": {
+      "src": "CMP-NOTIFY",
+      "dst": "ART-NOTIFY",
+      "relation": "realized_by"
+     },
+     "reason": "stated in source",
+     "support": "supported",
+     "confidence": 0.8,
+     "change_class": "structure",
+     "source_evidence": [
+      {
+       "source_id": "@spec/architecture.md",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "(`toolshare/notifications.py`)"
+      }
+     ]
+    },
+    {
+     "op_id": "op-31",
+     "kind": "add_edge",
+     "edge": {
+      "src": "TEST-HOLD-QUEUE",
+      "dst": "REQ-HOLD-EXPIRY",
+      "relation": "verifies"
+     },
+     "reason": "stated in source",
+     "support": "supported",
+     "confidence": 0.8,
+     "change_class": "structure",
+     "source_evidence": [
+      {
+       "source_id": "@spec/architecture.md",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "checks queue order and expiry."
+      }
+     ]
+    },
+    {
+     "op_id": "op-32",
+     "kind": "add_edge",
+     "edge": {
+      "src": "TEST-HOLD-QUEUE",
+      "dst": "REQ-PLACE-HOLD",
+      "relation": "verifies"
+     },
+     "reason": "queue order is the REQ-PLACE-HOLD criterion",
+     "support": "hypothesized",
+     "confidence": 0.8,
+     "change_class": "structure",
+     "source_evidence": [
+      {
+       "source_id": "@spec/architecture.md",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "checks queue order and expiry."
+      }
+     ]
+    },
+    {
+     "op_id": "op-33",
+     "kind": "add_edge",
+     "edge": {
+      "src": "TEST-NOTICE-FORMAT",
+      "dst": "CON-NOTICE-FORMAT",
+      "relation": "verifies"
+     },
+     "reason": "stated in source",
+     "support": "supported",
+     "confidence": 0.8,
+     "change_class": "structure",
+     "source_evidence": [
+      {
+       "source_id": "@spec/architecture.md",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "checks messages against CON-NOTICE-FORMAT."
+      }
+     ]
+    },
+    {
+     "op_id": "op-34",
+     "kind": "add_edge",
+     "edge": {
+      "src": "REQ-READY-NOTICE",
+      "dst": "CON-NOTICE-FORMAT",
+      "relation": "constrained_by"
+     },
+     "reason": "the ready notice is a notification message; the document does not link them explicitly",
+     "support": "hypothesized",
+     "confidence": 0.8,
+     "change_class": "structure",
+     "source_evidence": [
+      {
+       "source_id": "@spec/requirements.md",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "Notification messages are plain-text emails"
+      }
+     ]
+    }
+   ],
+   "unresolved_questions": [
+    {
+     "question": "Are fines for late pickup in scope?",
+     "about": [
+      "REQ-HOLD-EXPIRY"
+     ],
+     "blocking": false,
+     "source_evidence": [
+      {
+       "source_id": "@discovery/stakeholder_notes.md",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "Fines for late pickup came up. Parked — not in scope for now."
+      }
+     ]
+    }
+   ],
+   "possible_contradictions": []
+  },
+  "toolshare/E2/propose": {
+   "intent": "Requirements draft 2 resolves the pickup window and adds expiry acceptance criteria",
+   "operations": [
+    {
+     "op_id": "op-1",
+     "kind": "update_node",
+     "id": "Q-PICKUP-WINDOW",
+     "expected_rev": 1,
+     "aspect": "semantic",
+     "patch": {
+      "body": "Decided by the board on 2026-09-10: 48 hours from the ready notice.",
+      "data": {
+       "state": "resolved"
+      }
+     },
+     "reason": "question resolved in draft 2",
+     "support": "supported",
+     "confidence": 0.8,
+     "change_class": "semantic",
+     "source_evidence": [
+      {
+       "source_id": "@spec/requirements.md",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "Decided by the board on 2026-09-10: 48 hours from the ready notice. Resolved."
+      }
+     ]
+    },
+    {
+     "op_id": "op-2",
+     "kind": "update_node",
+     "id": "REQ-HOLD-EXPIRY",
+     "expected_rev": 1,
+     "aspect": "semantic",
+     "patch": {
+      "data": {
+       "acceptance_criteria": [
+        "The pickup window is 48 hours from the moment the ready notice is sent.",
+        "When the window passes, the hold lapses and the next member in the queue is offered the tool."
+       ]
+      }
+     },
+     "reason": "acceptance criteria added in draft 2",
+     "support": "supported",
+     "confidence": 0.8,
+     "change_class": "semantic",
+     "source_evidence": [
+      {
+       "source_id": "@spec/requirements.md",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "The pickup window is 48 hours from the moment the ready notice is sent."
+      },
+      {
+       "source_id": "@spec/requirements.md",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "When the window passes, the hold lapses and the next member in the queue is offered the tool."
+      }
+     ]
+    }
+   ],
+   "unresolved_questions": [],
+   "possible_contradictions": []
+  },
+  "toolshare/E3/propose": {
+   "intent": "Commit c2: hold expiry now sends a lapse email; 48h window constant",
+   "operations": [
+    {
+     "op_id": "op-1",
+     "kind": "update_node",
+     "id": "ART-HOLDS",
+     "expected_rev": 1,
+     "aspect": "implementation",
+     "patch": {
+      "data": {
+       "notes": "expire_hold sends a lapse email; PICKUP_WINDOW_HOURS = 48"
+      }
+     },
+     "reason": "implementation detail changed in c2",
+     "support": "supported",
+     "confidence": 0.8,
+     "change_class": "implementation",
+     "source_evidence": [
+      {
+       "source_id": "@diff",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "+PICKUP_WINDOW_HOURS = 48"
+      }
+     ]
+    },
+    {
+     "op_id": "op-2",
+     "kind": "add_edge",
+     "edge": {
+      "src": "TEST-HOLD-QUEUE",
+      "dst": "REQ-READY-NOTICE",
+      "relation": "verifies"
+     },
+     "reason": "the hold test checks the notice body",
+     "support": "supported",
+     "confidence": 0.8,
+     "change_class": "structure",
+     "source_evidence": [
+      {
+       "source_id": "@git:tests/test_holds.py",
+       "sha256": "@current",
+       "lines": [
+        10,
+        10
+       ],
+       "excerpt": "assert notifications.OUTBOX[-1][\"body\"].startswith(\"Your hold\")"
+      }
+     ]
+    }
+   ],
+   "unresolved_questions": [
+    {
+     "question": "Is the lapse email part of REQ-HOLD-EXPIRY? No requirement mentions it.",
+     "about": [
+      "REQ-HOLD-EXPIRY"
+     ],
+     "blocking": false,
+     "source_evidence": [
+      {
+       "source_id": "@git:toolshare/holds.py",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "send_email(lapsed, f\"Your hold on {tool} has lapsed\","
+      }
+     ]
+    }
+   ],
+   "possible_contradictions": []
+  },
+  "toolshare/E4/propose": {
+   "intent": "Draft 3 rewords REQ-READY-NOTICE without changing its meaning",
+   "operations": [
+    {
+     "op_id": "op-1",
+     "kind": "no_change",
+     "target": "REQ-READY-NOTICE",
+     "reason": "wording only; same obligation",
+     "support": "supported",
+     "confidence": 0.8,
+     "change_class": "editorial",
+     "source_evidence": [
+      {
+       "source_id": "@spec/requirements.md",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "REQ-READY-NOTICE — When a held tool is ready to be picked up, we notify the member by email."
+      }
+     ]
+    },
+    {
+     "op_id": "op-2",
+     "kind": "remove_edge",
+     "id": "LE-CMP-HOLDS--depends_on--CMP-INVENTORY",
+     "expected_rev": 1,
+     "reason": "draft 3 of the requirements no longer mentions inventory",
+     "support": "hypothesized",
+     "confidence": 0.8,
+     "change_class": "structure",
+     "source_evidence": []
+    }
+   ],
+   "unresolved_questions": [],
+   "possible_contradictions": []
+  },
+  "toolshare/E5/propose": {
+   "intent": "Draft 4 changes the notification format contract",
+   "operations": [
+    {
+     "op_id": "op-1",
+     "kind": "update_node",
+     "id": "CON-NOTICE-FORMAT",
+     "expected_rev": 1,
+     "aspect": "contract",
+     "patch": {
+      "body": "Notification messages are plain text, sent by email or, if the member prefers, by SMS. An SMS body is at most 160 characters; an email has a subject line and at most 500 characters of body text. Every message states the desk opening hours (Tue/Thu/Sat)."
+     },
+     "reason": "contract revised in draft 4",
+     "support": "supported",
+     "confidence": 0.8,
+     "change_class": "contract",
+     "source_evidence": [
+      {
+       "source_id": "@spec/requirements.md",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "SMS. An SMS body is at most 160 characters; an email has a subject line and at most 500 characters of body text."
+      },
+      {
+       "source_id": "@spec/requirements.md",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "Every message states the desk opening hours (Tue/Thu/Sat)."
+      }
+     ]
+    }
+   ],
+   "unresolved_questions": [
+    {
+     "question": "REQ-READY-NOTICE still says the member is notified by email; should it allow SMS?",
+     "about": [
+      "REQ-READY-NOTICE"
+     ],
+     "blocking": false,
+     "source_evidence": [
+      {
+       "source_id": "@spec/requirements.md",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "we notify the member by email."
+      }
+     ]
+    }
+   ],
+   "possible_contradictions": []
+  }
+ }
+}

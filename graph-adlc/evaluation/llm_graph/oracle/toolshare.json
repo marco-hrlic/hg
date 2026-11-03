@@ -1,0 +1,59 @@
+{
+  "project": "toolshare",
+  "oracle_version": "1.0",
+  "labeler": "single reviewer (the implementing agent); exploratory, not independent",
+  "written_before_any_replay": true,
+  "construction": {
+    "entities": [
+      {"id": "GOAL-FAIR-ACCESS", "kind": "goal"},
+      {"id": "CAP-HOLDS", "kind": "capability"}, {"id": "CAP-NOTIFY", "kind": "capability"},
+      {"id": "REQ-PLACE-HOLD", "kind": "requirement"}, {"id": "REQ-HOLD-EXPIRY", "kind": "requirement"},
+      {"id": "REQ-READY-NOTICE", "kind": "requirement"},
+      {"id": "Q-PICKUP-WINDOW", "kind": "question"},
+      {"id": "CON-NOTICE-FORMAT", "kind": "contract"},
+      {"id": "CMP-HOLDS", "kind": "component"}, {"id": "CMP-INVENTORY", "kind": "component"},
+      {"id": "CMP-NOTIFY", "kind": "component"},
+      {"id": "TEST-HOLD-QUEUE", "kind": "test"}, {"id": "TEST-NOTICE-FORMAT", "kind": "test"}
+    ],
+    "optional_entities": ["ART-HOLDS", "ART-INVENTORY", "ART-NOTIFY"],
+    "relations_required": [
+      ["GOAL-FAIR-ACCESS", "refines", "CAP-HOLDS"], ["GOAL-FAIR-ACCESS", "refines", "CAP-NOTIFY"],
+      ["CAP-HOLDS", "refines", "REQ-PLACE-HOLD"], ["CAP-HOLDS", "refines", "REQ-HOLD-EXPIRY"],
+      ["CAP-NOTIFY", "refines", "REQ-READY-NOTICE"],
+      ["Q-PICKUP-WINDOW", "blocks", "REQ-HOLD-EXPIRY"],
+      ["CMP-HOLDS", "implements", "REQ-PLACE-HOLD"], ["CMP-HOLDS", "implements", "REQ-HOLD-EXPIRY"],
+      ["CMP-NOTIFY", "implements", "REQ-READY-NOTICE"],
+      ["CMP-HOLDS", "depends_on", "CMP-INVENTORY"],
+      ["CMP-NOTIFY", "constrained_by", "CON-NOTICE-FORMAT"],
+      ["TEST-HOLD-QUEUE", "verifies", "REQ-HOLD-EXPIRY"],
+      ["TEST-NOTICE-FORMAT", "verifies", "CON-NOTICE-FORMAT"],
+      ["CMP-HOLDS", "depends_on", "CMP-NOTIFY"]
+    ],
+    "relations_optional": [
+      ["TEST-HOLD-QUEUE", "verifies", "REQ-PLACE-HOLD"], ["REQ-READY-NOTICE", "constrained_by", "CON-NOTICE-FORMAT"],
+      ["TEST-NOTICE-FORMAT", "verifies", "REQ-READY-NOTICE"],
+      ["CMP-HOLDS", "realized_by", "ART-HOLDS"], ["CMP-INVENTORY", "realized_by", "ART-INVENTORY"],
+      ["CMP-NOTIFY", "realized_by", "ART-NOTIFY"], ["CMP-HOLDS", "constrained_by", "CON-NOTICE-FORMAT"]
+    ],
+    "hidden_relations": [
+      {"relation": ["CMP-HOLDS", "depends_on", "CMP-NOTIFY"], "appears_in": "E3",
+       "why": "Only the c2 code shows holds.py importing notifications.send_email for the lapse notice; no document states it."}
+    ]
+  },
+  "impact": {
+    "E5": {
+      "origin": "CON-NOTICE-FORMAT",
+      "necessary": [
+        {"target": "CMP-NOTIFY", "critical": true, "why": "sends every message; must support SMS limits and opening hours"},
+        {"target": "CMP-HOLDS", "critical": true, "why": "composes the lapse message itself (c2): ~170 chars, no opening hours"},
+        {"target": "TEST-NOTICE-FORMAT", "critical": false, "why": "checks messages against the changed contract"},
+        {"target": "REQ-READY-NOTICE", "critical": false, "why": "still says 'by email'; needs review against SMS option"}
+      ],
+      "unknown": ["REQ-HOLD-EXPIRY", "CON-NOTICE-FORMAT"],
+      "not_necessary": ["REQ-PLACE-HOLD", "CMP-INVENTORY", "TEST-HOLD-QUEUE", "CAP-HOLDS", "CAP-NOTIFY",
+                        "GOAL-FAIR-ACCESS", "Q-PICKUP-WINDOW", "ART-INVENTORY"]
+    },
+    "E4": {"origin": "REQ-READY-NOTICE", "necessary": [], "unknown": [],
+           "note": "wording-only edit; nothing needs re-verification"}
+  }
+}

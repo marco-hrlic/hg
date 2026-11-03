@@ -1,0 +1,55 @@
+{
+  "project": "ledgerlite",
+  "oracle_version": "1.0",
+  "labeler": "single reviewer (the implementing agent); exploratory, not independent",
+  "written_before_any_replay": true,
+  "construction": {
+    "entities": [
+      {"id": "GOAL-BILLING", "kind": "goal"},
+      {"id": "CAP-INVOICING", "kind": "capability"}, {"id": "CAP-ACCOUNTING-EXPORT", "kind": "capability"},
+      {"id": "REQ-PDF-INVOICE", "kind": "requirement"}, {"id": "REQ-CSV-EXPORT", "kind": "requirement"},
+      {"id": "Q-CSV-LAYOUT", "kind": "question"},
+      {"id": "CON-MONEY-FORMAT", "kind": "contract"},
+      {"id": "CMP-MONEY", "kind": "component"}, {"id": "CMP-PDF", "kind": "component"}, {"id": "CMP-CSV", "kind": "component"},
+      {"id": "TEST-MONEY-FORMAT", "kind": "test"}
+    ],
+    "optional_entities": ["ART-MONEY", "ART-PDF", "ART-CSV", "CON-CSV-LAYOUT"],
+    "relations_required": [
+      ["GOAL-BILLING", "refines", "CAP-INVOICING"], ["GOAL-BILLING", "refines", "CAP-ACCOUNTING-EXPORT"],
+      ["CAP-INVOICING", "refines", "REQ-PDF-INVOICE"], ["CAP-ACCOUNTING-EXPORT", "refines", "REQ-CSV-EXPORT"],
+      ["Q-CSV-LAYOUT", "blocks", "REQ-CSV-EXPORT"],
+      ["CMP-PDF", "implements", "REQ-PDF-INVOICE"], ["CMP-CSV", "implements", "REQ-CSV-EXPORT"],
+      ["CMP-PDF", "depends_on", "CMP-MONEY"],
+      ["CMP-MONEY", "constrained_by", "CON-MONEY-FORMAT"],
+      ["TEST-MONEY-FORMAT", "verifies", "CON-MONEY-FORMAT"],
+      ["CMP-CSV", "depends_on", "CMP-MONEY"]
+    ],
+    "relations_optional": [
+      ["CMP-MONEY", "realized_by", "ART-MONEY"], ["CMP-PDF", "realized_by", "ART-PDF"], ["CMP-CSV", "realized_by", "ART-CSV"],
+      ["REQ-CSV-EXPORT", "constrained_by", "CON-CSV-LAYOUT"], ["CMP-CSV", "constrained_by", "CON-CSV-LAYOUT"],
+      ["REQ-PDF-INVOICE", "constrained_by", "CON-MONEY-FORMAT"], ["CMP-PDF", "constrained_by", "CON-MONEY-FORMAT"]
+    ],
+    "hidden_relations": [
+      {"relation": ["CMP-CSV", "depends_on", "CMP-MONEY"], "appears_in": "E3",
+       "why": "The architecture table says the CSV exporter does not use the formatter; commit c2 makes it import format_amount."}
+    ],
+    "expected_contradictions": [
+      {"about": "CMP-CSV", "appears_in": "E3", "why": "architecture.md: 'does not use the money formatter' vs c2 csv_export.py importing it"}
+    ]
+  },
+  "impact": {
+    "E5": {
+      "origin": "CMP-MONEY",
+      "necessary": [
+        {"target": "CMP-CSV", "critical": true, "why": "grouped amounts break the accountant import (DR-001); rows >= 1000 silently dropped"},
+        {"target": "REQ-CSV-EXPORT", "critical": true, "why": "acceptance criterion 'no thousands separators' is now violated"},
+        {"target": "TEST-MONEY-FORMAT", "critical": false, "why": "sample table has no amount >= 1000; it cannot detect the change"},
+        {"target": "CMP-PDF", "critical": false, "why": "every PDF amount changes appearance; check against REQ-PDF-INVOICE"}
+      ],
+      "unknown": ["CON-MONEY-FORMAT", "REQ-PDF-INVOICE", "CON-CSV-LAYOUT"],
+      "not_necessary": ["GOAL-BILLING", "CAP-INVOICING", "CAP-ACCOUNTING-EXPORT", "Q-CSV-LAYOUT"]
+    },
+    "E4": {"origin": "REQ-PDF-INVOICE", "necessary": [], "unknown": [],
+           "note": "wording-only edit ('Each'->'Every', 'a client'->'the client'); nothing needs re-verification"}
+  }
+}

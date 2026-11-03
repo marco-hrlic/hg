@@ -1,0 +1,896 @@
+{
+ "_notice": "SCRIPTED FAKE MODEL OUTPUTS authored by the implementing agent to exercise the pipeline. They are NOT outputs of any language model and must never be reported as LLM results. Placeholders: '@<logical path>' / '@git:<path>' / '@diff' resolve to the current source id, 'sha256: @current' to its hash and 'lines: @auto' to the excerpt's location, at replay time.",
+ "responses": {
+  "ledgerlite/E1/propose": {
+   "intent": "Initial graph from requirements v1, architecture table and repository c1",
+   "operations": [
+    {
+     "op_id": "op-1",
+     "kind": "add_node",
+     "node": {
+      "id": "GOAL-BILLING",
+      "kind": "goal",
+      "title": "Billing and clean accounting numbers",
+      "body": "Small studios can bill clients and hand clean numbers to their accountant.",
+      "data": {}
+     },
+     "reason": "stated in source",
+     "support": "supported",
+     "confidence": 0.8,
+     "change_class": "structure",
+     "source_evidence": [
+      {
+       "source_id": "@docs/requirements.md",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "GOAL-BILLING — Small studios can bill clients and hand clean numbers to their accountant."
+      }
+     ]
+    },
+    {
+     "op_id": "op-2",
+     "kind": "add_node",
+     "node": {
+      "id": "CAP-INVOICING",
+      "kind": "capability",
+      "title": "Invoicing",
+      "body": "Produce invoices for clients.",
+      "data": {}
+     },
+     "reason": "stated in source",
+     "support": "supported",
+     "confidence": 0.8,
+     "change_class": "structure",
+     "source_evidence": [
+      {
+       "source_id": "@docs/requirements.md",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "CAP-INVOICING — Produce invoices for clients."
+      }
+     ]
+    },
+    {
+     "op_id": "op-3",
+     "kind": "add_node",
+     "node": {
+      "id": "CAP-ACCOUNTING-EXPORT",
+      "kind": "capability",
+      "title": "Accounting export",
+      "body": "Hand invoice data to the accountant.",
+      "data": {}
+     },
+     "reason": "stated in source",
+     "support": "supported",
+     "confidence": 0.8,
+     "change_class": "structure",
+     "source_evidence": [
+      {
+       "source_id": "@docs/requirements.md",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "CAP-ACCOUNTING-EXPORT — Hand invoice data to the accountant."
+      }
+     ]
+    },
+    {
+     "op_id": "op-4",
+     "kind": "add_node",
+     "node": {
+      "id": "REQ-PDF-INVOICE",
+      "kind": "requirement",
+      "title": "PDF invoice",
+      "body": "Each invoice can be downloaded as a PDF that a client can read and pay from.",
+      "data": {
+       "acceptance_criteria": [
+        "The PDF shows every line item, the tax and the total.",
+        "Amounts are shown in the studio's currency with two decimals."
+       ]
+      }
+     },
+     "reason": "stated in source",
+     "support": "supported",
+     "confidence": 0.8,
+     "change_class": "structure",
+     "source_evidence": [
+      {
+       "source_id": "@docs/requirements.md",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "REQ-PDF-INVOICE — Each invoice can be downloaded as a PDF that a client can read and pay from."
+      }
+     ]
+    },
+    {
+     "op_id": "op-5",
+     "kind": "add_node",
+     "node": {
+      "id": "REQ-CSV-EXPORT",
+      "kind": "requirement",
+      "title": "Monthly CSV export",
+      "body": "Finance can export all invoices of a month as a CSV file for the accountant's bookkeeping tool.",
+      "data": {
+       "acceptance_criteria": []
+      }
+     },
+     "reason": "stated in source",
+     "support": "supported",
+     "confidence": 0.8,
+     "change_class": "structure",
+     "source_evidence": [
+      {
+       "source_id": "@docs/requirements.md",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "REQ-CSV-EXPORT — Finance can export all invoices of a month as a CSV file for the accountant's bookkeeping tool."
+      }
+     ]
+    },
+    {
+     "op_id": "op-6",
+     "kind": "add_node",
+     "node": {
+      "id": "Q-CSV-LAYOUT",
+      "kind": "question",
+      "title": "CSV layout expected by the accountant",
+      "body": "Which columns and number format does the accountant's import expect?",
+      "data": {
+       "blocking": true,
+       "state": "open"
+      }
+     },
+     "reason": "stated in source",
+     "support": "supported",
+     "confidence": 0.8,
+     "change_class": "structure",
+     "source_evidence": [
+      {
+       "source_id": "@docs/requirements.md",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "Q-CSV-LAYOUT — Which columns and number format does the accountant's import expect?"
+      }
+     ]
+    },
+    {
+     "op_id": "op-7",
+     "kind": "add_node",
+     "node": {
+      "id": "CON-MONEY-FORMAT",
+      "kind": "contract",
+      "title": "Money format",
+      "body": "Amounts are rendered with exactly two decimals and '.' as the decimal separator, followed by the ISO currency code.",
+      "data": {
+       "status": "accepted"
+      }
+     },
+     "reason": "stated in source",
+     "support": "supported",
+     "confidence": 0.8,
+     "change_class": "structure",
+     "source_evidence": [
+      {
+       "source_id": "@docs/requirements.md",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "CON-MONEY-FORMAT — Amounts are rendered with exactly two decimals and \".\" as the decimal separator, followed by the"
+      }
+     ]
+    },
+    {
+     "op_id": "op-8",
+     "kind": "add_node",
+     "node": {
+      "id": "CMP-MONEY",
+      "kind": "component",
+      "title": "Money formatting",
+      "body": "Money formatting (ledgerlite/money.py).",
+      "data": {}
+     },
+     "reason": "stated in source",
+     "support": "supported",
+     "confidence": 0.8,
+     "change_class": "structure",
+     "source_evidence": [
+      {
+       "source_id": "@docs/architecture.md",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "| CMP-MONEY | Money formatting | `ledgerlite/money.py` |"
+      }
+     ]
+    },
+    {
+     "op_id": "op-9",
+     "kind": "add_node",
+     "node": {
+      "id": "CMP-PDF",
+      "kind": "component",
+      "title": "PDF invoice renderer",
+      "body": "PDF invoice renderer (ledgerlite/pdf_invoice.py).",
+      "data": {}
+     },
+     "reason": "stated in source",
+     "support": "supported",
+     "confidence": 0.8,
+     "change_class": "structure",
+     "source_evidence": [
+      {
+       "source_id": "@docs/architecture.md",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "| CMP-PDF | PDF invoice renderer | `ledgerlite/pdf_invoice.py` |"
+      }
+     ]
+    },
+    {
+     "op_id": "op-10",
+     "kind": "add_node",
+     "node": {
+      "id": "CMP-CSV",
+      "kind": "component",
+      "title": "CSV exporter",
+      "body": "CSV exporter (ledgerlite/csv_export.py).",
+      "data": {}
+     },
+     "reason": "stated in source",
+     "support": "supported",
+     "confidence": 0.8,
+     "change_class": "structure",
+     "source_evidence": [
+      {
+       "source_id": "@docs/architecture.md",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "| CMP-CSV | CSV exporter | `ledgerlite/csv_export.py` |"
+      }
+     ]
+    },
+    {
+     "op_id": "op-11",
+     "kind": "add_node",
+     "node": {
+      "id": "ART-MONEY",
+      "kind": "artifact",
+      "title": "ledgerlite/money.py",
+      "body": "Source file ledgerlite/money.py.",
+      "data": {
+       "path": "ledgerlite/money.py"
+      }
+     },
+     "reason": "stated in source",
+     "support": "supported",
+     "confidence": 0.8,
+     "change_class": "structure",
+     "source_evidence": [
+      {
+       "source_id": "@docs/architecture.md",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "`ledgerlite/money.py`"
+      }
+     ]
+    },
+    {
+     "op_id": "op-12",
+     "kind": "add_node",
+     "node": {
+      "id": "ART-PDF",
+      "kind": "artifact",
+      "title": "ledgerlite/pdf_invoice.py",
+      "body": "Source file ledgerlite/pdf_invoice.py.",
+      "data": {
+       "path": "ledgerlite/pdf_invoice.py"
+      }
+     },
+     "reason": "stated in source",
+     "support": "supported",
+     "confidence": 0.8,
+     "change_class": "structure",
+     "source_evidence": [
+      {
+       "source_id": "@docs/architecture.md",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "`ledgerlite/pdf_invoice.py`"
+      }
+     ]
+    },
+    {
+     "op_id": "op-13",
+     "kind": "add_node",
+     "node": {
+      "id": "ART-CSV",
+      "kind": "artifact",
+      "title": "ledgerlite/csv_export.py",
+      "body": "Source file ledgerlite/csv_export.py.",
+      "data": {
+       "path": "ledgerlite/csv_export.py"
+      }
+     },
+     "reason": "stated in source",
+     "support": "supported",
+     "confidence": 0.8,
+     "change_class": "structure",
+     "source_evidence": [
+      {
+       "source_id": "@docs/architecture.md",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "`ledgerlite/csv_export.py`"
+      }
+     ]
+    },
+    {
+     "op_id": "op-14",
+     "kind": "add_node",
+     "node": {
+      "id": "TEST-MONEY-FORMAT",
+      "kind": "test",
+      "title": "Money format test",
+      "body": "Checks the formatter against CON-MONEY-FORMAT with a table of sample amounts.",
+      "data": {
+       "command": "pytest -q tests/test_money.py"
+      }
+     },
+     "reason": "stated in source",
+     "support": "supported",
+     "confidence": 0.8,
+     "change_class": "structure",
+     "source_evidence": [
+      {
+       "source_id": "@docs/architecture.md",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "TEST-MONEY-FORMAT (`tests/test_money.py`) checks the formatter against CON-MONEY-FORMAT"
+      }
+     ]
+    },
+    {
+     "op_id": "op-15",
+     "kind": "add_edge",
+     "edge": {
+      "src": "GOAL-BILLING",
+      "dst": "CAP-INVOICING",
+      "relation": "refines"
+     },
+     "reason": "document order",
+     "support": "hypothesized",
+     "confidence": 0.8,
+     "change_class": "structure",
+     "source_evidence": [
+      {
+       "source_id": "@docs/requirements.md",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "CAP-INVOICING — Produce invoices for clients."
+      }
+     ]
+    },
+    {
+     "op_id": "op-16",
+     "kind": "add_edge",
+     "edge": {
+      "src": "GOAL-BILLING",
+      "dst": "CAP-ACCOUNTING-EXPORT",
+      "relation": "refines"
+     },
+     "reason": "document order",
+     "support": "hypothesized",
+     "confidence": 0.8,
+     "change_class": "structure",
+     "source_evidence": [
+      {
+       "source_id": "@docs/requirements.md",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "CAP-ACCOUNTING-EXPORT — Hand invoice data to the accountant."
+      }
+     ]
+    },
+    {
+     "op_id": "op-17",
+     "kind": "add_edge",
+     "edge": {
+      "src": "CAP-INVOICING",
+      "dst": "REQ-PDF-INVOICE",
+      "relation": "refines"
+     },
+     "reason": "document order",
+     "support": "hypothesized",
+     "confidence": 0.8,
+     "change_class": "structure",
+     "source_evidence": [
+      {
+       "source_id": "@docs/requirements.md",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "REQ-PDF-INVOICE — Each invoice can be downloaded as a PDF"
+      }
+     ]
+    },
+    {
+     "op_id": "op-18",
+     "kind": "add_edge",
+     "edge": {
+      "src": "CAP-ACCOUNTING-EXPORT",
+      "dst": "REQ-CSV-EXPORT",
+      "relation": "refines"
+     },
+     "reason": "document order",
+     "support": "hypothesized",
+     "confidence": 0.8,
+     "change_class": "structure",
+     "source_evidence": [
+      {
+       "source_id": "@docs/requirements.md",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "REQ-CSV-EXPORT — Finance can export all invoices of a month"
+      }
+     ]
+    },
+    {
+     "op_id": "op-19",
+     "kind": "add_edge",
+     "edge": {
+      "src": "Q-CSV-LAYOUT",
+      "dst": "REQ-CSV-EXPORT",
+      "relation": "blocks"
+     },
+     "reason": "stated in source",
+     "support": "supported",
+     "confidence": 0.8,
+     "change_class": "structure",
+     "source_evidence": [
+      {
+       "source_id": "@docs/requirements.md",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "Question Q-CSV-LAYOUT is open and blocks this requirement."
+      }
+     ]
+    },
+    {
+     "op_id": "op-20",
+     "kind": "add_edge",
+     "edge": {
+      "src": "CMP-PDF",
+      "dst": "REQ-PDF-INVOICE",
+      "relation": "implements"
+     },
+     "reason": "stated in source",
+     "support": "supported",
+     "confidence": 0.8,
+     "change_class": "structure",
+     "source_evidence": [
+      {
+       "source_id": "@docs/architecture.md",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "Implements REQ-PDF-INVOICE."
+      }
+     ]
+    },
+    {
+     "op_id": "op-21",
+     "kind": "add_edge",
+     "edge": {
+      "src": "CMP-CSV",
+      "dst": "REQ-CSV-EXPORT",
+      "relation": "implements"
+     },
+     "reason": "stated in source",
+     "support": "supported",
+     "confidence": 0.8,
+     "change_class": "structure",
+     "source_evidence": [
+      {
+       "source_id": "@docs/architecture.md",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "Implements REQ-CSV-EXPORT."
+      }
+     ]
+    },
+    {
+     "op_id": "op-22",
+     "kind": "add_edge",
+     "edge": {
+      "src": "CMP-PDF",
+      "dst": "CMP-MONEY",
+      "relation": "depends_on"
+     },
+     "reason": "stated in source",
+     "support": "supported",
+     "confidence": 0.8,
+     "change_class": "structure",
+     "source_evidence": [
+      {
+       "source_id": "@docs/architecture.md",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "Uses CMP-MONEY for every amount."
+      },
+      {
+       "source_id": "@git:ledgerlite/pdf_invoice.py",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "from ledgerlite.money import format_amount"
+      }
+     ]
+    },
+    {
+     "op_id": "op-23",
+     "kind": "add_edge",
+     "edge": {
+      "src": "CMP-MONEY",
+      "dst": "CON-MONEY-FORMAT",
+      "relation": "constrained_by"
+     },
+     "reason": "stated in source",
+     "support": "supported",
+     "confidence": 0.8,
+     "change_class": "structure",
+     "source_evidence": [
+      {
+       "source_id": "@docs/architecture.md",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "Shared formatter. Must follow CON-MONEY-FORMAT."
+      }
+     ]
+    },
+    {
+     "op_id": "op-24",
+     "kind": "add_edge",
+     "edge": {
+      "src": "CMP-MONEY",
+      "dst": "ART-MONEY",
+      "relation": "realized_by"
+     },
+     "reason": "stated in source",
+     "support": "supported",
+     "confidence": 0.8,
+     "change_class": "structure",
+     "source_evidence": [
+      {
+       "source_id": "@docs/architecture.md",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "`ledgerlite/money.py`"
+      }
+     ]
+    },
+    {
+     "op_id": "op-25",
+     "kind": "add_edge",
+     "edge": {
+      "src": "CMP-PDF",
+      "dst": "ART-PDF",
+      "relation": "realized_by"
+     },
+     "reason": "stated in source",
+     "support": "supported",
+     "confidence": 0.8,
+     "change_class": "structure",
+     "source_evidence": [
+      {
+       "source_id": "@docs/architecture.md",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "`ledgerlite/pdf_invoice.py`"
+      }
+     ]
+    },
+    {
+     "op_id": "op-26",
+     "kind": "add_edge",
+     "edge": {
+      "src": "CMP-CSV",
+      "dst": "ART-CSV",
+      "relation": "realized_by"
+     },
+     "reason": "stated in source",
+     "support": "supported",
+     "confidence": 0.8,
+     "change_class": "structure",
+     "source_evidence": [
+      {
+       "source_id": "@docs/architecture.md",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "`ledgerlite/csv_export.py`"
+      }
+     ]
+    },
+    {
+     "op_id": "op-27",
+     "kind": "add_edge",
+     "edge": {
+      "src": "TEST-MONEY-FORMAT",
+      "dst": "CON-MONEY-FORMAT",
+      "relation": "verifies"
+     },
+     "reason": "stated in source",
+     "support": "supported",
+     "confidence": 0.8,
+     "change_class": "structure",
+     "source_evidence": [
+      {
+       "source_id": "@docs/architecture.md",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "checks the formatter against CON-MONEY-FORMAT with a table of sample amounts."
+      }
+     ]
+    }
+   ],
+   "unresolved_questions": [],
+   "possible_contradictions": []
+  },
+  "ledgerlite/E2/propose": {
+   "intent": "Requirements v2 and DR-001 resolve the CSV layout",
+   "operations": [
+    {
+     "op_id": "op-1",
+     "kind": "update_node",
+     "id": "Q-CSV-LAYOUT",
+     "expected_rev": 1,
+     "aspect": "semantic",
+     "patch": {
+      "body": "Resolved by DR-001: columns invoice_id,date,client,net,tax,total; plain amounts.",
+      "data": {
+       "state": "resolved"
+      }
+     },
+     "reason": "decision record resolves the question",
+     "support": "supported",
+     "confidence": 0.8,
+     "change_class": "semantic",
+     "source_evidence": [
+      {
+       "source_id": "@docs/decisions/DR-001-csv-layout.md",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "Status: decided, 2026-09-15. Decided by Dana with the studio's accountant. Resolves Q-CSV-LAYOUT."
+      }
+     ]
+    },
+    {
+     "op_id": "op-2",
+     "kind": "update_node",
+     "id": "REQ-CSV-EXPORT",
+     "expected_rev": 1,
+     "aspect": "semantic",
+     "patch": {
+      "data": {
+       "acceptance_criteria": [
+        "The file has the columns invoice_id, date, client, net, tax, total.",
+        "Amounts are plain numbers with '.' as decimal separator, no thousands separators and no currency code."
+       ]
+      }
+     },
+     "reason": "acceptance criteria added in v2",
+     "support": "supported",
+     "confidence": 0.8,
+     "change_class": "semantic",
+     "source_evidence": [
+      {
+       "source_id": "@docs/requirements.md",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "- The file has the columns invoice_id, date, client, net, tax, total."
+      },
+      {
+       "source_id": "@docs/requirements.md",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "- Amounts are plain numbers with \".\" as decimal separator, no thousands separators and no currency code."
+      }
+     ]
+    },
+    {
+     "op_id": "op-3",
+     "kind": "add_node",
+     "node": {
+      "id": "CON-CSV-LAYOUT",
+      "kind": "contract",
+      "title": "Accountant CSV layout",
+      "body": "Columns invoice_id,date,client,net,tax,total; amounts are plain numbers with '.' decimal separator, no thousands separators, no currency code.",
+      "data": {
+       "status": "accepted"
+      }
+     },
+     "reason": "DR-001 fixes an interface with the accountant's import tool",
+     "support": "supported",
+     "confidence": 0.8,
+     "change_class": "structure",
+     "source_evidence": [
+      {
+       "source_id": "@docs/decisions/DR-001-csv-layout.md",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "Amounts must be plain numbers with \".\" as the decimal separator and no thousands separators and no currency code"
+      }
+     ]
+    },
+    {
+     "op_id": "op-4",
+     "kind": "add_edge",
+     "edge": {
+      "src": "REQ-CSV-EXPORT",
+      "dst": "CON-CSV-LAYOUT",
+      "relation": "constrained_by"
+     },
+     "reason": "stated in source",
+     "support": "supported",
+     "confidence": 0.8,
+     "change_class": "structure",
+     "source_evidence": [
+      {
+       "source_id": "@docs/requirements.md",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "Acceptance criteria (see DR-001):"
+      }
+     ]
+    },
+    {
+     "op_id": "op-5",
+     "kind": "add_edge",
+     "edge": {
+      "src": "CMP-CSV",
+      "dst": "CON-CSV-LAYOUT",
+      "relation": "constrained_by"
+     },
+     "reason": "the exporter produces the file DR-001 describes",
+     "support": "hypothesized",
+     "confidence": 0.8,
+     "change_class": "structure",
+     "source_evidence": [
+      {
+       "source_id": "@docs/decisions/DR-001-csv-layout.md",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "The accountant's bookkeeping tool imports a CSV with the columns"
+      }
+     ]
+    }
+   ],
+   "unresolved_questions": [],
+   "possible_contradictions": []
+  },
+  "ledgerlite/E3/propose": {
+   "intent": "Commit c2: CSV export now formats amounts through the shared money formatter",
+   "operations": [
+    {
+     "op_id": "op-1",
+     "kind": "add_edge",
+     "edge": {
+      "src": "CMP-CSV",
+      "dst": "CMP-MONEY",
+      "relation": "depends_on"
+     },
+     "reason": "csv_export.py imports format_amount; contradicts the architecture table",
+     "support": "hypothesized",
+     "confidence": 0.8,
+     "change_class": "structure",
+     "source_evidence": [
+      {
+       "source_id": "@git:ledgerlite/csv_export.py",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "from ledgerlite.money import format_amount"
+      }
+     ]
+    },
+    {
+     "op_id": "op-2",
+     "kind": "update_node",
+     "id": "CMP-CSV",
+     "expected_rev": 1,
+     "aspect": "implementation",
+     "patch": {
+      "body": "CSV exporter (ledgerlite/csv_export.py). Formats amounts with the shared money formatter."
+     },
+     "reason": "code now uses the formatter",
+     "support": "supported",
+     "confidence": 0.8,
+     "change_class": "implementation",
+     "source_evidence": [
+      {
+       "source_id": "@git:ledgerlite/csv_export.py",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "return format_amount(value, \"\").strip()"
+      }
+     ]
+    }
+   ],
+   "unresolved_questions": [],
+   "possible_contradictions": [
+    {
+     "description": "architecture.md says the CSV exporter does not use the money formatter, but commit c2 makes csv_export.py call format_amount",
+     "between": [
+      "CMP-CSV"
+     ],
+     "source_evidence": [
+      {
+       "source_id": "@docs/architecture.md",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "The CSV exporter writes raw decimal amounts straight from the database and does not use the money formatter."
+      },
+      {
+       "source_id": "@git:ledgerlite/csv_export.py",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "from ledgerlite.money import format_amount"
+      }
+     ]
+    }
+   ]
+  },
+  "ledgerlite/E4/propose": {
+   "intent": "v3 rewords REQ-PDF-INVOICE",
+   "operations": [
+    {
+     "op_id": "op-1",
+     "kind": "update_node",
+     "id": "REQ-PDF-INVOICE",
+     "expected_rev": 1,
+     "aspect": "semantic",
+     "patch": {
+      "body": "Every invoice can be downloaded as a PDF that the client can read and pay from."
+     },
+     "reason": "text changed in v3",
+     "support": "supported",
+     "confidence": 0.8,
+     "change_class": "editorial",
+     "source_evidence": [
+      {
+       "source_id": "@docs/requirements.md",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "REQ-PDF-INVOICE — Every invoice can be downloaded as a PDF that the client can read and pay from."
+      }
+     ]
+    }
+   ],
+   "unresolved_questions": [],
+   "possible_contradictions": []
+  },
+  "ledgerlite/E5/propose": {
+   "intent": "Commit c3: money formatter groups thousands",
+   "operations": [
+    {
+     "op_id": "op-1",
+     "kind": "update_node",
+     "id": "CMP-MONEY",
+     "expected_rev": 1,
+     "aspect": "implementation",
+     "patch": {
+      "data": {
+       "implementation_note": "format_amount inserts ',' thousands separators (c3)"
+      }
+     },
+     "reason": "implementation of the shared formatter changed; TEST-MONEY-FORMAT still passes",
+     "support": "supported",
+     "confidence": 0.8,
+     "change_class": "implementation",
+     "source_evidence": [
+      {
+       "source_id": "@diff",
+       "sha256": "@current",
+       "lines": "@auto",
+       "excerpt": "+    return f\"{q:,} {currency}\""
+      }
+     ]
+    }
+   ],
+   "unresolved_questions": [],
+   "possible_contradictions": []
+  }
+ }
+}

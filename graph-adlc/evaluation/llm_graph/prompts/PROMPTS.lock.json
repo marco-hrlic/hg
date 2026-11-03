@@ -1,0 +1,8 @@
+{
+ "_notice": "Prompts are frozen for the v0.3 evaluation. Changing a prompt requires a new version file and a new lock entry.",
+ "prompts": {
+  "propose_update.v1": "cf3981f23ec4eab621bdbb0b07a2878275e2ebb99e4dad3210c2fd8a16a483c8",
+  "challenge.v1": "b188df8d9a3572e5e36740fbae0c7de10b8c75497a9528c7032e84f762da1956",
+  "direct_impact.v1": "97e97646aa03f089c90a41308bccd930cf228c138043640bfac8027a7b88e6f5"
+ }
+}
