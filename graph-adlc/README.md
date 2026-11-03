@@ -258,4 +258,7 @@ are ringed; with `--oracle` each ring shows hit, false positive, missed, or crit
 only another arm has (for example the reference graph H) as faint ghosts. Arm D has no graph and is skipped; arm H's
 graph is read from `evaluation/llm_graph/reference/`. `run_all.sh` writes `out/scripted/graphs.html`.
 
-**No live model has been evaluated yet.** See [`evaluation/llm_graph/RESULTS.md`](evaluation/llm_graph/RESULTS.md).
+One live run exists (`gpt-6.1-terra`, one sample per arm, author-labelled oracle). It is exploratory, and it deviates
+from the frozen protocol: a 32k output budget via `GADLC_LLM_MAX_TOKENS`, plus two harness fixes. See section 11 of
+[`evaluation/llm_graph/RESULTS.md`](evaluation/llm_graph/RESULTS.md) and `out/live/graphs.html`. To resume a live run that
+crashed without repeating finished arms, use `run_replay.py --mode live --resume`.

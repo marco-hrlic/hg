@@ -49,6 +49,165 @@ def impact_table(m: dict[str, Any], scripted: bool) -> list[str]:
     return L
 
 
+def _live_meta(live: dict[str, Any]) -> dict[str, Any]:
+    preds_p = HERE / "out" / "live" / "predictions.json"
+    preds = json.loads(preds_p.read_text()) if preds_p.exists() else {}
+    client = next(a["client"] for pv in live["projects"].values() for k, a in pv["arms"].items()
+                  if k != "H" and a.get("client"))
+    aborted = sorted(p.name for p in (HERE / "out").glob("live_aborted_*") if p.is_dir())
+    return {"client": client, "resumed": preds.get("resumed_arms", []), "aborted": aborted}
+
+
+def _arms(live: dict[str, Any], proj: str) -> dict[str, Any]:
+    return live["projects"][proj]["arms"]
+
+
+def live_bottom_line(live: dict[str, Any]) -> list[str]:
+    meta = _live_meta(live)
+    c = meta["client"]
+    L = [f"* **A live model was evaluated: `{c.get('model')}` ({c.get('provider')}), one run per arm.** The oracle, "
+         "fixtures and reference graph share one author, so every live number is exploratory and single-reviewer. "
+         "Section 11 has the tables and the deviations from the frozen protocol."]
+    for proj in sorted(live["projects"]):
+        a = _arms(live, proj)
+        row = "; ".join(f"{arm} {f(a[arm]['impact_E5']['recall'])}/{f(a[arm]['impact_E5']['precision'])}"
+                        for arm in ARMS if arm in a)
+        L.append(f"  * {proj}, E5 recall/precision: {row}.")
+    hid = {proj: {arm: _arms(live, proj)[arm]["construction"]["hidden_relations"][0]["status"]
+                  for arm in ("G0", "G1", "G2")} for proj in live["projects"]}
+    g1_both = all(h["G1"] for h in hid.values())
+    g0_none = not any(h["G0"] for h in hid.values())
+    if g1_both and g0_none:
+        L.append("  * **Maintenance recovered the code-only dependency in both projects; construction alone did not.** "
+                 "G1 has no import scan, so the model added the edge itself from the code diffs. G0, built once from the "
+                 "initial documents, never saw it.")
+    d_crit = {proj: _arms(live, proj)["D"]["impact_E5"]["critical_missed"] for proj in live["projects"]}
+    g_crit = {proj: sorted({x for arm in ("G1", "G2") for x in _arms(live, proj)[arm]["impact_E5"]["critical_missed"]})
+              for proj in live["projects"]}
+    if not any(d_crit.values()) and any(g_crit.values()):
+        miss = "; ".join(f"{p}: {f(v)}" for p, v in g_crit.items() if v)
+        L.append(f"  * **The document-only arm D missed no critical target; the maintained graphs did ({miss}).** That "
+                 "miss is the engine's terminal `check_contract` rule (H misses it too), not graph quality. D's cost is "
+                 "lower precision: it also names entities and documents outside the labelled set.")
+    return L
+
+
+def live_section(live: dict[str, Any]) -> list[str]:
+    meta = _live_meta(live)
+    c = meta["client"]
+    L: list[str] = []
+    A = L.append
+    A("## 11. Live run")
+    A("")
+    A(f"**Model:** `{c.get('model')}` via {c.get('provider')} (`{c.get('base_url')}`), JSON mode "
+      f"{'on' if c.get('json_mode') else 'off'}, temperature {'provider default' if c.get('temperature') is None else c.get('temperature')}, "
+      f"output budget {c.get('max_output_tokens') or 8000} tokens per call. Reviewer: `policy:conservative-v1` (not a "
+      "human). Prompts unchanged (`PROMPTS.lock.json`).")
+    A("")
+    A("### 11.1 Deviations from the frozen protocol")
+    A("")
+    if c.get("max_output_tokens"):
+        A(f"* **Output budget raised from 8000 to {c['max_output_tokens']} tokens** (`GADLC_LLM_MAX_TOKENS`). With 8000, "
+          "every proposal call ended `finish_reason=length` with empty content, so every proposal was unparseable.")
+    if c.get("temperature") is None:
+        A("* Temperature: the model rejected `temperature=0`, so the adapter retried with the provider default and "
+          "recorded that (designed behaviour, listed for completeness).")
+    A("* **Two harness bugs fixed during the trial**, both crashes on paths the scripted replay never reached. Scripted "
+      "outputs are byte-identical before and after. (1) The stand-in reviewer accepted an auto-generated `blocks` edge "
+      "while deferring its question node; such edges are now deferred with the node. (2) On rebase, an op that a sibling "
+      "proposal from the same base had already committed was re-applied; it is now dropped as a duplicate.")
+    if meta["resumed"]:
+        A(f"* **The run spans two invocations.** {f(meta['resumed'])} were completed before fix (2) and reused with "
+          "`--resume`, which refuses traces from a different model configuration. Fix (2) only changes rebases that "
+          "contain such duplicates, and no rebase happened in those arms, so they would have run identically.")
+    if meta["aborted"]:
+        A(f"* Aborted attempts are kept, unscored, in {f(['`out/' + x + '/`' for x in meta['aborted']])}, each with an "
+          "`ABORTED.md`.")
+    A("")
+    A("### 11.2 Impact of the probe change (E5)")
+    A("")
+    L += impact_table(live, scripted=False)
+    A("")
+    A("Arm D's predictions are free text matched to ids, and some name documents (`project:path`); those count as false "
+      "positives. Targets the oracle marks *unknown* count neither way.")
+    A("")
+    A("### 11.3 Construction and the code-only dependency")
+    A("")
+    A("| Project | Arm | Entities | Required relations | Hidden code-only relation | Status | Hypothesized edges | Extra nodes |")
+    A("|---|---|---|---|---|---|---:|---|")
+    for proj, pv in live["projects"].items():
+        for arm in ("G0", "G1", "G2"):
+            k = pv["arms"][arm]["construction"]
+            h = k["hidden_relations"][0]
+            q = len([n for n in k["extra_nodes"] if n.startswith("Q-")])
+            other = [n for n in k["extra_nodes"] if not n.startswith("Q-")]
+            A(f"| {proj} | {arm} | {k['entities_found']}/{k['entities_expected']} | {k['relations_found']}/"
+              f"{k['relations_required']} | `{' '.join(h['relation'])}` | {h['status'] or 'absent'} | "
+              f"{k['hypothesized_edges']} | {q} contradiction questions{'; ' + f(other) if other else ''} |")
+    A("")
+    A("### 11.4 Guardrails and review (live model output)")
+    A("")
+    A("| Project | Arm | Op verdicts | Finding codes | Decisions accept/reject/defer |")
+    A("|---|---|---|---|---|")
+    for proj, pv in live["projects"].items():
+        for arm in ("G1", "G2"):
+            g = pv["arms"][arm]["guardrails"]
+            d = pv["arms"][arm]["costs"]["review_decisions"]
+            A(f"| {proj} | {arm} | {f([f'{k} {v}' for k, v in sorted(g['op_verdicts'].items())])} | "
+              f"{f([f'{k} {v}' for k, v in sorted(g['finding_codes'].items())])} | {d['accept']}/{d['reject']}/{d['defer']} |")
+    A("")
+    A("### 11.5 Wording-only edit (E4)")
+    A("")
+    A("| Project | Arm | False-alarm obligations | Targets | Held for review | `no_change` records |")
+    A("|---|---|---:|---|---|---|")
+    for proj, pv in live["projects"].items():
+        for arm in ("G1", "G2", "H"):
+            n = pv["arms"][arm].get("negative_E4") or {}
+            if n.get("measured"):
+                A(f"| {proj} | {arm} | {n['false_alarms']} | {f(n['false_alarm_targets'])} | "
+                  f"{f(n.get('held_for_review'))} | {f(n.get('no_change_records'))} |")
+    A("")
+    A("### 11.6 Costs")
+    A("")
+    A("| Project | Arm | Model calls | Tokens in | Tokens out | Model latency (s) | Graph ops committed |")
+    A("|---|---|---:|---:|---:|---:|---:|")
+    for proj, pv in live["projects"].items():
+        for arm in ("D", "G0", "G1", "G2"):
+            k = pv["arms"][arm]["costs"]
+            lat = round(k["latency_ms"] / 1000) if k.get("latency_ms") else None
+            A(f"| {proj} | {arm} | {k['model_calls']} | {f(k['input_tokens'])} | {f(k['output_tokens'])} | {f(lat)} | "
+              f"{k['graph_ops_committed']} |")
+    A("")
+    A("Tokens out include hidden reasoning tokens, which the provider bills but does not return. G2's challenge "
+      "calls are included. Human review time was not measured.")
+    A("")
+    A("### 11.7 Reading")
+    A("")
+    A("* **RQ1 (construction).** From the initial documents alone (G0), the model found every expected entity and every "
+      "required relation except the code-only one, which is not in the documents. Beyond the oracle, it added only "
+      "`realized_by` artifact nodes and edges.")
+    A("* **RQ2 (maintenance).** Over the 5 events, the maintained graph (G1) picked up the code-only dependency in both "
+      "projects without the import scan, and recall on E5 rose to the level of the curated reference graph H in both. "
+      "The validator raised no `invalid` op in any live arm, so there were no fabricated citations or silent removals. "
+      "Quarantines came from contradictions, plus a few suspected duplicates (section 11.4). The model raised many "
+      "contradiction questions, which costs review time.")
+    A("* **RQ3 (benefit over documents only).** Not shown here. Arm D matched or beat every graph arm on recall in both "
+      "projects, at roughly a tenth of the tokens, and lost only on precision. The one critical target the graphs miss "
+      "(`REQ-CSV-EXPORT`) is an engine propagation limit, not a modelling failure. So on this material the graph's "
+      "advantage is precision and an auditable, persistent structure, not recall.")
+    A("* **Wording-only edits (E4).** In every maintained arm, the model classified the edit itself as editorial and it "
+      "was recorded as `no_change`; nothing about it propagated. The obligations counted in section 11.5 come from "
+      "something else: in the same step, the model raised contradiction questions about unrelated mismatches between "
+      "documents and code, and their `blocks` edges raise `review_spec`. One of them (ledgerlite: the architecture says "
+      "CSV amounts bypass the money formatter, but the exporter calls it) is the defect that E5 exposes. The oracle "
+      "labels E4 'nothing needs re-verification', so these count as false alarms. Whether they should count is a "
+      "labelling question for an independent reviewer. Toolshare G1 shows 0 because its question was deferred, not "
+      "committed.")
+    A("* **Caveats.** One sample per arm, one author for oracle, fixtures and H, and a policy reviewer. Treat these as "
+      "hypotheses to test with independent labels and repeated runs, not as results.")
+    return L
+
+
 def main() -> int:
     s = json.loads((HERE / "out" / "scripted" / "metrics.json").read_text())
     live_p = HERE / "out" / "live" / "metrics.json"
@@ -82,15 +241,14 @@ def main() -> int:
           "(construction fidelity), RQ2 (maintenance fidelity) and RQ3 (influence benefit versus a document-only "
           "model) are therefore **not yet evaluated**. Nothing below is a measurement of model quality.")
     else:
-        A(f"* A live run exists (`out/live/`, client: {live['projects']['toolshare']['arms']['G1']['client']}). "
-          "See the live section; scripted results remain separate.")
+        L += live_bottom_line(live)
     A("* **What was built and verified:** an end-to-end, opt-in maintenance loop over the existing engine — "
       "source snapshots (files and immutable Git commits) → model proposal → citation/provenance validation → "
       "per-operation human review → `GraphADLC.propose`/`commit` → spec-only Markdown → influence before/after — "
       "plus a missing-edge challenge, an evidence-sufficiency gate, a live provider adapter and a deterministic "
       "scripted fake. The loop ran **5 events on one persistent graph per project and arm** for two independently "
       "written projects; all 15 acceptance cases (L01–L15) have passing tests.")
-    A("* **What the deterministic parts show** (these do not depend on the fake):")
+    A("* **What the deterministic parts of the scripted self-check show** (these do not depend on the fake):")
     tg2, tg1 = tp["G2"]["construction"]["hidden_relations"][0], tp["G1"]["construction"]["hidden_relations"][0]
     A(f"  * The deterministic import scan recovered the code-only dependency in both projects "
       f"(toolshare `CMP-HOLDS → CMP-NOTIFY`: {'recovered' if tg2['recovered'] else 'missed'}; "
@@ -103,17 +261,23 @@ def main() -> int:
       f"{len(llp.get('gate_admitted', []))} admitted), so the gated condition prunes "
       f"{f(llp.get('pruned_with_gate')) if llp.get('pruned_with_gate') else 'nothing'}. Pruning stays off by default.")
     if crit_all:
-        A(f"  * **Every arm, including the curated reference graph H, misses {f(crit_all)}.** The engine's "
+        A(f"  * **Every graph arm, including the curated reference graph H, misses {f(crit_all)}.** The engine's "
           "`check_contract` on a consumer component is terminal, so a broken consumer never reaches the requirement it "
           "implements. This is the v0.2 'premature terminal propagation' class again, now on a code-discovered "
           "dependency; better graph maintenance cannot fix it.")
-    A("  * Wording-only edits: without the maintenance loop, the engine has no editorial aspect and raises "
+    A("  * Wording-only edits (scripted inputs): without the maintenance loop, the engine has no editorial aspect and raises "
       f"{tp['H']['negative_E4']['false_alarms']} (toolshare) and {lp['H']['negative_E4']['false_alarms']} (ledgerlite) "
       "obligations on the reference graph. With the loop, an editorial change is either recorded as a `no_change` "
       "or held in quarantine for review instead of being committed.")
-    A("* **Recommendation:** run the frozen live protocol (`--mode live`) with a configured model before building "
-      "anything else; separately, decide whether `check_contract` on an implementing component should reach the "
-      "requirement it implements (a versioned engine change with its own before/after).")
+    if live is None:
+        A("* **Recommendation:** run the frozen live protocol (`--mode live`) with a configured model before building "
+          "anything else; separately, decide whether `check_contract` on an implementing component should reach the "
+          "requirement it implements (a versioned engine change with its own before/after).")
+    else:
+        A("* **Recommendation:** have someone other than the fixture author label the E5 impacts and repeat the live run "
+          "(more than one sample) before drawing conclusions. Separately, version the engine rule that lets "
+          "`check_contract` on an implementing component reach its requirement: in the live run it is the binding limit "
+          "for every graph arm on ledgerlite, while arm D, which has no graph, finds that requirement.")
     A("")
     A("## 1. Baseline verification (M0)")
     A("")
@@ -138,12 +302,14 @@ def main() -> int:
             st = "deterministic; graph curated by the oracle author → diagnostic upper bound only"
         else:
             st = "**scripted fake**: proposals were authored by the implementing agent to exercise the pipeline"
+            if live is not None:
+                st = "live (section 11); sections 3–8 show the **scripted fake**, which is not evidence"
         A(f"| {arm} | {ARM_DESC[arm]} | {st} |")
     A("")
     A("Reviewer decisions in the replay come from a deterministic policy (`policy:conservative-v1`: accept admissible, "
       "reject invalid, defer quarantined), **not a human**. The policy never sees the oracle.")
     A("")
-    A("## 3. Impact of the probe change (E5), oracle v1.0")
+    A("## 3. Impact of the probe change (E5), oracle v1.0 — scripted self-check")
     A("")
     A("Unit is the target entity (the origin node is excluded). The toolshare probe is a contract change to "
       "`CON-NOTICE-FORMAT`; the ledgerlite probe is commit c3's change to the shared money formatter `CMP-MONEY`.")
@@ -242,15 +408,21 @@ def main() -> int:
     A("")
     A("## 9. Not measured")
     A("")
-    A("* Any model's construction, maintenance or challenge quality (RQ1/RQ2); arm D; RQ3 cost-benefit. These need "
-      "`--mode live`.")
+    if live is None:
+        A("* Any model's construction, maintenance or challenge quality (RQ1/RQ2); arm D; RQ3 cost-benefit. These "
+          "need `--mode live`.")
+    else:
+        A("* Run-to-run variance: the live run is a single sample per arm, so no interval can be given.")
     A("* Independent adjudication: the oracle, the reference graph H and the fixtures share one author. Treat every "
       "number as exploratory and single-reviewer.")
     A("* Human review effort, and lifecycle efficiency (RQ4) beyond the qualitative reconciliation trace.")
     A("")
     A("## 10. Recommended next step")
     A("")
-    A("Run the frozen protocol live: set `GADLC_LLM_MODEL=<id>` and either `ANTHROPIC_API_KEY` or `OPENAI_API_KEY` "
+    if live is not None:
+        A("See the recommendation in the bottom line. The live protocol is in section 11.")
+    else:
+        A("Run the frozen protocol live: set `GADLC_LLM_MODEL=<id>` and either `ANTHROPIC_API_KEY` or `OPENAI_API_KEY` "
       "(`GADLC_LLM_PROVIDER` picks one if both are set), then `python evaluation/llm_graph/run_replay.py --mode live && "
       "python evaluation/llm_graph/score.py --run evaluation/llm_graph/out/live && python evaluation/llm_graph/report.py`. Have someone other than the fixture author label the E5 impacts first. It is "
       "the cheapest experiment that can actually answer RQ1–RQ3, and the harness, prompts and scoring are already "
@@ -259,9 +431,7 @@ def main() -> int:
       "cannot recover those critical misses.")
     if live is not None:
         A("")
-        A("## Live run")
-        A("")
-        L += impact_table(live, scripted=False)
+        L += live_section(live)
     A("")
     (HERE / "RESULTS.md").write_text("\n".join(L))
     print(f"wrote {HERE / 'RESULTS.md'}")
