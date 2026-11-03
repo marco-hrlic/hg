@@ -1,0 +1,794 @@
+{
+ "arm": "G0",
+ "change_log": [],
+ "client": {
+  "api_key_env": "OPENAI_API_KEY",
+  "base_url": "https://api.openai.com",
+  "is_fake": false,
+  "json_mode": true,
+  "model": "gpt-6.1-terra",
+  "provider": "openai",
+  "temperature": null
+ },
+ "commits": {
+  "c1": "d1ca69603f4828bb812eba1e72f15c756ade52a4",
+  "c2": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+ },
+ "events": [
+  {
+   "diffs": [],
+   "event": "E1",
+   "graph_revision_after": 1,
+   "graph_revision_before": 1,
+   "kind": "discovery",
+   "lifecycle_after": [],
+   "lifecycle_before": [],
+   "probe_after": {
+    "aspect": "contract",
+    "node_id": "CON-NOTICE-FORMAT",
+    "pairs": [],
+    "present": false,
+    "pruned": [],
+    "targets": []
+   },
+   "probe_before": {
+    "aspect": "contract",
+    "node_id": "CON-NOTICE-FORMAT",
+    "pairs": [],
+    "present": false,
+    "pruned": [],
+    "targets": []
+   },
+   "proposal_step": {
+    "call": {
+     "call_key": "toolshare/E1/propose",
+     "client": {
+      "api_key_env": "OPENAI_API_KEY",
+      "base_url": "https://api.openai.com",
+      "is_fake": false,
+      "json_mode": true,
+      "model": "gpt-6.1-terra",
+      "provider": "openai",
+      "temperature": null
+     },
+     "input": {
+      "chars": 12959,
+      "diffs": [],
+      "limits": {
+       "max_chars_per_doc": 12000,
+       "max_total_chars": 60000
+      },
+      "packed_sources_sha256": "fce3d34b680fc0be00fd6f81ac1529da4ece05b69a64d7c1f989dc707279a446",
+      "sha256": "e4aeb601fd977841e556ff9dc8aa673fbde53d94698c9343a9ca7c7ecff0b05d",
+      "sources": [
+       {
+        "line_count": 14,
+        "origin": "file",
+        "path": "discovery/stakeholder_notes.md",
+        "project": "toolshare",
+        "sha256": "e9a2bdd034c3f226aeaf5dcb1cadea9d6ce03f0f2a9acf9a88ac051469ef64b8",
+        "source_id": "toolshare:discovery/stakeholder_notes.md",
+        "source_type": "stakeholder_notes",
+        "version": "2026-08-28"
+       },
+       {
+        "line_count": 12,
+        "origin": "file",
+        "path": "spec/architecture.md",
+        "project": "toolshare",
+        "sha256": "1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300",
+        "source_id": "toolshare:spec/architecture.md",
+        "source_type": "architecture",
+        "version": "2026-09-02"
+       },
+       {
+        "line_count": 33,
+        "origin": "file",
+        "path": "spec/requirements.md",
+        "project": "toolshare",
+        "sha256": "aba608a7cba6d2494754607772e19d10e5e6823d409dae7c96d9e1917b6d3af0",
+        "source_id": "toolshare:spec/requirements.md",
+        "source_type": "requirements",
+        "version": "draft-1"
+       },
+       {
+        "commit": "d1ca69603f4828bb812eba1e72f15c756ade52a4",
+        "line_count": 9,
+        "origin": "git",
+        "path": "tests/test_holds.py",
+        "project": "toolshare",
+        "repo": "toolshare",
+        "sha256": "bf13124788ea0c7f04563932b8f21ed079e2a9d099ed49ee70fb2f7b4a8a89ed",
+        "source_id": "git:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4:tests/test_holds.py",
+        "source_type": "test",
+        "version": "d1ca69603f4828bb812eba1e72f15c756ade52a4"
+       },
+       {
+        "commit": "d1ca69603f4828bb812eba1e72f15c756ade52a4",
+        "line_count": 14,
+        "origin": "git",
+        "path": "tests/test_notifications.py",
+        "project": "toolshare",
+        "repo": "toolshare",
+        "sha256": "5723cb01fb2199145f4388ba8e9c0359c7c874acef4cd626516428337b5cd1e4",
+        "source_id": "git:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4:tests/test_notifications.py",
+        "source_type": "test",
+        "version": "d1ca69603f4828bb812eba1e72f15c756ade52a4"
+       },
+       {
+        "commit": "d1ca69603f4828bb812eba1e72f15c756ade52a4",
+        "line_count": 0,
+        "origin": "git",
+        "path": "toolshare/__init__.py",
+        "project": "toolshare",
+        "repo": "toolshare",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "source_id": "git:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4:toolshare/__init__.py",
+        "source_type": "code",
+        "version": "d1ca69603f4828bb812eba1e72f15c756ade52a4"
+       },
+       {
+        "commit": "d1ca69603f4828bb812eba1e72f15c756ade52a4",
+        "line_count": 25,
+        "origin": "git",
+        "path": "toolshare/holds.py",
+        "project": "toolshare",
+        "repo": "toolshare",
+        "sha256": "db71ce7ce55d98719ff83f228de5e5efdef7de97a09a6d89f02ebc6f0e5e1a8d",
+        "source_id": "git:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4:toolshare/holds.py",
+        "source_type": "code",
+        "version": "d1ca69603f4828bb812eba1e72f15c756ade52a4"
+       },
+       {
+        "commit": "d1ca69603f4828bb812eba1e72f15c756ade52a4",
+        "line_count": 15,
+        "origin": "git",
+        "path": "toolshare/inventory.py",
+        "project": "toolshare",
+        "repo": "toolshare",
+        "sha256": "5d5448a350375901f733929d43320921ed02ef91bd84d306a0fa7f0ade64f557",
+        "source_id": "git:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4:toolshare/inventory.py",
+        "source_type": "code",
+        "version": "d1ca69603f4828bb812eba1e72f15c756ade52a4"
+       },
+       {
+        "commit": "d1ca69603f4828bb812eba1e72f15c756ade52a4",
+        "line_count": 14,
+        "origin": "git",
+        "path": "toolshare/notifications.py",
+        "project": "toolshare",
+        "repo": "toolshare",
+        "sha256": "ae80be0576750da1fc879a76854887e3233dfbcab1c6b301b84ae84d16dd33b7",
+        "source_id": "git:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4:toolshare/notifications.py",
+        "source_type": "code",
+        "version": "d1ca69603f4828bb812eba1e72f15c756ade52a4"
+       }
+      ],
+      "truncation": []
+     },
+     "is_fake": false,
+     "latency_ms": 89712.2,
+     "model_reported": "gpt-6.1-terra",
+     "output": {
+      "chars": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "text": ""
+     },
+     "parse": {
+      "error": "Expecting value: line 1 column 1 (char 0)",
+      "ok": false
+     },
+     "prompt": {
+      "prompt_id": "propose_update",
+      "sha256": "cf3981f23ec4eab621bdbb0b07a2878275e2ebb99e4dad3210c2fd8a16a483c8",
+      "version": "v1"
+     },
+     "stop_reason": "length",
+     "usage": {
+      "input_tokens": 3940,
+      "output_tokens": 8000
+     }
+    },
+    "errors": [
+     "unparseable output: Expecting value: line 1 column 1 (char 0)"
+    ]
+   },
+   "sources": [
+    {
+     "line_count": 14,
+     "origin": "file",
+     "path": "discovery/stakeholder_notes.md",
+     "project": "toolshare",
+     "sha256": "e9a2bdd034c3f226aeaf5dcb1cadea9d6ce03f0f2a9acf9a88ac051469ef64b8",
+     "source_id": "toolshare:discovery/stakeholder_notes.md",
+     "source_type": "stakeholder_notes",
+     "version": "2026-08-28"
+    },
+    {
+     "line_count": 12,
+     "origin": "file",
+     "path": "spec/architecture.md",
+     "project": "toolshare",
+     "sha256": "1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300",
+     "source_id": "toolshare:spec/architecture.md",
+     "source_type": "architecture",
+     "version": "2026-09-02"
+    },
+    {
+     "line_count": 33,
+     "origin": "file",
+     "path": "spec/requirements.md",
+     "project": "toolshare",
+     "sha256": "aba608a7cba6d2494754607772e19d10e5e6823d409dae7c96d9e1917b6d3af0",
+     "source_id": "toolshare:spec/requirements.md",
+     "source_type": "requirements",
+     "version": "draft-1"
+    },
+    {
+     "commit": "d1ca69603f4828bb812eba1e72f15c756ade52a4",
+     "line_count": 9,
+     "origin": "git",
+     "path": "tests/test_holds.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "bf13124788ea0c7f04563932b8f21ed079e2a9d099ed49ee70fb2f7b4a8a89ed",
+     "source_id": "git:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4:tests/test_holds.py",
+     "source_type": "test",
+     "version": "d1ca69603f4828bb812eba1e72f15c756ade52a4"
+    },
+    {
+     "commit": "d1ca69603f4828bb812eba1e72f15c756ade52a4",
+     "line_count": 14,
+     "origin": "git",
+     "path": "tests/test_notifications.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "5723cb01fb2199145f4388ba8e9c0359c7c874acef4cd626516428337b5cd1e4",
+     "source_id": "git:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4:tests/test_notifications.py",
+     "source_type": "test",
+     "version": "d1ca69603f4828bb812eba1e72f15c756ade52a4"
+    },
+    {
+     "commit": "d1ca69603f4828bb812eba1e72f15c756ade52a4",
+     "line_count": 0,
+     "origin": "git",
+     "path": "toolshare/__init__.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "source_id": "git:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4:toolshare/__init__.py",
+     "source_type": "code",
+     "version": "d1ca69603f4828bb812eba1e72f15c756ade52a4"
+    },
+    {
+     "commit": "d1ca69603f4828bb812eba1e72f15c756ade52a4",
+     "line_count": 25,
+     "origin": "git",
+     "path": "toolshare/holds.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "db71ce7ce55d98719ff83f228de5e5efdef7de97a09a6d89f02ebc6f0e5e1a8d",
+     "source_id": "git:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4:toolshare/holds.py",
+     "source_type": "code",
+     "version": "d1ca69603f4828bb812eba1e72f15c756ade52a4"
+    },
+    {
+     "commit": "d1ca69603f4828bb812eba1e72f15c756ade52a4",
+     "line_count": 15,
+     "origin": "git",
+     "path": "toolshare/inventory.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "5d5448a350375901f733929d43320921ed02ef91bd84d306a0fa7f0ade64f557",
+     "source_id": "git:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4:toolshare/inventory.py",
+     "source_type": "code",
+     "version": "d1ca69603f4828bb812eba1e72f15c756ade52a4"
+    },
+    {
+     "commit": "d1ca69603f4828bb812eba1e72f15c756ade52a4",
+     "line_count": 14,
+     "origin": "git",
+     "path": "toolshare/notifications.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "ae80be0576750da1fc879a76854887e3233dfbcab1c6b301b84ae84d16dd33b7",
+     "source_id": "git:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4:toolshare/notifications.py",
+     "source_type": "code",
+     "version": "d1ca69603f4828bb812eba1e72f15c756ade52a4"
+    }
+   ],
+   "spec_projection": "spec_E1.md"
+  },
+  {
+   "diffs": [],
+   "event": "E2",
+   "graph_revision_before": 1,
+   "kind": "refinement",
+   "skipped": "G0: no maintenance after initial construction",
+   "sources": [
+    {
+     "line_count": 14,
+     "origin": "file",
+     "path": "discovery/stakeholder_notes.md",
+     "project": "toolshare",
+     "sha256": "e9a2bdd034c3f226aeaf5dcb1cadea9d6ce03f0f2a9acf9a88ac051469ef64b8",
+     "source_id": "toolshare:discovery/stakeholder_notes.md",
+     "source_type": "stakeholder_notes",
+     "version": "2026-08-28"
+    },
+    {
+     "line_count": 12,
+     "origin": "file",
+     "path": "spec/architecture.md",
+     "project": "toolshare",
+     "sha256": "1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300",
+     "source_id": "toolshare:spec/architecture.md",
+     "source_type": "architecture",
+     "version": "2026-09-02"
+    },
+    {
+     "line_count": 36,
+     "origin": "file",
+     "path": "spec/requirements.md",
+     "project": "toolshare",
+     "sha256": "069e49112dfe418410bd88df5d778f3c6761cb30b9233208e7c692659aa146c4",
+     "source_id": "toolshare:spec/requirements.md",
+     "source_type": "requirements",
+     "version": "draft-2"
+    },
+    {
+     "commit": "d1ca69603f4828bb812eba1e72f15c756ade52a4",
+     "line_count": 9,
+     "origin": "git",
+     "path": "tests/test_holds.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "bf13124788ea0c7f04563932b8f21ed079e2a9d099ed49ee70fb2f7b4a8a89ed",
+     "source_id": "git:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4:tests/test_holds.py",
+     "source_type": "test",
+     "version": "d1ca69603f4828bb812eba1e72f15c756ade52a4"
+    },
+    {
+     "commit": "d1ca69603f4828bb812eba1e72f15c756ade52a4",
+     "line_count": 14,
+     "origin": "git",
+     "path": "tests/test_notifications.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "5723cb01fb2199145f4388ba8e9c0359c7c874acef4cd626516428337b5cd1e4",
+     "source_id": "git:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4:tests/test_notifications.py",
+     "source_type": "test",
+     "version": "d1ca69603f4828bb812eba1e72f15c756ade52a4"
+    },
+    {
+     "commit": "d1ca69603f4828bb812eba1e72f15c756ade52a4",
+     "line_count": 0,
+     "origin": "git",
+     "path": "toolshare/__init__.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "source_id": "git:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4:toolshare/__init__.py",
+     "source_type": "code",
+     "version": "d1ca69603f4828bb812eba1e72f15c756ade52a4"
+    },
+    {
+     "commit": "d1ca69603f4828bb812eba1e72f15c756ade52a4",
+     "line_count": 25,
+     "origin": "git",
+     "path": "toolshare/holds.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "db71ce7ce55d98719ff83f228de5e5efdef7de97a09a6d89f02ebc6f0e5e1a8d",
+     "source_id": "git:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4:toolshare/holds.py",
+     "source_type": "code",
+     "version": "d1ca69603f4828bb812eba1e72f15c756ade52a4"
+    },
+    {
+     "commit": "d1ca69603f4828bb812eba1e72f15c756ade52a4",
+     "line_count": 15,
+     "origin": "git",
+     "path": "toolshare/inventory.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "5d5448a350375901f733929d43320921ed02ef91bd84d306a0fa7f0ade64f557",
+     "source_id": "git:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4:toolshare/inventory.py",
+     "source_type": "code",
+     "version": "d1ca69603f4828bb812eba1e72f15c756ade52a4"
+    },
+    {
+     "commit": "d1ca69603f4828bb812eba1e72f15c756ade52a4",
+     "line_count": 14,
+     "origin": "git",
+     "path": "toolshare/notifications.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "ae80be0576750da1fc879a76854887e3233dfbcab1c6b301b84ae84d16dd33b7",
+     "source_id": "git:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4:toolshare/notifications.py",
+     "source_type": "code",
+     "version": "d1ca69603f4828bb812eba1e72f15c756ade52a4"
+    }
+   ]
+  },
+  {
+   "diffs": [
+    "git-diff:toolshare@d1ca69603f4828bb812eba1e72f15c756ade52a4..3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+   ],
+   "event": "E3",
+   "graph_revision_before": 1,
+   "kind": "implementation_observation",
+   "skipped": "G0: no maintenance after initial construction",
+   "sources": [
+    {
+     "line_count": 14,
+     "origin": "file",
+     "path": "discovery/stakeholder_notes.md",
+     "project": "toolshare",
+     "sha256": "e9a2bdd034c3f226aeaf5dcb1cadea9d6ce03f0f2a9acf9a88ac051469ef64b8",
+     "source_id": "toolshare:discovery/stakeholder_notes.md",
+     "source_type": "stakeholder_notes",
+     "version": "2026-08-28"
+    },
+    {
+     "line_count": 12,
+     "origin": "file",
+     "path": "spec/architecture.md",
+     "project": "toolshare",
+     "sha256": "1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300",
+     "source_id": "toolshare:spec/architecture.md",
+     "source_type": "architecture",
+     "version": "2026-09-02"
+    },
+    {
+     "line_count": 36,
+     "origin": "file",
+     "path": "spec/requirements.md",
+     "project": "toolshare",
+     "sha256": "069e49112dfe418410bd88df5d778f3c6761cb30b9233208e7c692659aa146c4",
+     "source_id": "toolshare:spec/requirements.md",
+     "source_type": "requirements",
+     "version": "draft-2"
+    },
+    {
+     "commit": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa",
+     "line_count": 10,
+     "origin": "git",
+     "path": "tests/test_holds.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "1d75cbe25e962f50d6f2b7d6dc3f1bfbc0535f1fa588658d75a13e6bdd0a413b",
+     "source_id": "git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:tests/test_holds.py",
+     "source_type": "test",
+     "version": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+    },
+    {
+     "commit": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa",
+     "line_count": 14,
+     "origin": "git",
+     "path": "tests/test_notifications.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "5723cb01fb2199145f4388ba8e9c0359c7c874acef4cd626516428337b5cd1e4",
+     "source_id": "git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:tests/test_notifications.py",
+     "source_type": "test",
+     "version": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+    },
+    {
+     "commit": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa",
+     "line_count": 0,
+     "origin": "git",
+     "path": "toolshare/__init__.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "source_id": "git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:toolshare/__init__.py",
+     "source_type": "code",
+     "version": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+    },
+    {
+     "commit": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa",
+     "line_count": 30,
+     "origin": "git",
+     "path": "toolshare/holds.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "b3024276c517744afea68dfec8b1041dc3e488d6125307cb1a36f40819fe1ecf",
+     "source_id": "git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:toolshare/holds.py",
+     "source_type": "code",
+     "version": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+    },
+    {
+     "commit": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa",
+     "line_count": 15,
+     "origin": "git",
+     "path": "toolshare/inventory.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "5d5448a350375901f733929d43320921ed02ef91bd84d306a0fa7f0ade64f557",
+     "source_id": "git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:toolshare/inventory.py",
+     "source_type": "code",
+     "version": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+    },
+    {
+     "commit": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa",
+     "line_count": 14,
+     "origin": "git",
+     "path": "toolshare/notifications.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "ae80be0576750da1fc879a76854887e3233dfbcab1c6b301b84ae84d16dd33b7",
+     "source_id": "git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:toolshare/notifications.py",
+     "source_type": "code",
+     "version": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+    }
+   ]
+  },
+  {
+   "diffs": [],
+   "event": "E4",
+   "graph_revision_before": 1,
+   "kind": "wording_only",
+   "skipped": "G0: no maintenance after initial construction",
+   "sources": [
+    {
+     "line_count": 14,
+     "origin": "file",
+     "path": "discovery/stakeholder_notes.md",
+     "project": "toolshare",
+     "sha256": "e9a2bdd034c3f226aeaf5dcb1cadea9d6ce03f0f2a9acf9a88ac051469ef64b8",
+     "source_id": "toolshare:discovery/stakeholder_notes.md",
+     "source_type": "stakeholder_notes",
+     "version": "2026-08-28"
+    },
+    {
+     "line_count": 12,
+     "origin": "file",
+     "path": "spec/architecture.md",
+     "project": "toolshare",
+     "sha256": "1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300",
+     "source_id": "toolshare:spec/architecture.md",
+     "source_type": "architecture",
+     "version": "2026-09-02"
+    },
+    {
+     "line_count": 36,
+     "origin": "file",
+     "path": "spec/requirements.md",
+     "project": "toolshare",
+     "sha256": "3d4e44476b367c2663cdc3b08e38da7c885a7eb952e7f4adc615afc629b44428",
+     "source_id": "toolshare:spec/requirements.md",
+     "source_type": "requirements",
+     "version": "draft-3"
+    },
+    {
+     "commit": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa",
+     "line_count": 10,
+     "origin": "git",
+     "path": "tests/test_holds.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "1d75cbe25e962f50d6f2b7d6dc3f1bfbc0535f1fa588658d75a13e6bdd0a413b",
+     "source_id": "git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:tests/test_holds.py",
+     "source_type": "test",
+     "version": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+    },
+    {
+     "commit": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa",
+     "line_count": 14,
+     "origin": "git",
+     "path": "tests/test_notifications.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "5723cb01fb2199145f4388ba8e9c0359c7c874acef4cd626516428337b5cd1e4",
+     "source_id": "git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:tests/test_notifications.py",
+     "source_type": "test",
+     "version": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+    },
+    {
+     "commit": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa",
+     "line_count": 0,
+     "origin": "git",
+     "path": "toolshare/__init__.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "source_id": "git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:toolshare/__init__.py",
+     "source_type": "code",
+     "version": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+    },
+    {
+     "commit": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa",
+     "line_count": 30,
+     "origin": "git",
+     "path": "toolshare/holds.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "b3024276c517744afea68dfec8b1041dc3e488d6125307cb1a36f40819fe1ecf",
+     "source_id": "git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:toolshare/holds.py",
+     "source_type": "code",
+     "version": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+    },
+    {
+     "commit": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa",
+     "line_count": 15,
+     "origin": "git",
+     "path": "toolshare/inventory.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "5d5448a350375901f733929d43320921ed02ef91bd84d306a0fa7f0ade64f557",
+     "source_id": "git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:toolshare/inventory.py",
+     "source_type": "code",
+     "version": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+    },
+    {
+     "commit": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa",
+     "line_count": 14,
+     "origin": "git",
+     "path": "toolshare/notifications.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "ae80be0576750da1fc879a76854887e3233dfbcab1c6b301b84ae84d16dd33b7",
+     "source_id": "git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:toolshare/notifications.py",
+     "source_type": "code",
+     "version": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+    }
+   ]
+  },
+  {
+   "diffs": [],
+   "event": "E5",
+   "graph_revision_before": 1,
+   "kind": "change",
+   "skipped": "G0: no maintenance after initial construction",
+   "sources": [
+    {
+     "line_count": 14,
+     "origin": "file",
+     "path": "discovery/stakeholder_notes.md",
+     "project": "toolshare",
+     "sha256": "e9a2bdd034c3f226aeaf5dcb1cadea9d6ce03f0f2a9acf9a88ac051469ef64b8",
+     "source_id": "toolshare:discovery/stakeholder_notes.md",
+     "source_type": "stakeholder_notes",
+     "version": "2026-08-28"
+    },
+    {
+     "line_count": 12,
+     "origin": "file",
+     "path": "spec/architecture.md",
+     "project": "toolshare",
+     "sha256": "1b7cc213e17478d47348158ee09173e4e423089739ce1c6c177527d6d2965300",
+     "source_id": "toolshare:spec/architecture.md",
+     "source_type": "architecture",
+     "version": "2026-09-02"
+    },
+    {
+     "line_count": 38,
+     "origin": "file",
+     "path": "spec/requirements.md",
+     "project": "toolshare",
+     "sha256": "ff5dae59d469eaa8e5ccd104ce6857802879e3b97104182b938c13f84f1fe755",
+     "source_id": "toolshare:spec/requirements.md",
+     "source_type": "requirements",
+     "version": "draft-4"
+    },
+    {
+     "commit": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa",
+     "line_count": 10,
+     "origin": "git",
+     "path": "tests/test_holds.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "1d75cbe25e962f50d6f2b7d6dc3f1bfbc0535f1fa588658d75a13e6bdd0a413b",
+     "source_id": "git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:tests/test_holds.py",
+     "source_type": "test",
+     "version": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+    },
+    {
+     "commit": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa",
+     "line_count": 14,
+     "origin": "git",
+     "path": "tests/test_notifications.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "5723cb01fb2199145f4388ba8e9c0359c7c874acef4cd626516428337b5cd1e4",
+     "source_id": "git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:tests/test_notifications.py",
+     "source_type": "test",
+     "version": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+    },
+    {
+     "commit": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa",
+     "line_count": 0,
+     "origin": "git",
+     "path": "toolshare/__init__.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "source_id": "git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:toolshare/__init__.py",
+     "source_type": "code",
+     "version": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+    },
+    {
+     "commit": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa",
+     "line_count": 30,
+     "origin": "git",
+     "path": "toolshare/holds.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "b3024276c517744afea68dfec8b1041dc3e488d6125307cb1a36f40819fe1ecf",
+     "source_id": "git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:toolshare/holds.py",
+     "source_type": "code",
+     "version": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+    },
+    {
+     "commit": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa",
+     "line_count": 15,
+     "origin": "git",
+     "path": "toolshare/inventory.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "5d5448a350375901f733929d43320921ed02ef91bd84d306a0fa7f0ade64f557",
+     "source_id": "git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:toolshare/inventory.py",
+     "source_type": "code",
+     "version": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+    },
+    {
+     "commit": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa",
+     "line_count": 14,
+     "origin": "git",
+     "path": "toolshare/notifications.py",
+     "project": "toolshare",
+     "repo": "toolshare",
+     "sha256": "ae80be0576750da1fc879a76854887e3233dfbcab1c6b301b84ae84d16dd33b7",
+     "source_id": "git:toolshare@3e93b8e1693e95c68fd953f7bf71da76cd8717aa:toolshare/notifications.py",
+     "source_type": "code",
+     "version": "3e93b8e1693e95c68fd953f7bf71da76cd8717aa"
+    }
+   ]
+  }
+ ],
+ "final_graph": {
+  "edges": [],
+  "graph_revision": 1,
+  "nodes": []
+ },
+ "ledger": {
+  "calls": 1,
+  "decisions": [],
+  "proposals": [
+   {
+    "change_id": null,
+    "id": "P-0001",
+    "status": "invalid"
+   }
+  ]
+ },
+ "negative": {
+  "E4": {
+   "engine_semantic_probe": {
+    "aspect": "semantic",
+    "node_id": "REQ-READY-NOTICE",
+    "pairs": [],
+    "present": false,
+    "pruned": [],
+    "targets": []
+   }
+  }
+ },
+ "prediction": {
+  "E5": {
+   "aspect": "contract",
+   "node_id": "CON-NOTICE-FORMAT",
+   "pairs": [],
+   "present": false,
+   "pruned": [],
+   "targets": []
+  }
+ },
+ "probe": {
+  "aspect": "contract",
+  "description": "Notification format contract changes: SMS allowed (160-character bodies) and every message must state the desk opening hours.",
+  "event": "E5",
+  "node_id": "CON-NOTICE-FORMAT"
+ },
+ "project": "toolshare"
+}
