@@ -352,7 +352,7 @@ def test_L14_v01_and_v02_suites_still_pass():
 
 
 # L15 ------------------------------------------------------------------------------------------
-def test_L15_scripted_runs_are_reproducible_and_never_reported_as_llm(scripted_run, tmp_path):
+def test_L15_scripted_runs_are_reproducible_and_never_reported_as_llm(scripted_run, tmp_path, monkeypatch):
     import run_replay
     preds = json.loads((scripted_run / "predictions.json").read_text())
     assert preds["mode"] == "scripted" and "PIPELINE SELF-CHECK" in preds["evidential_status"]
@@ -365,5 +365,8 @@ def test_L15_scripted_runs_are_reproducible_and_never_reported_as_llm(scripted_r
     for f in sorted(scripted_run.rglob("*")):
         if f.is_file() and f.name != "metrics.json":
             assert (tmp_path / "again" / f.relative_to(scripted_run)).read_bytes() == f.read_bytes(), f
+    for var in ("GADLC_LLM_PROVIDER", "GADLC_LLM_MODEL", "GADLC_LLM_API_KEY_ENV", "GADLC_LLM_BASE_URL",
+                "ANTHROPIC_API_KEY", "OPENAI_API_KEY"):
+        monkeypatch.delenv(var, raising=False)  # hermetic: the host may have live credentials configured
     assert run_replay.main(["--mode", "live", "--out", str(tmp_path / "live")]) == 2  # refuses without config
     assert not (tmp_path / "live").exists()
