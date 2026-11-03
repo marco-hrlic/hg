@@ -1,0 +1,93 @@
+{
+ "arm": "H",
+ "commits": {
+  "c1": "74b98166dcdf4dbb8c72c72dc9fa4fc0da40c447",
+  "c2": "17a4a69390b64db2e27dc047a279da5e2bfa1327",
+  "c3": "548ce68cdbb0f52c76402a5d4b5214722eff4cd7"
+ },
+ "events": [],
+ "influence_rules": "v1.1",
+ "negative": {
+  "E4": {
+   "engine_semantic_probe": {
+    "aspect": "semantic",
+    "graph_revision": 1,
+    "node_id": "REQ-PDF-INVOICE",
+    "pairs": [
+     [
+      "CAP-INVOICING",
+      "review_spec"
+     ],
+     [
+      "CMP-PDF",
+      "review_implementation"
+     ]
+    ],
+    "present": true,
+    "provisional": [],
+    "pruned": [],
+    "targets": [
+     "CAP-INVOICING",
+     "CMP-PDF"
+    ]
+   },
+   "note": "no maintenance loop: the engine has no editorial aspect"
+  }
+ },
+ "prediction": {
+  "E5": {
+   "aspect": "implementation",
+   "graph_revision": 1,
+   "node_id": "CMP-MONEY",
+   "pairs": [
+    [
+     "CMP-CSV",
+     "check_contract"
+    ],
+    [
+     "CMP-PDF",
+     "check_contract"
+    ],
+    [
+     "REQ-CSV-EXPORT",
+     "check_contract"
+    ],
+    [
+     "REQ-PDF-INVOICE",
+     "check_contract"
+    ]
+   ],
+   "present": true,
+   "provisional": [
+    "CMP-CSV",
+    "CMP-PDF",
+    "REQ-CSV-EXPORT",
+    "REQ-PDF-INVOICE"
+   ],
+   "pruned": [],
+   "targets": [
+    "CMP-CSV",
+    "CMP-PDF",
+    "REQ-CSV-EXPORT",
+    "REQ-PDF-INVOICE"
+   ]
+  }
+ },
+ "probe": {
+  "affected_domain": {
+   "amount_range": [
+    "0-999",
+    "1000+"
+   ]
+  },
+  "aspect": "implementation",
+  "description": "The shared money formatter now inserts ',' thousands separators (commit c3).",
+  "event": "E5",
+  "node_id": "CMP-MONEY"
+ },
+ "project": "ledgerlite",
+ "replay": {
+  "calls": [],
+  "from": "evaluation/llm_graph/out/live"
+ }
+}

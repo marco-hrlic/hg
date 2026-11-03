@@ -87,8 +87,9 @@ def live_bottom_line(live: dict[str, Any]) -> list[str]:
     if not any(d_crit.values()) and any(g_crit.values()):
         miss = "; ".join(f"{p}: {f(v)}" for p, v in g_crit.items() if v)
         L.append(f"  * **The document-only arm D missed no critical target; the maintained graphs did ({miss}).** That "
-                 "miss is the engine's terminal `check_contract` rule (H misses it too), not graph quality. D's cost is "
-                 "lower precision: it also names entities and documents outside the labelled set.")
+                 "miss is the engine's terminal `check_contract` rule (H misses it too), not graph quality; rule set v1.1 "
+                 "removes it (section 12). D's cost is lower precision: it also names entities and documents outside "
+                 "the labelled set.")
     return L
 
 
@@ -239,8 +240,10 @@ def rules_v11_section(v1: dict[str, Any], v11: dict[str, Any]) -> list[str]:
             live_c = [c["call_key"] for c in calls if c["served"] == "live"]
             A(f"| {proj}/{arm} | {sum(c['served'] == 'replayed' for c in calls)} | {f(live_c)} |")
     A("")
-    A("G2's challenge calls were not recorded in the v1 run (section 11.6), so they are always live here: G2's "
-      "before/after mixes the rule change with a fresh model sample of the challenge step.")
+    A("G2's challenge calls were not recorded in the v1 run (section 11.6), so they are always live here. Once the "
+      "first live challenge changed G2's graph, its later proposal prompts changed too and went live. **G2 from E3 "
+      "onwards is therefore a fresh model sample**, and its before/after mixes the rule change with run-to-run "
+      "variance. D, G0, G1 and H are exact rule-only comparisons.")
     A("")
     A("### 12.1 E5 impact, v1 → v1.1")
     A("")
@@ -270,6 +273,26 @@ def rules_v11_section(v1: dict[str, Any], v11: dict[str, Any]) -> list[str]:
             b = v11["projects"][proj]["arms"][arm].get("negative_E4") or {}
             if a.get("measured") and b.get("measured"):
                 A(f"| {proj} | {arm} | {a['false_alarms']} → {b['false_alarms']} |")
+    A("")
+    A("### 12.3 Reading")
+    A("")
+    A("* **The rule fixes the miss it targets.** On ledgerlite, G1 and H (exact rule-only comparisons) now reach "
+      "`REQ-CSV-EXPORT`, and recall goes from 0.50 to 0.75 at unchanged precision. With v1.1 the maintained graph no "
+      "longer misses a critical target in either project. G0 is unchanged: without the code-only dependency there is "
+      "no consumer to reach from.")
+    A("* **It costs precision where the consumer's other requirements are unaffected.** On toolshare, CMP-HOLDS "
+      "implements two requirements. v1.1 flags both, and the oracle marks `REQ-PLACE-HOLD` not necessary, so "
+      "precision drops from 1.00 to 0.80. On the reference graph H, the extra hop also adds wording-only (E4) false "
+      "alarms on toolshare (3 → 5). The rule cannot tell which of a consumer's requirements depend on the changed "
+      "behaviour.")
+    A("* **The remaining ledgerlite miss is a different gap.** `TEST-MONEY-FORMAT` verifies `CON-MONEY-FORMAT`, and "
+      "an implementation-aspect change to `CMP-MONEY` never reaches tests that verify its contract. v1.1 does not "
+      "address that.")
+    A("* **Against arm D.** With v1.1, G1 matches D's critical-target coverage in both projects while keeping higher "
+      "precision: toolshare 0.80 vs 0.67, ledgerlite 1.00 vs 0.67. D still has higher recall on ledgerlite (1.00 vs "
+      "0.75) and costs about a tenth of the tokens.")
+    A("* **Recommendation.** Adopt v1.1 as an opt-in rule set rather than a new default until it has been checked "
+      "against independent labels and the v0.2 corpus. Address the contract-test gap separately.")
     A("")
     return L
 
@@ -330,20 +353,25 @@ def main() -> int:
         A(f"  * **Every graph arm, including the curated reference graph H, misses {f(crit_all)}.** The engine's "
           "`check_contract` on a consumer component is terminal, so a broken consumer never reaches the requirement it "
           "implements. This is the v0.2 'premature terminal propagation' class again, now on a code-discovered "
-          "dependency; better graph maintenance cannot fix it.")
+          "dependency; under rule set v1, better graph maintenance cannot fix it (section 12 tests a rule change).")
     A("  * Wording-only edits (scripted inputs): without the maintenance loop, the engine has no editorial aspect and raises "
       f"{tp['H']['negative_E4']['false_alarms']} (toolshare) and {lp['H']['negative_E4']['false_alarms']} (ledgerlite) "
       "obligations on the reference graph. With the loop, an editorial change is either recorded as a `no_change` "
       "or held in quarantine for review instead of being committed.")
+    if live is not None and (HERE / "out" / "live_rules_v1.1" / "metrics.json").exists():
+        A("* **Engine rule set v1.1 (section 12)**, which takes one more hop from a flagged consumer to the requirement "
+          "it implements, removes the critical ledgerlite miss in every graph arm that has the code-only dependency "
+          "(G1/G2/H recall 0.50 → 0.75, precision unchanged). On toolshare it costs precision (1.00 → 0.80, one "
+          "unaffected requirement flagged). It is opt-in; v1 remains the default.")
     if live is None:
         A("* **Recommendation:** run the frozen live protocol (`--mode live`) with a configured model before building "
           "anything else; separately, decide whether `check_contract` on an implementing component should reach the "
           "requirement it implements (a versioned engine change with its own before/after).")
     else:
         A("* **Recommendation:** have someone other than the fixture author label the E5 impacts and repeat the live run "
-          "(more than one sample) before drawing conclusions. Separately, version the engine rule that lets "
-          "`check_contract` on an implementing component reach its requirement: in the live run it is the binding limit "
-          "for every graph arm on ledgerlite, while arm D, which has no graph, finds that requirement.")
+          "(more than one sample) before drawing conclusions. Evaluate rule set v1.1 on the v0.2 corpus and decide "
+          "whether to make it the default. Close the remaining gap, where an implementation change to a provider does "
+          "not reach the tests of its contract (`TEST-MONEY-FORMAT`), as a separate versioned rule.")
     A("")
     A("## 1. Baseline verification (M0)")
     A("")

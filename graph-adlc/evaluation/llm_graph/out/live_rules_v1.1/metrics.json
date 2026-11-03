@@ -1,0 +1,1748 @@
+{
+ "evidential_status": "live model run",
+ "mode": "live",
+ "projects": {
+  "ledgerlite": {
+   "arms": {
+    "D": {
+     "client": {
+      "api_key_env": "OPENAI_API_KEY",
+      "base_url": "https://api.openai.com",
+      "is_fake": false,
+      "json_mode": true,
+      "max_output_tokens": 32000,
+      "model": "gpt-6.1-terra",
+      "provider": "openai",
+      "replay_from": "evaluation/llm_graph/out/live",
+      "served": "replayed",
+      "temperature": null
+     },
+     "construction": {
+      "measured": false
+     },
+     "costs": {
+      "fake_calls": 0,
+      "graph_ops_committed": 0,
+      "input_chars": 8832,
+      "input_tokens": 2860,
+      "latency_ms": 34627.1,
+      "model_calls": 1,
+      "output_chars": 9223,
+      "output_tokens": 3033,
+      "review_decisions": {
+       "accept": 0,
+       "defer": 0,
+       "reject": 0
+      }
+     },
+     "guardrails": {
+      "finding_codes": {},
+      "op_verdicts": {},
+      "probe_by_event": [],
+      "reconcile": []
+     },
+     "impact_E5": {
+      "critical_missed": [],
+      "critical_total": 2,
+      "fn": [],
+      "fp": [
+       "DR-001",
+       "ledgerlite:docs/architecture.md"
+      ],
+      "measured": true,
+      "precision": 0.667,
+      "predicted": [
+       "CMP-CSV",
+       "CMP-PDF",
+       "CON-MONEY-FORMAT",
+       "DR-001",
+       "REQ-CSV-EXPORT",
+       "REQ-PDF-INVOICE",
+       "TEST-MONEY-FORMAT",
+       "ledgerlite:docs/architecture.md"
+      ],
+      "recall": 1.0,
+      "tp": [
+       "CMP-CSV",
+       "CMP-PDF",
+       "REQ-CSV-EXPORT",
+       "TEST-MONEY-FORMAT"
+      ],
+      "unknown_flagged": [
+       "CON-MONEY-FORMAT",
+       "REQ-PDF-INVOICE"
+      ]
+     },
+     "negative_E4": {
+      "measured": false
+     }
+    },
+    "G0": {
+     "client": {
+      "api_key_env": "OPENAI_API_KEY",
+      "base_url": "https://api.openai.com",
+      "is_fake": false,
+      "json_mode": true,
+      "max_output_tokens": 32000,
+      "model": "gpt-6.1-terra",
+      "provider": "openai",
+      "replay_from": "evaluation/llm_graph/out/live",
+      "served": "replayed",
+      "temperature": null
+     },
+     "construction": {
+      "duplicate_titles": 0,
+      "entities_expected": 11,
+      "entities_found": 11,
+      "entity_recall": 1.0,
+      "extra_nodes": [
+       "ART-CSV-EXPORT-PY",
+       "ART-MONEY-PY",
+       "ART-PDF-INVOICE-PY"
+      ],
+      "hidden_relations": [
+       {
+        "recovered": false,
+        "relation": [
+         "CMP-CSV",
+         "depends_on",
+         "CMP-MONEY"
+        ],
+        "status": null
+       }
+      ],
+      "hypothesized_edges": 4,
+      "measured": true,
+      "missing_entities": [],
+      "missing_relations": [
+       [
+        "CMP-CSV",
+        "depends_on",
+        "CMP-MONEY"
+       ]
+      ],
+      "relation_recall": 0.909,
+      "relations_found": 10,
+      "relations_not_in_oracle": [
+       [
+        "CMP-CSV",
+        "realized_by",
+        "ART-CSV-EXPORT-PY"
+       ],
+       [
+        "CMP-MONEY",
+        "realized_by",
+        "ART-MONEY-PY"
+       ],
+       [
+        "CMP-PDF",
+        "realized_by",
+        "ART-PDF-INVOICE-PY"
+       ]
+      ],
+      "relations_required": 11
+     },
+     "costs": {
+      "fake_calls": 0,
+      "graph_ops_committed": 27,
+      "input_chars": 10250,
+      "input_tokens": 3069,
+      "latency_ms": 89912.8,
+      "model_calls": 1,
+      "output_chars": 25031,
+      "output_tokens": 7960,
+      "review_decisions": {
+       "accept": 27,
+       "defer": 0,
+       "reject": 0
+      }
+     },
+     "guardrails": {
+      "finding_codes": {
+       "stored_as_hypothesized": 4
+      },
+      "op_verdicts": {
+       "admissible": 27
+      },
+      "probe_by_event": [
+       {
+        "after": [
+         "CMP-PDF",
+         "REQ-PDF-INVOICE"
+        ],
+        "before": [],
+        "event": "E1"
+       }
+      ],
+      "reconcile": []
+     },
+     "impact_E5": {
+      "critical_missed": [
+       "CMP-CSV",
+       "REQ-CSV-EXPORT"
+      ],
+      "critical_total": 2,
+      "fn": [
+       "CMP-CSV",
+       "REQ-CSV-EXPORT",
+       "TEST-MONEY-FORMAT"
+      ],
+      "fp": [],
+      "measured": true,
+      "precision": 1.0,
+      "predicted": [
+       "CMP-PDF",
+       "REQ-PDF-INVOICE"
+      ],
+      "recall": 0.25,
+      "tp": [
+       "CMP-PDF"
+      ],
+      "unknown_flagged": [
+       "REQ-PDF-INVOICE"
+      ]
+     },
+     "negative_E4": {
+      "false_alarm_targets": [
+       "CAP-INVOICING",
+       "CMP-PDF"
+      ],
+      "false_alarms": 2,
+      "held_for_review": [],
+      "measured": true,
+      "no_change_records": []
+     }
+    },
+    "G1": {
+     "client": {
+      "api_key_env": "OPENAI_API_KEY",
+      "base_url": "https://api.openai.com",
+      "is_fake": false,
+      "json_mode": true,
+      "max_output_tokens": 32000,
+      "model": "gpt-6.1-terra",
+      "provider": "openai",
+      "replay_from": "evaluation/llm_graph/out/live",
+      "served": "replayed",
+      "temperature": null
+     },
+     "construction": {
+      "duplicate_titles": 0,
+      "entities_expected": 11,
+      "entities_found": 11,
+      "entity_recall": 1.0,
+      "extra_nodes": [
+       "Q-P-0002-C1",
+       "Q-P-0002-C2",
+       "Q-P-0002-C3",
+       "Q-P-0003-C1",
+       "Q-P-0004-C1",
+       "Q-P-0005-C1"
+      ],
+      "hidden_relations": [
+       {
+        "recovered": true,
+        "relation": [
+         "CMP-CSV",
+         "depends_on",
+         "CMP-MONEY"
+        ],
+        "status": "confirmed"
+       }
+      ],
+      "hypothesized_edges": 4,
+      "measured": true,
+      "missing_entities": [],
+      "missing_relations": [],
+      "relation_recall": 1.0,
+      "relations_found": 11,
+      "relations_not_in_oracle": [
+       [
+        "Q-P-0002-C1",
+        "blocks",
+        "CON-MONEY-FORMAT"
+       ],
+       [
+        "Q-P-0002-C2",
+        "blocks",
+        "CMP-CSV"
+       ],
+       [
+        "Q-P-0002-C2",
+        "blocks",
+        "REQ-CSV-EXPORT"
+       ],
+       [
+        "Q-P-0002-C3",
+        "blocks",
+        "CMP-PDF"
+       ],
+       [
+        "Q-P-0002-C3",
+        "blocks",
+        "REQ-PDF-INVOICE"
+       ],
+       [
+        "Q-P-0003-C1",
+        "blocks",
+        "CMP-CSV"
+       ],
+       [
+        "Q-P-0004-C1",
+        "blocks",
+        "CMP-CSV"
+       ],
+       [
+        "Q-P-0004-C1",
+        "blocks",
+        "CMP-MONEY"
+       ],
+       [
+        "Q-P-0005-C1",
+        "blocks",
+        "CMP-CSV"
+       ],
+       [
+        "Q-P-0005-C1",
+        "blocks",
+        "CMP-MONEY"
+       ],
+       [
+        "Q-P-0005-C1",
+        "blocks",
+        "CON-CSV-LAYOUT"
+       ],
+       [
+        "Q-P-0005-C1",
+        "blocks",
+        "REQ-CSV-EXPORT"
+       ]
+      ],
+      "relations_required": 11
+     },
+     "costs": {
+      "fake_calls": 0,
+      "graph_ops_committed": 52,
+      "input_chars": 90840,
+      "input_tokens": 28185,
+      "latency_ms": 250781.0,
+      "model_calls": 5,
+      "output_chars": 59809,
+      "output_tokens": 21835,
+      "review_decisions": {
+       "accept": 53,
+       "defer": 3,
+       "reject": 0
+      }
+     },
+     "exploratory_pruning": {
+      "engine_pruned_with_all_evidence": [
+       "CMP-CSV",
+       "CMP-PDF"
+      ],
+      "gate_admitted": [],
+      "gate_refused": [
+       {
+        "evidence_id": "EV-1",
+        "reasons": [
+         "coverage of 'amount_range' lacks ['1000+'] (covered: ['0-999'])"
+        ]
+       }
+      ],
+      "pruned_with_gate": [],
+      "unsafe_prunes": [
+       "CMP-CSV"
+      ]
+     },
+     "guardrails": {
+      "finding_codes": {
+       "contradiction": 3,
+       "editorial_no_op": 1,
+       "stored_as_hypothesized": 4
+      },
+      "op_verdicts": {
+       "admissible": 53,
+       "quarantined": 3
+      },
+      "probe_by_event": [
+       {
+        "after": [
+         "CMP-PDF",
+         "REQ-PDF-INVOICE"
+        ],
+        "before": [],
+        "event": "E1"
+       },
+       {
+        "after": [
+         "CMP-PDF",
+         "REQ-PDF-INVOICE"
+        ],
+        "before": [
+         "CMP-PDF",
+         "REQ-PDF-INVOICE"
+        ],
+        "event": "E2"
+       },
+       {
+        "after": [
+         "CMP-CSV",
+         "CMP-PDF",
+         "REQ-CSV-EXPORT",
+         "REQ-PDF-INVOICE"
+        ],
+        "before": [
+         "CMP-PDF",
+         "REQ-PDF-INVOICE"
+        ],
+        "event": "E3"
+       },
+       {
+        "after": [
+         "CMP-CSV",
+         "CMP-PDF",
+         "REQ-CSV-EXPORT",
+         "REQ-PDF-INVOICE"
+        ],
+        "before": [
+         "CMP-CSV",
+         "CMP-PDF",
+         "REQ-CSV-EXPORT",
+         "REQ-PDF-INVOICE"
+        ],
+        "event": "E4"
+       },
+       {
+        "after": [
+         "CMP-CSV",
+         "CMP-PDF",
+         "REQ-CSV-EXPORT",
+         "REQ-PDF-INVOICE"
+        ],
+        "before": [
+         "CMP-CSV",
+         "CMP-PDF",
+         "REQ-CSV-EXPORT",
+         "REQ-PDF-INVOICE"
+        ],
+        "event": "E5"
+       }
+      ],
+      "reconcile": []
+     },
+     "impact_E5": {
+      "critical_missed": [],
+      "critical_total": 2,
+      "fn": [
+       "TEST-MONEY-FORMAT"
+      ],
+      "fp": [],
+      "measured": true,
+      "precision": 1.0,
+      "predicted": [
+       "CMP-CSV",
+       "CMP-PDF",
+       "REQ-CSV-EXPORT",
+       "REQ-PDF-INVOICE"
+      ],
+      "recall": 0.75,
+      "tp": [
+       "CMP-CSV",
+       "CMP-PDF",
+       "REQ-CSV-EXPORT"
+      ],
+      "unknown_flagged": [
+       "REQ-PDF-INVOICE"
+      ]
+     },
+     "negative_E4": {
+      "false_alarm_targets": [
+       "CMP-CSV",
+       "CMP-MONEY",
+       "Q-P-0004-C1"
+      ],
+      "false_alarms": 3,
+      "held_for_review": [],
+      "measured": true,
+      "no_change_records": [
+       "op-1"
+      ]
+     }
+    },
+    "G2": {
+     "client": {
+      "api_key_env": "OPENAI_API_KEY",
+      "base_url": "https://api.openai.com",
+      "is_fake": false,
+      "json_mode": true,
+      "max_output_tokens": 32000,
+      "model": "gpt-6.1-terra",
+      "provider": "openai",
+      "replay_from": "evaluation/llm_graph/out/live",
+      "served": "live",
+      "temperature": null
+     },
+     "construction": {
+      "duplicate_titles": 0,
+      "entities_expected": 11,
+      "entities_found": 11,
+      "entity_recall": 1.0,
+      "extra_nodes": [
+       "ART-TEST-MONEY",
+       "DR-001",
+       "Q-P-0002-C1",
+       "Q-P-0002-C2",
+       "Q-P-0002-C3",
+       "Q-P-0004-C1",
+       "Q-P-0004-C2",
+       "Q-P-0005-C1",
+       "Q-P-0005-C2",
+       "Q-P-0006-C1",
+       "Q-P-0007-C1",
+       "Q-P-0008-C1"
+      ],
+      "hidden_relations": [
+       {
+        "recovered": true,
+        "relation": [
+         "CMP-CSV",
+         "depends_on",
+         "CMP-MONEY"
+        ],
+        "status": "confirmed"
+       }
+      ],
+      "hypothesized_edges": 4,
+      "measured": true,
+      "missing_entities": [],
+      "missing_relations": [],
+      "relation_recall": 1.0,
+      "relations_found": 11,
+      "relations_not_in_oracle": [
+       [
+        "Q-P-0002-C1",
+        "blocks",
+        "CMP-CSV"
+       ],
+       [
+        "Q-P-0002-C1",
+        "blocks",
+        "REQ-CSV-EXPORT"
+       ],
+       [
+        "Q-P-0002-C2",
+        "blocks",
+        "CON-MONEY-FORMAT"
+       ],
+       [
+        "Q-P-0002-C3",
+        "blocks",
+        "CMP-PDF"
+       ],
+       [
+        "Q-P-0002-C3",
+        "blocks",
+        "REQ-PDF-INVOICE"
+       ],
+       [
+        "Q-P-0004-C1",
+        "blocks",
+        "CMP-CSV"
+       ],
+       [
+        "Q-P-0004-C1",
+        "blocks",
+        "CMP-MONEY"
+       ],
+       [
+        "Q-P-0004-C2",
+        "blocks",
+        "CMP-CSV"
+       ],
+       [
+        "Q-P-0004-C2",
+        "blocks",
+        "CMP-MONEY"
+       ],
+       [
+        "Q-P-0004-C2",
+        "blocks",
+        "CON-MONEY-FORMAT"
+       ],
+       [
+        "Q-P-0004-C2",
+        "blocks",
+        "DR-001"
+       ],
+       [
+        "Q-P-0005-C1",
+        "blocks",
+        "CMP-CSV"
+       ],
+       [
+        "Q-P-0005-C1",
+        "blocks",
+        "CMP-MONEY"
+       ],
+       [
+        "Q-P-0005-C2",
+        "blocks",
+        "CON-MONEY-FORMAT"
+       ],
+       [
+        "Q-P-0005-C2",
+        "blocks",
+        "DR-001"
+       ],
+       [
+        "Q-P-0005-C2",
+        "blocks",
+        "REQ-CSV-EXPORT"
+       ],
+       [
+        "Q-P-0006-C1",
+        "blocks",
+        "CMP-CSV"
+       ],
+       [
+        "Q-P-0006-C1",
+        "blocks",
+        "CMP-MONEY"
+       ],
+       [
+        "Q-P-0007-C1",
+        "blocks",
+        "CMP-CSV"
+       ],
+       [
+        "Q-P-0007-C1",
+        "blocks",
+        "CMP-MONEY"
+       ],
+       [
+        "Q-P-0007-C1",
+        "blocks",
+        "DR-001"
+       ],
+       [
+        "Q-P-0007-C1",
+        "blocks",
+        "REQ-CSV-EXPORT"
+       ],
+       [
+        "Q-P-0008-C1",
+        "blocks",
+        "CMP-CSV"
+       ],
+       [
+        "Q-P-0008-C1",
+        "blocks",
+        "CMP-MONEY"
+       ],
+       [
+        "Q-P-0008-C1",
+        "blocks",
+        "DR-001"
+       ],
+       [
+        "Q-P-0008-C1",
+        "blocks",
+        "REQ-CSV-EXPORT"
+       ],
+       [
+        "REQ-CSV-EXPORT",
+        "constrained_by",
+        "DR-001"
+       ]
+      ],
+      "relations_required": 11
+     },
+     "costs": {
+      "fake_calls": 0,
+      "graph_ops_committed": 71,
+      "input_chars": 147486,
+      "input_tokens": 46477,
+      "latency_ms": 333508.10000000003,
+      "model_calls": 7,
+      "output_chars": 81389,
+      "output_tokens": 29151,
+      "review_decisions": {
+       "accept": 72,
+       "defer": 19,
+       "reject": 0
+      }
+     },
+     "exploratory_pruning": {
+      "engine_pruned_with_all_evidence": [
+       "CMP-CSV",
+       "CMP-PDF"
+      ],
+      "gate_admitted": [],
+      "gate_refused": [
+       {
+        "evidence_id": "EV-1",
+        "reasons": [
+         "coverage of 'amount_range' lacks ['1000+'] (covered: ['0-999'])"
+        ]
+       }
+      ],
+      "pruned_with_gate": [],
+      "unsafe_prunes": [
+       "CMP-CSV"
+      ]
+     },
+     "guardrails": {
+      "finding_codes": {
+       "contradiction": 8,
+       "duplicate_suspected": 3,
+       "editorial_no_op": 1,
+       "stored_as_hypothesized": 4
+      },
+      "op_verdicts": {
+       "admissible": 80,
+       "quarantined": 11
+      },
+      "probe_by_event": [
+       {
+        "after": [
+         "CMP-PDF",
+         "REQ-PDF-INVOICE"
+        ],
+        "before": [],
+        "event": "E1"
+       },
+       {
+        "after": [
+         "CMP-PDF",
+         "REQ-PDF-INVOICE"
+        ],
+        "before": [
+         "CMP-PDF",
+         "REQ-PDF-INVOICE"
+        ],
+        "event": "E2"
+       },
+       {
+        "after": [
+         "CMP-CSV",
+         "CMP-PDF",
+         "REQ-CSV-EXPORT",
+         "REQ-PDF-INVOICE"
+        ],
+        "before": [
+         "CMP-PDF",
+         "REQ-PDF-INVOICE"
+        ],
+        "event": "E3"
+       },
+       {
+        "after": [
+         "CMP-CSV",
+         "CMP-PDF",
+         "REQ-CSV-EXPORT",
+         "REQ-PDF-INVOICE"
+        ],
+        "before": [
+         "CMP-CSV",
+         "CMP-PDF",
+         "REQ-CSV-EXPORT",
+         "REQ-PDF-INVOICE"
+        ],
+        "event": "E4"
+       },
+       {
+        "after": [
+         "CMP-CSV",
+         "CMP-PDF",
+         "REQ-CSV-EXPORT",
+         "REQ-PDF-INVOICE"
+        ],
+        "before": [
+         "CMP-CSV",
+         "CMP-PDF",
+         "REQ-CSV-EXPORT",
+         "REQ-PDF-INVOICE"
+        ],
+        "event": "E5"
+       }
+      ],
+      "reconcile": []
+     },
+     "impact_E5": {
+      "critical_missed": [],
+      "critical_total": 2,
+      "fn": [
+       "TEST-MONEY-FORMAT"
+      ],
+      "fp": [],
+      "measured": true,
+      "precision": 1.0,
+      "predicted": [
+       "CMP-CSV",
+       "CMP-PDF",
+       "REQ-CSV-EXPORT",
+       "REQ-PDF-INVOICE"
+      ],
+      "recall": 0.75,
+      "tp": [
+       "CMP-CSV",
+       "CMP-PDF",
+       "REQ-CSV-EXPORT"
+      ],
+      "unknown_flagged": [
+       "REQ-PDF-INVOICE"
+      ]
+     },
+     "negative_E4": {
+      "false_alarm_targets": [
+       "CMP-CSV",
+       "CMP-MONEY",
+       "Q-P-0006-C1"
+      ],
+      "false_alarms": 3,
+      "held_for_review": [
+       "op-2",
+       "auto-q2",
+       "auto-q2-b1",
+       "auto-q2-b2",
+       "auto-q2-b3",
+       "auto-q2-b4"
+      ],
+      "measured": true,
+      "no_change_records": [
+       "op-1"
+      ]
+     }
+    },
+    "H": {
+     "client": null,
+     "construction": {
+      "measured": false,
+      "note": "reference graph"
+     },
+     "costs": {
+      "fake_calls": 0,
+      "graph_ops_committed": 0,
+      "input_chars": 0,
+      "input_tokens": null,
+      "latency_ms": null,
+      "model_calls": 0,
+      "output_chars": 0,
+      "output_tokens": null,
+      "review_decisions": {
+       "accept": 0,
+       "defer": 0,
+       "reject": 0
+      }
+     },
+     "guardrails": {
+      "finding_codes": {},
+      "op_verdicts": {},
+      "probe_by_event": [],
+      "reconcile": []
+     },
+     "impact_E5": {
+      "critical_missed": [],
+      "critical_total": 2,
+      "fn": [
+       "TEST-MONEY-FORMAT"
+      ],
+      "fp": [],
+      "measured": true,
+      "precision": 1.0,
+      "predicted": [
+       "CMP-CSV",
+       "CMP-PDF",
+       "REQ-CSV-EXPORT",
+       "REQ-PDF-INVOICE"
+      ],
+      "recall": 0.75,
+      "tp": [
+       "CMP-CSV",
+       "CMP-PDF",
+       "REQ-CSV-EXPORT"
+      ],
+      "unknown_flagged": [
+       "REQ-PDF-INVOICE"
+      ]
+     },
+     "negative_E4": {
+      "false_alarm_targets": [
+       "CAP-INVOICING",
+       "CMP-PDF"
+      ],
+      "false_alarms": 2,
+      "held_for_review": [],
+      "measured": true,
+      "no_change_records": []
+     }
+    }
+   },
+   "labeler": "single reviewer (the implementing agent); exploratory, not independent",
+   "oracle_version": "1.0"
+  },
+  "toolshare": {
+   "arms": {
+    "D": {
+     "client": {
+      "api_key_env": "OPENAI_API_KEY",
+      "base_url": "https://api.openai.com",
+      "is_fake": false,
+      "json_mode": true,
+      "max_output_tokens": 32000,
+      "model": "gpt-6.1-terra",
+      "provider": "openai",
+      "replay_from": "evaluation/llm_graph/out/live",
+      "served": "replayed",
+      "temperature": 0.0
+     },
+     "construction": {
+      "measured": false
+     },
+     "costs": {
+      "fake_calls": 0,
+      "graph_ops_committed": 0,
+      "input_chars": 10557,
+      "input_tokens": 3408,
+      "latency_ms": 23608.2,
+      "model_calls": 1,
+      "output_chars": 6099,
+      "output_tokens": 1989,
+      "review_decisions": {
+       "accept": 0,
+       "defer": 0,
+       "reject": 0
+      }
+     },
+     "guardrails": {
+      "finding_codes": {},
+      "op_verdicts": {},
+      "probe_by_event": [],
+      "reconcile": []
+     },
+     "impact_E5": {
+      "critical_missed": [],
+      "critical_total": 2,
+      "fn": [],
+      "fp": [
+       "TEST-HOLD-QUEUE",
+       "toolshare:spec/architecture.md"
+      ],
+      "measured": true,
+      "precision": 0.667,
+      "predicted": [
+       "CMP-HOLDS",
+       "CMP-NOTIFY",
+       "REQ-READY-NOTICE",
+       "TEST-HOLD-QUEUE",
+       "TEST-NOTICE-FORMAT",
+       "toolshare:spec/architecture.md"
+      ],
+      "recall": 1.0,
+      "tp": [
+       "CMP-HOLDS",
+       "CMP-NOTIFY",
+       "REQ-READY-NOTICE",
+       "TEST-NOTICE-FORMAT"
+      ],
+      "unknown_flagged": []
+     },
+     "negative_E4": {
+      "measured": false
+     }
+    },
+    "G0": {
+     "client": {
+      "api_key_env": "OPENAI_API_KEY",
+      "base_url": "https://api.openai.com",
+      "is_fake": false,
+      "json_mode": true,
+      "max_output_tokens": 32000,
+      "model": "gpt-6.1-terra",
+      "provider": "openai",
+      "replay_from": "evaluation/llm_graph/out/live",
+      "served": "replayed",
+      "temperature": 0.0
+     },
+     "construction": {
+      "duplicate_titles": 0,
+      "entities_expected": 13,
+      "entities_found": 13,
+      "entity_recall": 1.0,
+      "extra_nodes": [
+       "ART-HOLDS-PY",
+       "ART-INVENTORY-PY",
+       "ART-NOTIFICATIONS-PY"
+      ],
+      "hidden_relations": [
+       {
+        "recovered": false,
+        "relation": [
+         "CMP-HOLDS",
+         "depends_on",
+         "CMP-NOTIFY"
+        ],
+        "status": null
+       }
+      ],
+      "hypothesized_edges": 2,
+      "measured": true,
+      "missing_entities": [],
+      "missing_relations": [
+       [
+        "CMP-HOLDS",
+        "depends_on",
+        "CMP-NOTIFY"
+       ]
+      ],
+      "relation_recall": 0.929,
+      "relations_found": 13,
+      "relations_not_in_oracle": [
+       [
+        "CMP-HOLDS",
+        "realized_by",
+        "ART-HOLDS-PY"
+       ],
+       [
+        "CMP-INVENTORY",
+        "realized_by",
+        "ART-INVENTORY-PY"
+       ],
+       [
+        "CMP-NOTIFY",
+        "realized_by",
+        "ART-NOTIFICATIONS-PY"
+       ]
+      ],
+      "relations_required": 14
+     },
+     "costs": {
+      "fake_calls": 0,
+      "graph_ops_committed": 33,
+      "input_chars": 12959,
+      "input_tokens": 3940,
+      "latency_ms": 111851.5,
+      "model_calls": 1,
+      "output_chars": 30733,
+      "output_tokens": 9959,
+      "review_decisions": {
+       "accept": 33,
+       "defer": 0,
+       "reject": 0
+      }
+     },
+     "guardrails": {
+      "finding_codes": {
+       "stored_as_hypothesized": 2
+      },
+      "op_verdicts": {
+       "admissible": 33
+      },
+      "probe_by_event": [
+       {
+        "after": [
+         "CMP-NOTIFY",
+         "REQ-READY-NOTICE",
+         "TEST-NOTICE-FORMAT"
+        ],
+        "before": [],
+        "event": "E1"
+       }
+      ],
+      "reconcile": []
+     },
+     "impact_E5": {
+      "critical_missed": [
+       "CMP-HOLDS"
+      ],
+      "critical_total": 2,
+      "fn": [
+       "CMP-HOLDS"
+      ],
+      "fp": [],
+      "measured": true,
+      "precision": 1.0,
+      "predicted": [
+       "CMP-NOTIFY",
+       "REQ-READY-NOTICE",
+       "TEST-NOTICE-FORMAT"
+      ],
+      "recall": 0.75,
+      "tp": [
+       "CMP-NOTIFY",
+       "REQ-READY-NOTICE",
+       "TEST-NOTICE-FORMAT"
+      ],
+      "unknown_flagged": []
+     },
+     "negative_E4": {
+      "false_alarm_targets": [
+       "CAP-NOTIFY",
+       "CMP-NOTIFY"
+      ],
+      "false_alarms": 2,
+      "held_for_review": [],
+      "measured": true,
+      "no_change_records": []
+     }
+    },
+    "G1": {
+     "client": {
+      "api_key_env": "OPENAI_API_KEY",
+      "base_url": "https://api.openai.com",
+      "is_fake": false,
+      "json_mode": true,
+      "max_output_tokens": 32000,
+      "model": "gpt-6.1-terra",
+      "provider": "openai",
+      "replay_from": "evaluation/llm_graph/out/live",
+      "served": "replayed",
+      "temperature": 0.0
+     },
+     "construction": {
+      "duplicate_titles": 0,
+      "entities_expected": 13,
+      "entities_found": 13,
+      "entity_recall": 1.0,
+      "extra_nodes": [
+       "ART-HOLDS-PY",
+       "ART-INVENTORY-PY",
+       "ART-NOTIFICATIONS-PY",
+       "Q-P-0002-C1",
+       "Q-P-0003-C1",
+       "Q-P-0005-C1",
+       "Q-P-0005-C2",
+       "Q-P-0005-C3"
+      ],
+      "hidden_relations": [
+       {
+        "recovered": true,
+        "relation": [
+         "CMP-HOLDS",
+         "depends_on",
+         "CMP-NOTIFY"
+        ],
+        "status": "confirmed"
+       }
+      ],
+      "hypothesized_edges": 6,
+      "measured": true,
+      "missing_entities": [],
+      "missing_relations": [],
+      "relation_recall": 1.0,
+      "relations_found": 14,
+      "relations_not_in_oracle": [
+       [
+        "CMP-HOLDS",
+        "realized_by",
+        "ART-HOLDS-PY"
+       ],
+       [
+        "CMP-INVENTORY",
+        "realized_by",
+        "ART-INVENTORY-PY"
+       ],
+       [
+        "CMP-NOTIFY",
+        "realized_by",
+        "ART-NOTIFICATIONS-PY"
+       ],
+       [
+        "Q-P-0002-C1",
+        "blocks",
+        "CMP-HOLDS"
+       ],
+       [
+        "Q-P-0002-C1",
+        "blocks",
+        "REQ-HOLD-EXPIRY"
+       ],
+       [
+        "Q-P-0003-C1",
+        "blocks",
+        "CMP-HOLDS"
+       ],
+       [
+        "Q-P-0003-C1",
+        "blocks",
+        "REQ-HOLD-EXPIRY"
+       ],
+       [
+        "Q-P-0005-C1",
+        "blocks",
+        "CMP-NOTIFY"
+       ],
+       [
+        "Q-P-0005-C1",
+        "blocks",
+        "CON-NOTICE-FORMAT"
+       ],
+       [
+        "Q-P-0005-C2",
+        "blocks",
+        "CON-NOTICE-FORMAT"
+       ],
+       [
+        "Q-P-0005-C2",
+        "blocks",
+        "REQ-READY-NOTICE"
+       ],
+       [
+        "Q-P-0005-C3",
+        "blocks",
+        "REQ-PLACE-HOLD"
+       ],
+       [
+        "REQ-HOLD-EXPIRY",
+        "depends_on",
+        "REQ-READY-NOTICE"
+       ]
+      ],
+      "relations_required": 14
+     },
+     "costs": {
+      "fake_calls": 0,
+      "graph_ops_committed": 53,
+      "input_chars": 102512,
+      "input_tokens": 32576,
+      "latency_ms": 257069.2,
+      "model_calls": 5,
+      "output_chars": 65889,
+      "output_tokens": 22325,
+      "review_decisions": {
+       "accept": 55,
+       "defer": 7,
+       "reject": 0
+      }
+     },
+     "guardrails": {
+      "finding_codes": {
+       "contradiction": 5,
+       "duplicate_suspected": 1,
+       "editorial_no_op": 2,
+       "stored_as_hypothesized": 6
+      },
+      "op_verdicts": {
+       "admissible": 56,
+       "quarantined": 6
+      },
+      "probe_by_event": [
+       {
+        "after": [
+         "CMP-NOTIFY",
+         "REQ-READY-NOTICE",
+         "TEST-NOTICE-FORMAT"
+        ],
+        "before": [],
+        "event": "E1"
+       },
+       {
+        "after": [
+         "CMP-NOTIFY",
+         "REQ-HOLD-EXPIRY",
+         "REQ-READY-NOTICE",
+         "TEST-NOTICE-FORMAT"
+        ],
+        "before": [
+         "CMP-NOTIFY",
+         "REQ-READY-NOTICE",
+         "TEST-NOTICE-FORMAT"
+        ],
+        "event": "E2"
+       },
+       {
+        "after": [
+         "CMP-HOLDS",
+         "CMP-NOTIFY",
+         "REQ-HOLD-EXPIRY",
+         "REQ-PLACE-HOLD",
+         "REQ-READY-NOTICE",
+         "TEST-NOTICE-FORMAT"
+        ],
+        "before": [
+         "CMP-NOTIFY",
+         "REQ-HOLD-EXPIRY",
+         "REQ-READY-NOTICE",
+         "TEST-NOTICE-FORMAT"
+        ],
+        "event": "E3"
+       },
+       {
+        "after": [
+         "CMP-HOLDS",
+         "CMP-NOTIFY",
+         "REQ-HOLD-EXPIRY",
+         "REQ-PLACE-HOLD",
+         "REQ-READY-NOTICE",
+         "TEST-NOTICE-FORMAT"
+        ],
+        "before": [
+         "CMP-HOLDS",
+         "CMP-NOTIFY",
+         "REQ-HOLD-EXPIRY",
+         "REQ-PLACE-HOLD",
+         "REQ-READY-NOTICE",
+         "TEST-NOTICE-FORMAT"
+        ],
+        "event": "E4"
+       },
+       {
+        "after": [
+         "CMP-HOLDS",
+         "CMP-NOTIFY",
+         "REQ-HOLD-EXPIRY",
+         "REQ-PLACE-HOLD",
+         "REQ-READY-NOTICE",
+         "TEST-NOTICE-FORMAT"
+        ],
+        "before": [
+         "CMP-HOLDS",
+         "CMP-NOTIFY",
+         "REQ-HOLD-EXPIRY",
+         "REQ-PLACE-HOLD",
+         "REQ-READY-NOTICE",
+         "TEST-NOTICE-FORMAT"
+        ],
+        "event": "E5"
+       }
+      ],
+      "reconcile": [
+       {
+        "obligations_since_baseline": [
+         [
+          "CMP-NOTIFY",
+          "review_spec"
+         ],
+         [
+          "CON-NOTICE-FORMAT",
+          "review_spec"
+         ],
+         [
+          "REQ-READY-NOTICE",
+          "review_spec"
+         ]
+        ],
+        "stale_evidence": [],
+        "status": "verified",
+        "targets": [
+         "REQ-READY-NOTICE"
+        ],
+        "work_id": "WORK-1"
+       }
+      ]
+     },
+     "impact_E5": {
+      "critical_missed": [],
+      "critical_total": 2,
+      "fn": [],
+      "fp": [
+       "REQ-PLACE-HOLD"
+      ],
+      "measured": true,
+      "precision": 0.8,
+      "predicted": [
+       "CMP-HOLDS",
+       "CMP-NOTIFY",
+       "REQ-HOLD-EXPIRY",
+       "REQ-PLACE-HOLD",
+       "REQ-READY-NOTICE",
+       "TEST-NOTICE-FORMAT"
+      ],
+      "recall": 1.0,
+      "tp": [
+       "CMP-HOLDS",
+       "CMP-NOTIFY",
+       "REQ-READY-NOTICE",
+       "TEST-NOTICE-FORMAT"
+      ],
+      "unknown_flagged": [
+       "REQ-HOLD-EXPIRY"
+      ]
+     },
+     "negative_E4": {
+      "false_alarm_targets": [],
+      "false_alarms": 0,
+      "held_for_review": [
+       "op-1",
+       "auto-q1",
+       "auto-q1-b1"
+      ],
+      "measured": true,
+      "no_change_records": [
+       "op-2"
+      ]
+     }
+    },
+    "G2": {
+     "client": {
+      "api_key_env": "OPENAI_API_KEY",
+      "base_url": "https://api.openai.com",
+      "is_fake": false,
+      "json_mode": true,
+      "max_output_tokens": 32000,
+      "model": "gpt-6.1-terra",
+      "provider": "openai",
+      "replay_from": "evaluation/llm_graph/out/live",
+      "served": "live",
+      "temperature": null
+     },
+     "construction": {
+      "duplicate_titles": 0,
+      "entities_expected": 13,
+      "entities_found": 13,
+      "entity_recall": 1.0,
+      "extra_nodes": [
+       "ART-HOLDS-PY",
+       "ART-INVENTORY-PY",
+       "ART-NOTIFICATIONS-PY",
+       "Q-P-0002-C1",
+       "Q-P-0004-C1",
+       "Q-P-0005-C2",
+       "Q-P-0006-C1",
+       "Q-P-0006-C2",
+       "Q-P-0007-C1",
+       "Q-P-0007-C2",
+       "Q-P-0008-C1",
+       "Q-P-0008-C2"
+      ],
+      "hidden_relations": [
+       {
+        "recovered": true,
+        "relation": [
+         "CMP-HOLDS",
+         "depends_on",
+         "CMP-NOTIFY"
+        ],
+        "status": "confirmed"
+       }
+      ],
+      "hypothesized_edges": 3,
+      "measured": true,
+      "missing_entities": [],
+      "missing_relations": [],
+      "relation_recall": 1.0,
+      "relations_found": 14,
+      "relations_not_in_oracle": [
+       [
+        "CMP-HOLDS",
+        "realized_by",
+        "ART-HOLDS-PY"
+       ],
+       [
+        "CMP-INVENTORY",
+        "realized_by",
+        "ART-INVENTORY-PY"
+       ],
+       [
+        "CMP-NOTIFY",
+        "realized_by",
+        "ART-NOTIFICATIONS-PY"
+       ],
+       [
+        "Q-P-0002-C1",
+        "blocks",
+        "REQ-HOLD-EXPIRY"
+       ],
+       [
+        "Q-P-0004-C1",
+        "blocks",
+        "REQ-HOLD-EXPIRY"
+       ],
+       [
+        "Q-P-0005-C2",
+        "blocks",
+        "REQ-HOLD-EXPIRY"
+       ],
+       [
+        "Q-P-0006-C1",
+        "blocks",
+        "REQ-HOLD-EXPIRY"
+       ],
+       [
+        "Q-P-0006-C2",
+        "blocks",
+        "REQ-HOLD-EXPIRY"
+       ],
+       [
+        "Q-P-0007-C1",
+        "blocks",
+        "CMP-NOTIFY"
+       ],
+       [
+        "Q-P-0007-C1",
+        "blocks",
+        "CON-NOTICE-FORMAT"
+       ],
+       [
+        "Q-P-0007-C2",
+        "blocks",
+        "CMP-HOLDS"
+       ],
+       [
+        "Q-P-0007-C2",
+        "blocks",
+        "REQ-HOLD-EXPIRY"
+       ],
+       [
+        "Q-P-0008-C1",
+        "blocks",
+        "CMP-NOTIFY"
+       ],
+       [
+        "Q-P-0008-C1",
+        "blocks",
+        "CON-NOTICE-FORMAT"
+       ],
+       [
+        "Q-P-0008-C2",
+        "blocks",
+        "REQ-HOLD-EXPIRY"
+       ],
+       [
+        "REQ-HOLD-EXPIRY",
+        "depends_on",
+        "REQ-READY-NOTICE"
+       ]
+      ],
+      "relations_required": 14
+     },
+     "costs": {
+      "fake_calls": 0,
+      "graph_ops_committed": 60,
+      "input_chars": 155269,
+      "input_tokens": 49118,
+      "latency_ms": 348487.7,
+      "model_calls": 7,
+      "output_chars": 89463,
+      "output_tokens": 30295,
+      "review_decisions": {
+       "accept": 62,
+       "defer": 10,
+       "reject": 0
+      }
+     },
+     "guardrails": {
+      "finding_codes": {
+       "contradiction": 8,
+       "duplicate_suspected": 1,
+       "editorial_no_op": 2,
+       "stored_as_hypothesized": 3
+      },
+      "op_verdicts": {
+       "admissible": 63,
+       "quarantined": 9
+      },
+      "probe_by_event": [
+       {
+        "after": [
+         "CMP-NOTIFY",
+         "REQ-READY-NOTICE",
+         "TEST-NOTICE-FORMAT"
+        ],
+        "before": [],
+        "event": "E1"
+       },
+       {
+        "after": [
+         "CMP-NOTIFY",
+         "REQ-READY-NOTICE",
+         "TEST-NOTICE-FORMAT"
+        ],
+        "before": [
+         "CMP-NOTIFY",
+         "REQ-READY-NOTICE",
+         "TEST-NOTICE-FORMAT"
+        ],
+        "event": "E2"
+       },
+       {
+        "after": [
+         "CMP-HOLDS",
+         "CMP-NOTIFY",
+         "REQ-HOLD-EXPIRY",
+         "REQ-PLACE-HOLD",
+         "REQ-READY-NOTICE",
+         "TEST-NOTICE-FORMAT"
+        ],
+        "before": [
+         "CMP-NOTIFY",
+         "REQ-READY-NOTICE",
+         "TEST-NOTICE-FORMAT"
+        ],
+        "event": "E3"
+       },
+       {
+        "after": [
+         "CMP-HOLDS",
+         "CMP-NOTIFY",
+         "REQ-HOLD-EXPIRY",
+         "REQ-PLACE-HOLD",
+         "REQ-READY-NOTICE",
+         "TEST-NOTICE-FORMAT"
+        ],
+        "before": [
+         "CMP-HOLDS",
+         "CMP-NOTIFY",
+         "REQ-HOLD-EXPIRY",
+         "REQ-PLACE-HOLD",
+         "REQ-READY-NOTICE",
+         "TEST-NOTICE-FORMAT"
+        ],
+        "event": "E4"
+       },
+       {
+        "after": [
+         "CMP-HOLDS",
+         "CMP-NOTIFY",
+         "REQ-HOLD-EXPIRY",
+         "REQ-PLACE-HOLD",
+         "REQ-READY-NOTICE",
+         "TEST-NOTICE-FORMAT"
+        ],
+        "before": [
+         "CMP-HOLDS",
+         "CMP-NOTIFY",
+         "REQ-HOLD-EXPIRY",
+         "REQ-PLACE-HOLD",
+         "REQ-READY-NOTICE",
+         "TEST-NOTICE-FORMAT"
+        ],
+        "event": "E5"
+       }
+      ],
+      "reconcile": [
+       {
+        "obligations_since_baseline": [
+         [
+          "CMP-NOTIFY",
+          "review_spec"
+         ]
+        ],
+        "stale_evidence": [],
+        "status": "verified",
+        "targets": [
+         "REQ-READY-NOTICE"
+        ],
+        "work_id": "WORK-1"
+       }
+      ]
+     },
+     "impact_E5": {
+      "critical_missed": [],
+      "critical_total": 2,
+      "fn": [],
+      "fp": [
+       "REQ-PLACE-HOLD"
+      ],
+      "measured": true,
+      "precision": 0.8,
+      "predicted": [
+       "CMP-HOLDS",
+       "CMP-NOTIFY",
+       "REQ-HOLD-EXPIRY",
+       "REQ-PLACE-HOLD",
+       "REQ-READY-NOTICE",
+       "TEST-NOTICE-FORMAT"
+      ],
+      "recall": 1.0,
+      "tp": [
+       "CMP-HOLDS",
+       "CMP-NOTIFY",
+       "REQ-READY-NOTICE",
+       "TEST-NOTICE-FORMAT"
+      ],
+      "unknown_flagged": [
+       "REQ-HOLD-EXPIRY"
+      ]
+     },
+     "negative_E4": {
+      "false_alarm_targets": [
+       "Q-P-0006-C1",
+       "Q-P-0006-C2",
+       "REQ-HOLD-EXPIRY"
+      ],
+      "false_alarms": 3,
+      "held_for_review": [
+       "op-1"
+      ],
+      "measured": true,
+      "no_change_records": [
+       "op-2"
+      ]
+     }
+    },
+    "H": {
+     "client": null,
+     "construction": {
+      "measured": false,
+      "note": "reference graph"
+     },
+     "costs": {
+      "fake_calls": 0,
+      "graph_ops_committed": 0,
+      "input_chars": 0,
+      "input_tokens": null,
+      "latency_ms": null,
+      "model_calls": 0,
+      "output_chars": 0,
+      "output_tokens": null,
+      "review_decisions": {
+       "accept": 0,
+       "defer": 0,
+       "reject": 0
+      }
+     },
+     "guardrails": {
+      "finding_codes": {},
+      "op_verdicts": {},
+      "probe_by_event": [],
+      "reconcile": []
+     },
+     "impact_E5": {
+      "critical_missed": [],
+      "critical_total": 2,
+      "fn": [],
+      "fp": [
+       "REQ-PLACE-HOLD"
+      ],
+      "measured": true,
+      "precision": 0.8,
+      "predicted": [
+       "CMP-HOLDS",
+       "CMP-NOTIFY",
+       "REQ-HOLD-EXPIRY",
+       "REQ-PLACE-HOLD",
+       "REQ-READY-NOTICE",
+       "TEST-NOTICE-FORMAT"
+      ],
+      "recall": 1.0,
+      "tp": [
+       "CMP-HOLDS",
+       "CMP-NOTIFY",
+       "REQ-READY-NOTICE",
+       "TEST-NOTICE-FORMAT"
+      ],
+      "unknown_flagged": [
+       "REQ-HOLD-EXPIRY"
+      ]
+     },
+     "negative_E4": {
+      "false_alarm_targets": [
+       "CAP-NOTIFY",
+       "CMP-HOLDS",
+       "CMP-NOTIFY",
+       "REQ-HOLD-EXPIRY",
+       "REQ-PLACE-HOLD"
+      ],
+      "false_alarms": 5,
+      "held_for_review": [],
+      "measured": true,
+      "no_change_records": []
+     }
+    }
+   },
+   "labeler": "single reviewer (the implementing agent); exploratory, not independent",
+   "oracle_version": "1.0"
+  }
+ }
+}
