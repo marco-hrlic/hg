@@ -1,6 +1,15 @@
 # MDLC Lab: Building a Sentiment Classifier, End to End
 
-Status: **draft plan, v0.1**. Nothing is built yet. This file is the outline we iterate on.
+Status: **v0.2**. Session 1 is built and ready for a dry run; sessions 2 and 3 are planned.
+
+## Decisions
+
+| Decision | Choice |
+|---|---|
+| Format | 3 sessions × 2h |
+| Data | Public: Yelp Review Full (1–5 stars), downloaded and rebuilt from a fixed seed, never committed |
+| Audience | Developers comfortable with Python, **no ML background**. Maths is taught through intuition and code first; formulas follow, and derivations are optional extras |
+| Runtime | CPU only, Python 3.10+, local or Colab. No API keys required (synthetic data ships pre-generated) |
 
 ## Goal
 
@@ -55,8 +64,8 @@ a 1–5 star score available as a secondary target.
 
 | Time | Block | Hands-on |
 |---|---|---|
-| 0:00–0:20 | Text → vectors: bag-of-words, TF-IDF, (briefly) embeddings | Vectorise the dataset |
-| 0:20–0:50 | **Maths**: linear score, sigmoid/softmax, likelihood → cross-entropy, gradient `(p − y)·x`, gradient descent | Derive on paper, then implement in NumPy |
+| 0:00–0:20 | Text → vectors: bag-of-words, TF-IDF, (briefly) embeddings. Vectors and dot products explained as "weighted word counts" | Vectorise the dataset; inspect one review as a vector |
+| 0:20–0:50 | **Maths, intuition first**: the session 1 lexicon *is* a linear model with hand-picked weights (+1/−1). Learning means choosing the weights automatically. Score → softmax ("turn scores into probabilities") → cross-entropy ("how surprised were we by the right answer") → gradient ("nudge each weight by (prediction − truth) × feature") → gradient descent ("repeat many times") | Implement each piece as a small NumPy function, checked by a test cell. Interactive plot: loss as a function of one weight. The paper derivation is an optional appendix |
 | 0:50–1:15 | Training loop: epochs and mini-batches, learning rate, train/val curves, overfitting, L2 regularisation, early stopping, seeds | LR sweep; overfit on purpose, then fix it |
 | 1:15–1:30 | Port to PyTorch: gradient check against the NumPy version, then the MLP | Same results in about 15 lines |
 | 1:30–2:00 | **Loss function design**: class weights, cost-sensitive loss (negative→positive is the expensive mistake), label smoothing for noisy labels; stars as classification vs regression (MSE) vs ordinal | Each group trains with a different loss; compare on the golden set |
@@ -73,24 +82,19 @@ a 1–5 star score available as a secondary target.
 
 ---
 
-## Deliverables to build
+## Deliverables
 
-- `data/`: dirty dataset with a planted-issues answer key, plus the 30-item labelling exercise set
-- `notebooks/01_data_golden.ipynb`, `02_math_training.ipynb`, `03_synthetic_eval.ipynb`, each with TODO cells and a matching `solutions/` version
-- `lab/`: small shared helpers (loading, splits, metrics, slice reports) so notebooks stay short
-- **Pre-generated synthetic data cache**, so session 3 runs without live LLM keys (live generation optional)
-- Instructor notes per session: timings, expected results, common pitfalls
-- Environment: CPU-only, `pip install` in under 2 minutes, Colab-compatible
+| Item | Status |
+|---|---|
+| `mdlc/` helper package (data build, cleaning, MinHash dedup, metrics, slices, baselines) | done, tested |
+| Dirty dataset + answer key, golden candidates, 30-item exercise, locked held-out set | done (`make data`) |
+| Session 1 notebook (student + solution), instructor notes | done, solution runs end to end in ~20 s |
+| **Reference golden labels** for the 400 candidates, so sessions 2–3 don't depend on how well a cohort labelled | todo: needs 2 human labellers (~3h), or LLM draft labels + human review |
+| Session 2 notebook + instructor notes | todo |
+| Pre-generated synthetic data for session 3 (with the prompts used to make it) | todo |
+| Session 3 notebook + instructor notes, model card template | todo |
 
 ## Open questions
 
-1. Two or three sessions? (This plan assumes three. A two-session cut is possible, see below.)
-2. Public data (e.g. Amazon/Yelp reviews) or anonymised data from our own domain?
-3. Audience: comfortable with Python/NumPy? Any ML background?
-4. LLM access for live synthetic generation: which provider, and are keys available?
-5. Local laptops, Colab, or a shared JupyterHub?
-
-### Two-session fallback
-
-Merge session 1's metrics block into session 2, and cut the MLP and calibration blocks.
-Synthetic data and the golden set stay: they are the most valuable parts for this audience.
+1. LLM provider for the *optional* live synthetic-data demo in session 3 (the lab works without it).
+2. Who labels the reference golden set? (See deliverables.)
