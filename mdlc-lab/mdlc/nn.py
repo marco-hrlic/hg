@@ -67,3 +67,36 @@ def plot_history(history: list[dict], title: str = "") -> None:
         fig.suptitle(title)
     fig.tight_layout()
     plt.show()
+
+
+def train_classifier(X_train, y_train: np.ndarray, X_dev, y_dev: np.ndarray, *, hidden: int = 32,
+                     epochs: int = 6, lr: float = 1e-3, batch_size: int = 64,
+                     class_weights: Sequence[float] | None = None, seed: int = 0):
+    """Lab 1's network and training loop, packaged. Keeps the epoch with the best dev macro-F1.
+
+    Returns (model, history). class_weights, if given, scale each class's contribution to the loss.
+    """
+    from .metrics import macro_f1  # local import keeps torch-free modules importable without torch
+
+    torch.manual_seed(seed)
+    model = torch.nn.Sequential(torch.nn.Linear(X_train.shape[1], hidden), torch.nn.ReLU(),
+                                torch.nn.Linear(hidden, len(LABELS)))
+    weight = None if class_weights is None else torch.tensor(list(class_weights), dtype=torch.float32)
+    loss_fn = torch.nn.CrossEntropyLoss(weight=weight)
+    optimizer = torch.optim.Adam(model.parameters(), lr=lr)
+    dev_labels = [LABELS[i] for i in y_dev]
+    history, best = [], (-1.0, None)
+    for epoch in range(1, epochs + 1):
+        for xb, yb in batches(X_train, y_train, batch_size, seed=epoch + 1000 * seed):
+            optimizer.zero_grad()
+            loss_fn(model(xb), yb).backward()
+            optimizer.step()
+        tr_loss, tr_acc = evaluate(model, X_train, y_train, loss_fn)
+        dv_loss, dv_acc = evaluate(model, X_dev, y_dev, loss_fn)
+        f1 = macro_f1(dev_labels, [LABELS[i] for i in predict_proba(model, X_dev).argmax(axis=1)])
+        history.append(dict(epoch=epoch, train_loss=tr_loss, dev_loss=dv_loss, train_acc=tr_acc,
+                            dev_acc=dv_acc, dev_macro_f1=f1))
+        if f1 > best[0]:
+            best = (f1, {k: v.clone() for k, v in model.state_dict().items()})
+    model.load_state_dict(best[1])
+    return model, history
