@@ -1,5 +1,9 @@
 # %% [markdown]
-# # Session 1: Framing, data, and the golden set
+# # Lab 2: Open the box (DRAFT)
+#
+# > **Draft:** this is the former session 1 material (raw data → clean splits → golden set →
+# > metrics). It is being reworked into lab 2: compressed to fit with the theory and retraining
+# > blocks in a single 2h session.
 #
 # **Goal for today:** before writing a single line of model code, we'll build the thing that tells us
 # whether a model is any good. By the end you will have:

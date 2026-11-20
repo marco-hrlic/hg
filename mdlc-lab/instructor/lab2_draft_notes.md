@@ -1,4 +1,4 @@
-# Session 1: instructor notes
+# Lab 2 (draft): instructor notes for the data-engineering block
 
 ## Before the session
 - Everyone runs `make data` beforehand. The download is the only step that can fail on the day.

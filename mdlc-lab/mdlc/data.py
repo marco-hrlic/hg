@@ -11,6 +11,7 @@ Files produced under the data directory:
     raw/answer_key.csv          instructor-only: one row per planted problem
     golden/candidates.csv       ~400 reviews from the official *test* split, slice-tagged,
                                 for golden-set curation
+    prepared/                   lab 1's ready-made train/val/test (reference_clean + stratified split)
     golden/exercise_30.csv      30 of the candidates for the labelling-agreement exercise
     golden/labelling_sheet.csv  blank sheet for collecting human labels
     heldout/heldout.csv         5,000 clean reviews from the test split. Locked until session 3.
@@ -296,6 +297,72 @@ def _select_exercise(golden: pd.DataFrame, rng: np.random.Generator) -> pd.DataF
     return pick.sample(frac=1, random_state=int(rng.integers(1 << 31))).reset_index(drop=True)
 
 
+# ---------------------------------------------------------------------------
+# Reference cleaning pipeline (produces lab 1's prepared data; lab 2A rebuilds it by hand)
+# ---------------------------------------------------------------------------
+
+_PLACEHOLDER_NORMS = {"n a", "test", "asdf", "null", "no comment", "review removed"}
+
+
+def parse_stars(value: object) -> int | None:
+    """A valid rating is exactly one of "1".."5". Anything else is unusable, not guessed at."""
+    v = str(value).strip()
+    return int(v) if v in {"1", "2", "3", "4", "5"} else None
+
+
+def is_placeholder(t: object) -> bool:
+    c = normalize_for_dedup(t)
+    return len(c) < 3 or c in _PLACEHOLDER_NORMS
+
+
+def reference_clean(raw: pd.DataFrame, near_threshold: float = 0.7) -> tuple[pd.DataFrame, pd.Series]:
+    """Every cleaning decision in one place. Returns (clean_df, log of rows dropped per reason)."""
+    df = raw.drop(columns=["stars_display"]).copy()  # leaky column
+    df["stars"] = df["stars"].map(parse_stars)
+    df["text"] = df["text"].map(clean_text)
+    log = {"start": len(df)}
+
+    df = df[df["stars"].notna()]
+    log["invalid_label"] = log["start"] - len(df)
+    n = len(df)
+    df = df[~df["text"].map(is_placeholder)]
+    log["placeholder"] = n - len(df)
+
+    df["stars"] = df["stars"].astype(int)
+    df["label"] = df["stars"].map(stars_to_sentiment)
+    df["norm"] = df["text"].map(normalize_for_dedup)
+    conflicting = df.groupby("norm")["label"].transform("nunique") > 1
+    n = len(df)
+    df = df[~conflicting]
+    log["conflicting_duplicate"] = n - len(df)
+    n = len(df)
+    df = df.drop_duplicates("norm")
+    log["exact_duplicate"] = n - len(df)
+
+    df = df.reset_index(drop=True)
+    near = find_near_duplicates(df["text"].tolist(), threshold=near_threshold)
+    n = len(df)
+    df = df.drop(index=sorted({j for _, j, _ in near}))
+    log["near_duplicate"] = n - len(df)
+    log["final"] = len(df)
+    return df.drop(columns=["norm"]).reset_index(drop=True), pd.Series(log)
+
+
+def stratified_split(df: pd.DataFrame, fractions=(0.8, 0.1, 0.1), seed: int = 42,
+                     label_col: str = "label") -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+    """Shuffle each label group separately and cut it 80/10/10, so every split has the same label mix."""
+    parts: dict[str, list] = {"train": [], "val": [], "test": []}
+    for _, group in df.groupby(label_col):
+        group = group.sample(frac=1, random_state=seed)
+        n_train = int(round(len(group) * fractions[0]))
+        n_val = int(round(len(group) * fractions[1]))
+        parts["train"].append(group.iloc[:n_train])
+        parts["val"].append(group.iloc[n_train : n_train + n_val])
+        parts["test"].append(group.iloc[n_train + n_val :])
+    return tuple(pd.concat(p).sample(frac=1, random_state=seed).reset_index(drop=True)
+                 for p in parts.values())
+
+
 def build_all(data_dir: Path = DATA_DIR, seed: int = SEED, force: bool = False) -> dict[str, Path]:
     """Build every lab dataset. Safe to call repeatedly: skips work if the files already exist."""
     data_dir = Path(data_dir)
@@ -306,6 +373,7 @@ def build_all(data_dir: Path = DATA_DIR, seed: int = SEED, force: bool = False) 
         "exercise": data_dir / "golden" / "exercise_30.csv",
         "sheet": data_dir / "golden" / "labelling_sheet.csv",
         "heldout": data_dir / "heldout" / "heldout.csv",
+        "prepared": data_dir / "prepared" / "manifest.json",
     }
     if not force and all(p.exists() for p in paths.values()):
         return paths
@@ -340,8 +408,15 @@ def build_all(data_dir: Path = DATA_DIR, seed: int = SEED, force: bool = False) 
     heldout["label"] = heldout["stars"].map(stars_to_sentiment)
     heldout.to_csv(paths["heldout"], index=False)
 
+    # Lab 1's ready-made dataset: the reference pipeline applied to the raw pool.
+    # It is clean in every way you can check row by row, but the ~600 flipped labels are still in it.
+    clean, _ = reference_clean(raw)
+    train_p, val_p, test_p = stratified_split(clean, seed=42)
+    save_versioned({"train": train_p, "val": val_p, "test": test_p}, paths["prepared"].parent,
+                   note="reference_clean() on raw/reviews_raw.csv, stratified 80/10/10, seed 42")
+
     manifest = {name: {"path": str(p.relative_to(data_dir)), "sha256": file_sha256(p),
-                       "rows": int(len(pd.read_csv(p)))} for name, p in paths.items()}
+                       "rows": int(len(pd.read_csv(p)))} for name, p in paths.items() if p.suffix == ".csv"}
     (data_dir / "manifest.json").write_text(json.dumps({"seed": seed, "files": manifest}, indent=2))
     return paths
 
@@ -349,6 +424,12 @@ def build_all(data_dir: Path = DATA_DIR, seed: int = SEED, force: bool = False) 
 # ---------------------------------------------------------------------------
 # Loading, splitting, versioning
 # ---------------------------------------------------------------------------
+
+def load_prepared(data_dir: Path = DATA_DIR) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+    """Lab 1's ready-made train/val/test splits."""
+    s = load_splits(Path(data_dir) / "prepared")
+    return s["train"], s["val"], s["test"]
+
 
 def load_raw(data_dir: Path = DATA_DIR) -> pd.DataFrame:
     """The dirty training pool, read the way a careless first attempt would: everything as text."""
@@ -412,6 +493,6 @@ def load_splits(split_dir: Path) -> dict[str, pd.DataFrame]:
 
 __all__ = [
     "LABELS", "build_all", "download_yelp", "find_near_duplicates", "load_golden_candidates",
-    "load_heldout", "load_raw", "load_splits", "save_versioned", "score_findings", "stars_to_sentiment",
+    "load_heldout", "load_prepared", "load_raw", "reference_clean", "stratified_split", "load_splits", "save_versioned", "score_findings", "stars_to_sentiment",
     "NEGATIVE_HINTS", "POSITIVE_HINTS",
 ]

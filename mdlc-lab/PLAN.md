@@ -1,84 +1,86 @@
 # MDLC Lab: Building a Sentiment Classifier, End to End
 
-Status: **v0.2**. Session 1 is built and ready for a dry run; sessions 2 and 3 are planned.
+Status: **v0.3**. Two labs. Lab 1 is built and ready for a dry run. Lab 2's data block exists as a
+draft; its theory, label-noise, synthetic-data and retrain blocks are still to build.
 
 ## Decisions
 
 | Decision | Choice |
 |---|---|
-| Format | 3 sessions × 2h |
+| Format | **2 labs × 2h** |
+| Shape | Lab 1: the payoff first (prepared data, train, use, break). Lab 2: open the box (raw data, theory, retrain) |
 | Data | Public: Yelp Review Full (1–5 stars), downloaded and rebuilt from a fixed seed, never committed |
-| Audience | Developers comfortable with Python, **no ML background**. Maths is taught through intuition and code first; formulas follow, and derivations are optional extras |
-| Runtime | CPU only, Python 3.10+, local or Colab. No API keys required (synthetic data ships pre-generated) |
+| Audience | Developers comfortable with Python, **no ML background** |
+| Runtime | CPU only, Python 3.10+, PyTorch, local or Colab. No API keys (synthetic data ships pre-generated) |
 
 ## Goal
 
-Developers go through one full model development lifecycle on a problem small enough to
-train on a laptop CPU. They should leave able to:
+Developers leave able to:
 
-- turn a vague request ("detect unhappy customers") into a labelling spec and a metric
-- handle data properly: splits, leakage, deduplication, versioning, a locked test set
-- explain the maths of a linear classifier: score → softmax → cross-entropy → gradient
-- write a training loop, read loss curves, and spot overfitting
+- turn a vague request into a labelled classification problem with a metric
+- handle data properly: class balance, stratified splits, leakage, deduplication, versioning, a locked test set
+- explain what training does: score → softmax → cross-entropy → gradient → update
+- read loss curves, spot overfitting, use early stopping
 - choose or design a loss function for what the business actually cares about
-- curate a golden dataset, and generate synthetic data without fooling themselves
+- curate a golden dataset, and use synthetic data without fooling themselves
 
-## Guiding principle: evaluation comes before the model
+## The story across the two labs
 
-The order is deliberate: **spec → data → golden set → baseline → model → iterate**.
-Developers build the thing that measures success before they build the thing being measured.
-This is the habit that carries over to real projects.
+**Lab 1** trains a network on a "prepared" dataset and gets a satisfying result: 0.81 accuracy and
+0.65 macro-F1, against 0.50 for a hand-written rule, in about 15 seconds of training. It ends with a
+reveal: the prepared data came from an export with seven kinds of problems, and ~600 flipped labels
+are still in it.
 
-## Running example
+**Lab 2** starts from that raw export, teaches the data engineering and the theory behind what
+lab 1 did, fixes the data and the loss, and retrains. Success means beating the lab 1 model on
+human-checked golden data.
 
-Customer-review sentiment, **3 classes (negative / neutral / positive)**, with
-a 1–5 star score available as a secondary target.
+The lab 1 dataset is produced by the same reference cleaning pipeline that lab 2 teaches
+(`mdlc.data.reference_clean`), so participants can compare their own cleaning with it.
 
-- 3 classes rather than 2, because "neutral" and "mixed" produce real disagreement
-  between labellers. That disagreement is what makes the golden-set discussion concrete.
-- Star scores let us compare classification against ordinal/regression losses in session 2.
-- The dataset ships **deliberately dirty**: exact and near duplicates, the same product
-  appearing in both train and test, HTML junk, a few percent of flipped labels, class imbalance.
+## Where each topic lives
 
-## Model progression (each step must beat the one before it on the golden set)
-
-1. Majority class and a keyword-lexicon baseline
-2. TF-IDF + logistic regression **written from scratch in NumPy**
-3. The same model in PyTorch, with autograd checked against the hand-derived gradient
-4. Small MLP or embedding-bag model in PyTorch
-5. *(Optional demo)* fine-tuned small transformer and/or a zero-shot LLM, as a reference ceiling
+| Topic | Lab 1 (show it, use it) | Lab 2 (explain it, do it yourself) |
+|---|---|---|
+| Class balance | Look at the label mix; majority baseline at 62% accuracy is useless; neutral recall ≈ 0.19 | Why the loss ignores rare classes; class weights, resampling (train only), thresholds |
+| Data splits | Roles of train/val/test; stratified mix; test touched once | Make them: stratification, the sorted-file trap, duplicates across splits, target leakage, group and time splits (theory), versioning |
+| Metrics | Accuracy vs macro-F1, confusion matrix, precision/recall | Compute them yourself; slices; cost of each error type |
+| Training | The loop (TODO: write the step), loss curves, overfitting, early stopping, hyperparameter experiments | The maths, from scratch in NumPy, checked against PyTorch |
+| Loss function | "Cross-entropy = how little probability on the right answer" | Derivation; class weights; cost-sensitive loss; label smoothing |
+| Data quality | Prepared for you (with a reveal at the end) | Hunt planted problems; find flipped labels using per-example loss |
+| Golden set | Hard-case pool with slices shows where the model fails | Labelling agreement (kappa), guideline, curation principles |
+| Synthetic data | Failures collected in "break it" | Targeted generation for weak slices, contamination check, evaluate on real data only |
 
 ---
 
-## Session 1 (2h): Framing, data, golden set
+## Lab 1 (2h): Train a classifier. *Built.*
 
 | Time | Block | Hands-on |
 |---|---|---|
-| 0:00–0:15 | Framing: what is a classifier, what decision it feeds, the cost of each error type | Write a one-paragraph problem spec |
-| 0:15–0:40 | **Labelling exercise**: everyone labels the same 30 reviews from a draft guideline | Compute Cohen's/Fleiss' kappa, discuss disagreements, revise the guideline |
-| 0:40–1:15 | Data handling: EDA, cleaning, exact and near-dup detection, leakage (group split by product/user), stratified splits, the test set as a locked box, dataset versioning (hash manifest) | Find the planted problems in the dirty dataset |
-| 1:15–1:40 | **Golden dataset curation**: adjudication, slice coverage (negation, sarcasm, mixed, domain terms, short text), size and refresh policy, freezing | Build a ~150-item golden set with slice tags |
-| 1:40–2:00 | Metrics: accuracy vs macro-F1, confusion matrix, per-slice metrics | Score the majority and lexicon baselines. This is the bar to beat |
+| 0:00–0:10 | The task: what a classifier is, supervised learning, star → sentiment labels, the expensive mistake | Discussion |
+| 0:10–0:25 | The data: prepared splits, **why three splits**, **class balance** per split | Plot the label mix |
+| 0:25–0:35 | The bar to beat: majority and lexicon baselines; accuracy vs macro-F1; confusion matrix | Run baselines |
+| 0:35–0:50 | Text → numbers: TF-IDF; vectorizer fitted on train only (first leakage rule) | Inspect one review as a vector |
+| 0:50–1:00 | The model: Linear → ReLU → Linear, logits, softmax; 640k random weights | Look at an untrained model's predictions |
+| 1:00–1:30 | Training: batches, forward, loss, backward, step; epochs; overfitting; early stopping | **TODO: write the training step**; two experiments (capacity, learning rate, batch size) |
+| 1:30–1:45 | Evaluation: scoreboard vs baselines, per-class report (neutral recall), the test set *once* | Read the confusion matrix against the expensive mistake |
+| 1:45–1:55 | Play and break it: classify your own reviews; learned word lists; per-slice scores | Write reviews that fool the model |
+| 1:55–2:00 | Save the model; the reveal; lead-in to lab 2 | |
 
-## Session 2 (2h): The maths and the training loop
+## Lab 2 (2h): Open the box. *Data block drafted; the rest to build.*
 
-| Time | Block | Hands-on |
-|---|---|---|
-| 0:00–0:20 | Text → vectors: bag-of-words, TF-IDF, (briefly) embeddings. Vectors and dot products explained as "weighted word counts" | Vectorise the dataset; inspect one review as a vector |
-| 0:20–0:50 | **Maths, intuition first**: the session 1 lexicon *is* a linear model with hand-picked weights (+1/−1). Learning means choosing the weights automatically. Score → softmax ("turn scores into probabilities") → cross-entropy ("how surprised were we by the right answer") → gradient ("nudge each weight by (prediction − truth) × feature") → gradient descent ("repeat many times") | Implement each piece as a small NumPy function, checked by a test cell. Interactive plot: loss as a function of one weight. The paper derivation is an optional appendix |
-| 0:50–1:15 | Training loop: epochs and mini-batches, learning rate, train/val curves, overfitting, L2 regularisation, early stopping, seeds | LR sweep; overfit on purpose, then fix it |
-| 1:15–1:30 | Port to PyTorch: gradient check against the NumPy version, then the MLP | Same results in about 15 lines |
-| 1:30–2:00 | **Loss function design**: class weights, cost-sensitive loss (negative→positive is the expensive mistake), label smoothing for noisy labels; stars as classification vs regression (MSE) vs ordinal | Each group trains with a different loss; compare on the golden set |
-
-## Session 3 (2h): Error analysis, synthetic data, shipping
+This is the dense one. To fit 2h, most code is provided and the exercises are short and focused.
+The blocks marked *demo* are instructor-led walkthroughs with the code already in the notebook.
 
 | Time | Block | Hands-on |
 |---|---|---|
-| 0:00–0:25 | Error analysis: per-slice failures, confusion pairs, finding label errors with model loss | Find the weakest slices; find mislabelled training items |
-| 0:25–1:15 | **Synthetic data**: LLM generation targeted at weak slices, prompt design for diversity, LLM-as-labeller vs human, filtering, dedup **against the golden/test set** (contamination), mixing ratios | Train real-only vs real+synthetic; evaluate on **real golden data only** |
-| 1:15–1:35 | Thresholds and calibration: reliability plot, choosing an operating point from the cost of each error | Pick a threshold for the "escalate to human" use case |
-| 1:35–1:50 | Shipping: model card, what to monitor (input drift, label drift), when to refresh the golden set | Fill in a model card template |
-| 1:50–2:00 | Retro, plus the MDLC loop back to the beginning | |
+| 0:00–0:05 | Recap, and the raw export lab 1's data came from | |
+| 0:05–0:40 | **Data engineering**: invalid labels, placeholders, HTML, exact/near duplicates (MinHash), target-leakage column, sorted file, imbalance; stratified splits; leakage across splits; group and time splits (theory); versioning; compare with lab 1's prepared data | 3 short TODOs (parse labels, dedup, stratified split), each scored against the answer key |
+| 0:40–0:55 | **Labels and the golden set**: 10-item labelling exercise and Cohen's kappa; what makes a golden set; slices; the reference golden labels | Label 10 reviews; compute agreement |
+| 0:55–1:25 | **The maths**: the lexicon *is* a linear model with hand-picked weights; softmax; cross-entropy from "probability of the right answer"; the gradient `(p − y)·x`; gradient descent | **TODO: softmax, cross-entropy and gradient in NumPy**, checked against PyTorch autograd |
+| 1:25–1:40 | **Loss design and label noise**: class weights for neutral recall, cost-sensitive loss for the expensive mistake; per-example loss as a detector for flipped labels | Train with class weights; find flipped labels, scored against the answer key |
+| 1:40–1:50 | **Synthetic data** *(demo)*: pre-generated examples aimed at weak slices (sarcasm, mixed, negation), dedup against eval data, mix ratio | Train with and without; evaluate on real golden data only |
+| 1:50–2:00 | **Retrain and compare**: the lab 2 model vs the lab 1 model on the golden set and per slice; unlock the held-out set once; the MDLC loop and what to monitor in production | Final scoreboard |
 
 ---
 
@@ -86,15 +88,18 @@ a 1–5 star score available as a secondary target.
 
 | Item | Status |
 |---|---|
-| `mdlc/` helper package (data build, cleaning, MinHash dedup, metrics, slices, baselines) | done, tested |
-| Dirty dataset + answer key, golden candidates, 30-item exercise, locked held-out set | done (`make data`) |
-| Session 1 notebook (student + solution), instructor notes | done, solution runs end to end in ~20 s |
-| **Reference golden labels** for the 400 candidates, so sessions 2–3 don't depend on how well a cohort labelled | todo: needs 2 human labellers (~3h), or LLM draft labels + human review |
-| Session 2 notebook + instructor notes | todo |
-| Pre-generated synthetic data for session 3 (with the prompts used to make it) | todo |
-| Session 3 notebook + instructor notes, model card template | todo |
+| `mdlc/` package: data build, reference cleaning, MinHash dedup, metrics, slices, baselines, PyTorch helpers | done, tested |
+| Datasets: raw export + answer key, prepared splits, golden candidates, labelling exercise, locked held-out set | done (`make data`) |
+| Lab 1 notebook (student + solution) and instructor notes | **done**, runs end to end in ~1 min |
+| Lab 2 data block (from the old session 1 notebook) | draft: needs compressing to 35 min and comparing with lab 1's prepared data |
+| Lab 2 theory, loss design and label-noise blocks | todo |
+| Pre-generated synthetic data for lab 2 (with the prompts used to make it) | todo |
+| **Reference golden labels** for the 400 candidates | todo: 2 human labellers (~3h), or LLM draft labels plus human review |
+| Lab 2 instructor notes | todo |
 
 ## Open questions
 
-1. LLM provider for the *optional* live synthetic-data demo in session 3 (the lab works without it).
-2. Who labels the reference golden set? (See deliverables.)
+1. Who labels the reference golden set? (See deliverables.)
+2. Group and time splits are taught as theory only, because Yelp Review Full has no business, user
+   or date fields. Switching to a dataset with them (e.g. Amazon Reviews 2023) would make them hands-on.
+3. LLM provider for an *optional* live synthetic-data demo (the lab works without one).
