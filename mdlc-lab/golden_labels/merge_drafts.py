@@ -7,9 +7,12 @@ Writes:
     data/golden/review_sheet.csv     not committed: the items a person must review, with text
 
 Status per item:
-    agreed        both raters chose the same sentiment label, and neither was low-confidence
-    needs_review  raters disagree, or either was low-confidence
-    ambiguous     both raters said ambiguous (excluded from the golden set unless a reviewer decides otherwise)
+    agreed           both raters chose the same sentiment label with high confidence
+    agreed_low_conf  same label, but at least one rater was unsure. Included in the draft golden set,
+                     listed for a lighter spot-check. (Requiring high confidence from both would drop
+                     nearly every neutral item: the hard cases are exactly the ones raters are unsure of.)
+    needs_review     the raters chose different labels. Excluded until a person decides.
+    ambiguous        both raters said ambiguous. Excluded unless a reviewer decides otherwise.
 """
 
 from __future__ import annotations
@@ -44,6 +47,7 @@ def main(folder: Path) -> None:
     same = df.label_A == df.label_B
     confident = (df.conf_A == "high") & (df.conf_B == "high")
     df["status"] = "needs_review"
+    df.loc[same, "status"] = "agreed_low_conf"
     df.loc[same & confident, "status"] = "agreed"
     df.loc[same & (df.label_A == "ambiguous"), "status"] = "ambiguous"
     df["draft_label"] = df.label_A.where(same, "")
@@ -52,13 +56,15 @@ def main(folder: Path) -> None:
     print(f"Cohen's kappa A vs B (items both labelled with a sentiment): "
           f"{metrics.cohen_kappa(both.label_A, both.label_B):.3f} on {len(both)} items")
     print(df.status.value_counts().to_string(), "\n")
-    agreed = df[df.status == "agreed"]
+    agreed = df[df.status.str.startswith("agreed")]
     print(f"agreed labels match star labels on {(agreed.draft_label == agreed.star_label).mean():.0%} of items")
 
     cols = ["item_id", "label_A", "conf_A", "note_A", "label_B", "conf_B", "note_B", "status", "draft_label"]
     df[cols].to_csv(HERE / "draft_labels.csv", index=False)
 
-    review = df[df.status != "agreed"].merge(cands[["item_id", "text"]], on="item_id")
+    priority = {"needs_review": 0, "ambiguous": 1, "agreed_low_conf": 2}
+    review = (df[df.status != "agreed"].merge(cands[["item_id", "text"]], on="item_id")
+              .sort_values("status", key=lambda s: s.map(priority)))
     review = review.assign(final_label="", reviewer="", reviewer_note="")
     out = data.DATA_DIR / "golden" / "review_sheet.csv"
     review[["item_id", "text", *cols[1:], "final_label", "reviewer", "reviewer_note"]].to_csv(out, index=False)

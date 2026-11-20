@@ -1,0 +1,401 @@
+item_id,label_A,conf_A,note_A,label_B,conf_B,note_B,status,draft_label
+G0001,positive,high,,positive,high,,agreed,positive
+G0002,positive,high,,positive,high,,agreed,positive
+G0003,negative,low,"Clean friendly hotel praised, but pool, bar staff, timeshare complaints dominate.",negative,low,"mostly complaints about pool, rudeness despite nice hotel",agreed_low_conf,negative
+G0004,negative,high,,negative,low,"underwhelmed and bored, though service good",agreed_low_conf,negative
+G0005,negative,high,,negative,high,,agreed,negative
+G0006,positive,high,,positive,high,,agreed,positive
+G0007,negative,high,,negative,high,,agreed,negative
+G0008,positive,high,,positive,high,,agreed,positive
+G0009,neutral,low,"Staff and cleanliness praised, food too dry; no clear overall lean.",neutral,low,friendly and clean but food too dry,agreed_low_conf,neutral
+G0010,positive,high,,positive,high,,agreed,positive
+G0011,positive,high,,positive,low,amazing happy hour but otherwise pricey,agreed_low_conf,positive
+G0012,positive,high,,positive,high,,agreed,positive
+G0013,negative,high,,negative,high,,agreed,negative
+G0014,positive,high,,positive,high,,agreed,positive
+G0015,positive,low,"Own meal disappointing, but husband loved his and will return.",positive,low,disappointed in own meal but will return,agreed_low_conf,positive
+G0016,negative,high,,negative,high,,agreed,negative
+G0017,negative,high,,negative,high,,agreed,negative
+G0018,negative,high,,negative,high,,agreed,negative
+G0019,negative,high,,negative,high,,agreed,negative
+G0020,negative,high,,negative,high,,agreed,negative
+G0021,positive,high,,positive,high,,agreed,positive
+G0022,negative,high,,negative,high,,agreed,negative
+G0023,neutral,low,"Dogs and sandwiches good, other items blah; balanced, slight negative possible.",neutral,low,"good for hot dogs, nothing more",agreed_low_conf,neutral
+G0024,positive,high,,positive,high,,agreed,positive
+G0025,positive,high,,positive,high,,agreed,positive
+G0026,positive,high,,positive,high,,agreed,positive
+G0027,negative,high,,negative,high,,agreed,negative
+G0028,negative,high,,negative,high,,agreed,negative
+G0029,positive,high,,positive,high,,agreed,positive
+G0030,negative,low,"Great egg rolls, husband happy, but meat inedibly salty; return doubtful.",negative,low,"great egg rolls but salty meat, doubtful return",agreed_low_conf,negative
+G0031,positive,high,,positive,high,,agreed,positive
+G0032,negative,high,,negative,high,,agreed,negative
+G0033,positive,low,Decor mocked but food good; 'wasn't actually okay' likely a typo.,positive,low,awful decor but good food,agreed_low_conf,positive
+G0034,positive,high,,positive,high,,agreed,positive
+G0035,negative,high,,negative,high,,agreed,negative
+G0036,negative,high,,negative,high,,agreed,negative
+G0037,negative,high,,negative,high,,agreed,negative
+G0038,positive,low,"Fun place, but overcrowding gripe is substantial.",positive,low,fun but overcrowded,agreed_low_conf,positive
+G0039,negative,high,,negative,high,,agreed,negative
+G0040,neutral,low,"Repeatedly 'okay'; overpriced and hype criticised, could read mildly negative.",neutral,high,,agreed_low_conf,neutral
+G0041,negative,high,,negative,high,,agreed,negative
+G0042,neutral,low,Bloated prices vs friendly staff and selection; three-star balance.,negative,low,pricey clothes but friendly staff,needs_review,
+G0043,neutral,low,"Crab legs great, everything else mediocre; conditional recommendation.",neutral,low,"crab legs great, rest mediocre",agreed_low_conf,neutral
+G0044,positive,high,,positive,high,,agreed,positive
+G0045,positive,high,,positive,high,,agreed,positive
+G0046,positive,high,,positive,high,,agreed,positive
+G0047,negative,low,"Groupon refusal grievance, though food and server described as good.",negative,high,,agreed_low_conf,negative
+G0048,negative,high,,negative,high,,agreed,negative
+G0049,negative,low,"Now 'just average', won't stay again, but still nice to visit.",neutral,low,"just average, won't return, still nice",needs_review,
+G0050,negative,high,,negative,high,,agreed,negative
+G0051,neutral,low,'Pretty decent' with complaints; points elsewhere for better food.,neutral,low,decent but unremarkable,agreed_low_conf,neutral
+G0052,positive,high,,positive,high,,agreed,positive
+G0053,positive,high,,positive,high,,agreed,positive
+G0054,positive,high,,positive,high,,agreed,positive
+G0055,positive,high,,positive,low,"3.5 stars, chili excellent, fries dull",agreed_low_conf,positive
+G0056,ambiguous,high,Not in English (French); content is clearly positive.,ambiguous,high,,ambiguous,ambiguous
+G0057,negative,low,"Liked own pad thai somewhat; skimpy protein, husband disappointed.",negative,low,liked it but several disappointments,agreed_low_conf,negative
+G0058,negative,high,,negative,high,,agreed,negative
+G0059,positive,high,,positive,high,,agreed,positive
+G0060,negative,high,,negative,high,,agreed,negative
+G0061,positive,high,,positive,high,,agreed,positive
+G0062,positive,high,,positive,high,,agreed,positive
+G0063,positive,high,,positive,high,,agreed,positive
+G0064,neutral,low,"'OK, nothing too special but still good'; lukewarm with mixed details.",neutral,high,,agreed_low_conf,neutral
+G0065,positive,high,,positive,high,,agreed,positive
+G0066,negative,high,,negative,high,,agreed,negative
+G0067,negative,high,,negative,high,,agreed,negative
+G0068,negative,high,,negative,high,,agreed,negative
+G0069,negative,high,,negative,high,,agreed,negative
+G0070,positive,high,,positive,high,,agreed,positive
+G0071,negative,low,"'Not bad' but limited, costly, got bored and left; could be neutral.",negative,low,not bad but bored and left,agreed_low_conf,negative
+G0072,positive,high,,positive,high,,agreed,positive
+G0073,negative,high,,negative,low,food OK but won't return to this location,agreed_low_conf,negative
+G0074,positive,high,,positive,high,,agreed,positive
+G0075,ambiguous,low,Opening value praise vs. hot-and-ready complaint; lean unclear.,negative,low,"minor complaint, backhanded opening",needs_review,
+G0076,negative,high,,negative,high,,agreed,negative
+G0077,positive,high,,positive,high,,agreed,positive
+G0078,positive,high,,positive,high,,agreed,positive
+G0079,negative,high,,negative,high,,agreed,negative
+G0080,positive,high,,positive,high,,agreed,positive
+G0081,negative,low,"Room service very bad, but hotel overall called ok and nice.",negative,low,"bad dining experience, hotel overall ok",agreed_low_conf,negative
+G0082,positive,low,"Food delicious, decor liked; waiter lacked warmth.",positive,low,"tasty food, cool service",agreed_low_conf,positive
+G0083,positive,high,,positive,high,,agreed,positive
+G0084,positive,high,,positive,high,,agreed,positive
+G0085,positive,high,,positive,high,,agreed,positive
+G0086,negative,high,,negative,high,,agreed,negative
+G0087,positive,high,,positive,high,,agreed,positive
+G0088,positive,high,,positive,high,,agreed,positive
+G0089,neutral,low,Mostly factual; no-wait positive vs limited-selection negative.,neutral,high,,agreed_low_conf,neutral
+G0090,positive,high,,positive,high,,agreed,positive
+G0091,negative,high,,negative,high,,agreed,negative
+G0092,positive,low,"Terse, somewhat cryptic; ends 'It's a good time'.",positive,high,,agreed_low_conf,positive
+G0093,negative,low,"Loves oxtail soup, but steak bad and otherwise 'wasting your time'.",negative,high,,agreed_low_conf,negative
+G0094,negative,high,,negative,high,,agreed,negative
+G0095,negative,low,"Food 'subpar', though worth it as hangover stop.",negative,low,"subpar food, worth it for drunk locals",agreed_low_conf,negative
+G0096,positive,high,,positive,high,,agreed,positive
+G0097,positive,low,"Mixed food notes, but ambiance excellent and coming back.",positive,low,mixed but lovely ambiance,agreed_low_conf,positive
+G0098,negative,high,,negative,high,,agreed,negative
+G0099,positive,low,"Likes place, everything above average, but strongly hates live bands.",positive,low,likes place but hates live bands,agreed_low_conf,positive
+G0100,negative,low,Single complaint about fitting rooms; 'only beef' implies otherwise satisfied.,neutral,low,only complaint is no fitting room,needs_review,
+G0101,negative,low,"Many complaints, but room fine and conditional willingness to return.",negative,low,Many complaints; ends mildly willing to return if free.,agreed_low_conf,negative
+G0102,negative,high,,negative,high,,agreed,negative
+G0103,negative,low,Unhappy with burger but says will return.,negative,low,Repeated complaint dominates but says will return.,agreed_low_conf,negative
+G0104,neutral,low,Mostly factual; 'got to enjoy' hints mild positive.,positive,low,"Mostly factual, mild enjoyment.",needs_review,
+G0105,negative,high,,negative,high,,agreed,negative
+G0106,negative,high,,negative,high,,agreed,negative
+G0107,positive,high,,positive,high,,agreed,positive
+G0108,positive,high,,positive,high,,agreed,positive
+G0109,negative,high,,negative,high,,agreed,negative
+G0110,negative,high,,negative,high,,agreed,negative
+G0111,positive,low,Praise for value but potato complaint and 'pretty sad' remark.,positive,high,,agreed_low_conf,positive
+G0112,neutral,low,Bare tip; implicit recommendation could be read positive.,positive,low,"Only an implicit recommendation, no evaluation.",needs_review,
+G0113,negative,high,,negative,high,,agreed,negative
+G0114,positive,high,,positive,high,,agreed,positive
+G0115,negative,high,,negative,high,,agreed,negative
+G0116,positive,high,,positive,high,,agreed,positive
+G0117,positive,high,,positive,high,,agreed,positive
+G0118,positive,high,,positive,high,,agreed,positive
+G0119,positive,high,,positive,high,,agreed,positive
+G0120,negative,high,,negative,high,,agreed,negative
+G0121,negative,high,,negative,high,,agreed,negative
+G0122,negative,low,"Fun roof view, but overpriced food is the closing verdict.",neutral,low,"Food ok and overpriced, fun view; slight lean negative.",needs_review,
+G0123,negative,high,,negative,high,,agreed,negative
+G0124,positive,high,,positive,low,"About an event, not a typical business; enthusiastic.",agreed_low_conf,positive
+G0125,negative,low,'Meh' verdict could be neutral; prefers competitors.,negative,low,"Meh, prefers competitors; could be neutral.",agreed_low_conf,negative
+G0126,negative,low,Complaints dominate but plans to try again.,negative,low,Many complaints but plans to retry.,agreed_low_conf,negative
+G0127,positive,high,,positive,high,,agreed,positive
+G0128,positive,high,,positive,high,,agreed,positive
+G0129,negative,high,,negative,high,,agreed,negative
+G0130,negative,high,,negative,high,,agreed,negative
+G0131,negative,high,,negative,high,,agreed,negative
+G0132,negative,high,,negative,high,,agreed,negative
+G0133,positive,low,"'Decent' throughout but satisfied, great price, 'A-OK'.",neutral,low,"Decent and A-OK, but satisfied and great price.",needs_review,
+G0134,neutral,low,"'Not that bad', good deals, meh burger; slight positive lean.",neutral,low,"Not that bad, meh burger, good deals.",agreed_low_conf,neutral
+G0135,negative,high,,negative,high,,agreed,negative
+G0136,positive,high,,positive,high,,agreed,positive
+G0137,positive,high,,positive,high,,agreed,positive
+G0138,negative,high,,negative,high,,agreed,negative
+G0139,negative,high,,negative,high,,agreed,negative
+G0140,negative,high,,negative,high,,agreed,negative
+G0141,neutral,low,Great coffee versus slow service; no clear overall lean.,neutral,low,Great coffee versus long waits; no clear lean.,agreed_low_conf,neutral
+G0142,positive,high,,positive,high,,agreed,positive
+G0143,positive,high,,positive,high,,agreed,positive
+G0144,positive,high,,positive,high,,agreed,positive
+G0145,positive,high,,positive,high,,agreed,positive
+G0146,positive,high,,positive,high,,agreed,positive
+G0147,neutral,high,,neutral,high,,agreed,neutral
+G0148,neutral,low,"Dinners ok, breakfasts good; 'in a pinch' stop.",neutral,high,,agreed_low_conf,neutral
+G0149,neutral,low,"Correction/apology note, not an evaluation of the business.",neutral,high,,agreed_low_conf,neutral
+G0150,positive,high,,positive,high,,agreed,positive
+G0151,positive,high,,positive,high,,agreed,positive
+G0152,positive,high,,positive,high,,agreed,positive
+G0153,negative,high,,negative,high,,agreed,negative
+G0154,negative,low,"Mediocre, friendly servers; could be read as neutral.",negative,low,"Mediocre and overpriced, friendly servers; could be neutral.",agreed_low_conf,negative
+G0155,negative,high,,negative,high,,agreed,negative
+G0156,positive,high,,positive,high,,agreed,positive
+G0157,negative,high,,negative,high,,agreed,negative
+G0158,positive,high,,positive,high,,agreed,positive
+G0159,negative,high,,negative,high,,agreed,negative
+G0160,positive,high,,positive,high,,agreed,positive
+G0161,positive,low,"Food fine, prices awesome, cramped seating accepted as small price.",positive,low,"Jokey; food fine, cheap, cramped; small price to pay.",agreed_low_conf,positive
+G0162,positive,high,,positive,high,,agreed,positive
+G0163,negative,low,Great food versus awful service; lean unclear.,neutral,low,Great food versus awful service; balanced.,needs_review,
+G0164,positive,high,,positive,high,,agreed,positive
+G0165,neutral,low,'Meh' food but great service and 'worth a visit'.,neutral,high,,agreed_low_conf,neutral
+G0166,negative,high,,negative,high,,agreed,negative
+G0167,positive,high,,positive,high,,agreed,positive
+G0168,neutral,low,"Great vibe and service, mediocre food; explicitly middling.",neutral,high,,agreed_low_conf,neutral
+G0169,negative,low,Food good but service bad; recommends elsewhere if in hurry.,negative,low,Good food but bad service; recommends elsewhere for speed.,agreed_low_conf,negative
+G0170,negative,high,,negative,high,,agreed,negative
+G0171,positive,high,,positive,high,,agreed,positive
+G0172,positive,low,"Good, reliable, but 'nothing that surprises'; could be neutral.",positive,low,Good but unremarkable; reasonable and reliable.,agreed_low_conf,positive
+G0173,negative,high,,negative,high,,agreed,negative
+G0174,negative,low,Amazing food but rude staff; ends 'Staff sucks'.,negative,low,Amazing food but rude staff; ends staff sucks.,agreed_low_conf,negative
+G0175,negative,low,"Food gone downhill, but will keep coming for happy hour.",negative,low,"Food gone downhill, still returns for happy hour.",agreed_low_conf,negative
+G0176,negative,high,,negative,high,,agreed,negative
+G0177,positive,high,,positive,high,,agreed,positive
+G0178,ambiguous,low,"Will go back, usually good, but 2 stars and terrible fish.",neutral,low,"Two stars, bad fish, but will go back; balanced.",needs_review,
+G0179,negative,high,,negative,high,,agreed,negative
+G0180,negative,high,,negative,high,,agreed,negative
+G0181,neutral,low,"Standard casino buffet; reasonable, variety; no strong lean.",neutral,high,,agreed_low_conf,neutral
+G0182,positive,high,,positive,high,,agreed,positive
+G0183,positive,high,,positive,high,,agreed,positive
+G0184,negative,high,,negative,high,,agreed,negative
+G0185,positive,high,,positive,high,,agreed,positive
+G0186,positive,high,,positive,high,,agreed,positive
+G0187,positive,high,,positive,high,,agreed,positive
+G0188,positive,high,,positive,high,,agreed,positive
+G0189,negative,low,"Mild personal dislike of coffee, polite; could be neutral.",negative,low,Dislikes coffee but politely framed as personal taste.,agreed_low_conf,negative
+G0190,positive,high,,positive,high,,agreed,positive
+G0191,positive,high,,positive,high,,agreed,positive
+G0192,negative,low,Says 'good' but outdated; wouldn't return unless invited.,neutral,low,Says good but uninnovative; wouldn't return on own.,needs_review,
+G0193,positive,high,,positive,low,"Good food, slow service, but 'I like it'.",agreed_low_conf,positive
+G0194,negative,high,,negative,high,,agreed,negative
+G0195,positive,high,,positive,high,,agreed,positive
+G0196,negative,low,"Dreadful service at this location; likes pizza, recommends other location.",negative,low,"Dreadful service, pizza recommended; advises other location.",agreed_low_conf,negative
+G0197,ambiguous,high,Only a link; no review content.,ambiguous,high,"Not a review, just a link.",ambiguous,ambiguous
+G0198,positive,high,,positive,high,,agreed,positive
+G0199,ambiguous,low,"Conspiracy rant, not a review of this business's experience.",ambiguous,high,"Conspiracy rant, not a review of the business.",ambiguous,ambiguous
+G0200,neutral,low,'Okay' with unfavourable comparison; could lean negative.,neutral,low,Just okay; comparison to other city's food.,agreed_low_conf,neutral
+G0201,positive,high,,positive,high,,agreed,positive
+G0202,positive,high,,positive,high,,agreed,positive
+G0203,negative,high,,negative,high,,agreed,negative
+G0204,positive,high,,positive,high,,agreed,positive
+G0205,positive,high,,positive,high,,agreed,positive
+G0206,negative,high,,negative,high,,agreed,negative
+G0207,negative,high,,negative,high,,agreed,negative
+G0208,negative,high,,negative,high,,agreed,negative
+G0209,neutral,low,"Good sushi but pricey, weird service; overall 'decent' reads lukewarm.",neutral,low,"Good sushi, pricey, weird service, overall decent; lukewarm.",agreed_low_conf,neutral
+G0210,positive,high,,positive,high,,agreed,positive
+G0211,negative,high,,negative,high,,agreed,negative
+G0212,negative,high,,negative,high,,agreed,negative
+G0213,positive,low,"Would absolutely return, but several complaints and lowered expectations.",positive,low,Would absolutely return but lowered expectations; mixed.,agreed_low_conf,positive
+G0214,positive,high,,positive,high,,agreed,positive
+G0215,positive,high,,positive,high,,agreed,positive
+G0216,negative,high,,negative,high,,agreed,negative
+G0217,negative,high,,negative,high,,agreed,negative
+G0218,negative,low,"Place called decent, but manager complaint dominates the review.",negative,low,Decent place but manager ruins the experience.,agreed_low_conf,negative
+G0219,neutral,low,"Food OK, nothing exciting; leans slightly negative on value.",neutral,high,,agreed_low_conf,neutral
+G0220,negative,high,,negative,high,,agreed,negative
+G0221,positive,low,Good local bar but wings only average; mild praise.,positive,low,"Good bar, average wings; mild positive.",agreed_low_conf,positive
+G0222,positive,low,Decent/good overall with slow service complaint; could read lukewarm.,positive,low,Decent with service complaints; lean mildly positive.,agreed_low_conf,positive
+G0223,positive,high,,positive,high,,agreed,positive
+G0224,negative,high,,negative,high,,agreed,negative
+G0225,positive,high,,positive,high,,agreed,positive
+G0226,negative,high,,negative,high,,agreed,negative
+G0227,positive,high,,positive,high,,agreed,positive
+G0228,negative,high,,negative,high,,agreed,negative
+G0229,positive,low,"Ordinary wash, but enthusiastic about the cheap monthly deal.",positive,high,,agreed_low_conf,positive
+G0230,negative,high,,negative,high,,agreed,negative
+G0231,positive,high,,positive,high,,agreed,positive
+G0232,positive,low,Self-described mixed feelings; concludes everything good but overhyped.,positive,low,Explicitly mixed; concludes everything good but overhyped.,agreed_low_conf,positive
+G0233,positive,high,,positive,high,,agreed,positive
+G0234,positive,low,"Food and service good, but much of text is off-target.",positive,low,"Good food and service, quirky crowd; mild lean positive.",agreed_low_conf,positive
+G0235,negative,high,,negative,high,,agreed,negative
+G0236,positive,high,,positive,high,,agreed,positive
+G0237,positive,low,Several mild positives with a wish for more buffet options.,positive,low,Mixed small positives and minor gripes; mild positive lean.,agreed_low_conf,positive
+G0238,positive,high,,positive,high,,agreed,positive
+G0239,positive,high,,positive,high,,agreed,positive
+G0240,positive,high,,positive,high,,agreed,positive
+G0241,negative,high,,negative,high,,agreed,negative
+G0242,negative,high,,negative,high,,agreed,negative
+G0243,negative,low,"Store experience bad; corporate customer service praised, two stars.",negative,low,"Store complaint, but corporate fixed it; two stars.",agreed_low_conf,negative
+G0244,negative,high,,negative,high,,agreed,negative
+G0245,positive,high,,positive,high,,agreed,positive
+G0246,neutral,low,"'It's OKAY'; leans slightly negative, prefers alternatives.",neutral,high,,agreed_low_conf,neutral
+G0247,neutral,low,Mostly factual; possible implied complaint about running out.,neutral,low,Purely factual; mildly critical tone possible.,agreed_low_conf,neutral
+G0248,negative,low,"One good visit, one bad; probably won't order again.",negative,high,,agreed_low_conf,negative
+G0249,positive,high,,positive,high,,agreed,positive
+G0250,positive,high,,positive,high,,agreed,positive
+G0251,negative,low,"Bad service, find better; quick turnaround keeps them using it.",negative,low,"Poor service, find better, but quick and convenient; near neutral.",agreed_low_conf,negative
+G0252,negative,high,,negative,high,,agreed,negative
+G0253,negative,low,Dog-friendliness disappointment dominates; mall otherwise called great.,negative,low,Strong disappointment about dog policy; ends mildly positive for humans.,agreed_low_conf,negative
+G0254,positive,high,,positive,high,,agreed,positive
+G0255,negative,high,,negative,high,,agreed,negative
+G0256,negative,high,,negative,high,,agreed,negative
+G0257,negative,high,,negative,high,,agreed,negative
+G0258,positive,high,,positive,high,,agreed,positive
+G0259,negative,low,"Prefers other events, but concedes family-friendly appeal.",negative,low,"Not impressed, prefers other events, but concedes family friendly.",agreed_low_conf,negative
+G0260,positive,high,,positive,high,,agreed,positive
+G0261,negative,low,"Underwhelming park, nice employees; mild criticism.",negative,high,,agreed_low_conf,negative
+G0262,negative,low,Frustrated it's always closed; no evaluation of food itself.,negative,high,,agreed_low_conf,negative
+G0263,negative,low,"Good food, but poor treatment is the review's focus.",negative,high,,agreed_low_conf,negative
+G0264,positive,low,"Store praised; complaints mostly about the route, off-target.",positive,low,Store praised; route complaints off-target; review barely evaluates the store.,agreed_low_conf,positive
+G0265,negative,low,Main item bland and disappointing; patio and fries praised.,negative,low,Bland food and bad bread outweigh good patio and fries.,agreed_low_conf,negative
+G0266,negative,low,"Gone downhill, mediocre now; suggests maybe an off night.",negative,high,,agreed_low_conf,negative
+G0267,positive,high,,positive,high,,agreed,positive
+G0268,positive,low,"Had a great time, recommends; wouldn't return without a discount.",positive,high,,agreed_low_conf,positive
+G0269,positive,high,,positive,high,,agreed,positive
+G0270,positive,low,"Food disappointed, but awesome setting and plans to return.",positive,low,Food disappointed but ambience great and plans to return.,agreed_low_conf,positive
+G0271,positive,high,,positive,high,,agreed,positive
+G0272,positive,high,,positive,high,,agreed,positive
+G0273,positive,high,,positive,high,,agreed,positive
+G0274,positive,high,,positive,high,,agreed,positive
+G0275,negative,high,,negative,high,,agreed,negative
+G0276,negative,high,,negative,high,,agreed,negative
+G0277,positive,high,,positive,high,,agreed,positive
+G0278,negative,low,"Horrible pizza and dry cheesesteak, but awesome sub.",negative,high,,agreed_low_conf,negative
+G0279,positive,high,,positive,high,,agreed,positive
+G0280,negative,low,"Implicit complaint: assured approval, got credit ding without loan.",negative,high,,agreed_low_conf,negative
+G0281,negative,high,,negative,high,,agreed,negative
+G0282,negative,high,,negative,high,,agreed,negative
+G0283,positive,high,,positive,high,,agreed,positive
+G0284,positive,high,,positive,high,,agreed,positive
+G0285,negative,high,,negative,high,,agreed,negative
+G0286,positive,high,,positive,high,,agreed,positive
+G0287,positive,high,,positive,high,,agreed,positive
+G0288,positive,high,,positive,high,,agreed,positive
+G0289,neutral,low,"Service 'okay/good, could have been better'; lukewarm.",neutral,high,,agreed_low_conf,neutral
+G0290,neutral,high,,neutral,high,,agreed,neutral
+G0291,negative,high,,negative,high,,agreed,negative
+G0292,negative,high,,negative,high,,agreed,negative
+G0293,negative,high,,negative,high,,agreed,negative
+G0294,neutral,low,Mixed; wouldn't mind returning but would check other options first.,negative,low,Complaints dominate but would consider returning; could be neutral.,needs_review,
+G0295,positive,high,,positive,high,,agreed,positive
+G0296,positive,high,,positive,high,,agreed,positive
+G0297,negative,high,,negative,high,,agreed,negative
+G0298,positive,high,,positive,high,,agreed,positive
+G0299,negative,high,,negative,high,,agreed,negative
+G0300,positive,high,,positive,high,,agreed,positive
+G0301,negative,high,,negative,high,,agreed,negative
+G0302,positive,high,,positive,high,,agreed,positive
+G0303,positive,high,,positive,high,,agreed,positive
+G0304,positive,high,,positive,high,,agreed,positive
+G0305,positive,high,,positive,high,,agreed,positive
+G0306,positive,low,Enjoyed own lobster; others' steaks only ok; says 3 stars.,positive,low,"Great lobster, but steaks ok and 3 stars mentioned.",agreed_low_conf,positive
+G0307,positive,low,Mostly mild praise with overpriced caveat; could read as neutral.,positive,low,Mildly positive; overpriced complaint balances somewhat.,agreed_low_conf,positive
+G0308,negative,high,,negative,high,,agreed,negative
+G0309,negative,high,,negative,high,,agreed,negative
+G0310,negative,high,,negative,low,Food fine but annoyed at service and drink situation.,agreed_low_conf,negative
+G0311,positive,high,,positive,high,,agreed,positive
+G0312,positive,high,,positive,high,,agreed,positive
+G0313,negative,high,,negative,high,,agreed,negative
+G0314,positive,high,,positive,high,,agreed,positive
+G0315,ambiguous,high,"Review is in French, not English.",ambiguous,low,Not in English (French).,ambiguous,ambiguous
+G0316,negative,high,,negative,high,,agreed,negative
+G0317,neutral,low,"Good but expensive with alternatives; lukewarm, slight lean either way.",neutral,low,Good but expensive; balanced lean.,agreed_low_conf,neutral
+G0318,positive,high,,positive,high,,agreed,positive
+G0319,positive,high,,positive,high,,agreed,positive
+G0320,negative,high,,negative,high,,agreed,negative
+G0321,neutral,low,"Generic Subway, mild praise for speed; could be mildly positive.",neutral,low,"Generic Subway; convenience only, no strong evaluation.",agreed_low_conf,neutral
+G0322,negative,high,,negative,high,,agreed,negative
+G0323,negative,high,,negative,high,,agreed,negative
+G0324,positive,high,,positive,high,,agreed,positive
+G0325,neutral,low,"Standard, as expected, minor flaws; glad they ate there.",neutral,low,"As expected, standard; glad but others may be better.",agreed_low_conf,neutral
+G0326,positive,high,,positive,high,,agreed,positive
+G0327,positive,high,,positive,high,,agreed,positive
+G0328,positive,high,,positive,high,,agreed,positive
+G0329,positive,high,,positive,high,,agreed,positive
+G0330,positive,high,,positive,high,,agreed,positive
+G0331,positive,low,Short nostalgic praise for apparently closed place.,positive,low,"Nostalgic, fond of the place; no explicit verdict.",agreed_low_conf,positive
+G0332,positive,high,,positive,high,,agreed,positive
+G0333,positive,high,,positive,high,,agreed,positive
+G0334,negative,low,"Usually good, but latest visit and handling bad; ends on complaint.",negative,low,"Usually good, but latest visit bad and rude barista.",agreed_low_conf,negative
+G0335,positive,high,,positive,high,,agreed,positive
+G0336,negative,high,,negative,high,,agreed,negative
+G0337,negative,low,Only implies this place is worse than a competitor.,negative,low,Only a comparison implying this place is worse.,agreed_low_conf,negative
+G0338,negative,high,,negative,high,,agreed,negative
+G0339,positive,high,,positive,high,,agreed,positive
+G0340,positive,high,,positive,high,,agreed,positive
+G0341,negative,high,,negative,high,,agreed,negative
+G0342,positive,high,,positive,high,,agreed,positive
+G0343,negative,high,,negative,high,,agreed,negative
+G0344,positive,high,,positive,high,,agreed,positive
+G0345,positive,low,"Food solid, frequent visits; cost and slow service complaints.",positive,low,"Food solid, regular visits; price and slow service quibbles.",agreed_low_conf,positive
+G0346,negative,high,,negative,high,,agreed,negative
+G0347,positive,high,,positive,high,,agreed,positive
+G0348,positive,high,,positive,high,,agreed,positive
+G0349,negative,high,,negative,high,,agreed,negative
+G0350,negative,high,,negative,high,,agreed,negative
+G0351,neutral,low,"Balanced list of pros and cons, no clear overall lean.",neutral,low,Balanced list of pros and cons.,agreed_low_conf,neutral
+G0352,positive,high,,positive,high,,agreed,positive
+G0353,negative,high,,negative,high,,agreed,negative
+G0354,positive,high,,positive,high,,agreed,positive
+G0355,positive,high,,positive,high,,agreed,positive
+G0356,negative,high,,negative,high,,agreed,negative
+G0357,positive,high,,positive,high,,agreed,positive
+G0358,negative,high,,negative,high,,agreed,negative
+G0359,positive,low,"Drinks and server praised, food meh; recommends for drinks.",positive,low,Liked drinks and server; food meh.,agreed_low_conf,positive
+G0360,positive,high,,positive,high,,agreed,positive
+G0361,negative,high,,negative,high,,agreed,negative
+G0362,ambiguous,high,"Review is in Spanish, not English.",ambiguous,low,Not in English (Spanish); appears positive.,ambiguous,ambiguous
+G0363,negative,high,,negative,low,Food good but long waits drove them to alternatives.,agreed_low_conf,negative
+G0364,neutral,high,,neutral,high,,agreed,neutral
+G0365,negative,high,,negative,high,,agreed,negative
+G0366,negative,high,,negative,low,Food amazing but would never return due to loud music.,agreed_low_conf,negative
+G0367,positive,high,,positive,high,,agreed,positive
+G0368,positive,high,,positive,high,,agreed,positive
+G0369,negative,high,,negative,high,,agreed,negative
+G0370,positive,high,,positive,high,,agreed,positive
+G0371,neutral,high,,neutral,high,,agreed,neutral
+G0372,negative,high,,negative,high,,agreed,negative
+G0373,positive,high,,positive,high,,agreed,positive
+G0374,positive,high,,positive,low,Older but comfy; mildly positive.,agreed_low_conf,positive
+G0375,negative,high,,negative,high,,agreed,negative
+G0376,positive,high,,positive,low,"Enjoyed food, but dismisses the hype.",agreed_low_conf,positive
+G0377,neutral,low,"Good at times, often too pricey, employees okay; lukewarm.",neutral,low,"Lukewarm: good at times, okay employees, pricey.",agreed_low_conf,neutral
+G0378,negative,high,,negative,high,,agreed,negative
+G0379,positive,low,"Clean, spacious, good location; bathroom complaint is lighthearted.",positive,low,"Praise for cleanliness, rooms, location; bathroom quirks humorous.",agreed_low_conf,positive
+G0380,positive,high,,positive,high,,agreed,positive
+G0381,neutral,low,"""Alright""; bad service offset by comp; will try again.",neutral,low,Alright; mixed; will give another shot.,agreed_low_conf,neutral
+G0382,positive,low,"Layout complaints, but calls place nice and cool.",positive,low,"Complaints about gambling tables, but nice and cool overall.",agreed_low_conf,positive
+G0383,positive,high,,positive,high,,agreed,positive
+G0384,ambiguous,low,Unclear whether grease remark is praise or criticism.,ambiguous,low,Could be praise or disgust about grease; unclear.,ambiguous,ambiguous
+G0385,positive,high,,positive,high,,agreed,positive
+G0386,negative,high,,negative,high,,agreed,negative
+G0387,positive,high,,positive,high,,agreed,positive
+G0388,positive,high,,positive,high,,agreed,positive
+G0389,positive,high,,positive,high,,agreed,positive
+G0390,positive,high,,positive,high,,agreed,positive
+G0391,positive,high,,positive,high,,agreed,positive
+G0392,positive,low,Pizza pretty good but nothing special; good for drunk food.,positive,low,"Pretty good, nothing special; positive lean.",agreed_low_conf,positive
+G0393,neutral,low,Brief factual note; fast and inexpensive is mild praise.,neutral,low,"Factual, mild praise of speed and price.",agreed_low_conf,neutral
+G0394,negative,low,"Late, lukewarm pizza; wings good; hesitant about reordering.",negative,high,,agreed_low_conf,negative
+G0395,negative,high,,negative,high,,agreed,negative
+G0396,positive,high,,positive,high,,agreed,positive
+G0397,positive,low,"Faint praise ""less-bad""; recommends visiting; could be neutral.",neutral,low,Less-bad club; faint praise.,needs_review,
+G0398,positive,low,"Ghetto, old music, but had a good time.",positive,low,Insults venue but had a good time.,agreed_low_conf,positive
+G0399,negative,high,,negative,high,,agreed,negative
+G0400,positive,high,,positive,high,,agreed,positive

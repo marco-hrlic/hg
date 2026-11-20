@@ -459,7 +459,7 @@ def load_golden(data_dir: Path = DATA_DIR, allow_draft: bool = True) -> pd.DataF
         source = "human-reviewed"
     elif allow_draft and (GOLDEN_LABELS_DIR / "draft_labels.csv").exists():
         d = pd.read_csv(GOLDEN_LABELS_DIR / "draft_labels.csv", keep_default_na=False)
-        labels = d.loc[d["status"] == "agreed", ["item_id", "draft_label"]].rename(columns={"draft_label": "label"})
+        labels = d.loc[d["status"].str.startswith("agreed"), ["item_id", "draft_label"]].rename(columns={"draft_label": "label"})
         source = "LLM DRAFT (two raters agreed, not yet human-reviewed)"
         warnings.warn("Golden labels are unreviewed LLM drafts. Review golden_labels/ before relying on them.")
     else:
