@@ -54,14 +54,14 @@ def predict_proba(model: torch.nn.Module, X) -> np.ndarray:
 
 
 def plot_history(history: list[dict], title: str = "") -> None:
-    """history: one dict per epoch with train_loss, val_loss, train_acc, val_acc."""
+    """history: one dict per epoch with train_loss, dev_loss, train_acc, dev_acc."""
     epochs = [h["epoch"] for h in history]
     fig, (a1, a2) = plt.subplots(1, 2, figsize=(10, 3.2))
     a1.plot(epochs, [h["train_loss"] for h in history], "o-", label="train")
-    a1.plot(epochs, [h["val_loss"] for h in history], "o-", label="validation")
+    a1.plot(epochs, [h["dev_loss"] for h in history], "o-", label="dev")
     a1.set_xlabel("epoch"); a1.set_ylabel("loss (lower is better)"); a1.legend()
     a2.plot(epochs, [h["train_acc"] for h in history], "o-", label="train")
-    a2.plot(epochs, [h["val_acc"] for h in history], "o-", label="validation")
+    a2.plot(epochs, [h["dev_acc"] for h in history], "o-", label="dev")
     a2.set_xlabel("epoch"); a2.set_ylabel("accuracy"); a2.legend()
     if title:
         fig.suptitle(title)

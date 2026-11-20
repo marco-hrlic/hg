@@ -11,10 +11,14 @@ Files produced under the data directory:
     raw/answer_key.csv          instructor-only: one row per planted problem
     golden/candidates.csv       ~400 reviews from the official *test* split, slice-tagged,
                                 for golden-set curation
-    prepared/                   lab 1's ready-made train/val/test (reference_clean + stratified split)
+    prepared/                   lab 1's ready-made development data: train/dev (reference_clean + stratified split)
     golden/exercise_30.csv      30 of the candidates for the labelling-agreement exercise
     golden/labelling_sheet.csv  blank sheet for collecting human labels
-    heldout/heldout.csv         5,000 clean reviews from the test split. Locked until session 3.
+    heldout/heldout.csv         5,000 clean reviews from the test split, production label mix. Locked:
+                                looked at once at the end of each lab.
+
+Development data (train, dev) and evaluation data (golden, held-out) come from different
+source files and are deduplicated against each other.
 """
 
 from __future__ import annotations
@@ -348,19 +352,21 @@ def reference_clean(raw: pd.DataFrame, near_threshold: float = 0.7) -> tuple[pd.
     return df.drop(columns=["norm"]).reset_index(drop=True), pd.Series(log)
 
 
-def stratified_split(df: pd.DataFrame, fractions=(0.8, 0.1, 0.1), seed: int = 42,
-                     label_col: str = "label") -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
-    """Shuffle each label group separately and cut it 80/10/10, so every split has the same label mix."""
-    parts: dict[str, list] = {"train": [], "val": [], "test": []}
+def stratified_split(df: pd.DataFrame, fractions=(0.9, 0.1), seed: int = 42,
+                     label_col: str = "label") -> tuple[pd.DataFrame, ...]:
+    """Shuffle each label group separately and cut it by `fractions`, so every part has the same label mix.
+
+    The last part takes whatever is left after rounding. Default: train 90% / dev 10%.
+    """
+    parts: list[list[pd.DataFrame]] = [[] for _ in fractions]
     for _, group in df.groupby(label_col):
         group = group.sample(frac=1, random_state=seed)
-        n_train = int(round(len(group) * fractions[0]))
-        n_val = int(round(len(group) * fractions[1]))
-        parts["train"].append(group.iloc[:n_train])
-        parts["val"].append(group.iloc[n_train : n_train + n_val])
-        parts["test"].append(group.iloc[n_train + n_val :])
-    return tuple(pd.concat(p).sample(frac=1, random_state=seed).reset_index(drop=True)
-                 for p in parts.values())
+        start = 0
+        for k, frac in enumerate(fractions):
+            end = len(group) if k == len(fractions) - 1 else start + int(round(len(group) * frac))
+            parts[k].append(group.iloc[start:end])
+            start = end
+    return tuple(pd.concat(p).sample(frac=1, random_state=seed).reset_index(drop=True) for p in parts)
 
 
 def build_all(data_dir: Path = DATA_DIR, seed: int = SEED, force: bool = False) -> dict[str, Path]:
@@ -408,12 +414,13 @@ def build_all(data_dir: Path = DATA_DIR, seed: int = SEED, force: bool = False) 
     heldout["label"] = heldout["stars"].map(stars_to_sentiment)
     heldout.to_csv(paths["heldout"], index=False)
 
-    # Lab 1's ready-made dataset: the reference pipeline applied to the raw pool.
+    # Lab 1's ready-made development data: the reference pipeline applied to the raw pool.
     # It is clean in every way you can check row by row, but the ~600 flipped labels are still in it.
+    # Evaluation data (golden, held-out) comes from the separate Yelp test file, never from this pool.
     clean, _ = reference_clean(raw)
-    train_p, val_p, test_p = stratified_split(clean, seed=42)
-    save_versioned({"train": train_p, "val": val_p, "test": test_p}, paths["prepared"].parent,
-                   note="reference_clean() on raw/reviews_raw.csv, stratified 80/10/10, seed 42")
+    train_p, dev_p = stratified_split(clean, (0.9, 0.1), seed=42)
+    save_versioned({"train": train_p, "dev": dev_p}, paths["prepared"].parent,
+                   note="reference_clean() on raw/reviews_raw.csv, stratified train/dev 90/10, seed 42")
 
     manifest = {name: {"path": str(p.relative_to(data_dir)), "sha256": file_sha256(p),
                        "rows": int(len(pd.read_csv(p)))} for name, p in paths.items() if p.suffix == ".csv"}
@@ -425,10 +432,10 @@ def build_all(data_dir: Path = DATA_DIR, seed: int = SEED, force: bool = False) 
 # Loading, splitting, versioning
 # ---------------------------------------------------------------------------
 
-def load_prepared(data_dir: Path = DATA_DIR) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
-    """Lab 1's ready-made train/val/test splits."""
+def load_prepared(data_dir: Path = DATA_DIR) -> tuple[pd.DataFrame, pd.DataFrame]:
+    """Lab 1's ready-made development data: (train, dev)."""
     s = load_splits(Path(data_dir) / "prepared")
-    return s["train"], s["val"], s["test"]
+    return s["train"], s["dev"]
 
 
 def load_raw(data_dir: Path = DATA_DIR) -> pd.DataFrame:

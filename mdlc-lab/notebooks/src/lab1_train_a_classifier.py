@@ -61,34 +61,36 @@ torch.manual_seed(0);
 # ---
 # ## 2. The data (15 min)
 #
-# Someone has already cleaned this dataset and split it into three parts. (Lab 2: you'll do that
-# yourself, starting from a much messier file.)
+# Someone has already cleaned this dataset and split it for you. (Lab 2: you'll do that yourself,
+# starting from a much messier file.)
 
 # %%
-train, val, test = data.load_prepared()
-print(f"train {len(train):,}   validation {len(val):,}   test {len(test):,}")
+train, dev = data.load_prepared()
+print(f"train {len(train):,}   dev {len(dev):,}")
 train.sample(5, random_state=3)[["stars", "label", "text"]]
 
 # %% [markdown]
-# ### Why three splits?
+# ### Development data and evaluation data
 #
-# | Split | Used for | How often we look |
-# |---|---|---|
-# | **train** | the model learns from these | constantly |
-# | **validation** | we compare models and settings on these | as often as we like |
-# | **test** | the final, honest score | **once**, at the very end |
+# | | Set | Used for | How often we look |
+# |---|---|---|---|
+# | **Development** | **train** | the model learns from these | constantly |
+# | | **dev** | we compare models and settings on these | as often as we like |
+# | **Evaluation** | **held-out** | the final, honest score on realistic data | **once**, at the very end |
+# | | **golden** | quality on hard cases, with carefully checked labels | rarely |
 #
 # The model must be scored on reviews it has never seen, otherwise we're measuring memory rather
 # than understanding. And every time *we* look at a score and change something in response, that
-# set leaks into our decisions. That's why the test set is touched only once.
+# set leaks into our decisions. The dev set absorbs that; the evaluation sets are kept clean by
+# looking at them as little as possible. The evaluation sets also come from a **separate source
+# file**, checked so that no review in them is a copy of one in the development data.
 
 # %% [markdown]
 # ### Class balance
 # How are the labels distributed?
 
 # %%
-mix = pd.DataFrame({name: df.label.value_counts(normalize=True)
-                    for name, df in [("train", train), ("validation", val), ("test", test)]})
+mix = pd.DataFrame({name: df.label.value_counts(normalize=True) for name, df in [("train", train), ("dev", dev)]})
 mix.loc[list(LABELS)].plot.bar(figsize=(7, 3), rot=0, title="label mix per split")
 plt.ylabel("share of reviews"); plt.show()
 mix.round(3)
@@ -98,9 +100,9 @@ mix.round(3)
 #
 # 1. **The classes are imbalanced.** Most reviews are positive and only about 1 in 9 is neutral.
 #    That's normal for real data, and it changes how we must measure success (next section).
-# 2. **Every split has the same mix.** That's on purpose. The split was *stratified*: each label was
-#    divided 80/10/10 separately. A careless split can easily put most of the neutral reviews in
-#    train and almost none in test.
+# 2. **Train and dev have the same mix.** That's on purpose. The split was *stratified*: each label
+#    was divided 90/10 separately. A careless split can easily put most of the neutral reviews in
+#    train and almost none in dev.
 
 # %% [markdown]
 # ---
@@ -119,9 +121,9 @@ baselines = {
 }
 scoreboard = []
 for name, m in baselines.items():
-    pred = m.predict(val.text)
-    scoreboard.append({"model": name, "accuracy": metrics.accuracy(val.label, pred),
-                       "macro_f1": metrics.macro_f1(val.label, pred)})
+    pred = m.predict(dev.text)
+    scoreboard.append({"model": name, "accuracy": metrics.accuracy(dev.label, pred),
+                       "macro_f1": metrics.macro_f1(dev.label, pred)})
 pd.DataFrame(scoreboard).set_index("model").round(3)
 
 # %% [markdown]
@@ -143,8 +145,8 @@ def show_confusion(y_true, y_pred, title=""):
     print(title)
     display(df)
 
-show_confusion(val.label, baselines["majority"].predict(val.text), "majority baseline")
-show_confusion(val.label, baselines["lexicon"].predict(val.text), "lexicon baseline")
+show_confusion(dev.label, baselines["majority"].predict(dev.text), "majority baseline")
+show_confusion(dev.label, baselines["lexicon"].predict(dev.text), "lexicon baseline")
 
 # %% [markdown]
 # **The bar:** macro-F1 ≈ 0.50 from a word list someone wrote in ten minutes.
@@ -165,15 +167,14 @@ show_confusion(val.label, baselines["lexicon"].predict(val.text), "lexicon basel
 # %%
 vectorizer = TfidfVectorizer(max_features=20_000, ngram_range=(1, 2), min_df=2, sublinear_tf=True)
 X_train = vectorizer.fit_transform(train.text)  # learn the vocabulary from TRAIN ONLY
-X_val = vectorizer.transform(val.text)
-X_test = vectorizer.transform(test.text)
-y_train, y_val, y_test = encode_labels(train.label), encode_labels(val.label), encode_labels(test.label)
+X_dev = vectorizer.transform(dev.text)
+y_train, y_dev = encode_labels(train.label), encode_labels(dev.label)
 print("train matrix:", X_train.shape, f"({X_train.nnz / X_train.shape[0]:.0f} non-zero slots per review on average)")
 
 # %% [markdown]
 # > **Data-handling rule:** the vectorizer is *fitted* on the training set only, then *applied* to
-# > validation and test. If we built the vocabulary from all the data, information about the test
-# > set would leak into the model's inputs. Every step that learns something from data follows this
+# > everything else. If we built the vocabulary from all the data, information about the dev and
+# > evaluation sets would leak into the model's inputs. Every step that learns something from data follows this
 # > rule.
 #
 # Here is what one review looks like to the network:
@@ -219,8 +220,8 @@ print(model, f"\n\n{n_params:,} weights")
 # Before training, the weights are random, so its "opinions" are noise:
 
 # %%
-probs = predict_proba(model, X_val[:3])
-pd.DataFrame(probs, columns=LABELS).assign(truth=val.label[:3].values, text=val.text[:3].str[:80].values).round(3)
+probs = predict_proba(model, X_dev[:3])
+pd.DataFrame(probs, columns=LABELS).assign(truth=dev.label[:3].values, text=dev.text[:3].str[:80].values).round(3)
 
 # %% [markdown]
 # ---
@@ -259,7 +260,7 @@ def train_step(model, optimizer, loss_fn, xb, yb) -> torch.Tensor:
 
 # %%
 def fit(model, epochs=5, lr=1e-3, batch_size=64, loss_fn=None, verbose=True):
-    """Train, recording train/val loss and accuracy after each epoch. Keeps the best epoch's weights."""
+    """Train, recording train/dev loss and accuracy after each epoch. Keeps the best epoch's weights."""
     loss_fn = loss_fn or torch.nn.CrossEntropyLoss()
     optimizer = torch.optim.Adam(model.parameters(), lr=lr)
     history, best = [], (float("inf"), None)
@@ -267,15 +268,15 @@ def fit(model, epochs=5, lr=1e-3, batch_size=64, loss_fn=None, verbose=True):
         for xb, yb in batches(X_train, y_train, batch_size, seed=epoch):
             train_step(model, optimizer, loss_fn, xb, yb)
         tr_loss, tr_acc = evaluate(model, X_train, y_train, loss_fn)
-        va_loss, va_acc = evaluate(model, X_val, y_val, loss_fn)
-        history.append(dict(epoch=epoch, train_loss=tr_loss, val_loss=va_loss, train_acc=tr_acc, val_acc=va_acc))
+        va_loss, va_acc = evaluate(model, X_dev, y_dev, loss_fn)
+        history.append(dict(epoch=epoch, train_loss=tr_loss, dev_loss=va_loss, train_acc=tr_acc, dev_acc=va_acc))
         if verbose:
-            print(f"epoch {epoch}: train loss {tr_loss:.3f} acc {tr_acc:.3f} | val loss {va_loss:.3f} acc {va_acc:.3f}")
+            print(f"epoch {epoch}: train loss {tr_loss:.3f} acc {tr_acc:.3f} | dev loss {va_loss:.3f} acc {va_acc:.3f}")
         if va_loss < best[0]:
             best = (va_loss, copy.deepcopy(model.state_dict()), epoch)
     model.load_state_dict(best[1])
     if verbose:
-        print(f"kept the weights from epoch {best[2]} (lowest validation loss)")
+        print(f"kept the weights from epoch {best[2]} (lowest dev loss)")
     return history
 
 # %%
@@ -297,11 +298,11 @@ plot_history(history, "hidden=32, lr=0.001")
 # %% [markdown]
 # ### Reading the curves
 # - **Training loss** keeps falling: the model fits the training reviews better and better.
-# - **Validation loss** falls, bottoms out after an epoch or two, then **rises**. From that point on,
+# - **Dev loss** falls, bottoms out after an epoch or two, then **rises**. From that point on,
 #   the model is memorising quirks of the training reviews that don't carry over to new ones.
 #   That's **overfitting**.
-# - That's why `fit` keeps the weights from the epoch with the lowest validation loss. This is
-#   called **early stopping**, and it's only possible because we have a validation set.
+# - That's why `fit` keeps the weights from the epoch with the lowest dev loss. This is called
+#   **early stopping**, and it's only possible because we have a dev set.
 
 # %% [markdown]
 # ### Experiments (pick two, ~20 s each)
@@ -328,12 +329,12 @@ plot_history(fit(experiment, epochs=8, lr=1e-3, verbose=False), "experiment: hid
 def predict_labels(model, X):
     return [LABELS[i] for i in predict_proba(model, X).argmax(axis=1)]
 
-val_pred = predict_labels(model, X_val)
-scoreboard.append({"model": "network (ours)", "accuracy": metrics.accuracy(val.label, val_pred),
-                   "macro_f1": metrics.macro_f1(val.label, val_pred)})
+dev_pred = predict_labels(model, X_dev)
+scoreboard.append({"model": "network (ours)", "accuracy": metrics.accuracy(dev.label, dev_pred),
+                   "macro_f1": metrics.macro_f1(dev.label, dev_pred)})
 display(pd.DataFrame(scoreboard).set_index("model").round(3))
-show_confusion(val.label, val_pred, "network, validation set")
-metrics.classification_report(val.label, val_pred)
+show_confusion(dev.label, dev_pred, "network, dev set")
+metrics.classification_report(dev.label, dev_pred)
 
 # %% [markdown]
 # **Discuss:**
@@ -345,16 +346,19 @@ metrics.classification_report(val.label, val_pred)
 # - Remember your answer from section 1: which off-diagonal cell is the expensive mistake?
 #   How many of those are there?
 #
-# ### The test set: once
-# We've made our choices using validation. Now the honest number:
+# ### The held-out set: once
+# We've made all our choices using the dev set. Now the honest number, on 5,000 reviews from a
+# separate source that nothing so far has touched. The loader makes you say you mean it.
 
 # %%
-test_pred = predict_labels(model, X_test)
-print(f"TEST  accuracy {metrics.accuracy(test.label, test_pred):.3f}   macro-F1 {metrics.macro_f1(test.label, test_pred):.3f}")
+heldout = data.load_heldout(i_am_done_iterating=True)
+heldout_pred = predict_labels(model, vectorizer.transform(heldout.text))
+print(f"HELD-OUT  accuracy {metrics.accuracy(heldout.label, heldout_pred):.3f}   "
+      f"macro-F1 {metrics.macro_f1(heldout.label, heldout_pred):.3f}")
 
 # %% [markdown]
-# If it's close to the validation score, good: our choices didn't overfit to the validation set.
-# Don't go back and tune now. If you did, the test set would become just another validation set.
+# If it's close to the dev score, good: our choices didn't overfit to the dev set.
+# Don't go back and tune now. If you did, the held-out set would become just another dev set.
 
 # %% [markdown]
 # ---
@@ -410,14 +414,19 @@ classify(
 )
 
 # %% [markdown]
-# A more systematic check: reviews from a separate pool, tagged by the kind of difficulty they
-# contain (**slices**). The overall score is an average, and averages hide weak spots.
+# A more systematic check: the **golden set**. It's a few hundred reviews, picked on purpose to
+# contain hard cases, whose labels were checked against a written guideline rather than taken from
+# the stars. Each review is tagged with the kind of difficulty it contains (**slices**). The
+# overall score is an average, and averages hide weak spots. (Lab 2: how a golden set is built.)
 
 # %%
-hard = data.load_golden_candidates()
-hard["label"] = hard.star_label  # star labels for now. Lab 2 replaces these with human-checked labels
-hard["pred"] = predict_labels(model, vectorizer.transform(hard.text))
-metrics.slice_report(hard, "label", "pred").sort_values("macro_f1")
+import warnings
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore")
+    golden = data.load_golden()
+print(f"{len(golden)} golden reviews, labels: {golden.attrs['label_source']}")
+golden["pred"] = predict_labels(model, vectorizer.transform(golden.text))
+metrics.slice_report(golden, "label", "pred").sort_values("macro_f1")
 
 # %% [markdown]
 # ---
@@ -439,7 +448,7 @@ print("saved to", out)
 #
 # In under two hours you:
 # - trained a neural network that beats a hand-written rule by a wide margin,
-# - learned why we split data three ways and why the test set is touched once,
+# - learned why development and evaluation data are kept apart, and why the held-out set is touched once,
 # - saw overfitting happen and stopped it early,
 # - learned why accuracy lies when classes are imbalanced,
 # - found the cases where it fails.
@@ -447,7 +456,7 @@ print("saved to", out)
 # **And now the uncomfortable part.** The "prepared" dataset you trained on started life as an
 # export with **seven kinds of problems** in it, including about **600 reviews whose star ratings
 # were flipped** (a glowing 5 ★ review stored as 1 ★). Those wrong labels are still in your
-# training data. Your model learned from them, and your validation score was measured against them.
+# training data. Your model learned from them, and your dev score was measured against them.
 #
 # **Lab 2:** start from the raw export, find what's wrong with it, learn the maths of what `fit`
 # just did, and retrain a better model on data you can trust.
