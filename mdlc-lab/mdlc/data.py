@@ -442,6 +442,34 @@ def load_golden_candidates(data_dir: Path = DATA_DIR) -> pd.DataFrame:
     return df
 
 
+GOLDEN_LABELS_DIR = LAB_ROOT / "golden_labels"
+
+
+def load_golden(data_dir: Path = DATA_DIR, allow_draft: bool = True) -> pd.DataFrame:
+    """The golden set: candidates joined with their checked labels.
+
+    Uses golden_labels/golden_labels.csv (human-reviewed, columns item_id,label) when it exists.
+    Otherwise, with allow_draft, falls back to the LLM draft labels the two raters agreed on,
+    and warns that they have not been reviewed yet. Items labelled `ambiguous` are excluded.
+    """
+    cands = load_golden_candidates(data_dir)
+    final = GOLDEN_LABELS_DIR / "golden_labels.csv"
+    if final.exists():
+        labels = pd.read_csv(final, keep_default_na=False)[["item_id", "label"]]
+        source = "human-reviewed"
+    elif allow_draft and (GOLDEN_LABELS_DIR / "draft_labels.csv").exists():
+        d = pd.read_csv(GOLDEN_LABELS_DIR / "draft_labels.csv", keep_default_na=False)
+        labels = d.loc[d["status"] == "agreed", ["item_id", "draft_label"]].rename(columns={"draft_label": "label"})
+        source = "LLM DRAFT (two raters agreed, not yet human-reviewed)"
+        warnings.warn("Golden labels are unreviewed LLM drafts. Review golden_labels/ before relying on them.")
+    else:
+        raise FileNotFoundError(f"no golden labels in {GOLDEN_LABELS_DIR}")
+    df = cands.merge(labels, on="item_id")
+    df = df[df["label"].isin(LABELS)].reset_index(drop=True)
+    df.attrs["label_source"] = source
+    return df
+
+
 def load_heldout(data_dir: Path = DATA_DIR, *, i_am_done_iterating: bool = False) -> pd.DataFrame:
     """The locked test set. Look at it once, at the end, after every decision is made."""
     if not i_am_done_iterating:
@@ -493,6 +521,6 @@ def load_splits(split_dir: Path) -> dict[str, pd.DataFrame]:
 
 __all__ = [
     "LABELS", "build_all", "download_yelp", "find_near_duplicates", "load_golden_candidates",
-    "load_heldout", "load_prepared", "load_raw", "reference_clean", "stratified_split", "load_splits", "save_versioned", "score_findings", "stars_to_sentiment",
+    "load_golden", "load_heldout", "load_prepared", "load_raw", "reference_clean", "stratified_split", "load_splits", "save_versioned", "score_findings", "stars_to_sentiment",
     "NEGATIVE_HINTS", "POSITIVE_HINTS",
 ]
