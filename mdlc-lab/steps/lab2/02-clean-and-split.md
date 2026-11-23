@@ -28,7 +28,8 @@ How many of the 20,700 rows will survive cleaning?
 >
 > Map stars to labels (1–2 negative, 3 neutral, 4–5 positive). Log how many rows each rule removes.
 > Then do a stratified 90/10 split with a fixed seed into `outputs/train.csv` and `outputs/dev.csv`
-> (`review_id,text,label`). Save a manifest with row counts, label mix and a hash of each file.
+> (`review_id,text,label`). Save `outputs/manifest.json` with row counts, label mix and a SHA-256
+> hash of each file.
 
 ## Verify
 `lab check 2.2` runs a dozen checks: leakage, duplicates across the split, stratification.

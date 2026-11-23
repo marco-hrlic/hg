@@ -55,6 +55,22 @@ report: explicit file names for the saved model and vectorizer, id-column conven
 writing to their own folder and staying under ~2 minutes each, a hint for finding a network's
 strongest words, and a real fit-on-train-only check.
 
+## Agent dry run (lab 2)
+An agent completed steps 2.1–2.8 from the cards alone; every check passed. What it taught us:
+- **Compare like with like.** Its own lab 2 candidates didn't beat the lab 1 *reference* model on
+  golden (0.704–0.714 vs 0.719), while held-out improved (0.695 → 0.717). Implementations differ by a
+  few points, which is as large as the effects we're measuring. Step 2.8 now retrains lab 1's recipe
+  as **candidate 0 in the same script with the same seeds**, and `lab check 2.8` reports each
+  candidate's difference from it against the seed noise. This is a strong teaching moment: if
+  someone's results are "within noise", that *is* the finding.
+- The source also escapes quotes (`\"`), not just newlines. Cleaning now decodes both, and check 2.2
+  fails if escapes remain.
+- Lab 2 no longer depends on lab 1's code: step 2.5 has the agent write one reusable `train()`
+  function (with a "should take under a minute" hint) that 2.6 and 2.8 reuse.
+- Agent-written training can be slow (3.5 min per run in the dry run vs ~20 s in the reference). The
+  cards now give the exact settings and the sparse-to-dense hint. Steps 2.5, 2.6 and 2.8 should run
+  in the background while you introduce the next concept.
+
 ## Self-study material
 `notebooks/` has the same content as two worked notebooks (solutions in `solutions/`). Good
 for participants who want to read the full code afterwards, or for preparing the session.

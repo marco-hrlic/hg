@@ -222,7 +222,8 @@ def cmd_submit(args) -> None:
         pred = align(pred_all, truth, "held-out")
         append_log({**entry, **summary(truth, pred)})  # log before showing anything
         print_scores(truth, pred, f"HELD-OUT: {args.name}")
-        print(f"\nHeld-out submissions used: {len(used) + 1} (allowance: one per lab).")
+        print(f"\nHeld-out looks used so far: {len(used) + 1} of {HELDOUT_ALLOWANCE} "
+              f"(one per lab; this includes earlier labs: {', '.join(e['name'] for e in used) or 'none'}).")
     else:
         g = golden_truth()
         truth = g.set_index("item_id")["label"]
@@ -426,6 +427,11 @@ def check_2_2() -> bool:
          "conflicting duplicates dropped (all copies)", "texts with conflicting labels are still there")
     test(not both.text.str.contains(r"<[a-z/][^>]*>|&[a-z#0-9]+;", regex=True).any(),
          "no HTML left in the text", "HTML tags or entities still in the text")
+    escaped = both.text.str.contains("\\n", regex=False) | both.text.str.contains('\\"', regex=False)
+    test(escaped.mean() < 0.01, "escaped characters (\\n, \\\") decoded",
+         f"{escaped.sum():,} texts still contain literal \\n or \\\" escapes from the source")
+    test(ws("outputs", "manifest.json").exists(), "manifest.json written", "no outputs/manifest.json (row counts, label mix, hashes)",
+         fatal=False)
     norm = both.text.map(text.normalize_for_dedup)
     test(not norm.duplicated().any(), "no exact duplicates (after normalising)",
          f"{norm.duplicated().sum()} exact duplicates remain")
@@ -539,10 +545,26 @@ def check_2_8() -> bool:
     log = pd.DataFrame(load_log())
     if log.empty:
         raise CheckFailed("no submissions yet")
-    print(log[[c for c in ["set", "name", "accuracy", "macro_f1"] if c in log]].to_string(index=False))
-    n_golden = (log.set == "golden").sum()
-    say(OK if n_golden >= 2 else FAIL, f"{n_golden} golden submissions (lab 1 model and at least one lab 2 model)")
-    return n_golden >= 2
+    golden = log[log.set == "golden"].copy()
+    golden["candidate"] = golden.name.str.replace(r"-s\d+$", "", regex=True)
+    table = golden.groupby("candidate", sort=False).macro_f1.agg(["count", "mean", "std", "min", "max"]).round(3)
+    heading("golden macro-F1 per candidate (seeds grouped by the -sN suffix)")
+    print(table.to_string())
+    seeded = table[table["count"] >= 2]
+    if "0" not in seeded.index:
+        say(FAIL, "no candidate 0 with several seeds: the lab 1 recipe retrained in the same script is the fair baseline")
+        return False
+    base = seeded.loc["0"]
+    noise = float(seeded["std"].max())
+    for cand, row in seeded.drop(index="0").iterrows():
+        diff = row["mean"] - base["mean"]
+        verdict = "clearly better" if diff > 2 * noise else "clearly worse" if diff < -2 * noise else "within noise"
+        say(OK, f"{cand}: {diff:+.3f} vs candidate 0 ({verdict}; seed std up to {noise:.3f})")
+    held = log[log.set == "heldout"]
+    print("\n" + held[["name", "accuracy", "macro_f1"]].to_string(index=False))
+    ok = len(held) >= 1 and len(seeded) >= 2
+    say(OK if ok else FAIL, "candidates compared and held-out submitted" if ok else "submit the chosen model to held-out")
+    return ok
 
 
 CHECKS = {"1.2": check_1_2, "1.4": check_1_4, "1.5": check_1_5, "1.6": check_1_6, "1.7": check_1_7,

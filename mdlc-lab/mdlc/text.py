@@ -24,7 +24,8 @@ def clean_text(text: object) -> str:
         return ""
     t = html.unescape(text)
     t = _TAG_RE.sub(" ", t)
-    t = t.replace("\\n", " ")  # the source escapes newlines as a literal backslash-n
+    t = t.replace("\\n", " ")  # the source escapes newlines as a literal backslash-n...
+    t = t.replace('\\"', '"')  # ...and quotes as a literal backslash-quote
     return _WS_RE.sub(" ", t).strip()
 
 

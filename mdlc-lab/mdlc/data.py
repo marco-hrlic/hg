@@ -209,7 +209,7 @@ GLOBAL_ISSUES = {
     "sorted_by_label": "The file is sorted by star rating, so taking the first 80% as train skews every split.",
     "leaky_column": "stars_display is the label written as stars. It must never be used as a feature.",
     "class_imbalance": "About 63% positive, 25% negative, 12% neutral. Accuracy alone is misleading.",
-    "escaped_newlines": "The source escapes newlines as a literal backslash-n.",
+    "escaped_characters": "The source escapes newlines as a literal backslash-n and quotes as backslash-quote.",
 }
 
 

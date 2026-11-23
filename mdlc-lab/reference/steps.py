@@ -148,8 +148,8 @@ def step_2_2():
     clean, _ = data.reference_clean(raw)
     train, dev = data.stratified_split(clean, (0.9, 0.1), seed=42)
     cols = ["review_id", "text", "label"]
-    train[cols].to_csv(OUT / "train.csv", index=False)
-    dev[cols].to_csv(OUT / "dev.csv", index=False)
+    data.save_versioned({"train": train[cols], "dev": dev[cols]}, OUT,
+                        note="reference_clean + stratified 90/10, seed 42")  # writes the CSVs + manifest.json
 
 
 def lab2_data():
@@ -201,15 +201,29 @@ def step_2_7():
 
 
 def step_2_8():
+    """Candidates 0 (lab 1 recipe), A (class weights), B (A + suspects removed), C (B + synthetic); seeds 0-2."""
     train, dev = lab2_data()
     if not (OUT / "suspects.csv").exists():
         step_2_6()
+    if not (OUT / "synthetic.csv").exists():
+        step_2_7()
     suspects = set(pd.read_csv(OUT / "suspects.csv").review_id)
-    clean = train[~train.review_id.isin(suspects)]
-    model, vec, _ = fit(clean, dev, class_weights=class_weights(clean, "sqrt_inverse"))
+    synthetic = pd.read_csv(OUT / "synthetic.csv")[["text", "label"]]
+    cleaned = train[~train.review_id.isin(suspects)]
+    candidates = {
+        "0": (train, None),
+        "A": (train, class_weights(train, "sqrt_inverse")),
+        "B": (cleaned, class_weights(cleaned, "sqrt_inverse")),
+        "C": (pd.concat([cleaned, synthetic], ignore_index=True), class_weights(cleaned, "sqrt_inverse")),
+    }
     golden, heldout = eval_texts()
-    write_preds(golden.item_id, labels_of(model, vec.transform(golden.text)), "golden_lab2.csv")
-    write_preds(heldout.review_id, labels_of(model, vec.transform(heldout.text)), "heldout_lab2.csv")
+    for name, (df, w) in candidates.items():
+        for seed in range(3):
+            model, vec, _ = fit(df, dev, seed=seed, class_weights=w)
+            write_preds(golden.item_id, labels_of(model, vec.transform(golden.text)), f"golden_{name}_s{seed}.csv")
+            if seed == 0:
+                write_preds(heldout.review_id, labels_of(model, vec.transform(heldout.text)), f"heldout_{name}_s0.csv")
+            print(f"candidate {name} seed {seed} done", flush=True)
 
 
 STEPS = {k.removeprefix("step_").replace("_", "."): v for k, v in dict(globals()).items() if k.startswith("step_")}

@@ -25,7 +25,9 @@ Loss of a model that answers 1/3 for every class? What happens with a learning r
 > be a scipy sparse matrix, Y one-hot), plus `train_linear(X, y, lr, steps)` using plain gradient
 > descent. Verify the gradient against PyTorch autograd on a small batch. Then train on our TF-IDF
 > features (from `outputs/train.csv`) with learning rates [DECISION: try three, e.g. 1, 10, 25],
-> plot the loss curves to `outputs/lr_curves.png`, and compare the best with lab 1's network on dev.
+> plot the loss curves to `outputs/lr_curves.png`, and report the best one's dev accuracy and macro-F1.
+
+Compare it with your lab 1 network's dev macro-F1 (in your notes; the reference was about 0.68).
 
 ## Verify
 `lab check 2.4` tests your functions, including against PyTorch's own gradients.

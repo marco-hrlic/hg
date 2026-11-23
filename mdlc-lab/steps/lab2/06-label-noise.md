@@ -11,8 +11,8 @@ That's **out-of-fold** prediction, the idea behind **cross-validation**.
 Of the 600 most surprising reviews, how many will be planted flips?
 
 ## Prompt
-> Find likely mislabelled reviews in `outputs/train.csv` with 2-fold out-of-fold loss: train the
-> network on one half, compute each review's cross-entropy loss on the other half, swap. Save the
+> Find likely mislabelled reviews in `outputs/train.csv` with 2-fold out-of-fold loss, using
+> `train()` from `src/train2.py`: train on one half, compute each review's cross-entropy loss on the other half, swap. Save the
 > 600 highest-loss reviews to `outputs/suspects.csv` (`review_id,loss`) and show me the top 10 with
 > their text and label. Explain why we didn't just train once on everything and use training loss.
 

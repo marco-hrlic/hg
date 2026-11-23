@@ -16,9 +16,16 @@ weigh negative higher.
 With inverse-frequency weights, what happens to neutral recall? To positive recall? To macro-F1?
 
 ## Prompt
-> Using `outputs/train.csv` and `outputs/dev.csv`, retrain the lab 1 network with class-weighted
-> cross-entropy, three times: no weights, square-root inverse frequency, inverse frequency. For each
-> run, record dev macro-F1 and recall per class in `outputs/class_weights.csv` with columns
+> Write `src/train2.py` with a reusable function `train(train_df, dev_df, class_weights=None, seed=0)`
+> that trains the same network as lab 1: TF-IDF (20,000 terms, words and two-word phrases) fitted on
+> `train_df` only; Linear → 32 → ReLU → Linear → 3; Adam, learning rate 0.001; batches of 64; 6 epochs;
+> keep the epoch with the best dev macro-F1. It returns the model and vectorizer. Each run should take
+> under a minute on a laptop CPU; if it's much slower, find out why (hint: convert only one batch at a
+> time from sparse to dense). Steps 2.6 and 2.8 reuse this function.
+>
+> Then, on `outputs/train.csv` and `outputs/dev.csv`, train it three times with class-weighted
+> cross-entropy: no weights, square-root inverse frequency, inverse frequency. Record dev macro-F1 and
+> recall per class in `outputs/class_weights.csv` with columns
 > `weighting,dev_macro_f1,recall_negative,recall_neutral,recall_positive`. Show me the weights you
 > computed, and explain what the weighted loss formula does.
 
