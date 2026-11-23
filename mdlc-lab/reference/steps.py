@@ -59,15 +59,15 @@ def fit(train, dev, seed=0, **kw):
     return model, vec, hist
 
 
-def save_model(model, vec, name):
-    torch.save(model.state_dict(), OUT / f"{name}.pt")
-    (OUT / f"{name}_vectorizer.pkl").write_bytes(pickle.dumps(vec))
+def save_model(model, vec):
+    torch.save(model.state_dict(), OUT / "model.pt")
+    (OUT / "vectorizer.pkl").write_bytes(pickle.dumps(vec))
 
 
-def load_model(name):
-    vec = pickle.loads((OUT / f"{name}_vectorizer.pkl").read_bytes())
+def load_model():
+    vec = pickle.loads((OUT / "vectorizer.pkl").read_bytes())
     m = torch.nn.Sequential(torch.nn.Linear(len(vec.vocabulary_), 32), torch.nn.ReLU(), torch.nn.Linear(32, 3))
-    m.load_state_dict(torch.load(OUT / f"{name}.pt"))
+    m.load_state_dict(torch.load(OUT / "model.pt"))
     return m, vec
 
 
@@ -85,7 +85,7 @@ def step_1_4():
     model, vec, hist = fit(train, dev, epochs=6)
     pd.DataFrame(hist).to_csv(OUT / "training_log.csv", index=False)
     write_preds(dev.review_id, labels_of(model, vec.transform(dev.text)), "dev_network.csv")
-    save_model(model, vec, "model_lab1")
+    save_model(model, vec)
 
 
 def step_1_5():
@@ -103,18 +103,18 @@ def step_1_5():
 
 
 def step_1_6():
-    if not (OUT / "model_lab1.pt").exists():
+    if not (OUT / "model.pt").exists():
         step_1_4()
-    model, vec = load_model("model_lab1")
+    model, vec = load_model()
     golden, heldout = eval_texts()
     write_preds(golden.item_id, labels_of(model, vec.transform(golden.text)), "golden_lab1.csv")
     write_preds(heldout.review_id, labels_of(model, vec.transform(heldout.text)), "heldout_lab1.csv")
 
 
 def step_1_7():
-    if not (OUT / "model_lab1.pt").exists():
+    if not (OUT / "model.pt").exists():
         step_1_4()
-    model, vec = load_model("model_lab1")
+    model, vec = load_model()
     tries = [("Not bad at all, actually.", "positive"),
              ("Oh great, another 45 minute wait for a cold burger. Fantastic.", "negative"),
              ("Food was amazing but the service was so rude I'm never coming back.", "negative"),

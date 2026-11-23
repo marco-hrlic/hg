@@ -12,7 +12,10 @@ Results also vary from run to run, because the starting weights and batch order 
 Before **each** experiment, write the prediction in the `predicted` column (see below).
 
 ## Prompt
-> Make `src/train.py` configurable from the command line (hidden size, learning rate, epochs, seed).
+> Make `src/train.py` configurable from the command line (hidden size, learning rate, epochs, seed,
+> and an output tag). Experiment runs must **not** overwrite `outputs/dev_network.csv`, `model.pt` or
+> `vectorizer.pkl` from step 1.4: write them under `outputs/experiments/` instead. Keep each run
+> under ~2 minutes (hidden size ≤ 256, ≤ 8 epochs); run longer ones in the background.
 > Then run these experiments, one change at a time from our current settings, and append one row per
 > run to `outputs/experiments.csv` with columns `experiment,change,predicted,dev_macro_f1,notes`.
 > I'll give you the prediction for each before you run it:

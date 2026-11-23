@@ -292,6 +292,7 @@ def check_1_4() -> bool:
                 "overfitting. Did you keep the weights from the best epoch?")
     else:
         say(WARN, "dev loss still falling at the last epoch: try more epochs to see where it turns")
+    _check_vectorizer_fitted_on_train()
     truth = _dev_truth_lab1()
     f1 = _dev_f1("dev_network.csv", truth)
     acc = metrics.accuracy(truth, align(read_predictions(ws("outputs", "dev_network.csv")), truth, "dev"))
@@ -305,6 +306,46 @@ def check_1_4() -> bool:
     say(OK if ok else FAIL, f"beats the best baseline ({best_base:.3f})" if ok
         else f"doesn't beat the best baseline ({best_base:.3f}) yet")
     return ok
+
+
+def _check_vectorizer_fitted_on_train() -> None:
+    """Verify the vectorizer learned only from train.
+
+    Two tests: every vocabulary term must occur in train, and, for TF-IDF, every stored IDF must equal
+    the IDF recomputed from train alone (IDF depends on how many documents were seen and which
+    contained the term, so fitting on train + dev changes it even when the vocabulary looks the same).
+    """
+    import pickle
+    from collections import Counter
+    path = ws("outputs", "vectorizer.pkl")
+    if not path.exists():
+        raise CheckFailed("missing outputs/vectorizer.pkl (the fitted vectorizer, pickled)")
+    try:
+        vec = pickle.loads(path.read_bytes())
+        analyze = vec.build_analyzer()
+        vocab = vec.vocabulary_
+    except Exception:  # not a scikit-learn vectorizer: can't verify, don't block
+        say(WARN, "couldn't inspect vectorizer.pkl (not a scikit-learn vectorizer?): fit-on-train not verified")
+        return
+    train = pd.read_csv(ws("data", "lab1", "train.csv"), keep_default_na=False).text
+    df = Counter()
+    for t in train:
+        df.update(set(analyze(t)))
+    outside = [term for term in vocab if term not in df]
+    if outside:
+        raise CheckFailed(f"{len(outside)} vocabulary terms never occur in train (e.g. {sorted(outside)[:3]}): "
+                          "the vectorizer was fitted on more than the training data. That's leakage.")
+    idf = getattr(vec, "idf_", None)
+    if idf is not None:
+        terms = sorted(vocab, key=vocab.get)
+        counts = np.array([df[t] for t in terms], dtype=float)
+        n = float(len(train))
+        smooth = float(getattr(vec, "smooth_idf", True))
+        expected = np.log((n + smooth) / (counts + smooth)) + 1
+        if not np.allclose(idf, expected, atol=1e-6):
+            raise CheckFailed("the vectorizer's IDF weights don't match the training data alone: it was fitted "
+                              "on more than train (e.g. train + dev). That's leakage. Fit on train, then transform.")
+    say(OK, f"vectorizer ({len(vocab):,} terms) was fitted on train only")
 
 
 def check_1_5() -> bool:

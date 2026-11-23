@@ -12,7 +12,8 @@ Write down three reviews you're sure will fool it, and what it will say.
 > probabilities. Run it on these: [DECISION: your tricky reviews: sarcasm, negation ("not bad at
 > all"), mixed verdicts, comparisons, slang, emoji]. Save `outputs/break_it.csv` with columns
 > `text,expected,predicted`. Then show me the words the model associates most strongly with each
-> label, and explain one of its failures.
+> label (a network has no single weight per word, so probe it: feed each vocabulary term on its own
+> and rank by predicted probability), and explain one of its failures.
 
 ## Verify
 `lab check 1.7`

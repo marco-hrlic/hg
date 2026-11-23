@@ -21,7 +21,7 @@ How many of the 20,000 slots will be non-zero for a typical review?
 
 ## Verify
 - Ask Claude: *"Show me the line where the vectorizer is fitted. What would go wrong if it were
-  fitted on train + dev?"*
+  fitted on train + dev?"* (`lab check 1.4` will verify it independently.)
 - Ask: *"Why is the matrix stored as 'sparse'?"*
 
 ## ML thinking

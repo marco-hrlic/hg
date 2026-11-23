@@ -26,11 +26,13 @@ Sketch the train-loss and dev-loss curves over 6 epochs. Where do they diverge?
 > with learning rate [DECISION], batches of 64, 6 epochs. After every epoch log epoch, train_loss,
 > dev_loss, train_acc and dev_acc to `outputs/training_log.csv`, and save a plot of the curves to
 > `outputs/training_curves.png`. Keep the weights from the epoch with the lowest dev loss. Write
-> that model's dev predictions to `outputs/dev_network.csv` (`id,label`) and save the model and
-> vectorizer to `outputs/` for later steps. Walk me through the five lines of the training step.
+> that model's dev predictions to `outputs/dev_network.csv` (`id,label`, where `id` is the
+> `review_id`). Save the model weights to `outputs/model.pt` and the fitted vectorizer to
+> `outputs/vectorizer.pkl` (pickle) for later steps. Walk me through the five lines of the training step.
 
 ## Verify
-`lab check 1.4` · `lab score outputs/dev_network.csv`
+`lab check 1.4` · `lab score outputs/dev_network.csv` (the check also verifies, from
+`outputs/vectorizer.pkl`, that the vocabulary was learned from train only)
 - Open `outputs/training_curves.png`. Where did overfitting start? Did your sketch match?
 - Ask Claude: *"Which data was the model trained on, and which was used only for measuring? Point to
   the code."*

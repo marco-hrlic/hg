@@ -38,13 +38,22 @@ with the next step.
 ## What the checks catch (and what agents tend to get wrong)
 | Mistake | Caught by |
 |---|---|
-| Vectorizer fitted on train + dev | a "suspiciously good" warning in 1.4 if dev accuracy > 0.92; mainly the card's verify questions |
+| Vectorizer fitted on train + dev | 1.4: vocabulary and IDF weights recomputed from train must match the saved vectorizer |
+| Dev data leaking into training some other way | 1.4: "suspiciously good" warning above 0.92 dev accuracy |
 | Using the `stars_display` column | 2.2 (leaky columns) |
 | Splitting by file position on a sorted file | 2.2 (stratification) |
 | Duplicates across train/dev, conflicting copies kept | 2.2 |
 | Unstable softmax, wrong gradient | 2.4 (tests against PyTorch autograd) |
 | Synthetic data copying evaluation items | 2.7 (near-duplicate check) |
 | Peeking at held-out repeatedly | `lab submit` refuses after the allowance |
+
+## Agent dry run (lab 1)
+An agent playing a participant (and its Claude Code) completed steps 1.1–1.7 from the cards
+alone: every check passed on the first attempt, at 3–6 tool calls per step. Its scores (dev
+macro-F1 0.685, golden 0.720, held-out 0.701) match the reference solution. Fixes made from its
+report: explicit file names for the saved model and vectorizer, id-column conventions, experiments
+writing to their own folder and staying under ~2 minutes each, a hint for finding a network's
+strongest words, and a real fit-on-train-only check.
 
 ## Self-study material
 `notebooks/` has the same content as two worked notebooks (solutions in `solutions/`). Good

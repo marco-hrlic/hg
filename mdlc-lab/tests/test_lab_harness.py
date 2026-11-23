@@ -88,3 +88,22 @@ def test_split_check_catches_leaky_column_and_unstratified_split(workspace):
         workspace / "outputs" / "train.csv", index=False)
     srt.iloc[int(len(srt) * 0.9):][cols].to_csv(workspace / "outputs" / "dev.csv", index=False)
     assert not lab.check_2_2()
+
+
+@needs_data
+@pytest.mark.parametrize("fit_on_dev_too", [False, True])
+def test_vectorizer_leakage_check(workspace, fit_on_dev_too):
+    import pickle
+
+    from sklearn.feature_extraction.text import TfidfVectorizer
+    (workspace / "data" / "lab1").mkdir(parents=True)
+    train, dev = data.load_prepared()
+    train.to_csv(workspace / "data" / "lab1" / "train.csv", index=False)
+    texts = pd.concat([train.text, dev.text]) if fit_on_dev_too else train.text
+    vec = TfidfVectorizer(max_features=20_000, ngram_range=(1, 2), min_df=2, sublinear_tf=True).fit(texts)
+    (workspace / "outputs" / "vectorizer.pkl").write_bytes(pickle.dumps(vec))
+    if fit_on_dev_too:  # capped vocabulary looks identical; the IDF test must still catch it
+        with pytest.raises(lab.CheckFailed, match="leakage"):
+            lab._check_vectorizer_fitted_on_train()
+    else:
+        lab._check_vectorizer_fitted_on_train()

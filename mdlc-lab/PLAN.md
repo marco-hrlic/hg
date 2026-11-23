@@ -1,8 +1,8 @@
 # MDLC Lab: Building a Sentiment Classifier, End to End
 
 Status: **v0.5**. Restructured around Claude Code: participants build with the agent from step
-cards, verified by an independent harness. Both labs built; a dry run of lab 1 by an agent
-playing the participant is the first test of the format. Golden labels await human review.
+cards, verified by an independent harness. Both labs built. Lab 1 passed an agent dry run (an agent
+playing the participant completed it from the cards alone). Golden labels await human review.
 
 ## Decisions
 
@@ -97,7 +97,8 @@ The lab 1 dataset is produced by the same reference cleaning pipeline that lab 2
 | Labelling guideline, LLM draft golden labels, review sheet, finalize script | done |
 | Synthetic data (300 reviews) and the prompt used | done |
 | **Human review of the golden labels** (19 disputed items, 101 spot-checks) | todo: see `golden_labels/README.md` |
-| Agent dry run of lab 1 | in progress |
+| Agent dry run of lab 1 | done: all checks passed first time; fixes applied (see instructor/GUIDE.md) |
+| Agent dry run of lab 2 | todo |
 | Dry run of both labs with a pilot group | todo |
 
 ## Open questions

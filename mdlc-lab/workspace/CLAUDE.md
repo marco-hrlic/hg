@@ -36,7 +36,10 @@ practitioner: so that afterwards they can direct agents like you and research to
 - Development data for lab 1 is in `data/lab1/`; lab 2 starts from the raw export in `data/lab2/`.
 
 ## File contracts (the harness reads these)
-- Prediction files: CSV with columns `id,label`, labels `negative`/`neutral`/`positive`.
+- Prediction files: CSV with columns `id,label`, labels `negative`/`neutral`/`positive`. `id` is
+  the input file's identifier: `review_id` for train, dev and held-out, `item_id` for golden.
+- Lab 1 saves its model as `outputs/model.pt` and its fitted vectorizer as `outputs/vectorizer.pkl`.
+- Long-running training (over ~2 minutes) should run in the background, so tool calls don't time out.
 - Each step card lists the exact files it expects in `outputs/`.
 
 ## Useful commands
