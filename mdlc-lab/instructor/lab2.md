@@ -37,3 +37,20 @@ That's the lesson: **evaluation power**. What *is* robust: class weights shift n
 items) moves in the right direction. An earlier version of these notes claimed a clear golden gain
 (0.719 → 0.747); that compared against a single, unlucky lab 1 run, which is exactly the mistake 2.8
 now teaches people to avoid.
+
+## Why we don't plant more label noise to make 2.8 "work"
+We tested whether a higher flip rate would make "remove the suspects" produce a clear gain
+(candidate 0 vs B, no class weights, 3 seeds each, macro-F1):
+
+| flipped labels in train | golden 0 → B | held-out 0 → B |
+|---|---|---|
+| 3% (as shipped) | 0.733 → 0.707 | 0.688 → 0.691 |
+| 10% | 0.694 → 0.737 | 0.648 → 0.649 |
+| 20% | 0.687 → 0.662 | 0.603 → 0.572 |
+
+The direction isn't consistent: about half of the removed suspects are genuinely hard but correctly
+labelled reviews, and dropping them costs as much as dropping the flips gains. So the dataset stays as
+it is, and 2.8 teaches controlled comparison and evaluation power rather than a guaranteed win. If
+someone asks "so how *would* you get a real gain?", the honest answer from step 2.3 is: fix the
+proxy labels (relabel the 3-star reviews against the guideline), and grow the golden set so a
+2-point gain is measurable.
