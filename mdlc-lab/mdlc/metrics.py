@@ -86,6 +86,21 @@ def fleiss_kappa(ratings: pd.DataFrame, item_col: str = "item_id", label_col: st
     return float((p_bar - p_e) / (1 - p_e))
 
 
+def bootstrap_ci(y_true: Sequence, y_pred: Sequence, metric=None, n: int = 1000, seed: int = 0,
+                 alpha: float = 0.05) -> tuple[float, float]:
+    """Confidence interval for a metric by resampling the evaluation items with replacement.
+
+    It answers "how much would this score move with a different sample of evaluation items of the
+    same size?" A difference between two models that's smaller than this is not evidence of anything.
+    """
+    metric = metric or macro_f1
+    y_true, y_pred = np.asarray(y_true), np.asarray(y_pred)
+    rng = np.random.default_rng(seed)
+    idx = rng.integers(0, len(y_true), size=(n, len(y_true)))
+    scores = np.array([metric(y_true[i], y_pred[i]) for i in idx])
+    return float(np.quantile(scores, alpha / 2)), float(np.quantile(scores, 1 - alpha / 2))
+
+
 def slice_report(df: pd.DataFrame, y_true: str, y_pred: str, slices_col: str = "slices") -> pd.DataFrame:
     """Accuracy and macro-F1 per slice. `slices_col` holds a list of slice names per row."""
     rows = [("ALL", df)]

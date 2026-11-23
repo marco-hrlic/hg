@@ -37,9 +37,12 @@ reveal: the prepared data came from an export with seven kinds of problems, and 
 are still in it.
 
 **Lab 2** starts from that raw export, teaches the data engineering and the theory behind what
-lab 1 did, fixes the data and the loss, and retrains. The lab 2 model beats lab 1 on the golden
-set (macro-F1 0.719 → 0.747, mean of 3 seeds; spread about ±0.01). Synthetic data, honestly
-measured, adds nothing beyond noise here, which is a lesson in itself.
+lab 1 did, fixes the data and the loss, and retrains, comparing against lab 1's recipe retrained in
+the same script with the same seeds. In the reference run the golden macro-F1 changes are **within
+noise** (candidate 0: 0.733 ± 0.012; best: 0.741), while class weights clearly shift neutral recall and
+held-out moves 0.695 → 0.719. The current lesson of 2.8 is therefore evaluation power and controlled
+comparison, more than "lab 2 wins". (An earlier claim of 0.719 → 0.747 compared against a single
+lab 1 run and is withdrawn.)
 
 The lab 1 dataset is produced by the same reference cleaning pipeline that lab 2 teaches
 (`mdlc.data.reference_clean`), so participants can compare their own cleaning with it.

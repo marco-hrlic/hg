@@ -26,7 +26,14 @@ concept while they run.
 | NumPy linear model (2.4) | dev accuracy ≈ 0.82, macro-F1 ≈ 0.68 (matches lab 1's network) |
 | class weights none / sqrt / inverse (2.5) | neutral recall 0.28 / 0.45 / 0.59; macro-F1 0.680 / 0.704 / 0.700 |
 | suspects (2.6) | 308 of 600 are planted flips; 204 of the other 292 are 3-star reviews |
-| final (2.8): sqrt weights + suspects removed | golden macro-F1 0.719 → 0.736; held-out 0.695 → 0.719 |
+| 2.8, golden macro-F1, 3 seeds each | candidate 0 (lab 1 recipe, retrained) 0.733 ± 0.012; A 0.737; B 0.735; C 0.741: **all within noise of 0** |
+| 2.8, held-out, seed 0 | lab 1 model 0.695 → candidate B 0.719 |
 
-Across 3 seeds, synthetic data's effect was within noise (±0.01). Present that honestly: it's
-the point of rule 3 on the card.
+**What to expect in 2.8, and how to present it.** On golden macro-F1, the lab 2 changes are within
+noise of the lab 1 recipe retrained in the same script. The golden set has 381 items (31 neutral), so
+its macro-F1 has a 95% bootstrap interval of roughly ±0.06, and seed-to-seed spread is ±0.01–0.02.
+That's the lesson: **evaluation power**. What *is* robust: class weights shift neutral recall
+(≈0.28 → 0.45 on dev), the out-of-fold check finds ~half of the planted flips, and held-out (5,000
+items) moves in the right direction. An earlier version of these notes claimed a clear golden gain
+(0.719 → 0.747); that compared against a single, unlucky lab 1 run, which is exactly the mistake 2.8
+now teaches people to avoid.

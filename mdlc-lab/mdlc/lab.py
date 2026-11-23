@@ -228,8 +228,11 @@ def cmd_submit(args) -> None:
         g = golden_truth()
         truth = g.set_index("item_id")["label"]
         pred = align(pred_all, truth, "golden")
-        append_log({**entry, **summary(truth, pred)})
+        lo, hi = metrics.bootstrap_ci(truth.values, pred.values)
+        append_log({**entry, **summary(truth, pred), "macro_f1_ci": [round(lo, 3), round(hi, 3)]})
         print_scores(truth, pred, f"GOLDEN: {args.name}")
+        print(f"\n95% bootstrap interval for macro-F1: {lo:.3f} to {hi:.3f}. With {len(truth)} items (only "
+              f"{(truth == 'neutral').sum()} neutral), differences smaller than this band are mostly noise.")
         heading("per slice (where the hard cases are)")
         rep = metrics.slice_report(g.assign(pred=pred.values), "label", "pred")
         print(rep.sort_values("macro_f1").to_string())
@@ -551,6 +554,8 @@ def check_2_8() -> bool:
     heading("golden macro-F1 per candidate (seeds grouped by the -sN suffix)")
     print(table.to_string())
     seeded = table[table["count"] >= 2]
+    print("\nTwo sources of noise: the random seed (the spread above) and the small evaluation set "
+          "(see each submission's bootstrap interval).")
     if "0" not in seeded.index:
         say(FAIL, "no candidate 0 with several seeds: the lab 1 recipe retrained in the same script is the fair baseline")
         return False
