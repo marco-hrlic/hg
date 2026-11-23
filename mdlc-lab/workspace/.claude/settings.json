@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "blockReadsOutsideWorkingDirectories": true,
+    "allow": [
+      "Bash(lab *)",
+      "Bash(python *)",
+      "Bash(python3 *)"
+    ]
+  }
+}

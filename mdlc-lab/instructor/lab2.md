@@ -1,57 +1,32 @@
-# Lab 2: instructor notes
+# Lab 2: Open the box (instructor notes)
 
-Lab 2 is the dense one: theory-heavy, with 6 short TODOs. To fit in 2h, keep exercises tight and
-present the theory tables rather than reading them out. The solutions notebook runs in ~4 min on
-4 CPU cores; the training cells in sections 4 and 6 take ~1 and ~2.5 min, so start them, then talk.
+Steps: `lab steps`. Cards: `steps/lab2/`. General format: [GUIDE.md](GUIDE.md). Theory-heavier
+than lab 1: spend the instructor minutes on the concepts, and let agents do the typing.
 
-## Before the session
-- `make data` and the lab 1 notebook run on every machine (lab 2 loads the saved lab 1 model; if
-  it's missing, it retrains the same recipe automatically).
-- Ideally, finish the human review of the golden labels first (`golden_labels/README.md`).
-  Otherwise lab 2 uses the agreed LLM draft labels and says so.
-
-## Timing
-
-| Block | Time | TODOs | Notes |
+| Step | Time | Concept to introduce | Debrief question |
 |---|---|---|---|
-| 1. Data engineering | 35 min | 1 parse labels, 2 exact dedup, 3 stratified split | Scores come from the answer key. 1e (theory: development vs evaluation data, leakage, imbalance) is the core 10 minutes. Point out the cleaned set equals lab 1's prepared data. |
-| 2. Labels and golden set | 15 min | label 10 reviews | The 3-star crosstab is the moment: most 3-star reviews aren't neutral. |
-| 3. The maths | 30 min | 4 softmax, 5 cross-entropy, 6 gradient | Draw z → softmax → loss on a whiteboard. Run the learning-rate plot live. The NumPy model matching lab 1's network is a good discussion. |
-| 4. Loss design and label noise | 15 min | | Start the class-weights cell, then explain the weighted loss while it runs. |
-| 5. Synthetic data | 10 min | | Demo. Show `synthetic/PROMPT.md`. Stress the four rules. |
-| 6. Retrain and compare | 10 min | | Start the comparison cell before the synthetic-data block's discussion ends. |
-| Wrap-up | 5 min | | The MDLC loop table. |
+| 2.1 Audit | 20 | data quality, near-duplicates, target leakage | Who found the sorted file? The leaky column? |
+| 2.2 Clean & split | 15 | cleaning rules as decisions; stratified split; versioning; group/time splits (theory) | Repair or drop "5 stars"? Defend it. |
+| 2.3 Labels & golden set | 15 | proxy labels, agreement (kappa), guidelines, golden-set properties, LLM raters | The 3-star column: what does it mean for lab 1's model? |
+| 2.4 The maths | 25 | linear model, softmax, cross-entropy, gradient, gradient descent; learning rate | Did the hand-written linear model match lab 1's network? |
+| 2.5 Loss design | 15 | class weights, cost-sensitive loss; metrics encode values | Which weighting would you ship? (No right answer) |
+| 2.6 Label noise | 10 | out-of-fold loss, cross-validation, data-centric debugging | What were the non-planted suspects? |
+| 2.7 Synthetic data | 10 | the four rules; contamination | Would you believe a customer wrote these? |
+| 2.8 Retrain & compare | 10 | seeds, model selection, held-out once; the MDLC loop | Was synthetic data worth it? |
 
-## Reference numbers (one run, 4-core CPU)
+Steps 2.5, 2.6 and 2.8 each train several models (1–3 min on a laptop). Introduce the next
+concept while they run.
 
+## Reference numbers (reference solution)
 | | value |
 |---|---|
-| NumPy linear model (lr 10, 1500 steps), dev | accuracy 0.817, macro-F1 0.681 |
-| Dev neutral recall, class weights none / sqrt / inverse | 0.30 / 0.50 / 0.62 |
-| Dev macro-F1, class weights none / sqrt / inverse | 0.680 / 0.707 / 0.700 |
-| Flipped-label suspects (top 600 by out-of-fold loss) | 296 of the 600 planted flips caught |
+| audit (2.1) | all row-level problems caught except label noise (0 of 600) |
+| clean + split (2.2) | 17,892 train / 1,988 dev, identical to lab 1's prepared data |
+| stars vs golden (2.3) | of 59 three-star golden items: 17 neutral, 29 positive, 13 negative |
+| NumPy linear model (2.4) | dev accuracy ≈ 0.82, macro-F1 ≈ 0.68 (matches lab 1's network) |
+| class weights none / sqrt / inverse (2.5) | neutral recall 0.28 / 0.45 / 0.59; macro-F1 0.680 / 0.704 / 0.700 |
+| suspects (2.6) | 308 of 600 are planted flips; 204 of the other 292 are 3-star reviews |
+| final (2.8): sqrt weights + suspects removed | golden macro-F1 0.719 → 0.736; held-out 0.695 → 0.719 |
 
-Golden macro-F1 (381 items, draft labels), mean of 3 seeds:
-
-| model | golden macro-F1 |
-|---|---|
-| lab 1 model | 0.719 |
-| + class weights (sqrt) | 0.737 |
-| + class weights, noise removed | **0.747** (chosen) |
-| + class weights, noise removed, synthetic | 0.741 |
-
-Held-out macro-F1: lab 1 0.695 → lab 2 0.701.
-
-A separate 3-seed experiment, with selection on dev macro-F1 throughout, gave the same picture:
-lab 1 recipe 0.714; noise removed 0.733; sqrt weights 0.732; inverse weights 0.700 (too
-aggressive); synthetic only 0.720; all three combined 0.753 ± 0.012. Synthetic data's effect is
-small and within run-to-run noise. Present that honestly: it's the lesson of rule 3.
-
-## Things people ask
-- *Why is the held-out gain smaller than the golden gain?* Held-out labels are star-derived, so the
-  3-star proxy problem penalises a model that reads 3-star reviews correctly. The golden set is the
-  better yardstick, which is why section 6 says so before the held-out cell.
-- *Wasn't choosing the final model on golden a form of tuning?* Yes, a mild one, and the notebook
-  says so. That's why the held-out set is opened only after the choice.
-- *The suspects list has non-planted items.* Mostly 3-star reviews that aren't neutral: real
-  label errors that nobody planted.
+Across 3 seeds, synthetic data's effect was within noise (±0.01). Present that honestly: it's
+the point of rule 3 on the card.

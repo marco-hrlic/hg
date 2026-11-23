@@ -1,0 +1,559 @@
+"""The `lab` command: step cards, independent checks, and a scorer with hidden evaluation labels.
+
+Participants build the project with Claude Code in `workspace/`. This harness is the part the
+agent doesn't write: it holds the evaluation labels and the answer key, scores prediction files,
+rations held-out submissions, and checks each step's outputs for the classic mistakes.
+
+    lab setup                      build data and export the participant's view of it into workspace/data
+    lab steps                      list the step cards
+    lab step 1.4                   print a step card
+    lab check 1.4                  check that step's outputs
+    lab score FILE [--truth FILE]  score dev predictions (default truth: data/lab1/dev.csv)
+    lab submit golden FILE --name NAME     score on the golden set (hidden labels), per slice
+    lab submit heldout FILE --name NAME    score on the held-out set (hidden labels), rationed
+    lab log                        every submission so far
+    lab catchup 1.4                write the reference outputs for a step, to catch up
+"""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import importlib.util
+import json
+import os
+import re
+import shutil
+import subprocess
+import sys
+import warnings
+from datetime import datetime, timezone
+from pathlib import Path
+
+import numpy as np
+import pandas as pd
+
+from . import LABELS, data, metrics, text
+
+LAB_ROOT = data.LAB_ROOT
+STEPS_DIR = LAB_ROOT / "steps"
+REFERENCE_DIR = LAB_ROOT / "reference"
+WORKSPACE = Path(os.environ.get("MDLC_WORKSPACE", LAB_ROOT / "workspace"))
+HELDOUT_ALLOWANCE = 2  # one look at the end of each lab
+
+OK, FAIL, WARN = "✓", "✗", "!"
+
+
+# ---------------------------------------------------------------------------
+# Small utilities
+# ---------------------------------------------------------------------------
+
+def ws(*parts: str) -> Path:
+    return WORKSPACE.joinpath(*parts)
+
+
+def say(mark: str, msg: str) -> None:
+    print(f"  {mark} {msg}")
+
+
+def heading(title: str) -> None:
+    print(f"\n{title}\n{'─' * len(title)}")
+
+
+class CheckFailed(Exception):
+    pass
+
+
+def require_file(path: Path, columns: list[str]) -> pd.DataFrame:
+    if not path.exists():
+        raise CheckFailed(f"missing {path.relative_to(WORKSPACE)}. The step card says what to create.")
+    df = pd.read_csv(path, keep_default_na=False)
+    missing = [c for c in columns if c not in df.columns]
+    if missing:
+        raise CheckFailed(f"{path.name} needs columns {columns}; missing {missing} (has {list(df.columns)})")
+    return df
+
+
+def read_predictions(path: Path) -> pd.Series:
+    """Prediction files have an id column (id, review_id or item_id) and a label column."""
+    if not Path(path).exists():
+        raise CheckFailed(f"no such file: {path}")
+    df = pd.read_csv(path, keep_default_na=False)
+    id_col = next((c for c in ("id", "review_id", "item_id") if c in df.columns), None)
+    if id_col is None or "label" not in df.columns:
+        raise CheckFailed(f"{Path(path).name}: expected columns `id,label` (got {list(df.columns)})")
+    bad = sorted(set(df["label"]) - set(LABELS))
+    if bad:
+        raise CheckFailed(f"{Path(path).name}: labels must be one of {LABELS}; found {bad[:5]}")
+    if df[id_col].duplicated().any():
+        raise CheckFailed(f"{Path(path).name}: some ids appear more than once")
+    return df.set_index(id_col)["label"]
+
+
+def align(pred: pd.Series, truth: pd.Series, what: str) -> pd.Series:
+    missing = truth.index.difference(pred.index)
+    if len(missing):
+        raise CheckFailed(f"predictions are missing {len(missing)} of the {len(truth)} {what} items "
+                          f"(e.g. {list(missing[:3])})")
+    return pred.loc[truth.index]
+
+
+def summary(truth: pd.Series, pred: pd.Series) -> dict:
+    return {"accuracy": round(metrics.accuracy(truth, pred), 4), "macro_f1": round(metrics.macro_f1(truth, pred), 4)}
+
+
+def print_scores(truth: pd.Series, pred: pd.Series, title: str) -> dict:
+    acc, f1 = metrics.accuracy(truth, pred), metrics.macro_f1(truth, pred)
+    heading(f"{title}: accuracy {acc:.3f}   macro-F1 {f1:.3f}")
+    cm = metrics.confusion_matrix(truth, pred)
+    print(pd.DataFrame(cm, index=[f"true {lab}" for lab in LABELS],
+                       columns=[f"pred {lab}" for lab in LABELS]).to_string())
+    print()
+    print(metrics.classification_report(truth, pred).to_string())
+    return {"accuracy": round(acc, 4), "macro_f1": round(f1, 4)}
+
+
+def state_path() -> Path:
+    return ws(".lab", "submissions.jsonl")
+
+
+def load_log() -> list[dict]:
+    p = state_path()
+    return [json.loads(line) for line in p.read_text().splitlines()] if p.exists() else []
+
+
+def append_log(entry: dict) -> None:
+    state_path().parent.mkdir(parents=True, exist_ok=True)
+    with open(state_path(), "a") as f:
+        f.write(json.dumps(entry) + "\n")
+
+
+def golden_truth() -> pd.DataFrame:
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
+        return data.load_golden()
+
+
+# ---------------------------------------------------------------------------
+# setup: export the participant's view of the data (no evaluation labels)
+# ---------------------------------------------------------------------------
+
+def cmd_setup(args) -> None:
+    paths = data.build_all()
+    d = ws("data")
+    for sub in ("lab1", "lab2", "eval"):
+        (d / sub).mkdir(parents=True, exist_ok=True)
+    train, dev = data.load_prepared()
+    cols = ["review_id", "text", "label"]
+    train[cols].to_csv(d / "lab1" / "train.csv", index=False)
+    dev[cols].to_csv(d / "lab1" / "dev.csv", index=False)
+    shutil.copy(paths["raw"], d / "lab2" / "reviews_raw.csv")
+
+    golden = golden_truth()
+    golden.assign(slices=golden["slices"].map(";".join))[["item_id", "text", "slices"]].to_csv(
+        d / "eval" / "golden_texts.csv", index=False)
+    heldout = pd.read_csv(paths["heldout"])
+    heldout[["review_id", "text"]].to_csv(d / "eval" / "heldout_texts.csv", index=False)
+    exercise = pd.read_csv(paths["exercise"])
+    exercise = exercise[exercise["item_id"].isin(golden["item_id"])].head(10)
+    exercise[["item_id", "text"]].to_csv(d / "lab2" / "label_these_10.csv", index=False)
+    shutil.copy(LAB_ROOT / "golden_labels" / "GUIDELINE.md", d / "lab2" / "GUIDELINE.md")
+    synth = LAB_ROOT / "synthetic" / "synthetic_reviews.jsonl"
+    pd.read_json(synth, lines=True).to_csv(d / "lab2" / "synthetic_pregenerated.csv", index=False)
+
+    ws("outputs").mkdir(exist_ok=True)
+    print(f"Workspace data ready in {d}:")
+    for p in sorted(d.rglob("*.csv")):
+        print(f"  {p.relative_to(WORKSPACE)}  ({sum(1 for _ in open(p)) - 1:,} rows)")
+    print("\nEvaluation sets contain texts only. Their labels stay with the harness: use `lab submit`.")
+
+
+# ---------------------------------------------------------------------------
+# step cards
+# ---------------------------------------------------------------------------
+
+def _card(step: str) -> Path:
+    lab, num = step.split(".")
+    matches = sorted((STEPS_DIR / f"lab{lab}").glob(f"{int(num):02d}-*.md"))
+    if not matches:
+        raise CheckFailed(f"no step {step}. Run `lab steps` for the list.")
+    return matches[0]
+
+
+def cmd_steps(args) -> None:
+    for lab_dir in sorted(STEPS_DIR.glob("lab*")):
+        print(f"\n{lab_dir.name}")
+        for p in sorted(lab_dir.glob("*.md")):
+            first = re.sub(r"^#\s*(\d+\.\d+\s+)?", "", p.read_text().splitlines()[0])
+            print(f"  {lab_dir.name[3:]}.{int(p.name[:2])}  {first}")
+
+
+def cmd_step(args) -> None:
+    print(_card(args.step).read_text())
+
+
+# ---------------------------------------------------------------------------
+# scoring and submissions
+# ---------------------------------------------------------------------------
+
+def cmd_score(args) -> None:
+    truth_df = pd.read_csv(args.truth, keep_default_na=False)
+    truth = truth_df.set_index("review_id")["label"]
+    pred = align(read_predictions(Path(args.file)), truth, "dev")
+    print_scores(truth, pred, f"dev score for {Path(args.file).name}")
+
+
+def cmd_submit(args) -> None:
+    pred_all = read_predictions(Path(args.file))
+    log = load_log()
+    entry = {"time": datetime.now(timezone.utc).isoformat(timespec="seconds"), "set": args.set,
+             "name": args.name, "file": str(args.file),
+             "sha256": hashlib.sha256(Path(args.file).read_bytes()).hexdigest()[:12]}
+    if args.set == "heldout":
+        used = [e for e in log if e["set"] == "heldout"]
+        if len(used) >= HELDOUT_ALLOWANCE and not args.force:
+            print(f"Refused: the held-out set has already been used {len(used)} times "
+                  f"({', '.join(e['name'] for e in used)}).")
+            print("Every look at it, followed by a change, turns it into another dev set. If you really "
+                  "must, rerun with --force; the log will show it.")
+            sys.exit(1)
+        entry["forced"] = bool(args.force and len(used) >= HELDOUT_ALLOWANCE)
+        truth = pd.read_csv(data.DATA_DIR / "heldout" / "heldout.csv").set_index("review_id")["label"]
+        pred = align(pred_all, truth, "held-out")
+        append_log({**entry, **summary(truth, pred)})  # log before showing anything
+        print_scores(truth, pred, f"HELD-OUT: {args.name}")
+        print(f"\nHeld-out submissions used: {len(used) + 1} (allowance: one per lab).")
+    else:
+        g = golden_truth()
+        truth = g.set_index("item_id")["label"]
+        pred = align(pred_all, truth, "golden")
+        append_log({**entry, **summary(truth, pred)})
+        print_scores(truth, pred, f"GOLDEN: {args.name}")
+        heading("per slice (where the hard cases are)")
+        rep = metrics.slice_report(g.assign(pred=pred.values), "label", "pred")
+        print(rep.sort_values("macro_f1").to_string())
+        n = sum(1 for e in log if e["set"] == "golden") + 1  # log was read before this submission
+        print(f"\n{g.attrs.get('label_source', '')} labels, {len(g)} items. Golden submissions so far: {n}. "
+              "Use it to compare finished candidates, not to tune.")
+
+
+def cmd_log(args) -> None:
+    log = load_log()
+    if not log:
+        print("No submissions yet.")
+        return
+    df = pd.DataFrame(log)
+    print(df[[c for c in ["time", "set", "name", "accuracy", "macro_f1", "forced"] if c in df]].to_string(index=False))
+
+
+# ---------------------------------------------------------------------------
+# checks
+# ---------------------------------------------------------------------------
+
+def _answer_key() -> pd.DataFrame:
+    return pd.read_csv(data.DATA_DIR / "raw" / "answer_key.csv", dtype=str, keep_default_na=False)
+
+
+def _dev_truth_lab1() -> pd.Series:
+    return pd.read_csv(ws("data", "lab1", "dev.csv"), keep_default_na=False).set_index("review_id")["label"]
+
+
+def _dev_f1(name: str, truth: pd.Series) -> float:
+    pred = align(read_predictions(ws("outputs", name)), truth, "dev")
+    return metrics.macro_f1(truth, pred)
+
+
+def check_1_2() -> bool:
+    truth = _dev_truth_lab1()
+    scores = {}
+    for name in ("dev_majority.csv", "dev_keywords.csv"):
+        pred = align(read_predictions(ws("outputs", name)), truth, "dev")
+        scores[name] = (metrics.accuracy(truth, pred), metrics.macro_f1(truth, pred))
+        say(OK, f"{name}: accuracy {scores[name][0]:.3f}, macro-F1 {scores[name][1]:.3f}")
+    maj_acc, maj_f1 = scores["dev_majority.csv"]
+    if maj_acc > 0.55 and maj_f1 < 0.35:
+        say(OK, f"majority baseline: {maj_acc:.0%} accurate and useless. That gap is why we track macro-F1.")
+    better = scores["dev_keywords.csv"][1] > maj_f1
+    say(OK if better else FAIL, "keyword baseline beats majority on macro-F1" if better
+        else "keyword baseline should beat majority on macro-F1: look at what it predicts")
+    return better
+
+
+def check_1_4() -> bool:
+    log = require_file(ws("outputs", "training_log.csv"), ["epoch", "train_loss", "dev_loss"])
+    if len(log) < 3:
+        raise CheckFailed("training_log.csv should have at least 3 epochs")
+    say(OK, f"training log: {len(log)} epochs")
+    best_epoch = int(log.loc[log.dev_loss.idxmin(), "epoch"])
+    if log.train_loss.iloc[-1] >= log.train_loss.iloc[0]:
+        say(WARN, "training loss didn't go down. Is the optimizer actually stepping?")
+    if best_epoch < int(log.epoch.max()):
+        say(OK, f"dev loss bottoms out at epoch {best_epoch}, then rises while training loss keeps falling: "
+                "overfitting. Did you keep the weights from the best epoch?")
+    else:
+        say(WARN, "dev loss still falling at the last epoch: try more epochs to see where it turns")
+    truth = _dev_truth_lab1()
+    f1 = _dev_f1("dev_network.csv", truth)
+    acc = metrics.accuracy(truth, align(read_predictions(ws("outputs", "dev_network.csv")), truth, "dev"))
+    say(OK, f"network on dev: accuracy {acc:.3f}, macro-F1 {f1:.3f}")
+    if acc > 0.92:
+        say(WARN, "suspiciously good. Check for leakage: was the dev set used for training, or the "
+                  "vectorizer fitted on dev too?")
+    best_base = max((_dev_f1(n, truth) for n in ("dev_keywords.csv", "dev_majority.csv")
+                     if ws("outputs", n).exists()), default=0.0)
+    ok = f1 > best_base
+    say(OK if ok else FAIL, f"beats the best baseline ({best_base:.3f})" if ok
+        else f"doesn't beat the best baseline ({best_base:.3f}) yet")
+    return ok
+
+
+def check_1_5() -> bool:
+    exp = require_file(ws("outputs", "experiments.csv"), ["experiment", "change", "predicted", "dev_macro_f1"])
+    print(exp.to_string(index=False))
+    ok = len(exp) >= 3
+    say(OK if ok else FAIL, f"{len(exp)} experiments logged" + ("" if ok else " (need at least 3)"))
+    if (exp.predicted.astype(str).str.strip() == "").any():
+        say(FAIL, "every experiment needs a prediction written *before* running it")
+        ok = False
+    spread = pd.to_numeric(exp.dev_macro_f1, errors="coerce").agg(["min", "max"])
+    say(OK, f"dev macro-F1 ranged {spread['min']:.3f}–{spread['max']:.3f}. Which differences are bigger "
+            "than what a different random seed alone would cause?")
+    return ok
+
+
+def check_1_6() -> bool:
+    log = load_log()
+    sets = {e["set"] for e in log}
+    for s in ("golden", "heldout"):
+        say(OK if s in sets else FAIL, f"{s} submission " + ("recorded" if s in sets else "missing: see the step card"))
+    return {"golden", "heldout"} <= sets
+
+
+def check_1_7() -> bool:
+    df = require_file(ws("outputs", "break_it.csv"), ["text", "expected", "predicted"])
+    broke = (df.expected.str.strip().str.lower() != df.predicted.str.strip().str.lower()).sum()
+    say(OK, f"you fooled the model {broke} times out of {len(df)}")
+    return len(df) >= 5
+
+
+def check_2_1() -> bool:
+    issues = require_file(ws("outputs", "issues.csv"), ["review_id", "issue"])
+    key = _answer_key()
+    flagged = set(issues.review_id)
+    heading("row-level problems (matched by review_id; your issue names don't need to match)")
+    ok = True
+    for issue, rows in key.groupby("issue"):
+        dup = issue.endswith("duplicate")
+        hit = rows.review_id.isin(flagged) | (dup & rows.related.isin(flagged))
+        frac = hit.mean()
+        mark = OK if frac >= 0.8 else (WARN if issue == "label_noise" or frac >= 0.4 else FAIL)
+        say(mark, f"{issue:22s} caught {hit.sum():4d} / {len(rows)}")
+        if issue in {"invalid_label", "empty_or_placeholder", "exact_duplicate", "conflicting_duplicate"} and frac < 0.8:
+            ok = False
+    planted = set(key.review_id) | set(key.loc[key.issue.str.endswith("duplicate"), "related"])
+    extra = len(flagged - planted)
+    say(OK if extra < 100 else WARN, f"{extra} flagged rows aren't in the answer key (some may still be real problems)")
+    print("\n  label_noise: almost nobody finds flipped labels by inspecting rows. Step 6 does it with a model.")
+    heading("dataset-level problems: compare with what you wrote in notes.md")
+    for name, desc in data.GLOBAL_ISSUES.items():
+        print(f"  • {name}: {desc}")
+    return ok
+
+
+def check_2_2() -> bool:
+    cols = ["review_id", "text", "label"]
+    tr = require_file(ws("outputs", "train.csv"), cols)
+    dv = require_file(ws("outputs", "dev.csv"), cols)
+    key = _answer_key()
+    ok = True
+
+    def test(cond: bool, good: str, bad: str, fatal: bool = True) -> None:
+        nonlocal ok
+        say(OK if cond else (FAIL if fatal else WARN), good if cond else bad)
+        if fatal and not cond:
+            ok = False
+
+    both = pd.concat([tr.assign(_split="train"), dv.assign(_split="dev")], ignore_index=True)
+    test(both.label.isin(LABELS).all(), "labels are negative/neutral/positive", "unexpected label values")
+    leaky = [c for c in both.columns if "display" in c or c == "stars"]
+    test(not leaky, "no leaky columns", f"columns {leaky} encode the label: drop them")
+    gone = lambda issue: not both.review_id.isin(key.loc[key.issue == issue, "review_id"]).any()  # noqa: E731
+    test(gone("invalid_label"), "invalid ratings removed", "rows with invalid ratings are still there")
+    test(gone("empty_or_placeholder"), "placeholders removed", "placeholder/empty texts are still there")
+    conf = key[key.issue == "conflicting_duplicate"]
+    test(not both.review_id.isin(set(conf.review_id) | set(conf.related)).any(),
+         "conflicting duplicates dropped (all copies)", "texts with conflicting labels are still there")
+    test(not both.text.str.contains(r"<[a-z/][^>]*>|&[a-z#0-9]+;", regex=True).any(),
+         "no HTML left in the text", "HTML tags or entities still in the text")
+    norm = both.text.map(text.normalize_for_dedup)
+    test(not norm.duplicated().any(), "no exact duplicates (after normalising)",
+         f"{norm.duplicated().sum()} exact duplicates remain")
+    test(not set(tr.review_id) & set(dv.review_id), "no review in both train and dev", "reviews in both splits")
+    pairs = text.find_near_duplicates(both.text.tolist(), threshold=0.7)
+    cross = sum(1 for i, j, _ in pairs if both._split[i] != both._split[j])
+    test(cross == 0, "no near-duplicates across train/dev", f"{cross} near-duplicate pairs across train/dev", fatal=False)
+    mix = pd.DataFrame({"train": tr.label.value_counts(normalize=True), "dev": dv.label.value_counts(normalize=True)})
+    gap = (mix.train - mix.dev).abs().max()
+    test(gap < 0.02, f"label mix matches within {gap:.1%} (stratified)", f"label mix differs by {gap:.1%}: stratify")
+    frac = len(dv) / len(both)
+    test(0.05 <= frac <= 0.25, f"dev is {frac:.0%} of the data", f"dev is {frac:.0%} of the data: aim for ~10%", fatal=False)
+    noise = both.review_id.isin(key.loc[key.issue == "label_noise", "review_id"]).sum()
+    print(f"\n  {len(tr):,} train / {len(dv):,} dev. Still hiding in there: {noise} flipped labels (step 6).")
+    return ok
+
+
+def check_2_3() -> bool:
+    mine = require_file(ws("outputs", "my_labels.csv"), ["item_id", "label"])
+    g = golden_truth().set_index("item_id")
+    mine = mine[mine.item_id.isin(g.index)]
+    if len(mine):
+        k = metrics.cohen_kappa(mine.label.str.strip().str.lower().tolist(), g.loc[mine.item_id, "label"].tolist())
+        say(OK, f"your labels vs the golden labels: Cohen's kappa {k:.2f} on {len(mine)} items")
+        stars_k = metrics.cohen_kappa(g.loc[mine.item_id, "star_label"].tolist(), g.loc[mine.item_id, "label"].tolist())
+        say(OK, f"star-derived labels vs the golden labels on the same items: kappa {stars_k:.2f}")
+    heading("all golden items: label from reading the text vs label from the stars")
+    print(pd.crosstab(g.label, g.stars, rownames=["golden label"], colnames=["stars"]).to_string())
+    print("\n  Look at the 3-star column.")
+    return len(mine) >= 8
+
+
+def check_2_4() -> bool:
+    path = ws("mathlab.py")
+    if not path.exists():
+        raise CheckFailed("missing mathlab.py with softmax, cross_entropy and gradients")
+    spec = importlib.util.spec_from_file_location("mathlab", path)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    ok = True
+    try:
+        P = np.asarray(mod.softmax(np.array([[2.0, 1.0, 0.0], [1000.0, 1000.0, 1000.0]])))
+        good = np.allclose(P[0], [0.665, 0.245, 0.090], atol=1e-3) and np.allclose(P[1], 1 / 3)
+        say(OK if good else FAIL, "softmax correct, and stable for large scores" if good
+            else "softmax wrong, or overflows for large scores (subtract each row's max first)")
+        ok &= good
+        ce = float(mod.cross_entropy(np.full((4, 3), 1 / 3), np.array([0, 1, 2, 0])))
+        good = abs(ce - np.log(3)) < 1e-6
+        say(OK if good else FAIL, f"cross-entropy of a uniform guess = ln 3 = {np.log(3):.3f}" if good
+            else f"cross-entropy of a uniform guess should be ln 3 ≈ 1.099, got {ce:.3f}")
+        ok &= good
+        import scipy.sparse as sp
+        import torch
+        rng = np.random.default_rng(0)
+        X = sp.random(32, 50, density=0.2, format="csr", random_state=0)
+        y = rng.integers(0, 3, 32)
+        W0, b0 = rng.normal(0, 0.1, (50, 3)), rng.normal(0, 0.1, 3)
+        dW, db = mod.gradients(X, np.asarray(mod.softmax(np.asarray(X @ W0) + b0)), np.eye(3)[y])
+        Wt, bt = torch.tensor(W0, requires_grad=True), torch.tensor(b0, requires_grad=True)
+        torch.nn.functional.cross_entropy(torch.tensor(X.toarray()) @ Wt + bt, torch.tensor(y)).backward()
+        good = np.allclose(np.asarray(dW), Wt.grad.numpy(), atol=1e-8) and np.allclose(np.asarray(db), bt.grad.numpy(), atol=1e-8)
+        say(OK if good else FAIL, "gradients match PyTorch autograd" if good else "gradients don't match PyTorch autograd")
+        ok &= good
+    except AttributeError as e:
+        raise CheckFailed(f"mathlab.py: {e}") from e
+    return ok
+
+
+def check_2_5() -> bool:
+    df = require_file(ws("outputs", "class_weights.csv"),
+                      ["weighting", "dev_macro_f1", "recall_negative", "recall_neutral", "recall_positive"])
+    print(df.to_string(index=False))
+    say(OK if len(df) >= 2 else FAIL, f"{len(df)} weightings compared")
+    print("\n  Weights don't make the model smarter; they move where its mistakes land. Which row would "
+          "you ship for 'route unhappy customers to support'? Write the decision and the reason in notes.md.")
+    return len(df) >= 2
+
+
+def check_2_6() -> bool:
+    sus = require_file(ws("outputs", "suspects.csv"), ["review_id"])
+    key = _answer_key()
+    noise = set(key.loc[key.issue == "label_noise", "review_id"])
+    hits = sus.review_id.isin(noise)
+    say(OK if hits.sum() >= 150 else WARN, f"{hits.sum()} of your {len(sus)} suspects are planted flipped labels "
+                                            f"({hits.mean():.0%} precision)")
+    raw = data.load_raw().set_index("review_id")
+    others = sus.loc[~hits, "review_id"]
+    three = (raw.loc[raw.index.intersection(others), "stars"] == "3").sum()
+    say(OK, f"of the {len(others)} other suspects, {three} are 3-star reviews: often real label errors nobody planted")
+    return hits.sum() >= 150
+
+
+def check_2_7() -> bool:
+    syn = require_file(ws("outputs", "synthetic.csv"), ["text", "label"])
+    ok = syn.label.isin(LABELS).all()
+    say(OK if ok else FAIL, f"{len(syn)} synthetic reviews, labels valid" if ok else "invalid labels")
+    say(OK, "label mix: " + ", ".join(f"{k} {v}" for k, v in syn.label.value_counts().items()))
+    eval_texts = (pd.read_csv(ws("data", "eval", "golden_texts.csv")).text.tolist()
+                  + pd.read_csv(ws("data", "eval", "heldout_texts.csv")).text.tolist())
+    combined = syn.text.tolist() + eval_texts
+    leaks = sum(1 for i, j, _ in text.find_near_duplicates(combined, threshold=0.5) if i < len(syn) <= j)
+    say(OK if leaks == 0 else FAIL, "no synthetic review near-duplicates an evaluation item" if leaks == 0
+        else f"{leaks} synthetic reviews near-duplicate evaluation items: remove them")
+    if ws("outputs", "train.csv").exists():
+        share = len(syn) / (len(syn) + len(pd.read_csv(ws("outputs", "train.csv"))))
+        say(OK if share < 0.2 else WARN, f"synthetic share of training data: {share:.1%}")
+    return ok and leaks == 0
+
+
+def check_2_8() -> bool:
+    log = pd.DataFrame(load_log())
+    if log.empty:
+        raise CheckFailed("no submissions yet")
+    print(log[[c for c in ["set", "name", "accuracy", "macro_f1"] if c in log]].to_string(index=False))
+    n_golden = (log.set == "golden").sum()
+    say(OK if n_golden >= 2 else FAIL, f"{n_golden} golden submissions (lab 1 model and at least one lab 2 model)")
+    return n_golden >= 2
+
+
+CHECKS = {"1.2": check_1_2, "1.4": check_1_4, "1.5": check_1_5, "1.6": check_1_6, "1.7": check_1_7,
+          "2.1": check_2_1, "2.2": check_2_2, "2.3": check_2_3, "2.4": check_2_4, "2.5": check_2_5,
+          "2.6": check_2_6, "2.7": check_2_7, "2.8": check_2_8}
+
+
+def cmd_check(args) -> None:
+    fn = CHECKS.get(args.step)
+    if fn is None:
+        print(f"Step {args.step} has no automatic check: its card lists what to verify yourself.")
+        return
+    heading(f"check {args.step}")
+    try:
+        passed = fn()
+    except CheckFailed as e:
+        say(FAIL, str(e))
+        passed = False
+    print(f"\n{'PASSED' if passed else 'NOT YET'}: step {args.step}")
+    sys.exit(0 if passed else 1)
+
+
+def cmd_catchup(args) -> None:
+    print(f"Writing reference outputs for step {args.step} into {WORKSPACE / 'outputs'} ...")
+    env = {**os.environ, "MDLC_WORKSPACE": str(WORKSPACE)}
+    result = subprocess.run([sys.executable, str(REFERENCE_DIR / "steps.py"), args.step], env=env)
+    sys.exit(result.returncode)
+
+
+def main(argv: list[str] | None = None) -> None:
+    import signal
+    if hasattr(signal, "SIGPIPE"):
+        signal.signal(signal.SIGPIPE, signal.SIG_DFL)  # piping into `head` shouldn't raise
+    p = argparse.ArgumentParser(prog="lab", description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    sub = p.add_subparsers(dest="cmd", required=True)
+    sub.add_parser("setup").set_defaults(fn=cmd_setup)
+    sub.add_parser("steps").set_defaults(fn=cmd_steps)
+    s = sub.add_parser("step"); s.add_argument("step"); s.set_defaults(fn=cmd_step)
+    s = sub.add_parser("check"); s.add_argument("step"); s.set_defaults(fn=cmd_check)
+    s = sub.add_parser("score"); s.add_argument("file")
+    s.add_argument("--truth", default=str(ws("data", "lab1", "dev.csv"))); s.set_defaults(fn=cmd_score)
+    s = sub.add_parser("submit"); s.add_argument("set", choices=["golden", "heldout"]); s.add_argument("file")
+    s.add_argument("--name", required=True); s.add_argument("--force", action="store_true"); s.set_defaults(fn=cmd_submit)
+    sub.add_parser("log").set_defaults(fn=cmd_log)
+    s = sub.add_parser("catchup"); s.add_argument("step"); s.set_defaults(fn=cmd_catchup)
+    args = p.parse_args(argv)
+    try:
+        args.fn(args)
+    except CheckFailed as e:
+        print(f"{FAIL} {e}")
+        sys.exit(1)
+
+
+if __name__ == "__main__":
+    main()
