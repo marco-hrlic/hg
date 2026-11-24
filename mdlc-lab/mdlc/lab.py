@@ -12,6 +12,7 @@ rations held-out submissions, and checks each step's outputs for the classic mis
     lab submit golden FILE --name NAME     score on the golden set (hidden labels), per slice
     lab submit heldout FILE --name NAME    score on the held-out set (hidden labels), rationed
     lab log                        every submission so far
+    lab compare A B                paired bootstrap: is candidate A really better than B on golden?
     lab catchup 1.4                write the reference outputs for a step, to catch up
 """
 
@@ -239,6 +240,47 @@ def cmd_submit(args) -> None:
         n = sum(1 for e in log if e["set"] == "golden") + 1  # log was read before this submission
         print(f"\n{g.attrs.get('label_source', '')} labels, {len(g)} items. Golden submissions so far: {n}. "
               "Use it to compare finished candidates, not to tune.")
+
+
+def _golden_runs() -> dict[str, list[pd.Series]]:
+    """Golden prediction files from the log, grouped by candidate (name without its -sN seed suffix)."""
+    runs: dict[str, list[pd.Series]] = {}
+    for e in load_log():
+        if e["set"] != "golden":
+            continue
+        path = Path(e["file"])
+        path = path if path.is_absolute() else WORKSPACE / path
+        if not path.exists() or hashlib.sha256(path.read_bytes()).hexdigest()[:12] != e["sha256"]:
+            continue  # file changed or gone since it was submitted: can't use it for a fair comparison
+        cand = re.sub(r"-s\d+$", "", e["name"])
+        runs.setdefault(cand, []).append(read_predictions(path))
+    return runs
+
+
+def compare_candidates(a: str, b: str) -> dict:
+    g = golden_truth().set_index("item_id")["label"]
+    runs = _golden_runs()
+    for name in (a, b):
+        if name not in runs:
+            raise CheckFailed(f"no golden submissions named {name} (or {name}-s0, {name}-s1, ...) with unchanged files")
+    res = metrics.paired_bootstrap_diff(g.values, [p.loc[g.index].values for p in runs[a]],
+                                        [p.loc[g.index].values for p in runs[b]])
+    res.update(n_a=len(runs[a]), n_b=len(runs[b]))
+    return res
+
+
+def describe_comparison(a: str, b: str, r: dict) -> str:
+    verdict = ("significantly better" if r["lo"] > 0 else "significantly worse" if r["hi"] < 0
+               else "not distinguishable (the interval includes 0)")
+    return (f"{a} vs {b}: macro-F1 {r['diff']:+.3f}, 95% interval [{r['lo']:+.3f}, {r['hi']:+.3f}] "
+            f"({r['n_a']} vs {r['n_b']} runs): {verdict}")
+
+
+def cmd_compare(args) -> None:
+    r = compare_candidates(args.a, args.b)
+    print(describe_comparison(args.a, args.b, r))
+    print("Paired bootstrap: both are re-scored on the same resampled golden items, so the luck of the "
+          "item sample mostly cancels out; several seeds per side average out run-to-run noise.")
 
 
 def cmd_log(args) -> None:
@@ -559,12 +601,9 @@ def check_2_8() -> bool:
     if "0" not in seeded.index:
         say(FAIL, "no candidate 0 with several seeds: the lab 1 recipe retrained in the same script is the fair baseline")
         return False
-    base = seeded.loc["0"]
-    noise = float(seeded["std"].max())
-    for cand, row in seeded.drop(index="0").iterrows():
-        diff = row["mean"] - base["mean"]
-        verdict = "clearly better" if diff > 2 * noise else "clearly worse" if diff < -2 * noise else "within noise"
-        say(OK, f"{cand}: {diff:+.3f} vs candidate 0 ({verdict}; seed std up to {noise:.3f})")
+    heading("paired comparison with candidate 0 (bootstrap over golden items, averaged over seeds)")
+    for cand in seeded.index.drop("0"):
+        say(OK, describe_comparison(cand, "0", compare_candidates(cand, "0")))
     held = log[log.set == "heldout"]
     print("\n" + held[["name", "accuracy", "macro_f1"]].to_string(index=False))
     ok = len(held) >= 1 and len(seeded) >= 2
@@ -614,6 +653,8 @@ def main(argv: list[str] | None = None) -> None:
     s = sub.add_parser("submit"); s.add_argument("set", choices=["golden", "heldout"]); s.add_argument("file")
     s.add_argument("--name", required=True); s.add_argument("--force", action="store_true"); s.set_defaults(fn=cmd_submit)
     sub.add_parser("log").set_defaults(fn=cmd_log)
+    s = sub.add_parser("compare", help="paired comparison of two golden candidates")
+    s.add_argument("a"); s.add_argument("b"); s.set_defaults(fn=cmd_compare)
     s = sub.add_parser("catchup"); s.add_argument("step"); s.set_defaults(fn=cmd_catchup)
     args = p.parse_args(argv)
     try:

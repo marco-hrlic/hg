@@ -101,6 +101,44 @@ def bootstrap_ci(y_true: Sequence, y_pred: Sequence, metric=None, n: int = 1000,
     return float(np.quantile(scores, alpha / 2)), float(np.quantile(scores, 1 - alpha / 2))
 
 
+def _fast_macro_f1(y: np.ndarray, p: np.ndarray, k: int) -> float:
+    cm = np.bincount(y * k + p, minlength=k * k).reshape(k, k)
+    tp = np.diag(cm).astype(float)
+    denom = cm.sum(axis=0) + cm.sum(axis=1)  # predicted + actual
+    with np.errstate(divide="ignore", invalid="ignore"):
+        f1 = np.where(denom > 0, 2 * tp / denom, 0.0)
+    return float(f1.mean())
+
+
+def paired_bootstrap_diff(y_true: Sequence, preds_a: list[Sequence], preds_b: list[Sequence],
+                          labels: Sequence = LABELS, n: int = 2000, seed: int = 0,
+                          alpha: float = 0.05) -> dict:
+    """Is model A really better than model B on this evaluation set?
+
+    Both are scored on the *same* resampled items, so luck in which items happen to be in the set
+    largely cancels out. That makes a paired comparison far more sensitive than comparing two
+    separate confidence intervals. Each side may be several runs (seeds); their macro-F1 is averaged,
+    so seed-to-seed variation is included too.
+
+    Returns the observed difference (A − B), its confidence interval, and the share of resamples in
+    which A was *not* better (a rough one-sided p-value).
+    """
+    index = {lab: i for i, lab in enumerate(labels)}
+    k = len(labels)
+    y = np.array([index[v] for v in y_true])
+    A = [np.array([index[v] for v in p]) for p in preds_a]
+    B = [np.array([index[v] for v in p]) for p in preds_b]
+    observed = np.mean([_fast_macro_f1(y, p, k) for p in A]) - np.mean([_fast_macro_f1(y, p, k) for p in B])
+    rng = np.random.default_rng(seed)
+    diffs = np.empty(n)
+    for r in range(n):
+        i = rng.integers(0, len(y), len(y))
+        diffs[r] = (np.mean([_fast_macro_f1(y[i], p[i], k) for p in A])
+                    - np.mean([_fast_macro_f1(y[i], p[i], k) for p in B]))
+    lo, hi = np.quantile(diffs, [alpha / 2, 1 - alpha / 2])
+    return {"diff": float(observed), "lo": float(lo), "hi": float(hi), "p_not_better": float((diffs <= 0).mean())}
+
+
 def slice_report(df: pd.DataFrame, y_true: str, y_pred: str, slices_col: str = "slices") -> pd.DataFrame:
     """Accuracy and macro-F1 per slice. `slices_col` holds a list of slice names per row."""
     rows = [("ALL", df)]
