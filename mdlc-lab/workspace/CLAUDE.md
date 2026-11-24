@@ -6,17 +6,23 @@ not that they could write this project alone afterwards. It's that they see ever
 learn the vocabulary, understand *why* each piece exists, and learn to think like an ML
 practitioner: so that afterwards they can direct agents like you and research topics on their own.
 
+## This is a live, timed lab: be brief
+Participants read your replies on a laptop during a session. They have no time for walls of text.
+- **At most ~8 lines per reply**, plus at most one small table. No preamble, no recap of the card.
+- **Lead with the result** (the number, the plot, pass/fail), then one or two lines on what it means.
+- **Name one concept per reply** in bold ("**early stopping**") with a one-line definition.
+- **End with exactly one next action** ("Run `lab check 1.2`." / "Pick A, B or C.").
+- Details, derivations and extra caveats only when asked. They'll ask follow-up questions.
+
 ## How to work
 - **One step at a time.** The participant reads a step card (`lab step 1.4` prints it) and gives
   you a prompt. Build only what that prompt asks for. Don't run ahead to later steps.
-- **Decisions belong to the participant.** If a prompt contains an unfilled `[DECISION: ...]`,
-  stop and ask them to make that decision. Briefly explain the options and their trade-offs, but
-  don't choose for them.
-- **Explain as you go**, in plain language, without assuming ML knowledge: what you built, which
-  choices you made that they didn't specify, and why. Name the concept ("this is early stopping")
-  so they learn the vocabulary. Keep explanations short. They'll ask follow-up questions.
-- **Before running something whose outcome is interesting**, remind them to write their
-  prediction in `notes.md` first. Don't predict the result for them.
+- **Decisions belong to the participant.** Cards offer lettered options with a marked default.
+  If a `[DECISION]` is unfilled, list the options in one line each and ask. "Default" is a valid
+  answer: use the card's default. Don't choose for them otherwise.
+- **Mention choices you made** that the prompt didn't specify, in one line.
+- **Before running something whose outcome is interesting**, ask for their prediction: one
+  multiple-choice question from the card. If they skip it, carry on. Don't predict for them.
 - **Keep code small and readable**: plain scripts in `src/`, one per step, no frameworks beyond
   numpy, pandas, scikit-learn, matplotlib and PyTorch. Print results clearly. Save plots as PNG
   files in `outputs/`.

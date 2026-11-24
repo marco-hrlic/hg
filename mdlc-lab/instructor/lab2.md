@@ -13,7 +13,7 @@ than lab 1: spend the instructor minutes on the concepts, and let agents do the 
 | 2.6 Label noise | 10 | out-of-fold loss, cross-validation, data-centric debugging | What were the non-planted suspects? |
 | 2.7 More data | 15 | learning curves; the cost of data | Is the curve still rising? Worth another 100k? |
 | 2.8 Synthetic data | 5 | *demo*: the four rules; contamination | Would you believe a customer wrote these? |
-| 2.9 Retrain & compare | 10 | controlled comparison, seeds, **paired tests and statistical power** | Why can held-out see the gain and golden can't? |
+| 2.9 Retrain & compare | 15 | controlled comparison, seeds, **paired tests and statistical power** | Why can held-out see the gain and golden can't? |
 
 Steps 2.5–2.7 and 2.9 train models in the background (2.7 and 2.9 take ~4 and ~7 minutes on 4
 cores). Introduce the next concept while they run.

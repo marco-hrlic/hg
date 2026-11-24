@@ -1,37 +1,30 @@
-# 1.2 Baselines and metrics (20 min)
+# 1.2 Baselines and metrics (15 min)
+**Goal:** two dumb baselines and the metric we'll use from now on.
 
 ## Why this matters
-A **baseline** is the simplest thing that could possibly work. It tells you what "good" means:
-a model is worth its complexity only if it clearly beats the baseline.
+A **baseline** is the simplest thing that could work; a model must clearly beat it.
+**Macro-F1** averages the F1 of each class, so rare neutral counts as much as common positive.
+The **confusion matrix**: rows = truth, columns = prediction.
 
-**Accuracy** (fraction right) hides failures on rare classes. So we also use, per class:
-- **precision**: of the reviews we *called* negative, how many were?
-- **recall**: of the reviews that *were* negative, how many did we catch?
-- **F1**: combines both; high only when both are high.
-- **macro-F1**: the average F1 over the three classes, so the rare class counts as much as the common one.
-
-The **confusion matrix** shows it all: rows are the truth, columns are predictions.
-
-## Predict first (notes.md)
-Majority baseline: accuracy = ? macro-F1 = ? Will a keyword-counting baseline beat it?
+## Predict
+"Always positive" scores 62% accuracy. Its macro-F1?  **A** about 0.25  **B** about 0.50  **C** about 0.62
 
 ## Prompt
-> Write `src/baselines.py` with two baselines, each predicting a label for every review in
-> `data/lab1/dev.csv`:
-> 1. **majority**: always predict the most common label *in train*;
-> 2. **keywords**: count words from a short positive list and a short negative list, and decide the
->    label from the difference. [DECISION: when should it say "neutral"?]
+> Write `src/baselines.py` with two baselines for `data/lab1/dev.csv`:
+> 1. **majority**: always the most common label in train;
+> 2. **keywords**: score = positive words − negative words, from two short word lists.
+>    [DECISION: when is it "neutral"?] **A** score exactly 0 (default) · **B** score between −1 and +1 ·
+>    **C** only a tie with keywords present (no keywords → positive)
 >
-> Save predictions as `outputs/dev_majority.csv` and `outputs/dev_keywords.csv` (columns `id,label`),
-> then run `lab score` on each and explain the confusion matrices to me.
+> Save `outputs/dev_majority.csv` and `outputs/dev_keywords.csv` (`id,label`), run `lab score` on
+> each, and explain the confusion matrices in three lines.
 
 ## Verify
-`lab check 1.2`
-- Why is the majority baseline's accuracy high but its macro-F1 so low? Find it in the confusion matrix.
-- Decide, in notes.md: **which metric will we use to compare models from now on, and why?**
+`lab check 1.2` · Find the majority baseline's zero columns in its confusion matrix.
+Then pick in `notes.md`: compare models from now on by **A** accuracy or **B** macro-F1?
 
-## ML thinking
-**The baseline and the metric come first.** Without them, no number means anything.
+## Takeaway
+Baseline and metric come first. Without them no number means anything.
 
 ## Go deeper
-precision vs recall · F1 score · macro vs micro averaging · confusion matrix · baseline model
+precision vs recall · F1 · macro vs micro averaging · confusion matrix

@@ -1,37 +1,24 @@
-# 2.3 Labels and the golden set (15 min, no Claude for the first part)
+# 2.3 Labels and the golden set (15 min, no Claude for part 1)
+**Goal:** find out how good our labels are, and why neutral failed in lab 1.
 
 ## Why this matters
-Every model learns from labels and is judged by labels. **How good are ours?**
+A **golden set** is labelled carefully: a written guideline, two independent raters, agreement
+measured with **Cohen's kappa** (1 = perfect, 0 = chance), disagreements settled by a person.
 
-A **golden set** is a small evaluation set whose labels were assigned carefully:
-- a written **labelling guideline** with rules for hard cases (`data/lab2/GUIDELINE.md`);
-- **at least two independent raters**; their agreement is measured with **Cohen's kappa**
-  (agreement beyond chance: 1 = perfect, 0 = chance level);
-- disagreements **adjudicated** by a person;
-- **hard cases included on purpose**, tagged by **slice**;
-- kept **independent** of training data, small, frozen and versioned.
+## Part 1: label 10 reviews yourself (5 min, no Claude)
+Read `data/lab2/label_these_10.csv` and label each **negative / neutral / positive**. The short version
+of `data/lab2/GUIDELINE.md`: the overall verdict wins; a stated intention to return or not counts most;
+neutral only if truly lukewarm or balanced. Save `outputs/my_labels.csv` (`item_id,label`).
 
-Ours was drafted by two different LLMs labelling independently (κ = 0.95), with disagreements sent
-to a human. That's a legitimate way to scale labelling, *if* you measure and check it.
-
-## Part 1: label 10 reviews yourself (no Claude)
-Read `data/lab2/label_these_10.csv`. For each, decide negative / neutral / positive using the
-guideline. Write `outputs/my_labels.csv` with columns `item_id,label`. Don't look at stars.
-
-## Predict first (notes.md)
-Of the 3-star reviews in the golden set, what share read as *neutral* when you actually read them?
+## Predict
+Of the golden set's 3★ reviews, what share actually read as neutral?  **A** about 80%  **B** about 50%  **C** about 30%
 
 ## Verify
-`lab check 2.3`: your agreement with the golden labels, and the stars-vs-golden table.
-- Look at the 3-star column. What does it say about the labels lab 1 trained on?
-- The check also shows what happened when an LLM rater relabelled **all 2,316 three-star reviews**
-  in the development data: only about a third read as neutral. That's ~1,450 wrong training labels.
-  (In our tests, training on the corrected labels alone didn't improve the model: neutral became
-  so rare that the model nearly stopped predicting it. Fixing labels changes the class balance too.)
-- Ask Claude: *"What is weak supervision, and when is a proxy label like star ratings good enough?"*
+`lab check 2.3` · Look at the **3★ column** of the stars-vs-golden table. What did lab 1 train on?
 
-## ML thinking
-**Labels are data too, and usually the noisiest part.** Measure agreement before trusting them.
+## Takeaway
+Labels are data too, and usually the noisiest part. Measure them before trusting them.
 
 ## Go deeper
-inter-annotator agreement · Cohen's / Fleiss' kappa · annotation guidelines · LLM-as-annotator · weak supervision
+inter-annotator agreement · Cohen's kappa · annotation guidelines · LLM-as-annotator ·
+*Ask Claude: "What is weak supervision, and when is a proxy label good enough?"*

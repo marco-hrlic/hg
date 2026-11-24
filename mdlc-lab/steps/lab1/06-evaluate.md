@@ -1,23 +1,17 @@
 # 1.6 Evaluate: golden and held-out (10 min)
+**Goal:** the honest verdict on lab 1's model, and its weakest class.
 
 ## Why this matters
-We used dev to make every decision, so the dev score is a little optimistic. Our choices fit it.
-The **evaluation sets** give the honest verdict:
-- **golden set** (~380 reviews): labels assigned against a written guideline by two independent
-  raters, with disagreements sent to a person (lab 2 shows how),
-  **deliberately rich in hard cases** (negation, sarcasm, mixed opinions), each tagged with its
-  **slice**. Answers "where does it fail?"
-- **held-out set** (5,000 reviews): realistic mix, labels from stars. Answers "how good in
-  production?" **One submission per lab.** Every look-then-change makes it less honest.
+Dev picked our settings, so it flatters us. **Golden** (381 hard-case reviews, carefully labelled)
+shows *where* it fails. **Held-out** (5,000 reviews) shows how good it is: **one look per lab**.
 
-## Predict first (notes.md)
-Held-out macro-F1 vs your dev macro-F1: higher, lower, the same? Which golden slice will be worst?
+## Predict
+Held-out macro-F1 compared with dev?  **A** clearly higher  **B** about the same (±0.02)  **C** clearly lower
 
 ## Prompt
-> Using `outputs/model.pt` and `outputs/vectorizer.pkl` from step 1.4, write `src/predict.py`
-> that predicts labels for `data/eval/golden_texts.csv` and `data/eval/heldout_texts.csv` and saves
-> `outputs/golden_lab1.csv` and `outputs/heldout_lab1.csv` with columns `id,label` (`id` = the file's
-> `item_id` or `review_id`). Don't submit; I'll do that.
+> Write `src/predict.py`: load `outputs/model.pt` and `outputs/vectorizer.pkl`, predict
+> `data/eval/golden_texts.csv` and `data/eval/heldout_texts.csv`, and save `outputs/golden_lab1.csv`
+> and `outputs/heldout_lab1.csv` (`id,label`; `id` = `item_id` or `review_id`). Don't submit.
 
 Then you run:
 ```
@@ -27,11 +21,10 @@ lab check 1.6
 ```
 
 ## Verify
-- Was your held-out prediction right? Why might dev and held-out differ?
-- Which slices are weakest? Note them; they're the target for lab 2.
+Find the **neutral** row in the held-out report. Write its F1 in `notes.md`: lab 2 explains it.
 
-## ML thinking
-**Decide, then evaluate once.** Evaluation data you've tuned on can't tell you the truth any more.
+## Takeaway
+Decide on dev, evaluate once. Data you've tuned on can't tell you the truth.
 
 ## Go deeper
-held-out test set · golden dataset · slice-based evaluation · overfitting to the test set · benchmark contamination
+held-out test set · golden dataset · slice-based evaluation · benchmark contamination

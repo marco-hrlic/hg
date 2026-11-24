@@ -1,39 +1,30 @@
 # 2.1 Audit the raw data (15 min)
+**Goal:** a counted list of what's wrong with the raw export, before fixing anything.
 
 ## Why this matters
-Lab 1's "prepared" data started as `data/lab2/reviews_raw.csv`: a raw export of 20,700 reviews.
-Real data always arrives like this. **Data quality problems cost more than modelling problems**,
-and they're invisible in an average score. Before cleaning anything, **audit**: find and count the
-problems, then decide what to do about each.
+Lab 1's data came from `data/lab2/reviews_raw.csv` (20,700 rows). Problems hide at **row level**
+(bad labels, junk text, **duplicates**) and **dataset level** (file order, **target leakage**: a column
+that gives the answer away).
 
-Kinds of problem to look for:
-- **row level**: invalid labels, empty or placeholder texts, markup, **duplicates** (exact, and
-  **near-duplicates**: edited or truncated copies), the same text with **conflicting labels**;
-- **dataset level**: how the file is ordered, columns that shouldn't be used as features
-  (**target leakage**: a column that gives the answer away), class balance.
-
-## Predict first (notes.md)
-How many different kinds of problem will you find? Which one would hurt the model most?
+## Predict
+How many *kinds* of problem are planted?  **A** 2–3  **B** 4–6  **C** 7 or more
 
 ## Prompt
-> Audit `data/lab2/reviews_raw.csv` (read every column as text first). Write `src/audit.py` that
-> looks for row-level problems: invalid star values, empty/placeholder texts, HTML, exact duplicates
-> after normalising case and punctuation, duplicates with conflicting ratings, and near-duplicates
-> (explain how you detect those efficiently). Write every flagged row to `outputs/issues.csv`
-> (`review_id,issue`). Then look at the dataset as a whole (row order, every column, label balance)
-> and tell me what else is wrong. Don't fix anything yet.
+> Write `src/audit.py` for `data/lab2/reviews_raw.csv` (read every column as text). Flag invalid
+> stars, empty/placeholder texts, HTML and escaped characters, exact duplicates (after normalising
+> case and punctuation), duplicates with conflicting stars, and near-duplicates. Write the flags to
+> `outputs/issues.csv` (`review_id,issue`). Then check row order, every column and the label balance,
+> and list dataset-level problems in five lines or fewer. Don't fix anything.
 
-Write the dataset-level problems you found in notes.md, **then** run the check.
+Write the dataset-level problems in `notes.md`, **then** run the check.
 
 ## Verify
-`lab check 2.1` scores your findings against the list of problems that were planted, then
-reveals the dataset-level ones.
-- Ask Claude: *"How does near-duplicate detection with MinHash work, in three sentences?"*
-- Ask: *"If we kept `stars_display` as a feature, what would the dev score look like, and why
-  would it be useless in production?"*
+`lab check 2.1` scores your flags against the planted problems and reveals the dataset-level ones.
 
-## ML thinking
-**Look before you clean, and count before you fix.**
+## Takeaway
+Look before you clean, count before you fix.
 
 ## Go deeper
-data profiling · near-duplicate detection (MinHash, LSH) · target leakage · data validation (Great Expectations, pandera)
+data profiling · near-duplicates (MinHash, LSH) · target leakage · data validation ·
+*Ask Claude: "How does MinHash find near-duplicates, in three sentences?"* ·
+*"What would `stars_display` do to the dev score?"*

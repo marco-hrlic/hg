@@ -1,39 +1,25 @@
-# 2.9 Retrain and compare (10 min)
+# 2.9 Retrain and compare (15 min)
+**Goal:** a fair, significance-tested answer to "is lab 2's model better than lab 1's?"
 
 ## Why this matters
-Time to find out whether everything we learned adds up to a better model than lab 1's. Three rules
-make the comparison fair:
-1. **Same code, same seeds.** Retrain lab 1's recipe *in the same script* as **candidate 0**.
-2. **Several seeds.** Results vary between runs; train each candidate twice and average.
-3. **A paired test on a big enough set.** Score every candidate on the *same* items and bootstrap the
-   *difference*. Our golden set (381 items) is great for finding *where* a model fails, but too small
-   to detect a 3-point gain. Dev (~2,000 items) and held-out (5,000) can.
+Fair comparison: **same code and seeds** for every candidate, **two seeds** each, and a **paired
+bootstrap** on the same items. Choose on dev, confirm once on held-out.
 
-Choose on dev. Confirm once on held-out, against your lab 1 submission.
-
-## Predict first (notes.md)
-Which candidate wins? By how much on held-out macro-F1? Will the difference be significant?
+## Predict
+Lab 2's best model vs lab 1 on held-out macro-F1?  **A** no significant difference  **B** +0.01 to +0.03  **C** +0.04 or more
 
 ## Prompt
-> Write `src/compare.py` using `train()` from `src/train2.py`. Candidates, all early-stopping on
-> `outputs/dev.csv`:
-> - **0**: `outputs/train.csv` as is (the lab 1 recipe);
-> - **A**: class weights [DECISION: your choice from 2.5];
-> - **B**: A + the suspects in `outputs/suspects.csv` removed;
-> - **D**: B + all of `data/lab2/more_reviews.csv`.
+> Write `src/compare.py` using `train()` from `src/train2.py`, early-stopping on `outputs/dev.csv`:
+> - **0**: `outputs/train.csv` as is (lab 1's recipe)
+> - **A**: + class weights. [DECISION: weights] your choice from 2.5 (default: sqrt)
+> - **B**: A + the reviews in `outputs/suspects.csv` removed
+> - **C**: B + `outputs/synthetic.csv`
+> - **D**: B + all of `data/lab2/more_reviews.csv`
 >
-> Train each with seeds 0 and 1 (8 runs; D is slow, so run everything in the background and tell me
-> when it's done). For every run write dev predictions to `outputs/dev_<candidate>_s<seed>.csv`; for
-> seed 0 also write `outputs/golden_<candidate>_s0.csv` and `outputs/heldout_<candidate>_s0.csv`.
-> Don't submit anything; I'll do that.
+> Seeds 0 and 1 each, in the background. Write `outputs/dev_<candidate>_s<seed>.csv` for every run, and
+> `outputs/golden_<candidate>_s0.csv` and `outputs/heldout_<candidate>_s0.csv` for seed 0. Don't submit.
 
-Then compare on dev, paired:
-```
-lab compare A 0
-lab compare B 0
-lab compare D 0
-```
-Pick the winner. Submit its held-out predictions **once**, and its golden predictions for the slice view:
+Then compare on dev (`lab compare A 0`, `B 0`, `C B`, `D 0`), pick the winner, and submit it once:
 ```
 lab submit heldout outputs/heldout_<winner>_s0.csv --name lab2
 lab submit golden  outputs/golden_<winner>_s0.csv  --name lab2
@@ -41,15 +27,12 @@ lab check 2.9
 ```
 
 ## Verify
-- Which candidates are **significantly** better than 0 on dev? Which aren't?
-- Is the lab 2 model significantly better than lab 1 on held-out? (`lab check 2.9` runs the paired test.)
-- Run `lab compare lab2 lab1 --on golden`. Same models, but the golden set can't tell them
-  apart. Why? Write down how big a golden set you'd need.
+Which candidates beat 0 significantly? Then run `lab compare lab2 lab1 --on golden`: why can't the
+golden set tell them apart?
 
-## Wrap-up: the loop
-frame → data → labels & golden set → train → evaluate → ship with a **model card** → monitor for
-**drift** → back to data. You've now touched every box. Pick one "go deeper" topic from today
-and ask an agent to teach it to you properly.
+## Takeaway
+frame → data → labels → train → evaluate → ship with a **model card** → monitor **drift** → back to
+data. You've touched every box. Pick one "go deeper" topic and ask an agent to teach it to you.
 
 ## Go deeper
-statistical power · paired bootstrap · controlled experiments · ablation study · model cards · data drift · MLOps
+statistical power · paired bootstrap · ablation study · model cards · data drift

@@ -10,10 +10,13 @@ Claude Code writes the code. Participants make the decisions, predict outcomes, 
 
 ## Format of every step (5–25 min)
 1. **Instructor, 2–4 min:** introduce the concept from the card's "Why this matters". Draw it.
-2. **Participants:** write the prediction in `notes.md`, fill in the `[DECISION]`s, paste the
-   prompt into Claude Code, then run `lab check`.
-3. **Instructor, 2–3 min:** debrief. Ask two or three people what they predicted vs got; read one
+2. **Participants:** pick A, B or C for the prediction in `notes.md`, paste the prompt into Claude
+   Code (choosing each `[DECISION]`, or saying "default"), then run `lab check`.
+3. **Instructor, 2–3 min:** debrief. A show of hands for A / B / C, then reveal the answer; read one
    surprising result aloud. This is where the learning happens. Don't skip it to save time.
+
+Cards follow `steps/TEMPLATE.md`: about one screen each, one multiple-choice prediction, lettered
+decisions with defaults. `workspace/CLAUDE.md` keeps the agent's replies short (about 8 lines).
 
 If someone falls behind: `lab catchup <step>` writes reference outputs so they can continue
 with the next step.
