@@ -8,7 +8,7 @@ rations held-out submissions, and checks each step's outputs for the classic mis
     lab steps                      list the step cards
     lab step 1.4                   print a step card
     lab check 1.4                  check that step's outputs
-    lab score FILE [--truth FILE]  score dev predictions (default truth: data/lab1/dev.csv)
+    lab score FILE [--truth FILE]  score dev predictions (lab 1 or lab 2 dev, picked by ids)
     lab submit golden FILE --name NAME     score on the golden set (hidden labels), per slice
     lab submit heldout FILE --name NAME    score on the held-out set (hidden labels), rationed
     lab log                        every submission so far
@@ -41,6 +41,7 @@ STEPS_DIR = LAB_ROOT / "steps"
 REFERENCE_DIR = LAB_ROOT / "reference"
 WORKSPACE = Path(os.environ.get("MDLC_WORKSPACE", LAB_ROOT / "workspace"))
 HELDOUT_ALLOWANCE = 2  # one look at the end of each lab
+MIN_SLICE_FOR_F1 = 30  # golden slices smaller than this show accuracy only
 
 OK, FAIL, WARN = "✓", "✗", "!"
 
@@ -198,11 +199,26 @@ def cmd_step(args) -> None:
 # scoring and submissions
 # ---------------------------------------------------------------------------
 
+def _dev_truth_for(pred: pd.Series) -> tuple[pd.Series, Path]:
+    """The dev split these predictions belong to: lab 2's outputs/dev.csv or lab 1's data/lab1/dev.csv,
+    whichever shares the most ids with the prediction file."""
+    candidates = [p for p in (ws("outputs", "dev.csv"), ws("data", "lab1", "dev.csv")) if p.exists()]
+    if not candidates:
+        raise CheckFailed("no dev set found: run `lab setup` first")
+    truths = {p: pd.read_csv(p, keep_default_na=False).set_index("review_id")["label"] for p in candidates}
+    best = max(truths, key=lambda p: truths[p].index.isin(pred.index).mean())
+    return truths[best], best
+
+
 def cmd_score(args) -> None:
-    truth_df = pd.read_csv(args.truth, keep_default_na=False)
-    truth = truth_df.set_index("review_id")["label"]
-    pred = align(read_predictions(Path(args.file)), truth, "dev")
-    print_scores(truth, pred, f"dev score for {Path(args.file).name}")
+    pred = read_predictions(Path(args.file))
+    if args.truth:
+        path = Path(args.truth)
+        truth = pd.read_csv(path, keep_default_na=False).set_index("review_id")["label"]
+    else:
+        truth, path = _dev_truth_for(pred)
+    pred = align(pred, truth, "dev")
+    print_scores(truth, pred, f"dev score for {Path(args.file).name} (truth: {path.name} in {path.parent.name}/)")
 
 
 def cmd_submit(args) -> None:
@@ -237,7 +253,13 @@ def cmd_submit(args) -> None:
               f"{(truth == 'neutral').sum()} neutral), differences smaller than this band are mostly noise.")
         heading("per slice (where the hard cases are)")
         rep = metrics.slice_report(g.assign(pred=pred.values), "label", "pred")
-        print(rep.sort_values("macro_f1").to_string())
+        small = rep["n"] < MIN_SLICE_FOR_F1
+        shown = rep.astype({"macro_f1": object})
+        shown.loc[small, "macro_f1"] = "-"  # macro-F1 on a handful of items swings wildly
+        print(shown.loc[rep.sort_values("accuracy").index].to_string())
+        if small.any():
+            print(f"(macro-F1 hidden for slices under {MIN_SLICE_FOR_F1} items: one review can swing it "
+                  "by 0.2. Read their accuracy, and treat it as a hint.)")
         n = sum(1 for e in log if e["set"] == "golden") + 1  # log was read before this submission
         print(f"\n{g.attrs.get('label_source', '')} labels, {len(g)} items. Golden submissions so far: {n}. "
               "Use it to compare finished candidates, not to tune.")
@@ -691,7 +713,7 @@ def main(argv: list[str] | None = None) -> None:
     s = sub.add_parser("step"); s.add_argument("step"); s.set_defaults(fn=cmd_step)
     s = sub.add_parser("check"); s.add_argument("step"); s.set_defaults(fn=cmd_check)
     s = sub.add_parser("score"); s.add_argument("file")
-    s.add_argument("--truth", default=str(ws("data", "lab1", "dev.csv"))); s.set_defaults(fn=cmd_score)
+    s.add_argument("--truth", default=None); s.set_defaults(fn=cmd_score)
     s = sub.add_parser("submit"); s.add_argument("set", choices=["golden", "heldout"]); s.add_argument("file")
     s.add_argument("--name", required=True); s.add_argument("--force", action="store_true"); s.set_defaults(fn=cmd_submit)
     sub.add_parser("log").set_defaults(fn=cmd_log)

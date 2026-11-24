@@ -220,17 +220,22 @@ def step_2_7():
 
 
 def step_2_9():
-    """Candidates 0 (lab 1 recipe), A (class weights), B (A + suspects removed), D (B + more data); seeds 0-1."""
+    """Candidates 0 (lab 1 recipe), A (class weights), B (A + suspects removed), C (B + synthetic),
+    D (B + more data); seeds 0-1."""
     train, dev = lab2_data()
     if not (OUT / "suspects.csv").exists():
         step_2_6()
     suspects = set(pd.read_csv(OUT / "suspects.csv").review_id)
     cleaned = train[~train.review_id.isin(suspects)]
+    if not (OUT / "synthetic.csv").exists():
+        step_2_8()
+    with_synthetic = pd.concat([cleaned, pd.read_csv(OUT / "synthetic.csv")], ignore_index=True)
     more = pd.concat([cleaned, more_reviews()], ignore_index=True)
     candidates = {
         "0": (train, None),
         "A": (train, class_weights(train, "sqrt_inverse")),
         "B": (cleaned, class_weights(cleaned, "sqrt_inverse")),
+        "C": (with_synthetic, class_weights(with_synthetic, "sqrt_inverse")),
         "D": (more, class_weights(more, "sqrt_inverse")),
     }
     golden, heldout = eval_texts()
