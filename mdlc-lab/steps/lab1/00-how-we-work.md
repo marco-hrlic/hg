@@ -1,6 +1,8 @@
 # How we work (10 min)
 **Goal:** know who does what, and the seven habits we'll practise.
 
+MDLC (machine-learning development lifecycle): everything from data to a model in production.
+
 Claude writes the code. **You decide, predict and check.** You won't build this alone afterwards,
 and that's fine: the aim is to know every part, the words for it, and how to direct an agent.
 

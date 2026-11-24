@@ -28,5 +28,5 @@ How many of the 20,700 rows survive?  **A** about 20,500  **B** about 19,900  **
 Every cleaning rule is a modelling decision. Write it down, version the result.
 
 ## Go deeper
-stratified split · group and time splits · data versioning (DVC) ·
+stratified split · group and time splits · data versioning (DVC, Data Version Control) ·
 *Ask Claude: "Why hash the output files?"* · *"If we had customer IDs, how should we split?"*

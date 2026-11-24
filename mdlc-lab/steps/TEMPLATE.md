@@ -33,3 +33,7 @@ Rules of thumb:
 - One prediction per step at most. Skip it when there's no real surprise.
 - Each prediction has a matching line in `workspace/notes.md`.
 - No more than one table per card.
+- Spell out each acronym on the card where it first appears in the course: "TF-IDF (term frequency ×
+  inverse document frequency)".
+- Ask for a picture where it replaces reading (a diagram, heatmap or plot), but not on every step:
+  every PNG is a file to open during the session.

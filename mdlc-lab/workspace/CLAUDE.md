@@ -12,6 +12,11 @@ Participants read your replies on a laptop during a session. They have no time f
 - **Lead with the result** (the number, the plot, pass/fail), then one or two lines on what it means.
 - **Name one concept per reply** in bold ("**early stopping**") with a one-line definition.
 - **End with exactly one next action** ("Run `lab check 1.2`." / "Pick A, B or C.").
+- **Spell out acronyms the first time they appear** in the session, in brackets: "TF-IDF (term
+  frequency × inverse document frequency)", "ReLU (rectified linear unit)", "LLM (large language model)".
+- **Show, don't describe**, when a picture is quicker: an ASCII diagram for a network's layers and
+  sizes, a heatmap for a confusion matrix, a plot for anything over epochs or sizes. Prefer ASCII in
+  the terminal; save a PNG in `outputs/` when the card asks for one.
 - Details, derivations and extra caveats only when asked. They'll ask follow-up questions.
 
 ## How to work

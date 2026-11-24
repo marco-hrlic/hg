@@ -15,10 +15,11 @@ With inverse-frequency weights, neutral recall will…  **A** fall  **B** stay a
 > dev macro-F1. Densify one batch at a time so a run takes under a minute. Steps 2.6, 2.7 and 2.9 reuse it.
 > On `outputs/train.csv` / `outputs/dev.csv`, train with no weights, square-root inverse frequency and
 > inverse frequency. Save `outputs/class_weights.csv`
-> (`weighting,dev_macro_f1,recall_negative,recall_neutral,recall_positive`) and show the weights.
+> (`weighting,dev_macro_f1,recall_negative,recall_neutral,recall_positive`), show the weights, and plot
+> recall per class for the three weightings as one grouped bar chart to `outputs/class_weights.png`.
 
 ## Verify
-`lab check 2.5` · Then pick in `notes.md`: to route unhappy customers to support, ship
+`lab check 2.5` · Open the bar chart. Then pick in `notes.md`: to route unhappy customers to support, ship
 **A** none, **B** sqrt or **C** inverse? (A product decision: there's no single right answer.)
 
 ## Takeaway

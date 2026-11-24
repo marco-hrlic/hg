@@ -14,11 +14,11 @@ neutral only if truly lukewarm or balanced. Save `outputs/my_labels.csv` (`item_
 Of the golden set's 3★ reviews, what share actually read as neutral?  **A** about 80%  **B** about 50%  **C** about 30%
 
 ## Verify
-`lab check 2.3` · Look at the **3★ column** of the stars-vs-golden table. What did lab 1 train on?
+`lab check 2.3` · Open `outputs/stars_vs_golden.png` and look at the **3★ column**. What did lab 1 train on?
 
 ## Takeaway
 Labels are data too, and usually the noisiest part. Measure them before trusting them.
 
 ## Go deeper
-inter-annotator agreement · Cohen's kappa · annotation guidelines · LLM-as-annotator ·
+inter-annotator agreement · Cohen's kappa · annotation guidelines · LLM (large language model) as annotator ·
 *Ask Claude: "What is weak supervision, and when is a proxy label good enough?"*

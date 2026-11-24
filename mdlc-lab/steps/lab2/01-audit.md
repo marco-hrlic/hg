@@ -25,6 +25,6 @@ Write the dataset-level problems in `notes.md`, **then** run the check.
 Look before you clean, count before you fix.
 
 ## Go deeper
-data profiling · near-duplicates (MinHash, LSH) · target leakage · data validation ·
+data profiling · near-duplicates (MinHash; LSH, locality-sensitive hashing) · target leakage · data validation ·
 *Ask Claude: "How does MinHash find near-duplicates, in three sentences?"* ·
 *"What would `stars_display` do to the dev score?"*

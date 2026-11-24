@@ -3,7 +3,8 @@
 
 ## Why this matters
 A **baseline** is the simplest thing that could work; a model must clearly beat it.
-**Macro-F1** averages the F1 of each class, so rare neutral counts as much as common positive.
+**F1** combines precision (were our "negative" calls right?) and recall (did we catch the negatives?);
+**macro-F1** averages it over the classes, so rare neutral counts as much as common positive.
 The **confusion matrix**: rows = truth, columns = prediction.
 
 ## Predict
@@ -17,7 +18,8 @@ The **confusion matrix**: rows = truth, columns = prediction.
 >    **C** only a tie with keywords present (no keywords → positive)
 >
 > Save `outputs/dev_majority.csv` and `outputs/dev_keywords.csv` (`id,label`), run `lab score` on
-> each, and explain the confusion matrices in three lines.
+> each, and explain the confusion matrices in three lines. Save the keyword baseline's confusion
+> matrix as a heatmap to `outputs/confusion_keywords.png`.
 
 ## Verify
 `lab check 1.2` · Find the majority baseline's zero columns in its confusion matrix.

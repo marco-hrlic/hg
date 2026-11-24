@@ -2,7 +2,7 @@
 **Goal:** every review becomes a vector of numbers, with no leakage.
 
 ## Why this matters
-**TF-IDF**: one slot per vocabulary term, high for words frequent in *this* review but rare overall.
+**TF-IDF** (term frequency × inverse document frequency): one slot per vocabulary term, high for words frequent in *this* review but rare overall.
 **Fit on train only**, then apply to dev and evaluation data; anything else leaks.
 
 ## Predict

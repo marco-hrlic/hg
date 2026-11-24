@@ -10,7 +10,8 @@ A model that always says "positive" gets what accuracy on dev?  **A** 33%  **B**
 
 ## Prompt
 > Write `src/explore.py`: review counts and label mix (%) for `data/lab1/train.csv` and `dev.csv`,
-> median review length, and two example reviews per label.
+> median review length, and two example reviews per label. Save a bar chart of the label mix to
+> `outputs/label_mix.png`.
 
 ## Verify
 Is the label mix the same in train and dev? Would you agree with the example labels?

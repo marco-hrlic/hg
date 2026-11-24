@@ -76,6 +76,25 @@ def require_file(path: Path, columns: list[str]) -> pd.DataFrame:
     return df
 
 
+def _save_heatmap(table: pd.DataFrame, path: Path, title: str, xlabel: str, ylabel: str) -> None:
+    """Counts as a heatmap with the numbers written in, for a quick visual read in the session."""
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+    fig, ax = plt.subplots(figsize=(1.1 * table.shape[1] + 2, 0.7 * table.shape[0] + 1.5))
+    ax.imshow(table.values, cmap="Blues")
+    ax.set_xticks(range(table.shape[1]), [str(c) for c in table.columns])
+    ax.set_yticks(range(table.shape[0]), [str(i) for i in table.index])
+    top = table.values.max()
+    for (i, j), v in np.ndenumerate(table.values):
+        ax.text(j, i, str(v), ha="center", va="center", color="white" if v > top / 2 else "black")
+    ax.set(title=title, xlabel=xlabel, ylabel=ylabel)
+    fig.tight_layout()
+    path.parent.mkdir(parents=True, exist_ok=True)
+    fig.savefig(path, dpi=120)
+    plt.close(fig)
+
+
 def read_predictions(path: Path) -> pd.Series:
     """Prediction files have an id column (id, review_id or item_id) and a label column."""
     if not Path(path).exists():
@@ -550,8 +569,11 @@ def check_2_3() -> bool:
         stars_k = metrics.cohen_kappa(g.loc[mine.item_id, "star_label"].tolist(), g.loc[mine.item_id, "label"].tolist())
         say(OK, f"star-derived labels vs the golden labels on the same items: kappa {stars_k:.2f}")
     heading("all golden items: label from reading the text vs label from the stars")
-    print(pd.crosstab(g.label, g.stars, rownames=["golden label"], colnames=["stars"]).to_string())
-    print("\n  Look at the 3-star column.")
+    table = pd.crosstab(g.label, g.stars, rownames=["golden label"], colnames=["stars"])
+    print(table.to_string())
+    _save_heatmap(table, ws("outputs", "stars_vs_golden.png"),
+                  "Golden label (from reading) vs stars", "stars", "golden label")
+    print("\n  Look at the 3-star column (also saved as outputs/stars_vs_golden.png).")
     rel = LAB_ROOT / "relabels" / "three_star_labels.csv"
     if rel.exists():
         mix = pd.read_csv(rel).label.value_counts(normalize=True)

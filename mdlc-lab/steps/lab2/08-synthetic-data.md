@@ -1,5 +1,5 @@
 # 2.8 Synthetic data (5 min, instructor demo)
-**Goal:** 300 LLM-written reviews for our weak slices, checked for contamination.
+**Goal:** 300 reviews written by an LLM (large language model) for our weak slices, checked for contamination.
 
 ## Why this matters
 **Synthetic data** can fill rare cases, and can quietly fool you. Rules: train only, never evaluate
