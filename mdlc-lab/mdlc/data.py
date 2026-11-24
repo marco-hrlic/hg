@@ -48,6 +48,7 @@ DATA_DIR = Path(os.environ.get("MDLC_DATA", LAB_ROOT / "data"))
 STAR_MIX = {1: 0.15, 2: 0.10, 3: 0.12, 4: 0.25, 5: 0.38}
 N_BASE = 20_000
 MAX_WORDS = 350  # keep CPU training fast and reviews readable
+N_MORE = 82_000  # lab 2's "more data" pool: brings training to ~100k reviews
 
 
 def stars_to_sentiment(stars: int) -> str:
@@ -380,6 +381,7 @@ def build_all(data_dir: Path = DATA_DIR, seed: int = SEED, force: bool = False) 
         "sheet": data_dir / "golden" / "labelling_sheet.csv",
         "heldout": data_dir / "heldout" / "heldout.csv",
         "prepared": data_dir / "prepared" / "manifest.json",
+        "more": data_dir / "extra" / "more_reviews.csv",
     }
     if not force and all(p.exists() for p in paths.values()):
         return paths
@@ -413,6 +415,18 @@ def build_all(data_dir: Path = DATA_DIR, seed: int = SEED, force: bool = False) 
     heldout["text"] = heldout["text"].map(clean_text)
     heldout["label"] = heldout["stars"].map(stars_to_sentiment)
     heldout.to_csv(paths["heldout"], index=False)
+
+    # Lab 2's "more data" pool: a second, larger export, already cleaned and star-labelled,
+    # disjoint (after normalisation) from the raw pool and from all evaluation data.
+    taken = train_norm | golden_norm | set(heldout["text"].map(normalize_for_dedup))
+    pool = train.copy()
+    pool["text"] = pool["text"].map(clean_text)
+    pool["norm"] = pool["text"].map(normalize_for_dedup)
+    pool = pool[~pool["norm"].isin(taken)].drop_duplicates("norm")
+    more = _sample_mix(pool, N_MORE, np.random.default_rng(seed + 2)).reset_index(drop=True)
+    more.insert(0, "review_id", [f"M{n:06d}" for n in range(1, len(more) + 1)])
+    more["label"] = more["stars"].map(stars_to_sentiment)
+    more[["review_id", "text", "label"]].to_csv(paths["more"], index=False)
 
     # Lab 1's ready-made development data: the reference pipeline applied to the raw pool.
     # It is clean in every way you can check row by row, but the ~600 flipped labels are still in it.

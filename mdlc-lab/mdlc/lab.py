@@ -12,7 +12,7 @@ rations held-out submissions, and checks each step's outputs for the classic mis
     lab submit golden FILE --name NAME     score on the golden set (hidden labels), per slice
     lab submit heldout FILE --name NAME    score on the held-out set (hidden labels), rationed
     lab log                        every submission so far
-    lab compare A B                paired bootstrap: is candidate A really better than B on golden?
+    lab compare A B [--on dev|golden|heldout]   paired bootstrap: is candidate A really better than B?
     lab catchup 1.4                write the reference outputs for a step, to catch up
 """
 
@@ -159,6 +159,7 @@ def cmd_setup(args) -> None:
     exercise = exercise[exercise["item_id"].isin(golden["item_id"])].head(10)
     exercise[["item_id", "text"]].to_csv(d / "lab2" / "label_these_10.csv", index=False)
     shutil.copy(LAB_ROOT / "golden_labels" / "GUIDELINE.md", d / "lab2" / "GUIDELINE.md")
+    shutil.copy(paths["more"], d / "lab2" / "more_reviews.csv")
     synth = LAB_ROOT / "synthetic" / "synthetic_reviews.jsonl"
     pd.read_json(synth, lines=True).to_csv(d / "lab2" / "synthetic_pregenerated.csv", index=False)
 
@@ -242,11 +243,32 @@ def cmd_submit(args) -> None:
               "Use it to compare finished candidates, not to tune.")
 
 
-def _golden_runs() -> dict[str, list[pd.Series]]:
-    """Golden prediction files from the log, grouped by candidate (name without its -sN seed suffix)."""
+def _dev_truth() -> pd.Series:
+    """Lab 2's own dev split if it exists, otherwise lab 1's."""
+    p = ws("outputs", "dev.csv") if ws("outputs", "dev.csv").exists() else ws("data", "lab1", "dev.csv")
+    return pd.read_csv(p, keep_default_na=False).set_index("review_id")["label"]
+
+
+def _truth(on: str) -> pd.Series:
+    if on == "golden":
+        return golden_truth().set_index("item_id")["label"]
+    if on == "heldout":
+        return pd.read_csv(data.DATA_DIR / "heldout" / "heldout.csv").set_index("review_id")["label"]
+    return _dev_truth()
+
+
+def _runs(on: str) -> dict[str, list[pd.Series]]:
+    """Prediction runs grouped by candidate. Dev: files outputs/dev_<candidate>_s<seed>.csv.
+    Golden and held-out: logged submissions, grouped by name without its -sN suffix."""
     runs: dict[str, list[pd.Series]] = {}
+    if on == "dev":
+        for path in sorted(ws("outputs").glob("dev_*_s*.csv")):
+            m = re.fullmatch(r"dev_(.+)_s\d+\.csv", path.name)
+            if m:
+                runs.setdefault(m.group(1), []).append(read_predictions(path))
+        return runs
     for e in load_log():
-        if e["set"] != "golden":
+        if e["set"] != on:
             continue
         path = Path(e["file"])
         path = path if path.is_absolute() else WORKSPACE / path
@@ -257,14 +279,15 @@ def _golden_runs() -> dict[str, list[pd.Series]]:
     return runs
 
 
-def compare_candidates(a: str, b: str) -> dict:
-    g = golden_truth().set_index("item_id")["label"]
-    runs = _golden_runs()
+def compare_candidates(a: str, b: str, on: str = "dev") -> dict:
+    g = _truth(on)
+    runs = _runs(on)
     for name in (a, b):
         if name not in runs:
-            raise CheckFailed(f"no golden submissions named {name} (or {name}-s0, {name}-s1, ...) with unchanged files")
-    res = metrics.paired_bootstrap_diff(g.values, [p.loc[g.index].values for p in runs[a]],
-                                        [p.loc[g.index].values for p in runs[b]])
+            where = "files outputs/dev_<name>_s<seed>.csv" if on == "dev" else f"{on} submissions (unchanged files)"
+            raise CheckFailed(f"no {where} for candidate {name}. Have: {sorted(runs) or 'none'}")
+    res = metrics.paired_bootstrap_diff(g.values, [align(p, g, on).values for p in runs[a]],
+                                        [align(p, g, on).values for p in runs[b]])
     res.update(n_a=len(runs[a]), n_b=len(runs[b]))
     return res
 
@@ -277,10 +300,11 @@ def describe_comparison(a: str, b: str, r: dict) -> str:
 
 
 def cmd_compare(args) -> None:
-    r = compare_candidates(args.a, args.b)
-    print(describe_comparison(args.a, args.b, r))
-    print("Paired bootstrap: both are re-scored on the same resampled golden items, so the luck of the "
-          "item sample mostly cancels out; several seeds per side average out run-to-run noise.")
+    r = compare_candidates(args.a, args.b, args.on)
+    print(f"[{args.on}, {len(_truth(args.on)):,} items] " + describe_comparison(args.a, args.b, r))
+    print("Paired bootstrap: both are re-scored on the same resampled items, so the luck of the item "
+          "sample mostly cancels out; several seeds per side average out run-to-run noise. The bigger the "
+          "evaluation set, the smaller the difference it can detect.")
 
 
 def cmd_log(args) -> None:
@@ -506,6 +530,12 @@ def check_2_3() -> bool:
     heading("all golden items: label from reading the text vs label from the stars")
     print(pd.crosstab(g.label, g.stars, rownames=["golden label"], colnames=["stars"]).to_string())
     print("\n  Look at the 3-star column.")
+    rel = LAB_ROOT / "relabels" / "three_star_labels.csv"
+    if rel.exists():
+        mix = pd.read_csv(rel).label.value_counts(normalize=True)
+        heading("at scale: an LLM rater relabelled all 2,316 three-star reviews in the development data")
+        print("  " + ", ".join(f"{lab} {mix.get(lab, 0):.0%}" for lab in (*LABELS, "ambiguous")))
+        print("  So 'three stars = neutral' gives roughly 1,450 wrong training labels: more than twice the 600 planted flips.")
     return len(mine) >= 8
 
 
@@ -570,6 +600,19 @@ def check_2_6() -> bool:
 
 
 def check_2_7() -> bool:
+    lc = require_file(ws("outputs", "learning_curve.csv"), ["n_train", "dev_macro_f1"])
+    lc = lc.sort_values("n_train")
+    print(lc.to_string(index=False))
+    ok = len(lc) >= 3 and lc.n_train.nunique() >= 3
+    say(OK if ok else FAIL, f"{lc.n_train.nunique()} training-set sizes" + ("" if ok else " (need at least 3)"))
+    if ok:
+        gain = lc.dev_macro_f1.iloc[-1] - lc.dev_macro_f1.iloc[0]
+        say(OK, f"{lc.n_train.iloc[0]:,} → {lc.n_train.iloc[-1]:,} reviews: dev macro-F1 {gain:+.3f}. Is the curve still "
+                "rising at the right-hand end? Then more data would still help.")
+    return ok
+
+
+def check_2_8() -> bool:
     syn = require_file(ws("outputs", "synthetic.csv"), ["text", "label"])
     ok = syn.label.isin(LABELS).all()
     say(OK if ok else FAIL, f"{len(syn)} synthetic reviews, labels valid" if ok else "invalid labels")
@@ -586,34 +629,33 @@ def check_2_7() -> bool:
     return ok and leaks == 0
 
 
-def check_2_8() -> bool:
-    log = pd.DataFrame(load_log())
-    if log.empty:
-        raise CheckFailed("no submissions yet")
-    golden = log[log.set == "golden"].copy()
-    golden["candidate"] = golden.name.str.replace(r"-s\d+$", "", regex=True)
-    table = golden.groupby("candidate", sort=False).macro_f1.agg(["count", "mean", "std", "min", "max"]).round(3)
-    heading("golden macro-F1 per candidate (seeds grouped by the -sN suffix)")
-    print(table.to_string())
-    seeded = table[table["count"] >= 2]
-    print("\nTwo sources of noise: the random seed (the spread above) and the small evaluation set "
-          "(see each submission's bootstrap interval).")
-    if "0" not in seeded.index:
-        say(FAIL, "no candidate 0 with several seeds: the lab 1 recipe retrained in the same script is the fair baseline")
+def check_2_9() -> bool:
+    runs = _runs("dev")
+    seeded = {c: len(r) for c, r in runs.items() if len(r) >= 2}
+    heading("dev: paired comparison with candidate 0 (bootstrap over dev items, averaged over seeds)")
+    if "0" not in seeded:
+        raise CheckFailed("need outputs/dev_0_s0.csv, dev_0_s1.csv, ...: candidate 0 (lab 1's recipe, retrained in "
+                          "the same script) with at least 2 seeds")
+    for cand in sorted(c for c in seeded if c != "0"):
+        say(OK, describe_comparison(cand, "0", compare_candidates(cand, "0", "dev")))
+    held = [e for e in load_log() if e["set"] == "heldout"]
+    names = [e["name"] for e in held]
+    heading("held-out: your lab 2 model vs the lab 1 model (one look each)")
+    if "lab1" not in names or len(held) < 2:
+        say(FAIL, f"need a held-out submission named lab1 (from lab 1) and one for your lab 2 model; have {names or 'none'}")
         return False
-    heading("paired comparison with candidate 0 (bootstrap over golden items, averaged over seeds)")
-    for cand in seeded.index.drop("0"):
-        say(OK, describe_comparison(cand, "0", compare_candidates(cand, "0")))
-    held = log[log.set == "heldout"]
-    print("\n" + held[["name", "accuracy", "macro_f1"]].to_string(index=False))
-    ok = len(held) >= 1 and len(seeded) >= 2
-    say(OK if ok else FAIL, "candidates compared and held-out submitted" if ok else "submit the chosen model to held-out")
-    return ok
+    final = held[-1]["name"]
+    say(OK, describe_comparison(final, "lab1", compare_candidates(final, "lab1", "heldout")))
+    golden = [e["name"] for e in load_log() if e["set"] == "golden"]
+    if golden:
+        print(f"\n  Golden submissions: {', '.join(golden)}. Use `lab compare X Y --on golden` to see why the "
+              "small golden set can't settle the same question.")
+    return True
 
 
 CHECKS = {"1.2": check_1_2, "1.4": check_1_4, "1.5": check_1_5, "1.6": check_1_6, "1.7": check_1_7,
           "2.1": check_2_1, "2.2": check_2_2, "2.3": check_2_3, "2.4": check_2_4, "2.5": check_2_5,
-          "2.6": check_2_6, "2.7": check_2_7, "2.8": check_2_8}
+          "2.6": check_2_6, "2.7": check_2_7, "2.8": check_2_8, "2.9": check_2_9}
 
 
 def cmd_check(args) -> None:
@@ -654,7 +696,8 @@ def main(argv: list[str] | None = None) -> None:
     s.add_argument("--name", required=True); s.add_argument("--force", action="store_true"); s.set_defaults(fn=cmd_submit)
     sub.add_parser("log").set_defaults(fn=cmd_log)
     s = sub.add_parser("compare", help="paired comparison of two golden candidates")
-    s.add_argument("a"); s.add_argument("b"); s.set_defaults(fn=cmd_compare)
+    s.add_argument("a"); s.add_argument("b")
+    s.add_argument("--on", choices=["dev", "golden", "heldout"], default="dev"); s.set_defaults(fn=cmd_compare)
     s = sub.add_parser("catchup"); s.add_argument("step"); s.set_defaults(fn=cmd_catchup)
     args = p.parse_args(argv)
     try:

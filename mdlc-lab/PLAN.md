@@ -79,14 +79,15 @@ The lab 1 dataset is produced by the same reference cleaning pipeline that lab 2
 
 | Step | Min | Participants do (with Claude Code) | Verified by |
 |---|---|---|---|
-| 2.1 Audit | 20 | find row- and dataset-level problems in the raw export | `lab check 2.1` (answer key) |
-| 2.2 Clean & split | 15 | cleaning decisions; stratified train/dev; manifest | `lab check 2.2` (leakage, dups, stratification) |
-| 2.3 Labels & golden set | 15 | label 10 reviews by hand; stars vs golden | `lab check 2.3` (kappa) |
-| 2.4 The maths | 25 | softmax, cross-entropy, gradient, gradient descent in NumPy | `lab check 2.4` (vs PyTorch autograd) |
-| 2.5 Loss design | 15 | class weights; ship decision | `lab check 2.5` |
+| 2.1 Audit | 15 | find row- and dataset-level problems in the raw export | `lab check 2.1` (answer key) |
+| 2.2 Clean & split | 15 | cleaning decisions; stratified train/dev; manifest | `lab check 2.2` (leakage, dups, escapes, stratification) |
+| 2.3 Labels & golden set | 15 | label 10 reviews by hand; stars vs golden; the 3-star relabelling result | `lab check 2.3` (kappa) |
+| 2.4 The maths | 20 | softmax, cross-entropy, gradient, gradient descent in NumPy | `lab check 2.4` (vs PyTorch autograd) |
+| 2.5 Loss design | 15 | class weights; ship decision; a reusable `train()` | `lab check 2.5` |
 | 2.6 Label noise | 10 | out-of-fold loss → suspects | `lab check 2.6` (answer key) |
-| 2.7 Synthetic data | 10 | generate or use pre-generated; contamination | `lab check 2.7` |
-| 2.8 Retrain & compare | 10 | candidates × 3 seeds on golden; held-out once | `lab check 2.8` |
+| 2.7 More data | 15 | learning curve at 18k / 50k / 100k reviews | `lab check 2.7` |
+| 2.8 Synthetic data | 5 | instructor demo; contamination | `lab check 2.8` |
+| 2.9 Retrain & compare | 10 | candidates 0/A/B/D × 2 seeds; paired test on dev; held-out once vs lab 1 | `lab check 2.9` (paired bootstrap) |
 
 ## Deliverables
 

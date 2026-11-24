@@ -16,7 +16,7 @@ SECTIONS = ["## Why this matters", "## Verify", "## Go deeper"]
 
 def test_every_card_has_the_standard_sections_and_a_matching_check():
     cards = sorted(lab.STEPS_DIR.glob("lab*/*.md"))
-    assert len(cards) == 16
+    assert len(cards) == 17
     for card in cards:
         body = card.read_text()
         step = f"{card.parent.name[3:]}.{int(card.name[:2])}"

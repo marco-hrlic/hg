@@ -44,7 +44,8 @@ with the next step.
 | Splitting by file position on a sorted file | 2.2 (stratification) |
 | Duplicates across train/dev, conflicting copies kept | 2.2 |
 | Unstable softmax, wrong gradient | 2.4 (tests against PyTorch autograd) |
-| Synthetic data copying evaluation items | 2.7 (near-duplicate check) |
+| Synthetic data copying evaluation items | 2.8 (near-duplicate check) |
+| Declaring a winner from a difference that's within noise | 2.9 and `lab compare` (paired bootstrap) |
 | Peeking at held-out repeatedly | `lab submit` refuses after the allowance |
 
 ## Agent dry run (lab 1)

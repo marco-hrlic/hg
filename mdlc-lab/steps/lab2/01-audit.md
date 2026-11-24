@@ -1,4 +1,4 @@
-# 2.1 Audit the raw data (20 min)
+# 2.1 Audit the raw data (15 min)
 
 ## Why this matters
 Lab 1's "prepared" data started as `data/lab2/reviews_raw.csv`: a raw export of 20,700 reviews.

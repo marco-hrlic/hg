@@ -21,7 +21,7 @@ With inverse-frequency weights, what happens to neutral recall? To positive reca
 > `train_df` only; Linear → 32 → ReLU → Linear → 3; Adam, learning rate 0.001; batches of 64; 6 epochs;
 > keep the epoch with the best dev macro-F1. It returns the model and vectorizer. Each run should take
 > under a minute on a laptop CPU; if it's much slower, find out why (hint: convert only one batch at a
-> time from sparse to dense). Steps 2.6 and 2.8 reuse this function.
+> time from sparse to dense). Steps 2.6, 2.7 and 2.9 reuse this function.
 >
 > Then, on `outputs/train.csv` and `outputs/dev.csv`, train it three times with class-weighted
 > cross-entropy: no weights, square-root inverse frequency, inverse frequency. Record dev macro-F1 and

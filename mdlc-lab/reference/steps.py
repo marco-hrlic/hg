@@ -196,32 +196,50 @@ def step_2_6():
     train.assign(loss=losses).nlargest(600, "loss")[["review_id", "loss"]].to_csv(OUT / "suspects.csv", index=False)
 
 
-def step_2_7():
+def step_2_8():
     pd.read_csv(WS / "data/lab2/synthetic_pregenerated.csv")[["text", "label"]].to_csv(OUT / "synthetic.csv", index=False)
 
 
-def step_2_8():
-    """Candidates 0 (lab 1 recipe), A (class weights), B (A + suspects removed), C (B + synthetic); seeds 0-2."""
+def more_reviews(n=None):
+    more = pd.read_csv(WS / "data/lab2/more_reviews.csv", keep_default_na=False)
+    return more if n is None else more.iloc[:n]
+
+
+def step_2_7():
+    import time
+    train, dev = lab2_data()
+    rows = []
+    for n in (0, 32_000, 82_000):
+        t = time.time()
+        model, vec, _ = fit(pd.concat([train, more_reviews(n)], ignore_index=True), dev)
+        from mdlc import metrics
+        f1 = metrics.macro_f1(dev.label, labels_of(model, vec.transform(dev.text)))
+        rows.append({"n_train": len(train) + n, "dev_macro_f1": round(f1, 4), "seconds": round(time.time() - t)})
+        print(rows[-1], flush=True)
+    pd.DataFrame(rows).to_csv(OUT / "learning_curve.csv", index=False)
+
+
+def step_2_9():
+    """Candidates 0 (lab 1 recipe), A (class weights), B (A + suspects removed), D (B + more data); seeds 0-1."""
     train, dev = lab2_data()
     if not (OUT / "suspects.csv").exists():
         step_2_6()
-    if not (OUT / "synthetic.csv").exists():
-        step_2_7()
     suspects = set(pd.read_csv(OUT / "suspects.csv").review_id)
-    synthetic = pd.read_csv(OUT / "synthetic.csv")[["text", "label"]]
     cleaned = train[~train.review_id.isin(suspects)]
+    more = pd.concat([cleaned, more_reviews()], ignore_index=True)
     candidates = {
         "0": (train, None),
         "A": (train, class_weights(train, "sqrt_inverse")),
         "B": (cleaned, class_weights(cleaned, "sqrt_inverse")),
-        "C": (pd.concat([cleaned, synthetic], ignore_index=True), class_weights(cleaned, "sqrt_inverse")),
+        "D": (more, class_weights(more, "sqrt_inverse")),
     }
     golden, heldout = eval_texts()
     for name, (df, w) in candidates.items():
-        for seed in range(3):
+        for seed in range(2):
             model, vec, _ = fit(df, dev, seed=seed, class_weights=w)
-            write_preds(golden.item_id, labels_of(model, vec.transform(golden.text)), f"golden_{name}_s{seed}.csv")
+            write_preds(dev.review_id, labels_of(model, vec.transform(dev.text)), f"dev_{name}_s{seed}.csv")
             if seed == 0:
+                write_preds(golden.item_id, labels_of(model, vec.transform(golden.text)), f"golden_{name}_s0.csv")
                 write_preds(heldout.review_id, labels_of(model, vec.transform(heldout.text)), f"heldout_{name}_s0.csv")
             print(f"candidate {name} seed {seed} done", flush=True)
 

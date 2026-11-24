@@ -1,4 +1,4 @@
-# 2.4 The maths (25 min)
+# 2.4 The maths (20 min)
 
 ## Why this matters
 In lab 1, `loss.backward()` and `optimizer.step()` did the learning. Here's what they computed,

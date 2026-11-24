@@ -1,4 +1,4 @@
-# 2.7 Synthetic data (10 min)
+# 2.8 Synthetic data (5 min, instructor demo)
 
 ## Why this matters
 The model is weak on sarcasm, mixed verdicts and lukewarm reviews, and real examples are rare.
@@ -11,7 +11,9 @@ fool you. The rules:
 4. **Keep it a minority** of the training data, and record the prompt and model used.
 
 ## Predict first (notes.md)
-Will 100–300 synthetic reviews measurably improve the golden-set score?
+Will 300 synthetic reviews measurably improve the model, next to 100,000 real ones?
+
+*Time is short here: the instructor runs this step on the projector. Do it yourself afterwards if you like.*
 
 ## Prompt
 > [DECISION: generate fresh or use the pre-generated set?]
@@ -24,7 +26,7 @@ Will 100–300 synthetic reviews measurably improve the golden-set score?
 > Then show me five examples and the label mix.
 
 ## Verify
-`lab check 2.7` checks contamination against the evaluation texts and the synthetic share.
+`lab check 2.8` checks contamination against the evaluation texts and the synthetic share.
 - Read ten synthetic reviews. Would you believe a customer wrote them? Are the labels right?
 - Ask Claude: *"What is model collapse, and why does it matter when training on generated data?"*
 

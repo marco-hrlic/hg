@@ -11,7 +11,7 @@ any part of it themselves.
 | Lab | Steps | |
 |---|---|---|
 | 1. Train a classifier | 1.0–1.7 | prepared data → baselines → features → network and training loop → experiments → evaluation → break it |
-| 2. Open the box | 2.1–2.8 | raw data audit → cleaning and splits → labels and the golden set → the maths → loss design → label noise → synthetic data → retrain and compare |
+| 2. Open the box | 2.1–2.9 | raw data audit → cleaning and splits → labels and the golden set → the maths → loss design → label noise → more data (learning curve) → synthetic data → retrain and compare, with paired significance tests |
 
 ## For participants
 

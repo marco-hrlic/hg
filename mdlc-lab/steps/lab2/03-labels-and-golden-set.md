@@ -24,6 +24,10 @@ Of the 3-star reviews in the golden set, what share read as *neutral* when you a
 ## Verify
 `lab check 2.3`: your agreement with the golden labels, and the stars-vs-golden table.
 - Look at the 3-star column. What does it say about the labels lab 1 trained on?
+- The check also shows what happened when an LLM rater relabelled **all 2,316 three-star reviews**
+  in the development data: only about a third read as neutral. That's ~1,450 wrong training labels.
+  (In our tests, training on the corrected labels alone didn't improve the model: neutral became
+  so rare that the model nearly stopped predicting it. Fixing labels changes the class balance too.)
 - Ask Claude: *"What is weak supervision, and when is a proxy label like star ratings good enough?"*
 
 ## ML thinking
